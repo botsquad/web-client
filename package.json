@@ -1,6 +1,6 @@
 {
   "name": "@botsquad/web-client",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "sideEffects": [
     "*.scss"
   ],
@@ -9,6 +9,7 @@
     "node": ">=0.4.5"
   },
   "scripts": {
+    "build-dev": "TARGET=host NODE_ENV=development webpack --config webpack.config.js --mode development",
     "build": "TARGET=host NODE_ENV=production webpack --config webpack.prod.config.js --mode production",
     "build-sdk": "TARGET=host NODE_ENV=production webpack --config webpack.sdk.config.js --mode production",
     "dev": "webpack-dev-server --hot --host 0.0.0.0 --config ./webpack.config.js",

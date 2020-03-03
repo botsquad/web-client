@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const WebpackAutoInjectPlugin = require('webpack-auto-inject-version');
-const webpackSettings = require('./webpack.config');
+const common = require('./webpack.config');
 
 const plugins = [
   new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
@@ -25,7 +25,9 @@ const plugins = [
   new webpack.optimize.OccurrenceOrderPlugin(),
 ];
 
-webpackSettings.mode = 'production';
-webpackSettings.plugins = plugins;
-webpackSettings.devtool = 'nosource-source-map';
-module.exports = webpackSettings;
+module.exports = {
+  ...common,
+  plugins,
+  mode: 'production',
+  devtool: false
+};

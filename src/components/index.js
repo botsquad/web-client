@@ -1,5 +1,6 @@
 import React from 'react'
 import { findDOMNode } from "react-dom";
+import PropTypes from 'prop-types';
 
 import ChatWindow from './ChatWindow'
 import ChatModal from './ChatModal'
@@ -136,7 +137,9 @@ export default class Chat extends React.Component {
       modalHiding: false,
       conversationMeta: {},
       online: true,
-      joined: null
+      joined: null,
+      settings: props.settings || { ui_labels: {}, chat_config: {} },
+      localePrefs: props.localePrefs || []
     }
     this.handler = new ChatHandler(this)
     if (props.notificationManager) {

@@ -153,7 +153,7 @@ export function fixedLabel(key, prefList) {
 
 export function chatLabel(component, part) {
   const { ui_labels } = component.props.settings
-  return resolveTranslationsLocales(ui_labels[part], component.props.localePrefs) || fixedLabel(part, component.props.localePrefs)
+  return ui_labels && resolveTranslationsLocales(ui_labels[part], component.props.localePrefs) || fixedLabel(part, component.props.localePrefs)
 }
 
 export function textDirectionClass(locale) {

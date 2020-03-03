@@ -20,8 +20,9 @@ module.exports = {
   entry: './src/index',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    publicPath: dev ? '' : '/',
     filename: '[name].js',
+    libraryTarget: "umd",
+    library: "@botsquad/web-client"
   },
   resolve: {
     extensions: ['.js'],
@@ -73,7 +74,7 @@ module.exports = {
       new UglifyJsPlugin({
         cache: true,
         parallel: true,
-        sourceMap: false, // set to true if you want JS source maps
+        sourceMap: false,
         uglifyOptions: {
           output: {
             comments: false,
