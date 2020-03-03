@@ -1,0 +1,36 @@
+{
+  "extends": "eslint-config-airbnb",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
+    }
+  },
+  "globals": {
+    "document": true
+  },
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "func-names": "off",
+    "no-param-reassign": "off",
+    "arrow-body-style": "off",
+    "max-len": "off",
+    "new-cap": "off",
+    "global-require": "off",
+    "no-underscore-dangle": "off",
+    "semi": "off",
+    "prefer-template": "off",
+    "camelcase": "off",
+    "react/prop-types": "off",
+    "react/forbit-prop-types": "off",
+    "react/no-danger": "off",
+    "react/jsx-filename-extension": "off",
+    "class-methods-use-this": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "no-plusplus": "off",
+    "react/sort-comp": "off",
+    "import/no-named-as-default": "off",
+    "import/no-named-as-default-member": "off"
+  }
+}

@@ -1,0 +1,4 @@
+# ignore file for ag -- https://github.com/ggreer/the_silver_searcher/wiki/Advanced-Usage
+node_modules/*
+sdk-dist/*
+dist/*

@@ -1,0 +1,199 @@
+import React from 'react'
+import { EventEmitter } from 'fbemitter'
+
+export const mediaEvents = new EventEmitter()
+
+
+class ModalWrapper extends React.PureComponent {
+  onClick() {
+    const { handler, modal, message } = this.props
+    if (modal) {
+      handler.component.hideModal()
+    } else {
+      handler.component.showModal(message)
+    }
+  }
+
+  triggerResize(event, component, ratio) {
+
+    if (!this.props.modal || !component && !this._component) {
+      return
+    }
+    if (component && !this._component) {
+      this._component = component
+    }
+
+    component = component || this._component
+
+    const { clientWidth, clientHeight, clientRatio } = this.props.handler.getClientDimensions()
+
+    this.props.modal.div.classList.toggle('prefer-height', ratio > clientRatio)
+
+    let w
+    let h
+    if (this.props.message.payload.class && this.props.message.payload.class.match(/\bfullscreen\b/)) {
+      w = clientWidth
+      h = clientHeight
+    } else {
+      if (clientRatio > ratio) {
+        w = Math.floor(clientWidth * 0.9) - 8
+        h = Math.floor(w * ratio)
+      } else {
+        h = Math.floor(clientHeight * 0.9) - 8
+        w = Math.floor(h / ratio)
+      }
+    }
+    component.style.width = `${w}px`;
+    component.style.height = `${h}px`;
+  }
+
+  render() {
+    const { className } = this.props
+    const onClick = this.onClick.bind(this)
+    if (this.props.modal) {
+      return this.props.children
+    }
+
+    return (
+      <div className={className}>
+        {React.Children.map(this.props.children, child => React.cloneElement(child, { onClick }))}
+      </div>
+    )
+  }
+}
+
+export class ImageMedia extends React.PureComponent {
+  state = {
+    loading: true,
+    retry: 0
+  }
+
+  render() {
+    const { message, onLoad, handler } = this.props
+    const { payload } = message
+    let wrapper = null
+    let component = null
+
+    if (this.state.loading) {
+      const img = document.createElement('img')
+      img.onload = () => {
+        this.setState({ loading: false })
+      }
+      img.onerror = () => {
+        if (this.state.retry > 20) return
+        setTimeout(() => this.setState({ retry: this.state.retry + 1 }), 250 + 50 * this.state.retry * this.state.retry)
+      }
+      img.src = payload.url
+
+      return (
+        <ModalWrapper {...this.props} ref={w => { wrapper = w }}>
+          <span className="loading" />
+        </ModalWrapper>
+      )
+    }
+    return (
+      <ModalWrapper {...this.props} ref={w => { wrapper = w }}>
+        <img ref={c => { component = c }} src={payload.url} onLoad={(event) => { if (onLoad) onLoad(); wrapper && component && wrapper.triggerResize(event, component, event.target.height / event.target.width) }} />
+      </ModalWrapper>
+    )
+  }
+}
+
+function determineAspect(cls) {
+  const ASPECTS = {
+    'default': 0.5625,
+    'two-by-three': 1.5,
+    'three-by-four': 1.333,
+    'square': 1,
+    'four-by-three': 0.75,
+    'three-by-two': 0.666,
+    'two-by-one': 0.5
+  }
+  return (cls || '').split(' ').reduce((acc, c) => acc || ASPECTS[c], false) || ASPECTS.default
+}
+
+export class WebMedia extends React.Component {
+
+  shouldComponentUpdate(nextProps) {
+    return this.props.message.payload.url !== nextProps.message.payload.url
+  }
+
+  render() {
+    const { message, onLoad, handler } = this.props
+    const { payload } = message
+    const { preview_image } = payload
+    let component = null
+    let wrapper = null
+    const aspect = determineAspect(payload.class)
+    const tryResize = (t) => {
+      const resize = () => wrapper && component && wrapper.triggerResize(null, component, aspect)
+      setTimeout(resize, 0)
+      if (t) setTimeout(resize, t)
+    }
+
+    return (
+      <ModalWrapper {...this.props} className={`web ${this.props.className}`} ref={w => { wrapper = w; tryResize(100) }}>
+        {preview_image && !this.props.modal
+         ? <img ref={c => { component = c }} src={preview_image} />
+         : <div className="frame-wrapper" ref={c => { component = c }}>
+           <iframe src={payload.url} scrolling="no" onLoad={(event) => { if (onLoad) onLoad(); tryResize() }} />
+         </div>}
+      </ModalWrapper>
+    )
+  }
+}
+
+export class AudioMedia extends React.Component {
+
+  shouldComponentUpdate(nextProps) {
+    return this.props.message.payload.url !== nextProps.message.payload.url
+  }
+
+  render() {
+    const { message, onLoad, handler, className } = this.props
+    const { payload } = message
+
+    return (
+      <div className={`${className} audio`}>
+        <audio src={payload.url} controls ref='audio'/>
+      </div>
+    )
+  }
+
+  _hasAudio = false
+
+  componentDidMount() {
+    this.props.handler.attachAudio(this.refs.audio)
+    this.refs.audio.addEventListener('play', () => {
+      mediaEvents.emit('audio.create', this.refs.audio)
+      this._hasAudio = true
+    })
+    this.refs.audio.addEventListener('ended', () => {
+      this.props.handler.send('event', { name: '$audio_ended', payload: { url: this.props.message.url } })
+    })
+  }
+
+  componentWillUnmount() {
+    if (this._hasAudio) {
+      mediaEvents.emit('audio.destroy')
+    }
+  }
+}
+
+export class VideoMedia extends React.Component {
+
+  shouldComponentUpdate(nextProps) {
+    return this.props.message.payload.url !== nextProps.message.payload.url
+  }
+
+  render() {
+    const { message, onLoad, handler, className } = this.props
+    const { payload } = message
+
+    return (
+      <div className={`${className} video`}>
+        <video src={payload.url} controls />
+      </div>
+    )
+  }
+}

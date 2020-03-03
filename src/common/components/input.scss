@@ -1,0 +1,139 @@
+// input area
+
+.chat-input {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+
+  -webkit-touch-callout: none; /* iOS Safari */
+  user-select: none;
+
+  &.docked {
+    background-color: #fff;
+    border-top: var(--botsquad-border-style);
+
+    > div.input {
+      flex: 1;
+      min-width: 80px;
+      input {
+        background: inherit;
+        height: 50px;
+        font-size: 125%;
+      }
+    }
+    button {
+      background: rgba(255,255,255,0);
+    }
+  }
+
+  &.embedded {
+    justify-content: flex-end;
+    margin-top: 20px;
+    > div.input {
+      flex: 1;
+      max-width: 400px;
+
+      transition: all 300ms ease-out;
+      border-radius: var(--botsquad-bubble-radius);
+      background-color: var(--botsquad-ui-background-color);
+      overflow: hidden;
+      opacity: 1;
+
+      input {
+        background-color: initial;
+        padding-left: 12px;
+      }
+    }
+    button.send {
+      border-top-right-radius: var(--botsquad-bubble-radius);
+      border-bottom-right-radius: var(--botsquad-bubble-radius);
+    }
+    &.menu-open > div.input {
+      min-width: 0;
+      width: 0 !important;
+      overflow: hidden;
+      opacity: 0;
+      z-index: -10;
+    }
+  }
+
+  > div.input {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    input {
+      width: 100%;
+      outline: none;
+      font-size: 1em;
+      padding: 0.5em;
+      border: 0;
+      z-index: 10;
+      ::placeholder {
+        color: var(--botsquad-ui-color);
+      }
+    }
+  }
+  button {
+    width: 40px;
+    background-color: var(--botsquad-ui-background-color);
+    cursor: pointer;
+    outline: none;
+    height: 50px;
+    svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--botsquad-ui-color);
+      vertical-align: middle;
+    }
+    &:active {
+      background-color: var(--botsquad-ui-color);
+    }
+    &.send {
+      background-color: initial;
+      border-radius: 0;
+      text-align: center;
+      &.has-message {
+        background-color: var(--botsquad-main-color);
+        color: white;
+        svg { fill: white; }
+      }
+      width: 50px;
+      margin-right: 0;
+      transition: background-color linear 200ms;
+    }
+
+    border: 0;
+    line-height: 1;
+  }
+
+  .input-menu {
+    button {
+      width: 50px; height: 50px;
+      margin-right: 10px;
+      border-radius: 50%;
+      text-align: center;
+    }
+    span.menu {
+      position: absolute;
+      right: 0; top: 0;
+      opacity: 0;
+      transition: all 400ms ease-out;
+      button:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+  &.menu-open .input-menu span.menu {
+    opacity: 1;
+  }
+}
+
+input.upload-trigger {
+  font-size: 0; width: 0; height: 0; line-height: 0;
+  display: inline-block;
+  flex: 0;
+  position: fixed;
+  bottom: 0; right: 0;
+  z-index: -100;
+  opacity: 0;
+}

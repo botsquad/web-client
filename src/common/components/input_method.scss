@@ -1,0 +1,430 @@
+
+// input method -- container
+.input-method--container {
+  user-select: none;
+
+  width: 100%;
+  @media(min-width: 480px) {
+    width: 480px;
+  }
+
+  display: flex;
+  flex-direction: column;
+  .content {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .input-method-header {
+    height: auto;
+    border-top-left-radius: var(--botsquad-bubble-radius);
+    border-top-right-radius: var(--botsquad-bubble-radius);
+    position: relative;
+    font-weight: normal;
+    color: #000;
+    display: flex;
+    flex-direction: row;
+
+    span.controls {
+      position: absolute;
+      right: 6px;
+      top: -26px;
+      cursor: pointer;
+      > span svg {
+        width: 24px; height: 24px;
+        fill: var(--botsquad-ui-color);
+        border-radius: 4px;
+      }
+    }
+    span.btn {
+      margin-right: 10px;
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      opacity: 1;
+    }
+
+    &.captioned {
+      background-color: var(--botsquad-secondary-color);
+      padding: 12px 16px;
+      border-radius: 0;
+      span.controls {
+        position: absolute;
+        right: 12px;
+        top: 10px;
+        > span {
+          cursor: pointer;
+          svg {
+            fill: #000;
+          }
+        }
+      }
+    }
+  }
+
+  .content {
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overflow-y: overlay;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    margin: 0;
+    padding: 0;
+  }
+  .header + .content {
+    border-top: none !important;
+  }
+
+  .below {
+    display: flex;
+    flex-direction: row;
+    button, .button {
+      font-size: 120%;
+      height: 50px;
+      flex: 1;
+      text-align: center;
+      color: var(--botsquad-main-color);
+      background: none;
+      border: 0;
+      &:disabled {
+        color: var(--botsquad-ui-color);
+      }
+      &:active {
+        background-color: var(--botsquad-main-color);
+        color: white;
+      }
+    }
+  }
+}
+
+&.layout-docked .input-method--container {
+  .header {
+    border-radius: 0;
+  }
+  .content {
+    border: none;
+  }
+  &.full {
+    max-height: 87vh;
+  }
+  &.tall .content {
+    max-height: 65vh;
+  }
+  @media(min-width: 480px) {
+    width: 100%;
+  }
+}
+
+// input method -- item picker
+.input-method--container.item-picker {
+  div.content {
+    border: var(--botsquad-border-style);
+    background: white;
+
+    > div {
+      position: relative;
+      padding: 10px;
+      text-align: center;
+      &.with-image {
+        text-align: left;
+      }
+
+      border-bottom: var(--botsquad-border-style);
+      cursor: pointer;
+
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      color: var(--botsquad-main-color);
+
+      .c {
+        flex: 1;
+      }
+
+      .image {
+        display: inline-block;
+        width: 50px; height: 50px;
+        background-position: left center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        margin: -8px 0;
+      }
+
+      .subtitle {
+        margin-top: 4px;
+        color: rgba(0, 0, 0, .40);
+        font-size: 80%;
+      }
+
+      &:active {
+        background-color: var(--botsquad-secondary-color);
+        border-color: var(--botsquad-secondary-color);
+        //          color: white;
+        .subtitle {
+          //            color: white;
+        }
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+
+  &.single:not(.confirm) {
+    div.content > div.selected {
+      div.title {
+        font-weight: 500;
+        &:before {
+          content: "✔ ";
+        }
+        &:after {
+          content: "   ";
+        }
+      }
+    }
+  }
+
+  &.confirm {
+    div.content > div {
+      text-align: left;
+    }
+
+    div.content > div {
+      svg {
+        fill: var(--botsquad-ui-color);
+        margin-right: 8px;
+      }
+      &.selected svg {
+        fill: var(--botsquad-main-color);
+      }
+    }
+  }
+}
+
+// input method -- location picker
+.input-method--container.location-picker {
+  div.content {
+    border: var(--botsquad-border-style);
+
+    .btn {
+      width: 28px; height: 28px;
+      background: white;
+      position: absolute;
+      top: 8px; left: 8px;
+      z-index: 2;
+      svg {
+        transform: scale(0.8, 0.8);
+        margin-top: 2px;
+        margin-left: 2px;
+        fill: #777;
+      }
+    }
+  }
+  &.finding .btn svg {
+    fill: #eee;
+  }
+}
+
+// input method -- form
+.input-method--container.form {
+  div.content {
+    background-color: white;
+    padding: 16px;
+    text-align: left;
+    border: var(--botsquad-border-style);
+
+    form {
+      color: #555;
+
+      span.required {
+        margin-left: 4px;
+      }
+
+      fieldset {
+        border: none;
+        margin: 0; padding: 0;
+      }
+
+      .form-control {
+        box-sizing: border-box !important;
+        display: block;
+        width: 100%;
+        padding: 6px 8px;
+        border-radius: 4px;
+        font-size: 1em;
+      }
+      .form-control, .control-label, .form-group {
+        margin-bottom: 4px;
+      }
+      .form-group {
+        margin-bottom: 16px;
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .error-detail {
+          display: none;
+        }
+      }
+      > .form-group {
+        margin-bottom: 0;
+      }
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #555;
+        font-size: 0.8em;
+      }
+      select, input[type=text], input[type=email], textarea {
+        border: var(--botsquad-border-style);
+        box-shadow: none;
+        padding: 8px 12px;
+      }
+      textarea.form-control {
+        height: 120px;
+      }
+      .has-error {
+        .form-control {
+          border-color: #aa0000;
+        }
+        label {
+          color: #aa0000;
+        }
+      }
+    }
+  }
+}
+
+.input-method--container.barcode,
+.input-method--container.qr {
+  div.content {
+    div.code {
+      position: absolute;
+      bottom: 8px;
+      left: 0; right: 0;
+      text-align: center;
+      span {
+        display: inline-block;
+        padding: 4px;
+        background-color: black;
+        color: white;
+      }
+    }
+  }
+}
+
+.input-method--container.qr {
+  div.content {
+    max-height: none;
+    > section > section > div {
+      // viewfinder
+      border: 50px solid rgba(0, 0, 0, 0.1) !important;
+      box-shadow: rgba(255, 0, 0, 0.5) 0px 0px 0px 2px inset !important;
+      z-index: 3 !important;
+    }
+    > section > section > video {
+      transform: translate(0, 0);
+    }
+  }
+}
+
+.input-method--container.barcode {
+
+  #interactive.viewport {
+    position: relative;
+    overflow: hidden;
+  }
+
+  #interactive.viewport > canvas, #interactive.viewport > video {
+    max-width: 100%;
+    width: 100%;
+    max-height: 40vh;
+    object-fit: cover;
+  }
+
+  #interactive > br {
+    display: none;
+  }
+
+  canvas.drawing, canvas.drawingBuffer {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+}
+
+.input-method--container.wait {
+  max-height: none !important;
+
+  div.content {
+    background-color: #f0f0f0;
+    padding: 24px;
+    text-align: center;
+
+    .loader {
+      position: relative;
+      margin: auto;
+      top: auto; left: auto;
+    }
+
+    .closed {
+      display: inline-block;
+      height: 4em;
+      width: 4em;
+      position: relative;
+      svg {
+      }
+    }
+
+    .time {
+      position: absolute;
+      left: 0; right: 0; top: 53px;
+    }
+
+    .description {
+      margin-top: 12px;
+      font-size: 0.9em;
+    }
+  }
+  div.below {
+    outline: none;
+    background-color: #ffffff;
+  }
+}
+
+.bubble-group .bubble-container .input-method--container {
+  max-height: none !important;
+
+  // in-stream input method
+  .content {
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  .below {
+    justify-content: center;
+    button {
+      @include bubble;
+      flex: 0;
+      white-space: nowrap;
+      height: auto;
+      display: inline-block;
+      margin-top: 5px;
+      background-color: var(--botsquad-ui-background-color);
+      border: var(--botsquad-border-style);
+      cursor: pointer;
+      border-radius: var(--botsquad-bubble-radius);
+      font-size: inherit;
+      &:active {
+        background-color: var(--botsquad-main-color);
+      }
+      &:disabled {
+        color: var(--botsquad-ui-color);
+      }
+    }
+  }
+}
