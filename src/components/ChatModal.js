@@ -6,6 +6,8 @@ import elementFactory from './elements'
 
 export default class ChatModal extends React.Component {
 
+  modalElement = React.createRef()
+
   renderMessage(message, modalParams) {
     const cls = `content ${message.self ? 'self' : 'bot'} ` + message.type
 
@@ -26,15 +28,10 @@ export default class ChatModal extends React.Component {
     this.props.handler.send('event', { name: '$modal_close', payload: { } })
   }
 
-  componentDidMount() {
-    // prevent scrolling of the body behind the modal, while the modal is opened
-    this.refs.modalElement.addEventListener('touchmove', e => e.preventDefault(), false)
-  }
-
   render() {
     const { message, hiding, modalParams } = this.props
     return (
-      <div className={`chat-modal ${hiding ? 'hiding' : ''} ${message.payload.class || ''}`} ref="modalElement">
+      <div className={`chat-modal ${hiding ? 'hiding' : ''} ${message.payload.class || ''}`} ref={this.modalElement}>
         <ReactGesture onSwipeUp={this.hide} onClick={this.hide} onTap={this.hide}>
           <div className="overlay" />
         </ReactGesture>
@@ -44,5 +41,10 @@ export default class ChatModal extends React.Component {
         <div className="close">{Close}</div>
       </div>
     )
+  }
+
+  componentDidMount() {
+    // prevent scrolling of the body behind the modal, while the modal is opened
+    this.modalElement.current.addEventListener('touchmove', e => e.preventDefault(), false)
   }
 }

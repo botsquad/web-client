@@ -36,10 +36,10 @@ class ModalWrapper extends React.PureComponent {
       h = clientHeight
     } else {
       if (clientRatio > ratio) {
-        w = Math.floor(clientWidth * 0.9) - 8
+        w = Math.floor(clientWidth * 0.9)
         h = Math.floor(w * ratio)
       } else {
-        h = Math.floor(clientHeight * 0.9) - 8
+        h = Math.floor(clientHeight * 0.9)
         w = Math.floor(h / ratio)
       }
     }
@@ -145,6 +145,8 @@ export class WebMedia extends React.Component {
 
 export class AudioMedia extends React.Component {
 
+  audio = React.createRef()
+
   shouldComponentUpdate(nextProps) {
     return this.props.message.payload.url !== nextProps.message.payload.url
   }
@@ -155,7 +157,7 @@ export class AudioMedia extends React.Component {
 
     return (
       <div className={`${className} audio`}>
-        <audio src={payload.url} controls ref='audio'/>
+        <audio src={payload.url} controls ref={this.audio} />
       </div>
     )
   }
@@ -163,12 +165,14 @@ export class AudioMedia extends React.Component {
   _hasAudio = false
 
   componentDidMount() {
-    this.props.handler.attachAudio(this.refs.audio)
+    const audio = this.audio.current
+
+    this.props.handler.attachAudio(audio)
     this.refs.audio.addEventListener('play', () => {
-      mediaEvents.emit('audio.create', this.refs.audio)
+      mediaEvents.emit('audio.create', audio)
       this._hasAudio = true
     })
-    this.refs.audio.addEventListener('ended', () => {
+    audio.addEventListener('ended', () => {
       this.props.handler.send('event', { name: '$audio_ended', payload: { url: this.props.message.url } })
     })
   }
@@ -176,6 +180,7 @@ export class AudioMedia extends React.Component {
   componentWillUnmount() {
     if (this._hasAudio) {
       mediaEvents.emit('audio.destroy')
+      this._hasAudio = false
     }
   }
 }
