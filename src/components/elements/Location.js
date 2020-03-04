@@ -1,6 +1,7 @@
 import React from 'react';
 import { compose, withProps } from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
+import { MyLocation } from '../icons'
 
 function transformLngLon(position) {
   return position = position ? { lat: position.lat, lng: position.lon } : null
@@ -88,7 +89,7 @@ class StaticLocation extends React.PureComponent {
 
     return (
       <div className={className} onClick={() => handler.component.showModal(message)}>
-        <img src={url} alt="Location" />
+        {mapsApiKey ? <img src={url} alt="Location" /> : MyLocation}
       </div>
     )
   }
