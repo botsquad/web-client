@@ -16,7 +16,12 @@
     "start": "webpack-dev-server --public sdk.botsqd.com --host 0.0.0.0 --config ./webpack.config.js --mode production",
     "test": "mocha --require @babel/register test/**/*.js"
   },
-  "license": "Proprietary",
+  "author": "Arjan Scherpenisse <arjan@miraclethings.nl>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/botsquad/web-client"
+  },
+  "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
@@ -50,6 +55,7 @@
     "eslint-plugin-react": "^6.3.0",
     "extract-text-webpack-plugin": "^3.0.2",
     "fs-extra": "^0.30.0",
+    "gensync": "^1.0.0-beta.1",
     "html-webpack-plugin": "^3.2.0",
     "jasmine-core": "^2.5.2",
     "mini-css-extract-plugin": "^0.4.0",
@@ -106,6 +112,5 @@
     "react-transition-group": "^4.0.0",
     "recompose": "^0.27.0",
     "whatwg-fetch": "^2.0.3"
-  },
-  "author": "Arjan Scherpenisse <arjan@miraclethings.nl>"
+  }
 }
