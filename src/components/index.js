@@ -123,6 +123,10 @@ class ChatHandler {
     clientHeight = Math.min(clientHeight, window.innerHeight)
     return { clientHeight, clientWidth, clientRatio: clientHeight/ clientWidth }
   }
+
+  getMapsAPIKey() {
+    return this.component.props.mapsApiKey || ""
+  }
 }
 
 export default class Chat extends React.Component {

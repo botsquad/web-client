@@ -2,8 +2,6 @@ import React from 'react';
 import { compose, withProps } from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
-import { MAPS_API_KEY } from '../../common/util'
-
 function transformLngLon(position) {
   return position = position ? { lat: position.lat, lng: position.lon } : null
 }
@@ -24,8 +22,10 @@ class Map extends React.Component {
     var geocoder = new google.maps.Geocoder;
     const latlng = transformLngLon(this.props.message.payload)
     geocoder.geocode({'location': latlng}, (results, status) => {
-      const address = results[0].formatted_address
-      this.setState({ address })
+      if (results && results[0]) {
+        const address = results[0].formatted_address
+        this.setState({ address })
+      }
     })
   }
 
@@ -58,8 +58,10 @@ const ComposedMap = compose(
   withProps(r => {
     const { clientHeight } = r.handler.getClientDimensions()
     const height = Math.floor(clientHeight * 0.6) + 'px'
+    const mapsApiKey = r.handler.getMapsAPIKey()
+
     return {
-      googleMapURL: `https://maps.googleapis.com/maps/api/js?v=3.exp&key=${MAPS_API_KEY}&libraries=geometry,drawing,places`,
+      googleMapURL: `https://maps.googleapis.com/maps/api/js?v=3.exp&key=${mapsApiKey}&libraries=geometry,drawing,places`,
       loadingElement: <div style={{ height,  width: '100%' }} />,
       containerElement: <div style={{ height: '100%', width: '100%' }} />,
       mapElement: <div style={{ height, width: '100%' }} />,
@@ -78,10 +80,11 @@ class StaticLocation extends React.PureComponent {
       return null
     }
 
+    const mapsApiKey = handler.getMapsAPIKey()
     const { lon, lat } = payload
     const maptype = payload.maptype || 'roadmap'
     const zoom = payload.zoom || 14
-    const url = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&zoom=${zoom}&scale=2&size=150x150&maptype=${maptype}&format=png&visual_refresh=true&markers=size:mid%7Ccolor:0xff0000%7Clabel:%7C${lat},${lon}&key=${MAPS_API_KEY}`
+    const url = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&zoom=${zoom}&scale=2&size=150x150&maptype=${maptype}&format=png&visual_refresh=true&markers=size:mid%7Ccolor:0xff0000%7Clabel:%7C${lat},${lon}&key=${mapsApiKey}`
 
     return (
       <div className={className} onClick={() => handler.component.showModal(message)}>

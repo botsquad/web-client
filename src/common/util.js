@@ -17,8 +17,6 @@ export function shortDateTimeFormat(dt) {
   return m.format('H:mm')
 }
 
-export const MAPS_API_KEY = 'AIzaSyCEmgofudNPp7jIJl9smvfpzbasryeld48'
-
 export function dateTimeFormat(dt) {
   const m = dt ? moment(dt) : moment()
   return m.format('D MMM Y, H:mm')

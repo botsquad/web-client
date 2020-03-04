@@ -2,7 +2,6 @@ import React from 'react'
 import { compose, withProps } from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
-import { MAPS_API_KEY } from '../../common/util'
 import { chatLabel } from '../../common/labels'
 import { MyLocation } from '../icons'
 import InputMethodContainer from './InputMethodContainer'
@@ -50,11 +49,15 @@ class Map extends React.Component {
 }
 
 const ComposedMap = compose(
-  withProps({
-    googleMapURL: `https://maps.googleapis.com/maps/api/js?v=3.exp&key=${MAPS_API_KEY}&libraries=geometry,drawing,places`,
-    loadingElement: <div style={{ height: `100%`, width: '100%' }} />,
-    containerElement: <div style={{ height: `100%`, width: '100%' }} />,
-    mapElement: <div style={{ height: `100%`, width: '100%' }} />,
+  withProps(props => {
+    const mapsApiKey = props.handler.getMapsAPIKey()
+
+    return {
+      googleMapURL: `https://maps.googleapis.com/maps/api/js?v=3.exp&key=${mapsApiKey}&libraries=geometry,drawing,places`,
+      loadingElement: <div style={{ height: `100%`, width: '100%' }} />,
+      containerElement: <div style={{ height: `100%`, width: '100%' }} />,
+      mapElement: <div style={{ height: `100%`, width: '100%' }} />,
+    }
   }),
   withScriptjs,
   withGoogleMap
@@ -111,7 +114,7 @@ export default class LocationPicker extends React.Component {
         below={!this.state.hasSubmitted ? <button disabled={this.state.position === null} onClick={this.submit}>{button_label || chatLabel(this, 'location_picker_select')}</button> : null}
       >
         <div className="btn my-location" onClick={this.setMyLocation}>{MyLocation}</div>
-        <ComposedMap onChange={this.setPosition} position={this.state.position} center={this.state.center} config={this.props.config} />
+        <ComposedMap handler={this.props.handler} onChange={this.setPosition} position={this.state.position} center={this.state.center} config={this.props.config} />
       </InputMethodContainer>
     )
   }
