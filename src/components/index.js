@@ -1,6 +1,7 @@
 import React from 'react'
 import { findDOMNode } from "react-dom";
 import PropTypes from 'prop-types';
+import { Socket } from 'phoenix'
 
 import ChatWindow from './ChatWindow'
 import ChatModal from './ChatModal'
@@ -22,7 +23,7 @@ class ChatHandler {
     this._eventQueue = []
   }
 
-  joinChannel({ bot_id, params, socket, onJoinError }) {
+  joinChannel({ bot_id, params, onJoinError }, socket) {
     this.leaveChannel()
     this.component.setState({ upload: null, typing: false, events: [] })
     botChannelJoin(this.component, socket, bot_id, params).then((channel) => {
@@ -143,17 +144,21 @@ export default class Chat extends React.Component {
       online: true,
       joined: null,
       settings: props.settings || { ui_labels: {}, chat_config: {} },
-      localePrefs: props.localePrefs || []
+      localePrefs: props.localePrefs || [],
+      socket: props.socket || new Socket('wss://bsqd.me/socket')
     }
     this.handler = new ChatHandler(this)
     if (props.notificationManager) {
       this.notificationManager = new NotificationManager(this)
     }
+    if (!props.socket) {
+      this.state.socket.connect()
+    }
   }
 
   componentWillReceiveProps(newProps) {
     if (newProps.bot_id !== this.props.bot_id) {
-      this.handler.joinChannel(newProps)
+      this.handler.joinChannel(newProps, this.state.socket)
     }
     this.notificationManager && this.notificationManager.windowFocusChange()
 
@@ -280,7 +285,7 @@ export default class Chat extends React.Component {
 
   componentDidMount() {
     this.mounted = true
-    this.handler.joinChannel(this.props)
+    this.handler.joinChannel(this.props, this.state.socket)
     this.notificationManager && this.notificationManager.componentDidMount()
     this.windowElement = findDOMNode(this).querySelector(".chat-window")
   }
