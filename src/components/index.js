@@ -50,6 +50,7 @@ class ChatHandler {
       this._eventQueue.push({ type, payload })
       return
     }
+    console.log(payload)
     this.channel.push('user_action', { type, payload })
     if (type === 'message' && typeof payload === 'string') {
       payload = { text: payload, type: 'text' }
