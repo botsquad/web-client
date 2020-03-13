@@ -2,3 +2,4 @@
 node_modules/*
 sdk-dist/*
 dist/*
+stats.json

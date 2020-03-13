@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'dayjs'
 import Cookie from 'js-cookie'
 import jstz from 'jstz';
 import locale2 from 'locale2'
@@ -11,15 +11,10 @@ export function shortDateTimeFormat(dt) {
   if (m.year() != now.year()) {
     return m.format('D MMM Y')
   }
-  if (m.date() != now.date()) {
+  if (m.format('D MMM') !== now.format('D MMM')) {
     return m.format('D MMM')
   }
   return m.format('H:mm')
-}
-
-export function dateTimeFormat(dt) {
-  const m = dt ? moment(dt) : moment()
-  return m.format('D MMM Y, H:mm')
 }
 
 export function isEdge() {

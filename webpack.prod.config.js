@@ -1,5 +1,7 @@
 const webpack = require('webpack');
 const WebpackAutoInjectPlugin = require('webpack-auto-inject-version');
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+
 const common = require('./webpack.config');
 
 const plugins = [
@@ -22,7 +24,7 @@ const plugins = [
   new webpack.DefinePlugin({
     'process.env.NODE_ENV': JSON.stringify('production'),
   }),
-  new webpack.optimize.OccurrenceOrderPlugin(),
+  new OptimizeCSSAssetsPlugin({}),
 ];
 
 module.exports = {
