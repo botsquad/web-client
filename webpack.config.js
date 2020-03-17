@@ -11,8 +11,12 @@ module.exports = {
   target: 'web',
   devtool: 'cheap-module-eval-source-map',
   devServer: {
+    contentBase: path.join(__dirname, "dev")
   },
-  entry: './src/index',
+  entry: {
+    main: './src/index',
+    example: './dev/example'
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
@@ -22,10 +26,6 @@ module.exports = {
   resolve: {
     extensions: ['.js'],
     modules: ['node_modules'],
-  },
-  externals: {
-    'react': 'react',
-    'react-dom': 'react-dom'
   },
   module: {
     rules: [

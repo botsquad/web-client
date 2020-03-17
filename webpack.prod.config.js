@@ -30,6 +30,13 @@ const plugins = [
 module.exports = {
   ...common,
   plugins,
+  externals: {
+    'react': 'react',
+    'react-dom': 'react-dom'
+  },
+  entry: {
+    main: './src/index',
+  },
   mode: 'production',
   devtool: false
 };
