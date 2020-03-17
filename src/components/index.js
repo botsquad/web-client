@@ -2,7 +2,9 @@ import React from 'react'
 import { findDOMNode } from "react-dom";
 import PropTypes from 'prop-types';
 import { Socket } from 'phoenix'
+import locale2 from 'locale2'
 
+import { getUserInfo } from '../common/util'
 import ChatWindow from './ChatWindow'
 import ChatModal from './ChatModal'
 import ChatToast from './ChatToast'
@@ -26,6 +28,7 @@ class ChatHandler {
   joinChannel({ bot_id, params, onJoinError }, socket) {
     this.leaveChannel()
     this.component.setState({ upload: null, typing: false, events: [] })
+    params = { ...params, context: (params.context || { user: getUserInfo() }) }
     botChannelJoin(this.component, socket, bot_id, params).then((channel) => {
       this.channel = channel
       this._eventQueue.forEach(({ type, payload }) => {
@@ -144,7 +147,7 @@ export default class Chat extends React.Component {
       online: true,
       joined: null,
       settings: props.settings || { ui_labels: {}, chat_config: {} },
-      localePrefs: props.localePrefs || [],
+      localePrefs: props.localePrefs || [locale2.replace(/\-.*$/, '')],
       socket: props.socket || new Socket('wss://bsqd.me/socket')
     }
     this.handler = new ChatHandler(this)
@@ -267,7 +270,7 @@ export default class Chat extends React.Component {
   }
 
   render() {
-    const localePrefs = this.state.conversationMeta?.locale ? [this.state.conversationMeta?.locale] : this.props.localePrefs
+    const localePrefs = this.state.conversationMeta?.locale ? [this.state.conversationMeta?.locale] : this.state.localePrefs
     const props = { ...this.props, localePrefs }
     const { modal, ...state } = this.state
 
