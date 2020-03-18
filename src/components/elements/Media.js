@@ -168,7 +168,7 @@ export class AudioMedia extends React.Component {
     const audio = this.audio.current
 
     this.props.handler.attachAudio(audio)
-    this.refs.audio.addEventListener('play', () => {
+    audio.addEventListener('play', () => {
       mediaEvents.emit('audio.create', audio)
       this._hasAudio = true
     })
