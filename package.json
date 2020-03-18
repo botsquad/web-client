@@ -14,7 +14,8 @@
     "build-sdk": "TARGET=host NODE_ENV=production webpack --config webpack.sdk.config.js --mode production",
     "dev": "webpack-dev-server --hot --host 0.0.0.0 --config ./webpack.config.js",
     "start": "webpack-dev-server --public sdk.botsqd.com --host 0.0.0.0 --config ./webpack.config.js --mode production",
-    "test": "mocha --require @babel/register test/**/*.js"
+    "test": "mocha --require @babel/register test/**/*.js",
+    "prepare": "install-peers"
   },
   "author": "Arjan Scherpenisse <arjan@miraclethings.nl>",
   "repository": {
@@ -57,6 +58,7 @@
     "fs-extra": "^0.30.0",
     "gensync": "^1.0.0-beta.1",
     "html-webpack-plugin": "^3.2.0",
+    "install-peers-cli": "^2.2.0",
     "jasmine-core": "^2.5.2",
     "mini-css-extract-plugin": "^0.4.0",
     "mocha": "^4.0.1",
