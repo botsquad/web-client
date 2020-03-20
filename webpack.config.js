@@ -1,4 +1,3 @@
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 const dev = process.env.NODE_ENV !== 'production'
@@ -67,21 +66,6 @@ module.exports = {
         loader: 'url-loader',
       },
     ],
-  },
-  optimization: {
-    minimizer: [
-      new UglifyJsPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: false,
-        uglifyOptions: {
-          output: {
-            comments: false,
-          },
-        },
-        exclude: [/\.min\.js$/gi] // skip pre-minified libs
-      }),
-    ]
   },
   plugins: [
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
