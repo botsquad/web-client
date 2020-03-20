@@ -5,7 +5,6 @@ import MultiItemPicker from './MultiItemPicker'
 
 import Form from './Form'
 import LocationPicker from './LocationPicker'
-import QR from './QR'
 import Barcode from './Barcode'
 import Wait from './Wait'
 
@@ -29,9 +28,6 @@ export default function elementFactory(method, props, inputModal) {
   }
   if (type === 'form') {
     return <Form {...props} config={payload} inputModal={inputModal} />
-  }
-  if (type === 'qr') {
-    return <QR {...props} config={payload} inputModal={inputModal} />
   }
   if (type === 'wait') {
     return <Wait {...props} time={time} type={type} config={payload} inputModal={inputModal} />
