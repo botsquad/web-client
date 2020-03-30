@@ -51,7 +51,7 @@ export default class ChatInput extends React.Component {
   sendMessage() {
     const message = this.state.message.trim()
     if (message.length > 0) {
-      this.props.handler.send('message', message)
+      this.props.handler.send('message', { text: message, input_type: 'keyboard' })
     }
     this.setState({ message: '', hasMessage: false }, () => this.props.chatMessages.scrollToBottom())
     if (this.input) {

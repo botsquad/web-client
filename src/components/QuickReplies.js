@@ -33,7 +33,7 @@ function renderButton({ content_type, title, image_url }, idx, handler) {
 
   if (content_type === 'text') {
     return (
-      <div className="button" key={idx} onClick={() => handler.send('message', title)}>
+      <div className="button" key={idx} onClick={() => handler.send('message', { text: title, input_type: 'touch' })}>
         { image_url &&
           <div className="icon">
             <img src={image_url} />
