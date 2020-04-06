@@ -6,10 +6,9 @@ import InputMethodContainer from './InputMethodContainer'
 import { chatLabel } from '../../common/labels'
 
 export default class extends React.Component {
-
   state = {
     hasSubmitted: false,
-    code: null
+    code: null,
   }
 
   componentDidMount() {
@@ -18,25 +17,25 @@ export default class extends React.Component {
 
     Quagga.init({
       inputStream: {
-        type : "LiveStream",
+        type: 'LiveStream',
         constraints: {
           width: 640,
           height: 480,
-          facingMode: "environment" // or user
-        }
+          facingMode: 'environment',
+        },
       },
       locator: {
-        patchSize: "medium",
-        halfSample: false
+        patchSize: 'medium',
+        halfSample: false,
       },
       numOfWorkers: 2,
       decoder: {
-        readers : readers.map(x => x + "_reader")
+        readers: readers.map(x => x + '_reader'),
       },
-      locate: true
+      locate: true,
     }, (err) => {
       if (err) {
-        return console.log(err);
+        return
       }
       Quagga.start()
       this.props.inputModal.scrollToBottom()
@@ -60,7 +59,6 @@ export default class extends React.Component {
   }
 
   _onDetected = (result) => {
-    console.log(result)
     const { code } = result.codeResult
 
     if (!code || code === this.state.code) return
@@ -81,8 +79,9 @@ export default class extends React.Component {
     const { button_label } = this.props.config
 
     return (
-      <InputMethodContainer {...this.props}
-        className={`barcode`}
+      <InputMethodContainer
+        {...this.props}
+        className="barcode"
         below={this.hasConfirm() ? <button disabled={!this.state.code || this.state.hasSubmitted} onClick={this.submit}>{button_label || chatLabel(this, 'form_submit_button')}</button> : null}
         onCancel={this.cancel}
       >
@@ -95,5 +94,4 @@ export default class extends React.Component {
       </InputMethodContainer>
     )
   }
-
 }

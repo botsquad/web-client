@@ -5,14 +5,7 @@ import MultiItemPicker from './MultiItemPicker'
 
 import Form from './Form'
 import LocationPicker from './LocationPicker'
-import Barcode from './Barcode'
 import Wait from './Wait'
-
-class Loading extends React.Component {
-  render() {
-    return <span>Loading...</span>
-  }
-}
 
 export default function elementFactory(method, props, inputModal) {
   const { type, payload, time } = method

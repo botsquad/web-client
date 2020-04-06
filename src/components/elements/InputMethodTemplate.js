@@ -3,7 +3,6 @@ import React from 'react'
 import inputMethodFactory from '../input_method'
 
 export default class extends React.Component {
-
   finish(type, payload, config) {
     if (type === 'location' && !config?.event) {
       // send raw
@@ -24,7 +23,7 @@ export default class extends React.Component {
   }
 
   render() {
-    let { payload } = this.props
+    const { payload } = this.props
 
     return (
       inputMethodFactory({ type: payload.input_method, payload }, { inline: true, inputModal: this, ...this.props }, this)

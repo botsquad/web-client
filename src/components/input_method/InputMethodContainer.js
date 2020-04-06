@@ -1,9 +1,7 @@
 import React from 'react'
-
 import { Close } from '../icons'
 
 export default class extends React.Component {
-
   cancel = () => {
     this.props.inputModal.cancel()
   }
@@ -22,7 +20,7 @@ export default class extends React.Component {
     const { required, caption, height } = config
 
     return (
-      <div className={`input-method--container ${height} ${className || ''} ${this.props['class'] || ''}`} ref={r => this.div = r}>
+      <div className={`input-method--container ${height} ${className || ''} ${this.props.class || ''}`} ref={(r) => { this.div = r }}>
         {(!required || caption)
         ? this.renderHeader(caption, required)
         : null}
@@ -52,5 +50,4 @@ export default class extends React.Component {
     const attr = classList.contains('fixed-height') ? 'height' : 'max-height'
     style[attr] = Math.floor(sizeMap[size] * maxHeight) + 'px'
   }
-
 }

@@ -6,10 +6,11 @@ import ChatInput from './ChatInput'
 import { deviceClasses } from '../common/util'
 
 export default class ChatWindow extends React.Component {
-
   componentDidMount() {
     window.addEventListener('orientationchange', () => this.forceUpdate())
   }
+
+  chatMessages = React.createRef()
 
   render() {
     const { online } = this.props
@@ -17,9 +18,9 @@ export default class ChatWindow extends React.Component {
 
     return (
       <div className={classNames('chat-window', { online }, layout, deviceClasses())}>
-        <ChatMessages {...this.props} ref={r => this.chatMessages = r } />
+        <ChatMessages {...this.props} ref={this.chatMessages} />
         {this.props.settings.layout !== 'embedded'
-         ? <ChatInput {...this.props} chatMessages={this.chatMessages} />
+         ? <ChatInput {...this.props} chatMessages={this.chatMessages.current} />
          : null}
       </div>
     )

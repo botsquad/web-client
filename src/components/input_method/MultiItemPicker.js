@@ -5,10 +5,9 @@ import { CheckboxOn, CheckboxOff } from '../icons'
 import { chatLabel } from '../../common/labels'
 
 export default class extends React.Component {
-
   state = {
     hasSubmitted: false,
-    selected: []
+    selected: [],
   }
 
   componentWillMount() {
@@ -21,7 +20,7 @@ export default class extends React.Component {
 
   submit = () => {
     const { selected } = this.state
-    if (selected.length == 0) {
+    if (selected.length === 0) {
       return
     }
 
@@ -52,8 +51,9 @@ export default class extends React.Component {
     const { items, button_label } = this.props.config
 
     return (
-      <InputMethodContainer {...this.props}
-        className={`item-picker multiple confirm`}
+      <InputMethodContainer
+        {...this.props}
+        className="item-picker multiple confirm"
         below={<button disabled={this.state.selected.length === 0 || this.state.hasSubmitted} onClick={this.submit}>{button_label || chatLabel(this, 'form_submit_button')}</button>}
       >
         {items.map(
@@ -64,7 +64,7 @@ export default class extends React.Component {
                 className={`${selected ? 'selected' : ''} ${item.image_url ? 'with-image' : ''}`}
                 onClick={() => this.itemClick(item)}
                 key={index}
-                >
+              >
                 {selected ? CheckboxOn : CheckboxOff}
                 <div className="c">
                   <div className="title">{item.title}</div>

@@ -1,36 +1,37 @@
 import React from 'react'
-import { compose, withProps } from "recompose"
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
+import { compose, withProps } from 'recompose'
+import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 
 import { chatLabel } from '../../common/labels'
 import { MyLocation } from '../icons'
 import InputMethodContainer from './InputMethodContainer'
 
 function transformLngLon(position) {
-  return position = position ? { lat: position.lat, lng: position.lon } : null
+  position = position ? { lat: position.lat, lng: position.lon } : null
+  return position
 }
 
 class Map extends React.Component {
-
   setMarkerPosition = ({ latLng }) => {
     const center = { lat: this.map.getCenter().lat(), lon: this.map.getCenter().lng() }
     const position = { lat: latLng.lat(), lon: latLng.lng() }
     this.props.onChange({ position, center })
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps() {
     this.setState({ center: null })
   }
 
   render() {
-    let { position, config } = this.props
+    let { position } = this.props
+    const { config } = this.props
 
     position = transformLngLon(position)
     const center = transformLngLon(this.props.center)
 
     return (
       <GoogleMap
-        ref={m => { this.map = m }}
+        ref={(m) => { this.map = m }}
         defaultZoom={config.zoom}
         defaultCenter={center}
         center={center}
@@ -40,7 +41,8 @@ class Map extends React.Component {
           zoomControl: true,
           fullscreenControl: true,
           clickableIcons: false,
-          mapTypeIds: ['roadmap']}}
+          mapTypeIds: ['roadmap'],
+        }}
       >
         {position ? <Marker position={position} draggable onDragEnd={this.setMarkerPosition} /> : null}
       </GoogleMap>
@@ -49,14 +51,14 @@ class Map extends React.Component {
 }
 
 const ComposedMap = compose(
-  withProps(props => {
+  withProps((props) => {
     const mapsApiKey = props.handler.getMapsAPIKey()
 
     return {
       googleMapURL: `https://maps.googleapis.com/maps/api/js?v=3.exp&key=${mapsApiKey}&libraries=geometry,drawing,places`,
-      loadingElement: <div style={{ height: `100%`, width: '100%' }} />,
-      containerElement: <div style={{ height: `100%`, width: '100%' }} />,
-      mapElement: <div style={{ height: `100%`, width: '100%' }} />,
+      loadingElement: <div style={{ height: '100%', width: '100%' }} />,
+      containerElement: <div style={{ height: '100%', width: '100%' }} />,
+      mapElement: <div style={{ height: '100%', width: '100%' }} />,
     }
   }),
   withScriptjs,
@@ -64,12 +66,11 @@ const ComposedMap = compose(
 )(Map)
 
 export default class LocationPicker extends React.Component {
-
   state = {
     hasSubmitted: false,
     position: null,
     center: null,
-    findingLocation: false
+    findingLocation: false,
   }
 
   componentWillMount() {
@@ -93,7 +94,7 @@ export default class LocationPicker extends React.Component {
     }
     this.setState({ findingLocation: true })
     navigator.geolocation.getCurrentPosition(({ coords }) => {
-      const position = { lat: coords.latitude, lon: coords.longitude}
+      const position = { lat: coords.latitude, lon: coords.longitude }
       this.setState({ position, center: position, findingLocation: false })
     }, () => {
       this.setState({ findingLocation: false })
@@ -109,7 +110,8 @@ export default class LocationPicker extends React.Component {
     const { button_label } = this.props.config
 
     return (
-      <InputMethodContainer {...this.props}
+      <InputMethodContainer
+        {...this.props}
         className={`fixed-height location-picker ${this.state.findingLocation ? 'finding' : ''}`}
         below={!this.state.hasSubmitted ? <button disabled={this.state.position === null} onClick={this.submit}>{button_label || chatLabel(this, 'location_picker_select')}</button> : null}
       >

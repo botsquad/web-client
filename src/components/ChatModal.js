@@ -5,7 +5,6 @@ import { Close } from './icons'
 import elementFactory from './elements'
 
 export default class ChatModal extends React.Component {
-
   modalElement = React.createRef()
 
   renderMessage(message, modalParams) {

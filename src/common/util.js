@@ -8,7 +8,7 @@ const ua = navigator.userAgent
 export function shortDateTimeFormat(dt) {
   const m = moment(dt)
   const now = moment()
-  if (m.year() != now.year()) {
+  if (m.year() !== now.year()) {
     return m.format('D MMM Y')
   }
   if (m.format('D MMM') !== now.format('D MMM')) {
@@ -71,14 +71,14 @@ export function isObject(item) {
  */
 export function mergeDeep(target, source) {
   if (isObject(target) && isObject(source)) {
-    Object.keys(source).forEach(key => {
+    Object.keys(source).forEach((key) => {
       if (isObject(source[key])) {
         if (!target[key]) Object.assign(target, { [key]: {} });
         mergeDeep(target[key], source[key]);
       } else {
         Object.assign(target, { [key]: source[key] });
       }
-    });
+    })
   }
   return target;
 }
@@ -126,8 +126,7 @@ export function updateQueryStringParam(key, value) {
       params = params.replace(/[&;]$/, '')
     } else if (urlQueryString.match(updateRegex) !== null) {
       // If param exists already, update it
-      params = urlQueryString.replace(updateRegex, "$1" + newParam)
-
+      params = urlQueryString.replace(updateRegex, '$1' + newParam)
     } else {
       // Otherwise, add it to end of query string
       params = urlQueryString + '&' + newParam
@@ -139,11 +138,11 @@ export function updateQueryStringParam(key, value) {
 }
 
 function getUrlParameter(name) {
-  name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+  name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
   const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
   const results = regex.exec(location.search);
   return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-};
+}
 
 export function getChannelParams(defaultId) {
   const params = {}
@@ -165,15 +164,14 @@ export function consumeChannelParams() {
 
 export function getUserInfo() {
   const timezone = jstz.determine();
-  let info = {
+  return {
     timezone: timezone.name(),
     locale: locale2.replace('-', '_'),
     extra: {
       user_agent: navigator.userAgent,
-      web_push_capable: ('PushManager' in window)
-    }
+      web_push_capable: ('PushManager' in window),
+    },
   }
-  return info
 }
 
 export function parseUrl(url) {
@@ -190,7 +188,7 @@ export function getAPIEndpoint(socketUrl, botId, path) {
 function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding)
-    .replace(/\-/g, '+')
+    .replace(/-/g, '+')
     .replace(/_/g, '/')
   ;
   const rawData = window.atob(base64);
@@ -203,13 +201,13 @@ export function subscribeToPushEvents(socketUrl, botId, userId, pushManager, app
     .then((subscription) => {
       const body = JSON.stringify({ subscription, user_id: userId })
       const endpoint = getAPIEndpoint(socketUrl, botId, 'push_subscribe')
-      return fetch(endpoint, { method: 'POST', mode: 'cors', headers: { 'content-type': 'application/json'}, body })
+      return fetch(endpoint, { method: 'POST', mode: 'cors', headers: { 'content-type': 'application/json' }, body })
     })
 }
 export function registerFirebaseToken(socketUrl, botId, userId, token) {
   const body = JSON.stringify({ user_id: userId, firebase: token })
   const endpoint = getAPIEndpoint(socketUrl, botId, 'push_subscribe')
-  return fetch(endpoint, { method: 'POST', mode: 'cors', headers: { 'content-type': 'application/json'}, body })
+  return fetch(endpoint, { method: 'POST', mode: 'cors', headers: { 'content-type': 'application/json' }, body })
 }
 
 export function setupSocketReconnectBehaviour(socket, channel, notificationManager) {
@@ -221,7 +219,7 @@ export function setupSocketReconnectBehaviour(socket, channel, notificationManag
     connected = true
   })
 
-  socket.onClose(r => {
+  socket.onClose((r) => {
     connected = false
     socket.params = { ...socket.params, reconnect: true }
   })
@@ -244,19 +242,22 @@ export function setupSocketReconnectBehaviour(socket, channel, notificationManag
 }
 
 export function getQueryParams() {
-  return document.location.search.replace(/(^\?)/, '').split('&').map(function(n){return n = n.split("="),this[n[0]] = n[1],this}.bind({}))[0];
+  return document.location.search.replace(/(^\?)/, '').split('&').map(function(n) { return n = n.split("="), this[n[0]] = n[1], this }.bind({}))[0];
 }
 
 export function hostCheck(domains) {
   const { hostname } = document.location
-  if (hostname === 'localhost' || hostname.endsWith('.localhost') || hostname === '127.0.0.1' || hostname == 'bsqd.me' || hostname.endsWith('.bsqd.me')) {
+  if (hostname === 'localhost' || hostname.endsWith('.localhost') || hostname === '127.0.0.1' || hostname === 'bsqd.me' || hostname.endsWith('.bsqd.me')) {
     return true
   }
   if (!domains || !domains.length) return false
   if (domains.indexOf(hostname) >= 0 || domains.find(h => hostname.endsWith('.' + h))) {
     return true
   }
+
+  // eslint-disable-next-line no-console
   console.log(`💡 [Botsquad] This chat widget is not configured to be hosted on ${hostname}.`)
+
   return false
 }
 

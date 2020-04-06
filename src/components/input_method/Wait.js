@@ -6,9 +6,13 @@ import { fixedLabel } from '../../common/labels'
 import { processText } from '../elements/util'
 
 function renderImplicitCloseButton(props) {
-  if (props.type !== 'closed') return
+  if (props.type !== 'closed') {
+    return null
+  }
   const { closeConversation } = props.handler.component.props
-  if (!closeConversation) return null
+  if (!closeConversation) {
+    return null
+  }
 
   return <button onClick={closeConversation} >{fixedLabel('new_conversation', props.localePrefs)}</button>
 }
@@ -35,9 +39,9 @@ function formatTime(waitTime, total) {
   )
 }
 
-export default function(props) {
+function Wait(props) {
   const { type } = props
-  const { caption, description, wait_time, button } = props.config
+  const { description, wait_time, button } = props.config
   const [waitTime, setWaitTime] = useState(0)
 
   const tick = () => {
@@ -60,8 +64,9 @@ export default function(props) {
   }, [])
 
   return (
-    <InputMethodContainer {...props}
-      className={`wait`} inline={type === 'closed' /* hides the `x` mark */}
+    <InputMethodContainer
+      {...props}
+      className="wait" inline={type === 'closed'}
       below={renderButton(button, props) || renderImplicitCloseButton(props)}
     >
       {type === 'wait' && (typeof wait_time !== 'undefined') && <div className="loader" />}
@@ -77,5 +82,6 @@ export default function(props) {
       {wait_time && waitTime >= 0 ? formatTime(waitTime, wait_time) : null}
     </InputMethodContainer>
   )
-  return <div>please wait</div>
 }
+
+export default Wait

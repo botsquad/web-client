@@ -35,7 +35,7 @@ const LABELS = {
     de: 'Nachricht schreiben…',
     fr: 'Tapez le message…',
     es: 'Escriba mensaje…',
-    ar: 'اكتب رسالة ...'
+    ar: 'اكتب رسالة ...',
   },
   new_conversation: {
     '$i18n': true,
@@ -81,7 +81,7 @@ const LABELS = {
     fr: 'Notre équipe répond normalement en 5 minutes.',
     es: 'Nuestro equipo responde normalmente en 5 minutos.',
     ar: 'يستجيب فريقنا عادة في 5 دقائق.',
-  }
+  },
 }
 
 let _uiLocale = null
@@ -89,7 +89,7 @@ let _uiLocale = null
 export function determineUILocale(initialLocale, bot) {
   const { locale } = bot
   const extra_locales = bot.extra_locales || bot.extraLocales
-  const user = initialLocale || locale2.replace(/\-.*$/, '')
+  const user = initialLocale || locale2.replace(/-.*$/, '')
   if (user === locale || extra_locales.indexOf(user) >= 0) {
     _uiLocale = user
   } else {
@@ -107,19 +107,6 @@ export function localePreflist(userLocale, bot) {
     prefList.unshift(userLocale)
   }
   return prefList
-}
-
-export function resolveTranslations(value, userLocale, bot) {
-  if (typeof value !== 'object') {
-    return value
-  }
-
-  if (!bot) {
-    // userLocale is a list
-    return resolveTranslationsLocales(value, userLocale)
-  }
-
-  return resolveTranslationsLocales(value, localePreflist(userLocale, bot))
 }
 
 export function resolveTranslationsLocales(value, locales) {
@@ -142,18 +129,33 @@ export function resolveTranslationsLocales(value, locales) {
       , null)
   }
 
-  Object.keys(value).forEach(k => {
+  Object.keys(value).forEach((k) => {
     value[k] = resolveTranslations(value[k], locales)
   })
   return value
 }
+
+export function resolveTranslations(value, userLocale, bot) {
+  if (typeof value !== 'object') {
+    return value
+  }
+
+  if (!bot) {
+    // userLocale is a list
+    return resolveTranslationsLocales(value, userLocale)
+  }
+
+  return resolveTranslationsLocales(value, localePreflist(userLocale, bot))
+}
+
 export function fixedLabel(key, prefList) {
   return resolveTranslations(LABELS[key], prefList.concat(['en']))
 }
 
 export function chatLabel(component, part) {
   const { ui_labels } = component.props.settings
-  return ui_labels && resolveTranslationsLocales(ui_labels[part], component.props.localePrefs) || fixedLabel(part, component.props.localePrefs)
+  return (ui_labels && resolveTranslationsLocales(ui_labels[part], component.props.localePrefs))
+      || fixedLabel(part, component.props.localePrefs)
 }
 
 export function textDirectionClass(locale) {

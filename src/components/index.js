@@ -1,6 +1,4 @@
 import React from 'react'
-import { findDOMNode } from "react-dom";
-import PropTypes from 'prop-types';
 import { Socket } from 'phoenix'
 import locale2 from 'locale2'
 
@@ -17,7 +15,7 @@ import UploadTrigger from './UploadTrigger'
 import './index.scss'
 
 class ChatHandler {
-  constructor(component, channel) {
+  constructor(component) {
     this.component = component
     this.channel = null
     this._activeAudio = null
@@ -65,7 +63,7 @@ class ChatHandler {
       // ignore short URLs, these are tracked internally
       return
     }
-    this.send('event', { name: '$link_click', payload: { url, via: "web" } })
+    this.send('event', { name: '$link_click', payload: { url, via: 'web' } })
   }
 
   sendFile(file) {
@@ -86,7 +84,7 @@ class ChatHandler {
                      },
                      () => {
                        // error
-                       this.component.setState({ upload: { name, type, retry: file }})
+                       this.component.setState({ upload: { name, type, retry: file } })
                      },
                      (progress) => {
                        this.component.setState({ upload: { ...this.component.state.upload, progress } })
@@ -96,24 +94,26 @@ class ChatHandler {
 
 
   handleAudioEvent(payload) {
-    if (!this._activeAudio) return null
+    if (!this._activeAudio) return
 
     switch (payload) {
       case 'play':
         // pause all others
-        this._audioElements.forEach(a => { if (a !== this._activeAudio) a.pause() })
+        this._audioElements.forEach((a) => { if (a !== this._activeAudio) a.pause() })
         // perform command
         this._activeAudio.play()
         break;
       case 'pause':
         this._activeAudio.pause()
         break;
+      default:
+        break;
     }
   }
 
   attachAudio(audio) {
     this._activeAudio = audio
-    if (this._audioElements.indexOf(audio) == -1) {
+    if (this._audioElements.indexOf(audio) === -1) {
       this._audioElements.push(audio)
     }
   }
@@ -123,13 +123,14 @@ class ChatHandler {
   }
 
   getClientDimensions() {
-    let { clientHeight, clientWidth } = this.component.windowElement
+    const { clientWidth } = this.component.windowElement
+    let { clientHeight } = this.component.windowElement
     clientHeight = Math.min(clientHeight, window.innerHeight)
-    return { clientHeight, clientWidth, clientRatio: clientHeight/ clientWidth }
+    return { clientHeight, clientWidth, clientRatio: clientHeight / clientWidth }
   }
 
   getMapsAPIKey() {
-    return this.component.props.mapsApiKey || ""
+    return this.component.props.mapsApiKey || ''
   }
 }
 
@@ -146,9 +147,9 @@ export default class Chat extends React.Component {
       conversationMeta: {},
       online: true,
       joined: null,
-      settings: props.settings || { ui_labels: {}, chat_config: {} },
-      localePrefs: props.localePrefs || [locale2.replace(/\-.*$/, '')],
-      socket: props.socket || new Socket('wss://bsqd.me/socket')
+      settings: { ui_labels: {}, chat_config: {}, ...props.settings },
+      localePrefs: props.localePrefs || [locale2.replace(/-.*$/, '')],
+      socket: props.socket || new Socket('wss://bsqd.me/socket'),
     }
     this.handler = new ChatHandler(this)
     if (props.notificationManager) {
@@ -163,7 +164,9 @@ export default class Chat extends React.Component {
     if (newProps.bot_id !== this.props.bot_id) {
       this.handler.joinChannel(newProps, this.state.socket)
     }
-    this.notificationManager && this.notificationManager.windowFocusChange()
+    if (this.notificationManager) {
+      this.notificationManager.windowFocusChange()
+    }
 
     if (newProps.online !== this.props.online) {
       if (newProps.online) {
@@ -177,7 +180,9 @@ export default class Chat extends React.Component {
 
   componentWillUnmount() {
     this.mounted = false
-    this.notificationManager && this.notificationManager.componentWillUnmount()
+    if (this.notificationManager) {
+      this.notificationManager.componentWillUnmount()
+    }
     this.handler.leaveChannel()
   }
 
@@ -228,7 +233,7 @@ export default class Chat extends React.Component {
 
   prependEvents(history, cb, initial) {
     if (initial) {
-      const lastInputState = history.concat([]).reverse().find((c) => c.type === 'emit' && c.payload.event === 'hide_input')
+      const lastInputState = history.concat([]).reverse().find(c => c.type === 'emit' && c.payload.event === 'hide_input')
       if (lastInputState) {
         const hide_input = JSON.parse(lastInputState.payload.json)
         if (this.props.onHideInput) {
@@ -269,13 +274,15 @@ export default class Chat extends React.Component {
     return { type, self, payload, renderable, time, as }
   }
 
+  root = React.createRef()
+
   render() {
     const localePrefs = this.state.conversationMeta?.locale ? [this.state.conversationMeta?.locale] : this.state.localePrefs
     const props = { ...this.props, localePrefs }
     const { modal, ...state } = this.state
 
     return (
-      <div className="botsi-web-client">
+      <div className="botsi-web-client" ref={this.root}>
         <ChatWindow {...props} online={this.state.online} channel={this.handler.channel} {...state} handler={this.handler} conversationMeta={this.state.conversationMeta} />
         {this.state.toast ? <ChatToast toast={this.state.toast} hiding={this.state.toastHiding} /> : null}
         {this.state.modal ? <ChatModal {...props} {...this.state} handler={this.handler} message={this.state.modal} hiding={this.state.modalHiding} /> : null}
@@ -289,7 +296,9 @@ export default class Chat extends React.Component {
   componentDidMount() {
     this.mounted = true
     this.handler.joinChannel(this.props, this.state.socket)
-    this.notificationManager && this.notificationManager.componentDidMount()
-    this.windowElement = findDOMNode(this).querySelector(".chat-window")
+    if (this.notificationManager) {
+      this.notificationManager.componentDidMount()
+    }
+    this.windowElement = this.root.current.querySelector('.chat-window')
   }
 }

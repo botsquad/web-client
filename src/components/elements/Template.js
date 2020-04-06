@@ -4,11 +4,12 @@ import Slider from 'react-slick'
 import InputMethodTemplate from './InputMethodTemplate'
 import { OpenModal, ArrowLeft, ArrowRight } from '../icons'
 import { processText } from './util'
-import { isMobile } from '../../common/util'
 
 import './css/slick.min.css'
 
 export function buttonClick(button, handler, handleEvent) {
+  let payload
+
   if (button.hide_modal) {
     handler.component.hideModal()
   }
@@ -17,7 +18,7 @@ export function buttonClick(button, handler, handleEvent) {
       handler.send('event', { name: button.payload, payload: {} })
       break
     case 'event':
-      const payload = { name: button.event, payload: button.json ? JSON.parse(button.json) : button.payload }
+      payload = { name: button.event, payload: button.json ? JSON.parse(button.json) : button.payload }
       handleEvent = handleEvent || (p => handler.send('event', p))
       handleEvent(payload)
       break
@@ -82,7 +83,6 @@ function renderGenericElement(element, idx, handler, message, full) {
 }
 
 export default class Template extends React.Component {
-
   render() {
     const { handler, message, modal, modalParams } = this.props
     const { clientWidth } = handler.getClientDimensions()
@@ -108,7 +108,7 @@ export default class Template extends React.Component {
         const singleCls = payload.elements.length === 1 ? ' single' : ''
         if (modal) {
           const settings = {
-            className: "center" + singleCls,
+            className: 'center' + singleCls,
             centerMode: true,
             infinite: false,
             centerPadding: clientWidth > 600 ? '200px' : '40px',
@@ -130,7 +130,7 @@ export default class Template extends React.Component {
         }
         const full = modal || !payload.modal
         return (
-          <Slider className={className + (full ? ' full' : '') + singleCls} arrows={false} variableWidth={true} infinite={false}>
+          <Slider className={className + (full ? ' full' : '') + singleCls} arrows={false} variableWidth infinite={false}>
             {payload.elements.map((element, i) => renderGenericElement(element, i, handler, message, full))}
           </Slider>
         )

@@ -1,12 +1,11 @@
 import React from 'react'
 
 export default class UploadTrigger extends React.Component {
-
   state = {
-    accept: ''
+    accept: '',
   }
 
-  onChange(e) {
+  onChange = (e) => {
     if (this.callback && e.target.files && e.target.files.length > 0) {
       this.callback(e.target.files[0])
     }
@@ -22,7 +21,7 @@ export default class UploadTrigger extends React.Component {
     return (
       <input
         className="upload-trigger"
-        onChange={this.onChange.bind(this)}
+        onChange={this.onChange}
         type="file"
         multiple={false}
         accept={this.state.accept}

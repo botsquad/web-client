@@ -5,10 +5,9 @@ import isEqual from 'lodash/isEqual'
 import inputMethodFactory from './input_method'
 
 export default class extends React.Component {
-
   state = {
     inputMethod: null,
-    operatorActive: false
+    operatorActive: false,
   }
 
   componentWillMount() {
@@ -64,7 +63,7 @@ export default class extends React.Component {
   }
 
   allDisabled() {
-    return this.props.settings.hide_input || this.isDisabled('text') && this.isDisabled('location') && this.isDisabled('image')
+    return this.props.settings.hide_input || (this.isDisabled('text') && this.isDisabled('location') && this.isDisabled('image'))
   }
 
   render() {

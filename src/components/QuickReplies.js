@@ -13,8 +13,6 @@ function uploadImage(handler) {
 }
 
 function renderButton({ content_type, title, image_url }, idx, handler) {
-  const icon = undefined
-
   if (content_type === 'image') {
     return (
       <div className="button" key={idx} onClick={() => uploadImage(handler)}>
@@ -36,7 +34,7 @@ function renderButton({ content_type, title, image_url }, idx, handler) {
       <div className="button" key={idx} onClick={() => handler.send('message', { text: title, input_type: 'touch' })}>
         { image_url &&
           <div className="icon">
-            <img src={image_url} />
+            <img src={image_url} alt="icon" />
           </div>
         }
         <span className="label">{title}</span>

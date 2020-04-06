@@ -5,10 +5,9 @@ import { RadioOn, RadioOff } from '../icons'
 import { chatLabel } from '../../common/labels'
 
 export default class extends React.Component {
-
   state = {
     hasSubmitted: false,
-    selectedItem: null
+    selectedItem: null,
   }
 
   componentWillMount() {
@@ -44,7 +43,8 @@ export default class extends React.Component {
     const { items, confirm, button_label } = this.props.config
 
     return (
-      <InputMethodContainer {...this.props}
+      <InputMethodContainer
+        {...this.props}
         className={`item-picker single ${confirm ? 'confirm' : ''}`}
         below={confirm ? <button disabled={!this.state.selectedItem || this.state.hasSubmitted} onClick={this.submit}>{button_label || chatLabel(this, 'form_submit_button')}</button> : null}
       >
@@ -56,7 +56,7 @@ export default class extends React.Component {
                  className={`${selected ? 'selected' : ''} ${item.image_url ? 'with-image' : ''}`}
                  onClick={() => this.itemClick(item)}
                  key={index}
-                 >
+               >
                  {confirm ? (selected ? RadioOn : RadioOff) : null}
                  <div className="c">
                    <div className="title">{item.title}</div>

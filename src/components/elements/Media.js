@@ -5,7 +5,7 @@ export const mediaEvents = new EventEmitter()
 
 
 class ModalWrapper extends React.PureComponent {
-  onClick() {
+  onClick = () => {
     const { handler, modal, message } = this.props
     if (modal) {
       handler.component.hideModal()
@@ -15,8 +15,7 @@ class ModalWrapper extends React.PureComponent {
   }
 
   triggerResize(event, component, ratio) {
-
-    if (!this.props.modal || !component && !this._component) {
+    if (!this.props.modal || (!component && !this._component)) {
       return
     }
     if (component && !this._component) {
@@ -34,14 +33,12 @@ class ModalWrapper extends React.PureComponent {
     if (this.props.message.payload.class && this.props.message.payload.class.match(/\bfullscreen\b/)) {
       w = clientWidth
       h = clientHeight
+    } else if (clientRatio > ratio) {
+      w = Math.floor(clientWidth * 0.9)
+      h = Math.floor(w * ratio)
     } else {
-      if (clientRatio > ratio) {
-        w = Math.floor(clientWidth * 0.9)
-        h = Math.floor(w * ratio)
-      } else {
-        h = Math.floor(clientHeight * 0.9)
-        w = Math.floor(h / ratio)
-      }
+      h = Math.floor(clientHeight * 0.9)
+      w = Math.floor(h / ratio)
     }
     component.style.width = `${w}px`;
     component.style.height = `${h}px`;
@@ -49,14 +46,13 @@ class ModalWrapper extends React.PureComponent {
 
   render() {
     const { className } = this.props
-    const onClick = this.onClick.bind(this)
     if (this.props.modal) {
       return this.props.children
     }
 
     return (
       <div className={className}>
-        {React.Children.map(this.props.children, child => React.cloneElement(child, { onClick }))}
+        {React.Children.map(this.props.children, child => React.cloneElement(child, { onClick: this.onClick }))}
       </div>
     )
   }
@@ -65,11 +61,11 @@ class ModalWrapper extends React.PureComponent {
 export class ImageMedia extends React.PureComponent {
   state = {
     loading: true,
-    retry: 0
+    retry: 0,
   }
 
   render() {
-    const { message, onLoad, handler } = this.props
+    const { message, onLoad } = this.props
     const { payload } = message
     let wrapper = null
     let component = null
@@ -81,19 +77,29 @@ export class ImageMedia extends React.PureComponent {
       }
       img.onerror = () => {
         if (this.state.retry > 20) return
-        setTimeout(() => this.setState({ retry: this.state.retry + 1 }), 250 + 50 * this.state.retry * this.state.retry)
+        setTimeout(() => this.setState({ retry: this.state.retry + 1 }), 250 + (50 * this.state.retry * this.state.retry))
       }
       img.src = payload.url
 
       return (
-        <ModalWrapper {...this.props} ref={w => { wrapper = w }}>
+        <ModalWrapper {...this.props} ref={(w) => { wrapper = w }}>
           <span className="loading" />
         </ModalWrapper>
       )
     }
     return (
-      <ModalWrapper {...this.props} ref={w => { wrapper = w }}>
-        <img ref={c => { component = c }} src={payload.url} onLoad={(event) => { if (onLoad) onLoad(); wrapper && component && wrapper.triggerResize(event, component, event.target.height / event.target.width) }} />
+      <ModalWrapper {...this.props} ref={(w) => { wrapper = w }}>
+        <img
+          role="presentation"
+          ref={(c) => { component = c }}
+          src={payload.url}
+          onLoad={(event) => {
+            if (onLoad) onLoad();
+            if (wrapper && component) {
+              wrapper.triggerResize(event, component, event.target.height / event.target.width)
+            }
+          }}
+        />
       </ModalWrapper>
     )
   }
@@ -107,19 +113,18 @@ function determineAspect(cls) {
     'square': 1,
     'four-by-three': 0.75,
     'three-by-two': 0.666,
-    'two-by-one': 0.5
+    'two-by-one': 0.5,
   }
   return (cls || '').split(' ').reduce((acc, c) => acc || ASPECTS[c], false) || ASPECTS.default
 }
 
 export class WebMedia extends React.Component {
-
   shouldComponentUpdate(nextProps) {
     return this.props.message.payload.url !== nextProps.message.payload.url
   }
 
   render() {
-    const { message, onLoad, handler } = this.props
+    const { message, onLoad } = this.props
     const { payload } = message
     const { preview_image } = payload
     let component = null
@@ -132,19 +137,22 @@ export class WebMedia extends React.Component {
     }
 
     return (
-      <ModalWrapper {...this.props} className={`web ${this.props.className}`} ref={w => { wrapper = w; tryResize(100) }}>
+      <ModalWrapper {...this.props} className={`web ${this.props.className}`} ref={(w) => { wrapper = w; tryResize(100) }}>
         {preview_image && !this.props.modal
-         ? <img ref={c => { component = c }} src={preview_image} />
-         : <div className="frame-wrapper" ref={c => { component = c }}>
-           <iframe src={payload.url} scrolling="no" onLoad={(event) => { if (onLoad) onLoad(); tryResize() }} />
-         </div>}
+        ? <img
+            ref={(c) => { component = c }}
+            src={preview_image}
+            role="presentation"
+        />
+        : <div className="frame-wrapper" ref={(c) => { component = c }}>
+          <iframe src={payload.url} scrolling="no" onLoad={() => { if (onLoad) onLoad(); tryResize() }} />
+        </div>}
       </ModalWrapper>
     )
   }
 }
 
 export class AudioMedia extends React.Component {
-
   audio = React.createRef()
 
   shouldComponentUpdate(nextProps) {
@@ -152,7 +160,7 @@ export class AudioMedia extends React.Component {
   }
 
   render() {
-    const { message, onLoad, handler, className } = this.props
+    const { message, className } = this.props
     const { payload } = message
 
     return (
@@ -186,13 +194,12 @@ export class AudioMedia extends React.Component {
 }
 
 export class VideoMedia extends React.Component {
-
   shouldComponentUpdate(nextProps) {
     return this.props.message.payload.url !== nextProps.message.payload.url
   }
 
   render() {
-    const { message, onLoad, handler, className } = this.props
+    const { message, className } = this.props
     const { payload } = message
 
     return (

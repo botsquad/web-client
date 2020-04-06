@@ -1,15 +1,16 @@
 import React from 'react';
-import { compose, withProps } from "recompose"
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
+import { compose, withProps } from 'recompose'
+import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import { MyLocation } from '../icons'
 
 function transformLngLon(position) {
-  return position = position ? { lat: position.lat, lng: position.lon } : null
+  position = position ? { lat: position.lat, lng: position.lon } : null
+  return position
 }
 
 class Map extends React.Component {
   state = {
-    address: null
+    address: null,
   }
 
   click = () => {
@@ -20,9 +21,9 @@ class Map extends React.Component {
   }
 
   componentDidMount() {
-    var geocoder = new google.maps.Geocoder;
+    const geocoder = new google.maps.Geocoder;
     const latlng = transformLngLon(this.props.message.payload)
-    geocoder.geocode({'location': latlng}, (results, status) => {
+    geocoder.geocode({ 'location': latlng }, (results) => {
       if (results && results[0]) {
         const address = results[0].formatted_address
         this.setState({ address })
@@ -45,7 +46,8 @@ class Map extends React.Component {
             disableDefaultUI: true,
             zoomControl: true,
             clickableIcons: false,
-            mapTypeIds: ['roadmap']}}
+            mapTypeIds: ['roadmap'],
+          }}
         >
           <Marker position={center} onClick={this.click} />
         </GoogleMap>
@@ -56,7 +58,7 @@ class Map extends React.Component {
 }
 
 const ComposedMap = compose(
-  withProps(r => {
+  withProps((r) => {
     const { clientHeight } = r.handler.getClientDimensions()
     const height = Math.floor(clientHeight * 0.6) + 'px'
     const mapsApiKey = r.handler.getMapsAPIKey()

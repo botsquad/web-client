@@ -22,7 +22,7 @@ const HTML_ENTITIES = {
 };
 
 export function escapeHtml(string) {
-  return String(string).replace(/[&<>"']/g, (s) => HTML_ENTITIES[s])
+  return String(string).replace(/[&<>"']/g, s => HTML_ENTITIES[s])
 }
 
 let markdownOpts = null

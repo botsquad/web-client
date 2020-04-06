@@ -21,7 +21,7 @@ export default function botChatHandler(component, socket, bot_id, params) {
       .receive('error', (resp) => {
         reject(resp)
       })
-      .receive('ok', ({ user_id, widget_state }) => {
+      .receive('ok', ({ user_id }) => {
         if (joined) {
           return
         }

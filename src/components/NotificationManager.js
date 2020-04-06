@@ -1,9 +1,8 @@
-const NUMBERS = ["❶", "❷", "❸", "❹", "❺", "❻", "❼", "❽", "❾", "❿"]
+const NUMBERS = ['❶', '❷', '❸', '❹', '❺', '❻', '❼', '❽', '❾', '❿']
 const SOUND = 'https://s3.eu-central-1.amazonaws.com/bsqd/audio/df56cb16-124c-4975-8a86-bbdd0dd20102.dat'
 const NOTIFICATION_CLEAR_TIME = 5000
 
 export default class NotificationManager {
-
   constructor(component) {
     this.component = component
     this.hasCordovaFocus = null
@@ -23,7 +22,7 @@ export default class NotificationManager {
   }
 
   _push(event, payload) {
-    const channel = this.channel || this.component.handler && this.component.handler.channel
+    const channel = this.channel || (this.component.handler && this.component.handler.channel)
     if (channel) {
       channel.push(event, payload)
     }
@@ -33,23 +32,23 @@ export default class NotificationManager {
     this.documentTitle = document.title
     window.addEventListener('focus', this.windowFocusChange.bind(this))
     window.addEventListener('blur', this.windowFocusChange.bind(this))
-    document.addEventListener("pause", this.cordovaFocusChange.bind(this, false), false);
-    document.addEventListener("resume", this.cordovaFocusChange.bind(this, true), false);
+    document.addEventListener('pause', this.cordovaFocusChange.bind(this, false), false);
+    document.addEventListener('resume', this.cordovaFocusChange.bind(this, true), false);
   }
 
   componentWillUnmount() {
     this._clearNotificationUI()
     window.removeEventListener('focus', this.windowFocusChange.bind(this))
     window.removeEventListener('blur', this.windowFocusChange.bind(this))
-    document.removeEventListener("pause", this.cordovaFocusChange.bind(this, false), false);
-    document.removeEventListener("resume", this.cordovaFocusChange.bind(this, true), false);
+    document.removeEventListener('pause', this.cordovaFocusChange.bind(this, false), false);
+    document.removeEventListener('resume', this.cordovaFocusChange.bind(this, true), false);
   }
 
   play() {
     if (this.mayPlaySound()) {
       try {
         this.sound.play()
-      } catch(e) {
+      } catch (e) {
         // autoplay audio is disabled
       }
     }
@@ -124,7 +123,7 @@ export default class NotificationManager {
   }
 
   mayPlaySound() {
-    return this.component.props.host && this.component.props.host.mayPlaySound() ||
-           this.component.externalInterface && this.component.externalInterface.mayPlaySound()
+    return (this.component.props.host && this.component.props.host.mayPlaySound()) ||
+           (this.component.externalInterface && this.component.externalInterface.mayPlaySound())
   }
 }

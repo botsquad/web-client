@@ -2,11 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import WebClient from '../src/index';
+import './example.scss'
 
 const user_id = 'u' + Math.random()
-const bot_id = "1adc3f20-32e9-4376-a147-d9ef23ac8a4c"
-
-import './example.scss'
+const bot_id = '1adc3f20-32e9-4376-a147-d9ef23ac8a4c'
 
 function App() {
   return (
@@ -16,6 +15,7 @@ function App() {
           bot_id={bot_id}
           params={{ user_id }}
           hideAvatars
+          settings={{ alwaysFocus: true }}
         />
       </div>
     </div>

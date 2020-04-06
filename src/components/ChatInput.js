@@ -2,48 +2,30 @@ import React from 'react'
 import debounce from 'lodash/debounce'
 
 import { ImageUpload, AudioUpload, FileUpload, LocationShare, Arrow, More, Close } from './icons'
-import { isiOS, isiPad, isMobile } from '../common/util'
-import ChatInputModal from './ChatInputModal'
+import { isiOS } from '../common/util'
+import ChatInputModalWrapper from './ChatInputModalWrapper'
 import { chatMessagesEvents } from './ChatMessages'
 import { chatLabel } from '../common/labels'
 
-class ChatInputModalWrapper extends React.Component {
-  cancel = () => {
-    const { component, cancelLabel } = this.props
-    if (component.state.inputMethodOverride) {
-      component.setState({ inputMethodOverride: null })
-    } else {
-      component.props.handler.send('message', { type: 'cancel', text: cancelLabel })
-    }
-  }
-
-  finish = () => {
-    const { component } = this.props
-    component.setState({ inputMethodOverride: null })
-  }
-
-  render() {
-    const { children, component } = this.props
-    return (
-      <ChatInputModal {...component.props} onCancel={this.cancel} onFinish={this.finish} inputMethodOverride={component.state.inputMethodOverride}>
-        {children}
-      </ChatInputModal>
-    )
-  }
-}
 
 export default class ChatInput extends React.Component {
   state = {
     hasMessage: false,
     message: '',
     inputFocus: false,
-    inputMethodOverride: null
+    inputMethodOverride: null,
   }
   _input = null
 
   showLocationInput() {
     this.setState(
-      { inputMethodOverride: {type: 'location', payload: { zoom: 12, height: 'compact' } }, menuOpen: false },
+      {
+        inputMethodOverride: {
+          type: 'location',
+          payload: { zoom: 12, height: 'compact' },
+        },
+        menuOpen: false,
+      },
       () => this.props.chatMessages.scrollToBottom()
     )
   }
@@ -54,9 +36,13 @@ export default class ChatInput extends React.Component {
       this.props.handler.send('message', { text: message, input_type: 'keyboard' })
     }
     this.setState({ message: '', hasMessage: false }, () => this.props.chatMessages.scrollToBottom())
-    if (this.input) {
+    if (this.input.current) {
       const { alwaysFocus } = this.props.settings
-      alwaysFocus ? this.input.focus() : this.input.blur()
+      if (alwaysFocus) {
+        this.input.current.focus()
+      } else {
+        this.input.current.blur()
+      }
     }
   }
 
@@ -89,7 +75,9 @@ export default class ChatInput extends React.Component {
 
     if (e.keyCode === 27) {
       if (layout !== 'embedded') {
-        this.props.handler.component.props.onClose && this.props.handler.component.props.onClose()
+        if (this.props.handler.component.props.onClose) {
+          this.props.handler.component.props.onClose()
+        }
       } else {
         this.setState({ message: '', hasMessage: false, menuOpen: false })
       }
@@ -129,29 +117,34 @@ export default class ChatInput extends React.Component {
     setTimeout(() => chatMessagesEvents.emit('scrollToBottom'), 500)
 
     if (!isiOS()) return
-    const mb = this.inputDiv.style.marginBottom
-    this.inputDiv.style.marginBottom = mb === '-1px' ? '0' : '-1px'
+    const mb = this.inputDiv.current.style.marginBottom
+    this.inputDiv.current.style.marginBottom = mb === '-1px' ? '0' : '-1px'
   }
 
   onInputBlur() {
     if (!isiOS()) return
     setTimeout(() => {
-      const mb = this.inputDiv.style.marginBottom
-      this.inputDiv.style.marginBottom = mb === '-1px' ? '0' : '-1px'
+      const mb = this.inputDiv.current.style.marginBottom
+      this.inputDiv.current.style.marginBottom = mb === '-1px' ? '0' : '-1px'
     }, 10)
   }
+
+  inputDiv = React.createRef()
+  input = React.createRef()
 
   renderDocked() {
     return (
       <ChatInputModalWrapper component={this} cancelLabel={chatLabel(this, 'cancel')}>
         {operatorActive =>
-          <div className="chat-input docked" ref={inputDiv => { this.inputDiv = inputDiv }}>
+          <div className="chat-input docked" ref={this.inputDiv}>
             <div className="input">
               {(!this.isDisabled('text') || operatorActive)
-              ? <input type="text" value={this.state.message}
+              ? <input
+                  type="text"
+                  value={this.state.message}
                   readOnly={!this.props.online}
                   placeholder={chatLabel(this, 'text_input_placeholder')}
-                  ref={input => { this.input = input }}
+                  ref={this.input}
                   onFocus={() => this.onInputFocus()}
                   onBlur={() => this.onInputBlur()}
                   onKeyUp={e => this.onKeyUp(e)}
@@ -187,20 +180,20 @@ export default class ChatInput extends React.Component {
             </div>
 
             {(!this.isDisabled('text') || operatorActive)
-            ? <>
-              <div className="input">
-                <input type="text" value={this.state.message}
-                  readOnly={!this.props.online}
-                  placeholder={chatLabel(this, 'text_input_placeholder')}
-                  ref={input => { this.input = input }}
-                  onKeyUp={e => this.onKeyUp(e)}
-                  onFocus={() => this.onFocus()}
-                  onBlur={() => this.onBlur()}
-                  onChange={e => this.onChange(e)}
-                />
-                <button className={`send ${this.state.hasMessage ? 'has-message' : ''}`} disabled={!this.props.online} onClick={() => this.sendMessage()}>{Arrow}</button>
-              </div>
-            </>
+            ? <div className="input">
+              <input
+                type="text"
+                value={this.state.message}
+                readOnly={!this.props.online}
+                placeholder={chatLabel(this, 'text_input_placeholder')}
+                ref={this.input}
+                onKeyUp={e => this.onKeyUp(e)}
+                onFocus={() => this.onFocus()}
+                onBlur={() => this.onBlur()}
+                onChange={e => this.onChange(e)}
+              />
+              <button className={`send ${this.state.hasMessage ? 'has-message' : ''}`} disabled={!this.props.online} onClick={() => this.sendMessage()}>{Arrow}</button>
+            </div>
             : null}
           </div>
         }
@@ -212,5 +205,4 @@ export default class ChatInput extends React.Component {
     const { layout } = this.props.settings
     return layout === 'embedded' ? this.renderEmbedded() : this.renderDocked()
   }
-
 }

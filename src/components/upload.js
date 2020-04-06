@@ -1,4 +1,4 @@
-export function uploadFile(file, signed_request, resolve, reject, progressHandler){
+export function uploadFile(file, signed_request, resolve, reject, progressHandler) {
   let error = false
 
   const xhr = new XMLHttpRequest()
@@ -18,7 +18,9 @@ export function uploadFile(file, signed_request, resolve, reject, progressHandle
 
   xhr.onerror = (err) => {
     error = true
-    reject && setTimeout(() => reject(err), 0)
+    if (reject) {
+      setTimeout(() => reject(err), 0)
+    }
   };
 
   xhr.send(file);

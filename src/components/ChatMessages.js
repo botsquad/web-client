@@ -1,28 +1,22 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import debounce from 'lodash/debounce'
 import isEqual from 'lodash/isEqual'
+import { EventEmitter } from 'fbemitter'
 
 import QuickReplies from './QuickReplies'
 import ChatInput from './ChatInput'
 import elementFactory from './elements'
 import { shortDateTimeFormat } from '../common/util'
 import { messageHasModal } from './elements/util'
-import { EventEmitter } from 'fbemitter'
 
 export const chatMessagesEvents = new EventEmitter()
 
 
 export default class ChatMessages extends React.Component {
-
   state = {
     messageGroups: [],
     lastMessage: null,
-    loading: false
+    loading: false,
   }
-
-  wrapperElement = null
-  scrollElement = null
 
   componentDidMount() {
     this.groupMessages(this.props)
@@ -40,7 +34,7 @@ export default class ChatMessages extends React.Component {
 
   _connectFormEvents(events) {
     const formLookup = {}
-    for (let m of events) {
+    for (const m of events) {
       if (m.type === 'template' && m.payload.template_type === 'input_method') {
         formLookup[m.payload.template_id] = m
       }
@@ -57,14 +51,14 @@ export default class ChatMessages extends React.Component {
     const { events, userAvatar, botAvatar, conversationMeta } = props
 
     // convert all events into groups of messages
-    let messageGroups = []
+    const messageGroups = []
     let lastMessage = false
     let lastModalMessage = null
     let currentGroup = false
 
     this._connectFormEvents(events)
 
-    for (let message of events) {
+    for (const message of events) {
       if (!message.renderable) {
         continue
       }
@@ -76,7 +70,7 @@ export default class ChatMessages extends React.Component {
           avatar: message.self ? userAvatar : (message.as ? message.as.profile_picture : botAvatar),
           messages: [message],
           class: message.payload.class || null,
-          as: message.as
+          as: message.as,
         }
       } else {
         currentGroup.messages.push(message)
@@ -116,16 +110,18 @@ export default class ChatMessages extends React.Component {
     if (layout === 'embedded' && this.props.host) {
       // scroll the document
       this.props.host.scrollToBottom()
-    } else if (this.wrapperElement) {
-      this.wrapperElement.scrollTop = this.wrapperElement.scrollHeight
+    } else if (this.wrapperElement.current) {
+      this.wrapperElement.current.scrollTop = this.wrapperElement.current.scrollHeight
     }
   }
 
-  renderMessageGroup(group){
+  renderMessageGroup = (group) => {
     if (group.hasReadUntil) {
-      return <div key="hasReadUntil" className={`has-read-until`}>
-        <span>{shortDateTimeFormat(group.hasReadUntil)}</span>
-      </div>
+      return (
+        <div key="hasReadUntil" className="has-read-until">
+          <span>{shortDateTimeFormat(group.hasReadUntil)}</span>
+        </div>
+      )
     }
 
     const key = group.messages[0].time
@@ -151,7 +147,6 @@ export default class ChatMessages extends React.Component {
   }
 
   renderMessage(message) {
-    let element = null
     const cls = `bubble ${message.self ? 'self' : 'bot'} ` + message.type
 
     const attrs = {
@@ -160,13 +155,13 @@ export default class ChatMessages extends React.Component {
       message,
       className: cls + (message.payload.class ? ' ' + message.payload.class : '') + (this.isRecent(message) ? ' recent' : ''),
       layout: this.props.settings.layout,
-      onLoad: () => this.scrollToBottom()
+      onLoad: () => this.scrollToBottom(),
     }
 
     return (this.props.elementFactory ? this.props.elementFactory(message, attrs) : null) || elementFactory(message, attrs)
   }
 
-  renderUpload({ name, progress, type, retry }) {
+  renderUpload({ progress, type, retry }) {
     if (retry) {
       return (
         <div className="upload">
@@ -186,7 +181,7 @@ export default class ChatMessages extends React.Component {
       <div className="upload">
         <span className="label">Sending {type}… {Math.ceil(progress)}%</span>
         <span className="progress">
-          <span style={{ width: progress + '%' }}></span>
+          <span style={{ width: progress + '%' }} />
         </span>
       </div>
     )
@@ -205,15 +200,15 @@ export default class ChatMessages extends React.Component {
         ? <div className="avatar" style={{ backgroundImage: avatar ? `url(${avatar})` : null }} />
         : null}
         <div className="typing">
-          <span></span><span></span><span></span>
+          <span /><span /><span />
         </div>
       </div>
     )
   }
 
-  checkLinkClick(e) {
-    let url
-    if (e.target && (url = e.target.getAttribute('href'))) {
+  checkLinkClick = (e) => {
+    const url = e.target?.getAttribute('href')
+    if (url) {
       this.props.handler.sendLinkClick(url)
     }
   }
@@ -224,24 +219,29 @@ export default class ChatMessages extends React.Component {
     })
   }
 
-  onScroll() {
-    if (this.props.channel && this.props.channel.hasMoreHistory() && this.wrapperElement.scrollTop < 10 && !this.state.loading) {
+  onScroll = () => {
+    if (this.props.channel && this.props.channel.hasMoreHistory() && this.wrapperElement.current.scrollTop < 10 && !this.state.loading) {
       this.loadHistory()
     }
   }
 
+  wrapperElement = React.createRef()
+
   render() {
-    const { upload, events, typing, handler, hideAvatars, userAvatar } = this.props
+    const { upload, typing, handler, hideAvatars, userAvatar } = this.props
     const { messageGroups, lastMessage } = this.state
 
     if (this.isRecent(lastMessage) || typing || upload) {
       setTimeout(() => this.scrollToBottom(), 0)
     }
 
-    const hasMore = this.props.channel && this.props.channel.hasMoreHistory()
-
     return (
-      <div className={`chat-messages ${hideAvatars ? 'hide-avatars' : (userAvatar ? 'user-avatar' : '')}`} ref={e => this.wrapperElement = e } onClick={this.checkLinkClick.bind(this)} onScroll={this.onScroll.bind(this)}>
+      <div
+        className={`chat-messages ${hideAvatars ? 'hide-avatars' : (userAvatar ? 'user-avatar' : '')}`}
+        ref={this.wrapperElement}
+        onClick={this.checkLinkClick}
+        onScroll={this.onScroll}
+      >
         <div className="inner">
 
           {(this.props.settings.layout === 'embedded')
@@ -258,7 +258,7 @@ export default class ChatMessages extends React.Component {
           {upload ? this.renderUpload(upload) : null}
           {typing ? this.renderTyping() : null}
 
-          {messageGroups.map(this.renderMessageGroup.bind(this))}
+          {messageGroups.map(this.renderMessageGroup)}
 
           {this.state.loading ? <span>…</span> : null}
         </div>
@@ -271,7 +271,8 @@ export default class ChatMessages extends React.Component {
       // do not autoload history, for now
       return
     }
-    if (this.wrapperElement && this.wrapperElement.scrollHeight <= this.wrapperElement.offsetHeight && this.props.channel && this.props.channel.hasMoreHistory() && !this.state.loading) {
+    const wrapper = this.wrapperElement.current
+    if (wrapper && wrapper.scrollHeight <= wrapper.offsetHeight && this.props.channel && this.props.channel.hasMoreHistory() && !this.state.loading) {
       this.loadHistory()
     }
   }
