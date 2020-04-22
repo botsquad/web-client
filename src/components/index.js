@@ -147,7 +147,6 @@ export default class Chat extends React.Component {
       conversationMeta: {},
       online: true,
       joined: null,
-      settings: { ui_labels: {}, chat_config: {}, ...props.settings },
       localePrefs: props.localePrefs || [locale2.replace(/-.*$/, '')],
       socket: props.socket || new Socket('wss://bsqd.me/socket'),
     }
