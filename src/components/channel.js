@@ -88,6 +88,9 @@ export default function botChatHandler(component, socket, bot_id, params) {
           if (event.event === 'trigger_audio') {
             component.triggerAudio(event.payload)
           }
+          if (event.event === 'hide_input' && component.props.onHideInput) {
+            component.props.onHideInput(event.payload)
+          }
           if (component.props.onEmit) {
             component.props.onEmit(event)
           }
