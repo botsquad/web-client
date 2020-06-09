@@ -6,6 +6,7 @@ import MultiItemPicker from './MultiItemPicker'
 import Form from './Form'
 import LocationPicker from './LocationPicker'
 import Wait from './Wait'
+import NumericKeyboard from './NumericKeyboard'
 
 export default function elementFactory(method, props, inputModal) {
   const { type, payload, time } = method
@@ -28,10 +29,13 @@ export default function elementFactory(method, props, inputModal) {
   if (type === 'closed') {
     return <Wait {...props} time={time} type={type} config={payload} inputModal={inputModal} />
   }
-  /*
-  if (type === 'barcode') {
-    return <Barcode {...props} config={payload} inputModal={inputModal} />
+  if (type === 'numeric') {
+    return <NumericKeyboard {...props} time={time} type={type} config={payload} inputModal={inputModal} />
   }
-  */
+  /*
+     if (type === 'barcode') {
+     return <Barcode {...props} config={payload} inputModal={inputModal} />
+     }
+   */
   return <div>Unsupported input method: <b>{type}</b></div>
 }

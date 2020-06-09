@@ -63,6 +63,26 @@ $bubble-radius: 20px;
   border-radius: $bubble-radius;
 }
 
+@mixin ui-button {
+  font-size: 120%;
+  padding: 10px;
+  flex: 1;
+  text-align: center;
+  color: var(--botsquad-main-color);
+  background: none;
+  border: 0;
+  &:disabled {
+    color: var(--botsquad-ui-color);
+  }
+  &:active {
+    background-color: var(--botsquad-main-color);
+    color: white;
+  }
+  &:focus {
+    outline: none;
+  }
+}
+
 @mixin avatar($dim: 60px) {
   position: relative;
   background-color: #eee;

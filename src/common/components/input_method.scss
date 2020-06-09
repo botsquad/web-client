@@ -80,20 +80,8 @@
     display: flex;
     flex-direction: row;
     button, .button {
-      font-size: 120%;
       height: 50px;
-      flex: 1;
-      text-align: center;
-      color: var(--botsquad-main-color);
-      background: none;
-      border: 0;
-      &:disabled {
-        color: var(--botsquad-ui-color);
-      }
-      &:active {
-        background-color: var(--botsquad-main-color);
-        color: white;
-      }
+      @include ui-button;
     }
   }
 }
@@ -393,6 +381,48 @@
   div.below {
     outline: none;
     background-color: #ffffff;
+  }
+}
+
+.input-method--container.numeric {
+  .content {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    .display {
+      padding: 6px 12px;
+      height: 28px;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
+      font-size: 120%;
+
+      button {
+        @include ui-button;
+        padding: 6px 10px;
+        border: 0;
+        background: none;
+        svg { width: 16px; height: 16px; }
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+    }
+
+    .keys {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      border-top: 1px solid var(--botsquad-ui-color);
+      border-bottom: 1px solid var(--botsquad-ui-color);
+
+      button {
+        @include ui-button;
+      }
+    }
+  }
+
+  .below {
   }
 }
 

@@ -13,8 +13,8 @@ const LABELS = {
   form_submit_button: {
     '$i18n': true,
     en: 'Submit',
-    nl: 'Opslaan',
-    de: 'Speichern',
+    nl: 'Verstuur',
+    de: 'Senden',
     fr: 'Enregistrer',
     es: 'Guardar',
     ar: 'إرسال',
