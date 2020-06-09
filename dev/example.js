@@ -15,7 +15,7 @@ function App() {
           bot_id={bot_id}
           params={{ user_id }}
           hideAvatars
-          settings={{ alwaysFocus: true }}
+          settings={{ alwaysFocus: true, chat_config: { disabled_inputs: [] } }}
         />
       </div>
     </div>
@@ -24,5 +24,5 @@ function App() {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(<App />, document.getElementById("root"))
+  ReactDOM.render(<App />, document.getElementById('root'))
 })
