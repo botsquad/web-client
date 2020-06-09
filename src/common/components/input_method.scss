@@ -392,21 +392,27 @@
 
     .display {
       padding: 6px 12px;
-      height: 28px;
+      height: 40px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
       font-size: 1em;
       font-weight: bold;
       text-align: center;
       font-size: 120%;
-
+      position: relative;
       button {
         @include ui-button;
-        padding: 6px 10px;
-        border: 0;
+        height: 40px; width: 40px;
         background: none;
-        svg { width: 16px; height: 16px; }
+        border: 0;
         position: absolute;
         right: 0;
         top: 0;
+        text-align: center;
+        svg { width: 16px; height: 16px; margin-left: 5px; }
+        &:active svg { fill: white; }
       }
     }
 
