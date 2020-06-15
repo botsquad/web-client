@@ -21,7 +21,7 @@ export default function botChatHandler(component, socket, bot_id, params) {
       .receive('error', (resp) => {
         reject(resp)
       })
-      .receive('ok', ({ user_id }) => {
+      .receive('ok', (joinResult) => {
         if (joined) {
           return
         }
@@ -44,11 +44,11 @@ export default function botChatHandler(component, socket, bot_id, params) {
                  })
         }
 
-        setCookieUserId(user_id)
+        setCookieUserId(joinResult.user_id)
 
         if (component.props.onChannel) {
           if (!component.mounted) return
-          component.props.onChannel(channel)
+          component.props.onChannel(channel, joinResult)
         }
 
         channel.on('history', ({ events, next }) => {
