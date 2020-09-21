@@ -7,7 +7,6 @@ import ChatInputModalWrapper from './ChatInputModalWrapper'
 import { chatMessagesEvents } from './ChatMessages'
 import { chatLabel } from '../common/labels'
 
-
 export default class ChatInput extends React.Component {
   state = {
     hasMessage: false,
@@ -26,7 +25,7 @@ export default class ChatInput extends React.Component {
         },
         menuOpen: false,
       },
-      () => this.props.chatMessages.scrollToBottom()
+      () => this.props.chatMessages.scrollToBottom(),
     )
   }
 
@@ -100,7 +99,7 @@ export default class ChatInput extends React.Component {
   }
 
   upload(accept) {
-    this.props.handler.component.uploader.trigger(accept, (file) => {
+    this.props.handler.component.uploader.trigger(accept, file => {
       this.props.handler.sendFile(file)
       this.props.chatMessages.scrollToBottom()
       this.setState({ menuOpen: false })
@@ -135,11 +134,11 @@ export default class ChatInput extends React.Component {
   renderDocked() {
     return (
       <ChatInputModalWrapper component={this} cancelLabel={chatLabel(this, 'cancel')}>
-        {operatorActive =>
+        {operatorActive => (
           <div className="chat-input docked" ref={this.inputDiv}>
             <div className="input">
-              {(!this.isDisabled('text') || operatorActive)
-              ? <input
+              {!this.isDisabled('text') || operatorActive ? (
+                <input
                   type="text"
                   value={this.state.message}
                   readOnly={!this.props.online}
@@ -149,16 +148,31 @@ export default class ChatInput extends React.Component {
                   onBlur={() => this.onInputBlur()}
                   onKeyUp={e => this.onKeyUp(e)}
                   onChange={e => this.onChange(e)}
-              />
-              : null}
+                />
+              ) : null}
             </div>
-            {!this.state.hasMessage && (operatorActive || !this.isDisabled('location')) ? <button disabled={!this.props.online} onClick={() => this.showLocationInput()}>{LocationShare}</button> : null}
-            {!this.state.hasMessage && !this.isDisabled('image') ? <button disabled={!this.props.online} onClick={() => this.upload('image/*,video/*')}>{ImageUpload}</button> : null}
+            {!this.state.hasMessage && (operatorActive || !this.isDisabled('location')) ? (
+              <button disabled={!this.props.online} onClick={() => this.showLocationInput()}>
+                {LocationShare}
+              </button>
+            ) : null}
+            {!this.state.hasMessage && !this.isDisabled('image') ? (
+              <button disabled={!this.props.online} onClick={() => this.upload('image/*,video/*')}>
+                {ImageUpload}
+              </button>
+            ) : null}
 
-            {this.state.hasMessage || (this.isDisabled('image') && this.isDisabled('location'))
-            ? <button className={`send ${this.state.hasMessage ? 'has-message' : ''}`} disabled={!this.props.online || !this.state.hasMessage} onClick={() => this.sendMessage()}>{Arrow}</button>
-            : null}
-          </div>}
+            {this.state.hasMessage || (this.isDisabled('image') && this.isDisabled('location')) ? (
+              <button
+                className={`send ${this.state.hasMessage ? 'has-message' : ''}`}
+                disabled={!this.props.online || !this.state.hasMessage}
+                onClick={() => this.sendMessage()}
+              >
+                {Arrow}
+              </button>
+            ) : null}
+          </div>
+        )}
       </ChatInputModalWrapper>
     )
   }
@@ -166,37 +180,63 @@ export default class ChatInput extends React.Component {
   renderEmbedded() {
     return (
       <ChatInputModalWrapper component={this} cancelLabel={chatLabel(this, 'cancel')}>
-        {operatorActive =>
-          <div className={`chat-input embedded ${this.state.menuOpen ? 'menu-open' : ''} ${this.state.inputFocus ? 'input-focus' : ''}`}>
+        {operatorActive => (
+          <div
+            className={`chat-input embedded ${this.state.menuOpen ? 'menu-open' : ''} ${
+              this.state.inputFocus ? 'input-focus' : ''
+            }`}
+          >
             <div className="input-menu">
               <span className="menu">
-                {this.state.menuOpen ? <button onClick={() => this.setState({ menuOpen: !this.state.menuOpen })}>{this.state.menuOpen ? Close : More}</button> : null}
-                <button disabled={!this.props.online} onClick={() => this.showLocationInput()}>{LocationShare}</button>
-                <button disabled={!this.props.online} onClick={() => this.upload('image/*,video/*')}>{ImageUpload}</button>
-                <button disabled={!this.props.online} onClick={() => this.upload('*/*')}>{FileUpload}</button>
-                <button disabled={!this.props.online} onClick={() => this.upload('audio/*')}>{AudioUpload}</button>
+                {this.state.menuOpen ? (
+                  <button onClick={() => this.setState({ menuOpen: !this.state.menuOpen })}>
+                    {this.state.menuOpen ? Close : More}
+                  </button>
+                ) : null}
+                <button disabled={!this.props.online} onClick={() => this.showLocationInput()}>
+                  {LocationShare}
+                </button>
+                <button disabled={!this.props.online} onClick={() => this.upload('image/*,video/*')}>
+                  {ImageUpload}
+                </button>
+                <button disabled={!this.props.online} onClick={() => this.upload('*/*')}>
+                  {FileUpload}
+                </button>
+                <button disabled={!this.props.online} onClick={() => this.upload('audio/*')}>
+                  {AudioUpload}
+                </button>
               </span>
-              {!this.state.menuOpen ? <button onClick={() => this.setState({ menuOpen: !this.state.menuOpen })}>{this.state.menuOpen ? Close : More}</button> : null}
+              {!this.state.menuOpen ? (
+                <button onClick={() => this.setState({ menuOpen: !this.state.menuOpen })}>
+                  {this.state.menuOpen ? Close : More}
+                </button>
+              ) : null}
             </div>
 
-            {(!this.isDisabled('text') || operatorActive)
-            ? <div className="input">
-              <input
-                type="text"
-                value={this.state.message}
-                readOnly={!this.props.online}
-                placeholder={chatLabel(this, 'text_input_placeholder')}
-                ref={this.input}
-                onKeyUp={e => this.onKeyUp(e)}
-                onFocus={() => this.onFocus()}
-                onBlur={() => this.onBlur()}
-                onChange={e => this.onChange(e)}
-              />
-              <button className={`send ${this.state.hasMessage ? 'has-message' : ''}`} disabled={!this.props.online} onClick={() => this.sendMessage()}>{Arrow}</button>
-            </div>
-            : null}
+            {!this.isDisabled('text') || operatorActive ? (
+              <div className="input">
+                <input
+                  type="text"
+                  value={this.state.message}
+                  readOnly={!this.props.online}
+                  placeholder={chatLabel(this, 'text_input_placeholder')}
+                  ref={this.input}
+                  onKeyUp={e => this.onKeyUp(e)}
+                  onFocus={() => this.onFocus()}
+                  onBlur={() => this.onBlur()}
+                  onChange={e => this.onChange(e)}
+                />
+                <button
+                  className={`send ${this.state.hasMessage ? 'has-message' : ''}`}
+                  disabled={!this.props.online}
+                  onClick={() => this.sendMessage()}
+                >
+                  {Arrow}
+                </button>
+              </div>
+            ) : null}
           </div>
-        }
+        )}
       </ChatInputModalWrapper>
     )
   }

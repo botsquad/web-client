@@ -4,24 +4,24 @@ export function uploadFile(file, signed_request, resolve, reject, progressHandle
   const xhr = new XMLHttpRequest()
   xhr.open('PUT', signed_request)
 
-  xhr.upload.onprogress = (evt) => {
+  xhr.upload.onprogress = evt => {
     if (evt.lengthComputable && progressHandler && !error) {
-      progressHandler((evt.loaded / evt.total) * 100);
+      progressHandler((evt.loaded / evt.total) * 100)
     }
   }
 
   xhr.onload = () => {
     if (xhr.status === 200) {
-      resolve(signed_request.replace(/\?.*$/, ''));
+      resolve(signed_request.replace(/\?.*$/, ''))
     }
-  };
+  }
 
-  xhr.onerror = (err) => {
+  xhr.onerror = err => {
     error = true
     if (reject) {
       setTimeout(() => reject(err), 0)
     }
-  };
+  }
 
-  xhr.send(file);
+  xhr.send(file)
 }

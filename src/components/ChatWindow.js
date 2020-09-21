@@ -19,9 +19,9 @@ export default class ChatWindow extends React.Component {
     return (
       <div className={classNames('chat-window', { online }, layout, deviceClasses())}>
         <ChatMessages {...this.props} ref={this.chatMessages} />
-        {this.props.settings.layout !== 'embedded'
-         ? <ChatInput {...this.props} chatMessages={this.chatMessages.current} />
-         : null}
+        {this.props.settings.layout !== 'embedded' ? (
+          <ChatInput {...this.props} chatMessages={this.chatMessages.current} />
+        ) : null}
       </div>
     )
   }

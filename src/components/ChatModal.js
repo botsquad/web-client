@@ -24,7 +24,7 @@ export default class ChatModal extends React.Component {
   hide = () => {
     if (this.props.hiding) return
     this.props.handler.component.hideModal()
-    this.props.handler.send('event', { name: '$modal_close', payload: { } })
+    this.props.handler.send('event', { name: '$modal_close', payload: {} })
   }
 
   render() {
@@ -34,7 +34,12 @@ export default class ChatModal extends React.Component {
         <ReactGesture onSwipeUp={this.hide} onClick={this.hide} onTap={this.hide}>
           <div className="overlay" />
         </ReactGesture>
-        <div className={`modal ${message.type}`} ref={(div) => { this.div = div }}>
+        <div
+          className={`modal ${message.type}`}
+          ref={div => {
+            this.div = div
+          }}
+        >
           {this.renderMessage(message, modalParams)}
         </div>
         <div className="close">{Close}</div>

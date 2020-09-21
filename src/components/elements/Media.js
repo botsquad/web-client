@@ -3,7 +3,6 @@ import { EventEmitter } from 'fbemitter'
 
 export const mediaEvents = new EventEmitter()
 
-
 class ModalWrapper extends React.PureComponent {
   onClick = () => {
     const { handler, modal, message } = this.props
@@ -40,8 +39,8 @@ class ModalWrapper extends React.PureComponent {
       h = Math.floor(clientHeight * 0.9)
       w = Math.floor(h / ratio)
     }
-    component.style.width = `${w}px`;
-    component.style.height = `${h}px`;
+    component.style.width = `${w}px`
+    component.style.height = `${h}px`
   }
 
   render() {
@@ -77,24 +76,36 @@ export class ImageMedia extends React.PureComponent {
       }
       img.onerror = () => {
         if (this.state.retry > 20) return
-        setTimeout(() => this.setState({ retry: this.state.retry + 1 }), 250 + (50 * this.state.retry * this.state.retry))
+        setTimeout(() => this.setState({ retry: this.state.retry + 1 }), 250 + 50 * this.state.retry * this.state.retry)
       }
       img.src = payload.url
 
       return (
-        <ModalWrapper {...this.props} ref={(w) => { wrapper = w }}>
+        <ModalWrapper
+          {...this.props}
+          ref={w => {
+            wrapper = w
+          }}
+        >
           <span className="loading" />
         </ModalWrapper>
       )
     }
     return (
-      <ModalWrapper {...this.props} ref={(w) => { wrapper = w }}>
+      <ModalWrapper
+        {...this.props}
+        ref={w => {
+          wrapper = w
+        }}
+      >
         <img
           role="presentation"
-          ref={(c) => { component = c }}
+          ref={c => {
+            component = c
+          }}
           src={payload.url}
-          onLoad={(event) => {
-            if (onLoad) onLoad();
+          onLoad={event => {
+            if (onLoad) onLoad()
             if (wrapper && component) {
               wrapper.triggerResize(event, component, event.target.height / event.target.width)
             }
@@ -130,23 +141,46 @@ export class WebMedia extends React.Component {
     let component = null
     let wrapper = null
     const aspect = determineAspect(payload.class)
-    const tryResize = (t) => {
+    const tryResize = t => {
       const resize = () => wrapper && component && wrapper.triggerResize(null, component, aspect)
       setTimeout(resize, 0)
       if (t) setTimeout(resize, t)
     }
 
     return (
-      <ModalWrapper {...this.props} className={`web ${this.props.className}`} ref={(w) => { wrapper = w; tryResize(100) }}>
-        {preview_image && !this.props.modal
-        ? <img
-            ref={(c) => { component = c }}
+      <ModalWrapper
+        {...this.props}
+        className={`web ${this.props.className}`}
+        ref={w => {
+          wrapper = w
+          tryResize(100)
+        }}
+      >
+        {preview_image && !this.props.modal ? (
+          <img
+            ref={c => {
+              component = c
+            }}
             src={preview_image}
             role="presentation"
-        />
-        : <div className="frame-wrapper" ref={(c) => { component = c }}>
-          <iframe src={payload.url} scrolling="no" onLoad={() => { if (onLoad) onLoad(); tryResize() }} />
-        </div>}
+          />
+        ) : (
+          <div
+            className="frame-wrapper"
+            ref={c => {
+              component = c
+            }}
+          >
+            <iframe
+              src={payload.url}
+              scrolling="no"
+              onLoad={() => {
+                if (onLoad) onLoad()
+                tryResize()
+              }}
+            />
+          </div>
+        )}
       </ModalWrapper>
     )
   }

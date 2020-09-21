@@ -1,6 +1,6 @@
 import moment from 'dayjs'
 import Cookie from 'js-cookie'
-import jstz from 'jstz';
+import jstz from 'jstz'
 import locale2 from 'locale2'
 
 const ua = navigator.userAgent
@@ -22,7 +22,7 @@ export function isEdge() {
 }
 
 export function isiOS() {
-  return (ua.match(/Mobile/) && ua.match(/AppleWebKit/))
+  return ua.match(/Mobile/) && ua.match(/AppleWebKit/)
 }
 
 export function isiPad() {
@@ -61,7 +61,7 @@ export function deviceClasses() {
  * @returns {boolean}
  */
 export function isObject(item) {
-  return (item && typeof item === 'object' && !Array.isArray(item) && item !== null);
+  return item && typeof item === 'object' && !Array.isArray(item) && item !== null
 }
 
 /**
@@ -71,16 +71,16 @@ export function isObject(item) {
  */
 export function mergeDeep(target, source) {
   if (isObject(target) && isObject(source)) {
-    Object.keys(source).forEach((key) => {
+    Object.keys(source).forEach(key => {
       if (isObject(source[key])) {
-        if (!target[key]) Object.assign(target, { [key]: {} });
-        mergeDeep(target[key], source[key]);
+        if (!target[key]) Object.assign(target, { [key]: {} })
+        mergeDeep(target[key], source[key])
       } else {
-        Object.assign(target, { [key]: source[key] });
+        Object.assign(target, { [key]: source[key] })
       }
     })
   }
-  return target;
+  return target
 }
 
 const USER_COOKIE = '_botsqd_user'
@@ -88,14 +88,20 @@ const USER_COOKIE = '_botsqd_user'
 export function setCookieUserId(userId) {
   const old = Cookie.get(USER_COOKIE)
   if (old !== userId && userId !== undefined) {
-    Cookie.set(USER_COOKIE, userId, { expires: 365 * 10 });
+    Cookie.set(USER_COOKIE, userId, { expires: 365 * 10 })
   }
 }
 
 export function getCookieUserId() {
   let userId = Cookie.get(USER_COOKIE)
   if (!userId || !userId.length) {
-    userId = (Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15))
+    userId =
+      Math.random()
+        .toString(36)
+        .substring(2, 15) +
+      Math.random()
+        .toString(36)
+        .substring(2, 15)
     setCookieUserId(userId)
   }
   return userId
@@ -117,12 +123,12 @@ export function updateQueryStringParam(key, value) {
 
   // If the "search" string exists, then build params from it
   if (urlQueryString) {
-    const updateRegex = new RegExp('([?&])' + key + '[^&]*');
-    const removeRegex = new RegExp('([?&])' + key + '=[^&;]+[&;]?');
+    const updateRegex = new RegExp('([?&])' + key + '[^&]*')
+    const removeRegex = new RegExp('([?&])' + key + '=[^&;]+[&;]?')
 
     if (typeof value === 'undefined' || value === null || value === '') {
       // Remove param if value is empty
-      params = urlQueryString.replace(removeRegex, '$1');
+      params = urlQueryString.replace(removeRegex, '$1')
       params = params.replace(/[&;]$/, '')
     } else if (urlQueryString.match(updateRegex) !== null) {
       // If param exists already, update it
@@ -134,14 +140,14 @@ export function updateQueryStringParam(key, value) {
   } else if (value) {
     params = '?' + newParam
   }
-  window.history.replaceState({}, '', baseUrl + params + document.location.hash);
+  window.history.replaceState({}, '', baseUrl + params + document.location.hash)
 }
 
 function getUrlParameter(name) {
-  name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
-  const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-  const results = regex.exec(location.search);
-  return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+  name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]')
+  const regex = new RegExp('[\\?&]' + name + '=([^&#]*)')
+  const results = regex.exec(location.search)
+  return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '))
 }
 
 export function getChannelParams(defaultId) {
@@ -163,13 +169,13 @@ export function consumeChannelParams() {
 }
 
 export function getUserInfo() {
-  const timezone = jstz.determine();
+  const timezone = jstz.determine()
   return {
     timezone: timezone.name(),
     locale: locale2.replace('-', '_'),
     extra: {
       user_agent: navigator.userAgent,
-      web_push_capable: ('PushManager' in window),
+      web_push_capable: 'PushManager' in window,
     },
   }
 }
@@ -186,19 +192,16 @@ export function getAPIEndpoint(socketUrl, botId, path) {
 }
 
 function urlBase64ToUint8Array(base64String) {
-  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding)
-    .replace(/-/g, '+')
-    .replace(/_/g, '/')
-  ;
-  const rawData = window.atob(base64);
-  return Uint8Array.from([...rawData].map(char => char.charCodeAt(0)));
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/')
+  const rawData = window.atob(base64)
+  return Uint8Array.from([...rawData].map(char => char.charCodeAt(0)))
 }
 
 export function subscribeToPushEvents(socketUrl, botId, userId, pushManager, applicationServerKey) {
   return pushManager
     .subscribe({ userVisibleOnly: true, applicationServerKey: urlBase64ToUint8Array(applicationServerKey) })
-    .then((subscription) => {
+    .then(subscription => {
       const body = JSON.stringify({ subscription, user_id: userId })
       const endpoint = getAPIEndpoint(socketUrl, botId, 'push_subscribe')
       return fetch(endpoint, { method: 'POST', mode: 'cors', headers: { 'content-type': 'application/json' }, body })
@@ -219,7 +222,7 @@ export function setupSocketReconnectBehaviour(socket, channel, notificationManag
     connected = true
   })
 
-  socket.onClose((r) => {
+  socket.onClose(() => {
     connected = false
     socket.params = { ...socket.params, reconnect: true }
   })
@@ -242,12 +245,25 @@ export function setupSocketReconnectBehaviour(socket, channel, notificationManag
 }
 
 export function getQueryParams() {
-  return document.location.search.replace(/(^\?)/, '').split('&').map(function(n) { return n = n.split("="), this[n[0]] = n[1], this }.bind({}))[0];
+  return document.location.search
+    .replace(/(^\?)/, '')
+    .split('&')
+    .map(
+      function(n) {
+        return (n = n.split('=')), (this[n[0]] = n[1]), this
+      }.bind({}),
+    )[0]
 }
 
 export function hostCheck(domains) {
   const { hostname } = document.location
-  if (hostname === 'localhost' || hostname.endsWith('.localhost') || hostname === '127.0.0.1' || hostname === 'bsqd.me' || hostname.endsWith('.bsqd.me')) {
+  if (
+    hostname === 'localhost' ||
+    hostname.endsWith('.localhost') ||
+    hostname === '127.0.0.1' ||
+    hostname === 'bsqd.me' ||
+    hostname.endsWith('.bsqd.me')
+  ) {
     return true
   }
   if (!domains || !domains.length) return false
@@ -262,5 +278,7 @@ export function hostCheck(domains) {
 }
 
 export function newGroup() {
-  return Math.random().toString(36).substring(2, 10)
+  return Math.random()
+    .toString(36)
+    .substring(2, 10)
 }

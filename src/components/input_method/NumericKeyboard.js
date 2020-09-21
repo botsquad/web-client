@@ -7,7 +7,7 @@ const KEYS = [
   ['1', '2', '3'],
   ['4', '5', '6'],
   ['7', '8', '9'],
-  ['*', '0', '#']
+  ['*', '0', '#'],
 ]
 
 function NumericKeyboard(props) {
@@ -31,7 +31,7 @@ function NumericKeyboard(props) {
     )
   }
 
-  const add = (key) => {
+  const add = key => {
     if (config.finish_on_key === key) {
       finish()
       return
@@ -50,13 +50,17 @@ function NumericKeyboard(props) {
   }
 
   return (
-    <InputMethodContainer {...props} className="numeric" below={button()} >
+    <InputMethodContainer {...props} className="numeric" below={button()}>
       <div className="display">
         <span>{value}</span>
         <button onClick={backspace}>{ArrowBack}</button>
       </div>
       <div className="keys">
-        {KEYS.flat().map(k => <button key={k} onClick={() => add(k)} className="key">{k}</button>)}
+        {KEYS.flat().map(k => (
+          <button key={k} onClick={() => add(k)} className="key">
+            {k}
+          </button>
+        ))}
       </div>
     </InputMethodContainer>
   )

@@ -26,8 +26,8 @@ class ChatHandler {
   joinChannel({ bot_id, params, onJoinError }, socket) {
     this.leaveChannel()
     this.component.setState({ upload: null, typing: false, events: [] })
-    params = { ...params, context: (params.context || { user: getUserInfo() }) }
-    botChannelJoin(this.component, socket, bot_id, params).then((channel) => {
+    params = { ...params, context: params.context || { user: getUserInfo() } }
+    botChannelJoin(this.component, socket, bot_id, params).then(channel => {
       this.channel = channel
       this._eventQueue.forEach(({ type, payload }) => {
         this.send(type, payload)
@@ -55,7 +55,11 @@ class ChatHandler {
     if (type === 'message' && typeof payload === 'string') {
       payload = { text: payload, type: 'text' }
     }
-    this.component.addEvent({ type: `user_${type}`, payload, time: (new Date()).getTime() })
+    this.component.addEvent({
+      type: `user_${type}`,
+      payload,
+      time: new Date().getTime(),
+    })
   }
 
   sendLinkClick(url) {
@@ -70,28 +74,30 @@ class ChatHandler {
     const { name } = file
     let { type } = file
     this.component.setState({ upload: { name, type, progress: 0 } })
-    this.channel
-        .push('get_upload_url', { name, type })
-        .receive('ok', ({ upload_url, public_url }) => {
-          uploadFile(file, upload_url,
-                     () => {
-                       type = type.replace(/\/.*$/, '')
-                       if (type !== 'video' && type !== 'audio' && type !== 'image') {
-                         type = 'file'
-                       }
-                       this.send('attachment', { type, url: public_url })
-                       this.component.setState({ upload: null })
-                     },
-                     () => {
-                       // error
-                       this.component.setState({ upload: { name, type, retry: file } })
-                     },
-                     (progress) => {
-                       this.component.setState({ upload: { ...this.component.state.upload, progress } })
-                     })
-        })
+    this.channel.push('get_upload_url', { name, type }).receive('ok', ({ upload_url, public_url }) => {
+      uploadFile(
+        file,
+        upload_url,
+        () => {
+          type = type.replace(/\/.*$/, '')
+          if (type !== 'video' && type !== 'audio' && type !== 'image') {
+            type = 'file'
+          }
+          this.send('attachment', { type, url: public_url })
+          this.component.setState({ upload: null })
+        },
+        () => {
+          // error
+          this.component.setState({ upload: { name, type, retry: file } })
+        },
+        progress => {
+          this.component.setState({
+            upload: { ...this.component.state.upload, progress },
+          })
+        },
+      )
+    })
   }
-
 
   handleAudioEvent(payload) {
     if (!this._activeAudio) return
@@ -99,15 +105,17 @@ class ChatHandler {
     switch (payload) {
       case 'play':
         // pause all others
-        this._audioElements.forEach((a) => { if (a !== this._activeAudio) a.pause() })
+        this._audioElements.forEach(a => {
+          if (a !== this._activeAudio) a.pause()
+        })
         // perform command
         this._activeAudio.play()
-        break;
+        break
       case 'pause':
         this._activeAudio.pause()
-        break;
+        break
       default:
-        break;
+        break
     }
   }
 
@@ -126,7 +134,11 @@ class ChatHandler {
     const { clientWidth } = this.component.windowElement
     let { clientHeight } = this.component.windowElement
     clientHeight = Math.min(clientHeight, window.innerHeight)
-    return { clientHeight, clientWidth, clientRatio: clientHeight / clientWidth }
+    return {
+      clientHeight,
+      clientWidth,
+      clientRatio: clientHeight / clientWidth,
+    }
   }
 
   getMapsAPIKey() {
@@ -136,7 +148,7 @@ class ChatHandler {
 
 export default class Chat extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       events: [],
       typing: false,
@@ -194,9 +206,7 @@ export default class Chat extends React.Component {
       return
     }
     this.setState({ modalHiding: true })
-    setTimeout(
-      () => this.setState({ modal: null, modalHiding: false }),
-      300)
+    setTimeout(() => this.setState({ modal: null, modalHiding: false }), 300)
   }
 
   showToast(toast) {
@@ -208,11 +218,9 @@ export default class Chat extends React.Component {
     this._toastClearer2 = setTimeout(() => {
       this.setState({ toastHiding: true })
 
-      setTimeout(
-        () => {
-          this._toastClearer = this.setState({ toast: null, toastHiding: false })
-        },
-        500)
+      setTimeout(() => {
+        this._toastClearer = this.setState({ toast: null, toastHiding: false })
+      }, 500)
     }, 4000)
   }
 
@@ -227,12 +235,18 @@ export default class Chat extends React.Component {
   }
 
   addEvent(event) {
-    this.setState({ typing: false, events: this.state.events.concat([this.normalizeEvent(event)]) })
+    this.setState({
+      typing: false,
+      events: this.state.events.concat([this.normalizeEvent(event)]),
+    })
   }
 
   prependEvents(history, cb, initial) {
     if (initial) {
-      const lastInputState = history.concat([]).reverse().find(c => c.type === 'emit' && c.payload.event === 'hide_input')
+      const lastInputState = history
+        .concat([])
+        .reverse()
+        .find(c => c.type === 'emit' && c.payload.event === 'hide_input')
       if (lastInputState) {
         const hide_input = JSON.parse(lastInputState.payload.json)
         if (this.props.onHideInput) {
@@ -241,8 +255,14 @@ export default class Chat extends React.Component {
       }
 
       // determine modal state
-      const modalEvents = history.concat([]).reverse().filter(({ type, payload }) =>
-        (type === 'emit' && payload.event === 'trigger_modal') || (type === 'user_event' && payload.name === '$modal_close'))
+      const modalEvents = history
+        .concat([])
+        .reverse()
+        .filter(
+          ({ type, payload }) =>
+            (type === 'emit' && payload.event === 'trigger_modal') ||
+            (type === 'user_event' && payload.name === '$modal_close'),
+        )
       const modalOpen = modalEvents.length > 0 ? modalEvents[0].type === 'emit' : false
       if (modalOpen) {
         setTimeout(() => this.triggerModal(), 0)
@@ -276,17 +296,38 @@ export default class Chat extends React.Component {
   root = React.createRef()
 
   render() {
-    const localePrefs = this.state.conversationMeta?.locale ? [this.state.conversationMeta?.locale] : this.state.localePrefs
+    const localePrefs = this.state.conversationMeta?.locale
+      ? [this.state.conversationMeta?.locale]
+      : this.state.localePrefs
     const props = { ...this.props, localePrefs }
     const { modal, ...state } = this.state
 
     return (
       <div className="botsi-web-client" ref={this.root}>
-        <ChatWindow {...props} online={this.state.online} channel={this.handler.channel} {...state} handler={this.handler} conversationMeta={this.state.conversationMeta} />
+        <ChatWindow
+          {...props}
+          online={this.state.online}
+          channel={this.handler.channel}
+          {...state}
+          handler={this.handler}
+          conversationMeta={this.state.conversationMeta}
+        />
         {this.state.toast ? <ChatToast toast={this.state.toast} hiding={this.state.toastHiding} /> : null}
-        {this.state.modal ? <ChatModal {...props} {...this.state} handler={this.handler} message={this.state.modal} hiding={this.state.modalHiding} /> : null}
+        {this.state.modal ? (
+          <ChatModal
+            {...props}
+            {...this.state}
+            handler={this.handler}
+            message={this.state.modal}
+            hiding={this.state.modalHiding}
+          />
+        ) : null}
         {!this.state.online ? <span className="offline">{Offline}</span> : null}
-        <UploadTrigger ref={(uploader) => { this.uploader = uploader }} />
+        <UploadTrigger
+          ref={uploader => {
+            this.uploader = uploader
+          }}
+        />
         {this.state.joined === false ? <div className="loader joining" /> : null}
       </div>
     )

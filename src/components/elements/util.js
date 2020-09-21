@@ -19,7 +19,7 @@ const HTML_ENTITIES = {
   '>': '&gt;',
   '"': '&quot;',
   "'": '&#39;',
-};
+}
 
 export function escapeHtml(string) {
   return String(string).replace(/[&<>"']/g, s => HTML_ENTITIES[s])

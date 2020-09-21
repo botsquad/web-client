@@ -14,7 +14,7 @@ function renderImplicitCloseButton(props) {
     return null
   }
 
-  return <button onClick={closeConversation} >{fixedLabel('new_conversation', props.localePrefs)}</button>
+  return <button onClick={closeConversation}>{fixedLabel('new_conversation', props.localePrefs)}</button>
 }
 
 function renderButton(button, props) {
@@ -23,7 +23,7 @@ function renderButton(button, props) {
   const onClick = payload =>
     props.inputModal.finish('message', { type: 'wait', text: button.title, data: { event: payload } }, props.config)
 
-  return <button onClick={() => buttonClick(button, props.handler, onClick)} >{button.title}</button>
+  return <button onClick={() => buttonClick(button, props.handler, onClick)}>{button.title}</button>
 }
 
 function pad(n, char = '0') {
@@ -47,7 +47,7 @@ function Wait(props) {
   const tick = () => {
     if (!wait_time || waitTime < 0) return
 
-    const delta = Math.floor(((new Date()).getTime() - props.time) / 1000)
+    const delta = Math.floor((new Date().getTime() - props.time) / 1000)
 
     if (delta > wait_time) {
       setWaitTime(-1)
@@ -66,18 +66,15 @@ function Wait(props) {
   return (
     <InputMethodContainer
       {...props}
-      className="wait" inline={type === 'closed'}
+      className="wait"
+      inline={type === 'closed'}
       below={renderButton(button, props) || renderImplicitCloseButton(props)}
     >
-      {type === 'wait' && (typeof wait_time !== 'undefined') && <div className="loader" />}
+      {type === 'wait' && typeof wait_time !== 'undefined' && <div className="loader" />}
 
-      {props.type === 'closed'
-      ? <span className="closed">{Closed}</span>
-      : null}
+      {props.type === 'closed' ? <span className="closed">{Closed}</span> : null}
 
-      {description
-      ? <div className="description" dangerouslySetInnerHTML={processText(description)} />
-      : null}
+      {description ? <div className="description" dangerouslySetInnerHTML={processText(description)} /> : null}
 
       {wait_time && waitTime >= 0 ? formatTime(waitTime, wait_time) : null}
     </InputMethodContainer>

@@ -18,10 +18,10 @@ export default function botChatHandler(component, socket, bot_id, params) {
   return new Promise((resolve, reject) => {
     channel
       .join()
-      .receive('error', (resp) => {
+      .receive('error', resp => {
         reject(resp)
       })
-      .receive('ok', (joinResult) => {
+      .receive('ok', joinResult => {
         if (joined) {
           return
         }
@@ -36,12 +36,11 @@ export default function botChatHandler(component, socket, bot_id, params) {
           if (historyNext === null) {
             return
           }
-          channel.push('get_history', { next: historyNext })
-                 .receive('ok', ({ events, next }) => {
-                   historyNext = next
-                   const history = events.reverse().map(({ time, ...rest }) => ({ ...rest, time: Date.parse(time) }))
-                   component.prependEvents(history)
-                 })
+          channel.push('get_history', { next: historyNext }).receive('ok', ({ events, next }) => {
+            historyNext = next
+            const history = events.reverse().map(({ time, ...rest }) => ({ ...rest, time: Date.parse(time) }))
+            component.prependEvents(history)
+          })
         }
 
         setCookieUserId(joinResult.user_id)
@@ -63,18 +62,18 @@ export default function botChatHandler(component, socket, bot_id, params) {
           if (!component.mounted) return
           component.setState({ typing: payload, typingAs: as })
         })
-        channel.on('message', (event) => {
+        channel.on('message', event => {
           if (!component.mounted) return
           component.setState({ online: true })
-          component.addEvent({ ...event, time: (new Date()).getTime() })
+          component.addEvent({ ...event, time: new Date().getTime() })
         })
-        channel.on('input_method', (payload) => {
+        channel.on('input_method', payload => {
           if (!component.mounted) return
           component.addEvent({ type: 'input_method', payload })
           // sometimes the input method modal is not yet updated
           setTimeout(() => component.forceUpdate(), 0)
         })
-        channel.on('emit', (event) => {
+        channel.on('emit', event => {
           if (!component.mounted) return
           if (event.event === 'trigger_modal') {
             component.triggerModal()
@@ -95,19 +94,19 @@ export default function botChatHandler(component, socket, bot_id, params) {
             component.props.onEmit(event)
           }
         })
-        channel.on('conversation_meta', (conversationMeta) => {
+        channel.on('conversation_meta', conversationMeta => {
           component.setState({ conversationMeta })
           if (component.props.onConversationMeta) {
             component.props.onConversationMeta(conversationMeta)
           }
         })
-        channel.on('error', (error) => {
+        channel.on('error', error => {
           if (!component.mounted) return
           if (component.props.onError) {
             component.props.onError(error)
           }
         })
-        channel.on('debug_info', (info) => {
+        channel.on('debug_info', info => {
           if (!component.mounted) return
           if (component.props.onDebug) {
             component.props.onDebug(info)

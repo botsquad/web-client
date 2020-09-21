@@ -36,7 +36,11 @@ export default class extends React.Component {
   submit = () => {
     this.setState({ hasSubmitted: true, disabled: true })
     // create a readable text for the form submit
-    let text = [...this._form.querySelectorAll('input[type=text],input[type=email],input[type=number],input[type=range],input[type=date],textarea,select,input[type=checkbox]')]
+    let text = [
+      ...this._form.querySelectorAll(
+        'input[type=text],input[type=email],input[type=number],input[type=range],input[type=date],textarea,select,input[type=checkbox]',
+      ),
+    ]
       .map(elementValue)
       .filter(f => f.length > 0)
       .slice(0, 3)
@@ -52,11 +56,11 @@ export default class extends React.Component {
     this.setState({ formData })
   }
 
-  setHasError = debounce((hasError) => {
+  setHasError = debounce(hasError => {
     this.setState({ hasError })
   }, 400)
 
-  validate = (errors) => {
+  validate = errors => {
     this.setHasError(errors.length > 0)
     return errors.map(e => ({ property: e.property }))
   }
@@ -75,7 +79,7 @@ export default class extends React.Component {
     }
 
     if (!config || !config.schema) {
-      return <span>Missing 'config.schema' in form</span>
+      return <span>Missing &#39;config.schema&#39; in form</span>
     }
 
     return (
@@ -83,11 +87,18 @@ export default class extends React.Component {
         {...this.props}
         className="form"
         headerControl={headerControl}
-        below={!disabled && <button disabled={this.state.hasError || this.state.hasSubmitted} onClick={this.submit}>{config.button_label || chatLabel(this, 'form_submit_button')}</button>}
+        below={
+          !disabled && (
+            <button disabled={this.state.hasError || this.state.hasSubmitted} onClick={this.submit}>
+              {config.button_label || chatLabel(this, 'form_submit_button')}
+            </button>
+          )
+        }
       >
-        {this.state.error
-        ? <div>{this.state.error.message}</div>
-        : <Form
+        {this.state.error ? (
+          <div>{this.state.error.message}</div>
+        ) : (
+          <Form
             liveValidate
             noHtml5Validate
             idPrefix={'bsqd-form'}
@@ -98,10 +109,14 @@ export default class extends React.Component {
             disabled={disabled}
             onChange={this.onChange}
             transformErrors={this.validate}
-        >
-          <span ref={(r) => { this._form = r ? r.parentNode : null }} />
-        </Form>
-        }
+          >
+            <span
+              ref={r => {
+                this._form = r ? r.parentNode : null
+              }}
+            />
+          </Form>
+        )}
       </InputMethodContainer>
     )
   }

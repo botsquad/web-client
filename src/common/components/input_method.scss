@@ -1,10 +1,9 @@
-
 // input method -- container
 .input-method--container {
   user-select: none;
 
   width: 100%;
-  @media(min-width: 480px) {
+  @media (min-width: 480px) {
     width: 480px;
   }
 
@@ -31,7 +30,8 @@
       top: -26px;
       cursor: pointer;
       > span svg {
-        width: 24px; height: 24px;
+        width: 24px;
+        height: 24px;
         fill: var(--botsquad-ui-color);
         border-radius: 4px;
       }
@@ -79,7 +79,8 @@
   .below {
     display: flex;
     flex-direction: row;
-    button, .button {
+    button,
+    .button {
       height: 50px;
       @include ui-button;
     }
@@ -99,7 +100,7 @@
   &.tall .content {
     max-height: 65vh;
   }
-  @media(min-width: 480px) {
+  @media (min-width: 480px) {
     width: 100%;
   }
 }
@@ -133,7 +134,8 @@
 
       .image {
         display: inline-block;
-        width: 50px; height: 50px;
+        width: 50px;
+        height: 50px;
         background-position: left center;
         background-size: contain;
         background-repeat: no-repeat;
@@ -142,7 +144,7 @@
 
       .subtitle {
         margin-top: 4px;
-        color: rgba(0, 0, 0, .40);
+        color: rgba(0, 0, 0, 0.4);
         font-size: 80%;
       }
 
@@ -166,10 +168,10 @@
       div.title {
         font-weight: 500;
         &:before {
-          content: "✔ ";
+          content: '✔ ';
         }
         &:after {
-          content: "   ";
+          content: '   ';
         }
       }
     }
@@ -198,10 +200,12 @@
     border: var(--botsquad-border-style);
 
     .btn {
-      width: 28px; height: 28px;
+      width: 28px;
+      height: 28px;
       background: white;
       position: absolute;
-      top: 8px; left: 8px;
+      top: 8px;
+      left: 8px;
       z-index: 2;
       svg {
         transform: scale(0.8, 0.8);
@@ -233,7 +237,8 @@
 
       fieldset {
         border: none;
-        margin: 0; padding: 0;
+        margin: 0;
+        padding: 0;
       }
 
       .form-control {
@@ -244,7 +249,9 @@
         border-radius: 4px;
         font-size: 1em;
       }
-      .form-control, .control-label, .form-group {
+      .form-control,
+      .control-label,
+      .form-group {
         margin-bottom: 4px;
       }
       .form-group {
@@ -266,7 +273,10 @@
         color: #555;
         font-size: 0.8em;
       }
-      select, input[type=text], input[type=email], textarea {
+      select,
+      input[type='text'],
+      input[type='email'],
+      textarea {
         border: var(--botsquad-border-style);
         box-shadow: none;
         padding: 8px 12px;
@@ -292,7 +302,8 @@
     div.code {
       position: absolute;
       bottom: 8px;
-      left: 0; right: 0;
+      left: 0;
+      right: 0;
       text-align: center;
       span {
         display: inline-block;
@@ -320,13 +331,13 @@
 }
 
 .input-method--container.barcode {
-
   #interactive.viewport {
     position: relative;
     overflow: hidden;
   }
 
-  #interactive.viewport > canvas, #interactive.viewport > video {
+  #interactive.viewport > canvas,
+  #interactive.viewport > video {
     max-width: 100%;
     width: 100%;
     max-height: 40vh;
@@ -337,12 +348,12 @@
     display: none;
   }
 
-  canvas.drawing, canvas.drawingBuffer {
+  canvas.drawing,
+  canvas.drawingBuffer {
     position: absolute;
     left: 0;
     top: 0;
   }
-
 }
 
 .input-method--container.wait {
@@ -356,7 +367,8 @@
     .loader {
       position: relative;
       margin: auto;
-      top: auto; left: auto;
+      top: auto;
+      left: auto;
     }
 
     .closed {
@@ -370,7 +382,9 @@
 
     .time {
       position: absolute;
-      left: 0; right: 0; top: 53px;
+      left: 0;
+      right: 0;
+      top: 53px;
     }
 
     .description {
@@ -404,15 +418,22 @@
       position: relative;
       button {
         @include ui-button;
-        height: 40px; width: 40px;
+        height: 40px;
+        width: 40px;
         background: none;
         border: 0;
         position: absolute;
         right: 0;
         top: 0;
         text-align: center;
-        svg { width: 16px; height: 16px; margin-left: 5px; }
-        &:active svg { fill: white; }
+        svg {
+          width: 16px;
+          height: 16px;
+          margin-left: 5px;
+        }
+        &:active svg {
+          fill: white;
+        }
       }
     }
 

@@ -4,7 +4,7 @@ import InputMethodContainer from './InputMethodContainer'
 import { RadioOn, RadioOff } from '../icons'
 import { chatLabel } from '../../common/labels'
 
-export default class extends React.Component {
+export default class SingleItemPicker extends React.Component {
   state = {
     hasSubmitted: false,
     selectedItem: null,
@@ -46,27 +46,31 @@ export default class extends React.Component {
       <InputMethodContainer
         {...this.props}
         className={`item-picker single ${confirm ? 'confirm' : ''}`}
-        below={confirm ? <button disabled={!this.state.selectedItem || this.state.hasSubmitted} onClick={this.submit}>{button_label || chatLabel(this, 'form_submit_button')}</button> : null}
+        below={
+          confirm ? (
+            <button disabled={!this.state.selectedItem || this.state.hasSubmitted} onClick={this.submit}>
+              {button_label || chatLabel(this, 'form_submit_button')}
+            </button>
+          ) : null
+        }
       >
-        {items.map(
-           (item, index) => {
-             const selected = this.state.selectedItem && this.state.selectedItem.value === item.value
-             return (
-               <div
-                 className={`${selected ? 'selected' : ''} ${item.image_url ? 'with-image' : ''}`}
-                 onClick={() => this.itemClick(item)}
-                 key={index}
-               >
-                 {confirm ? (selected ? RadioOn : RadioOff) : null}
-                 <div className="c">
-                   <div className="title">{item.title}</div>
-                   {item.subtitle ? <div className="subtitle">{item.subtitle}</div> : null}
-                 </div>
-                 {item.image_url ? <div className="image" style={{ backgroundImage: `url(${item.image_url})` }} /> : null}
-               </div>
-             )
-           }
-        )}
+        {items.map((item, index) => {
+          const selected = this.state.selectedItem && this.state.selectedItem.value === item.value
+          return (
+            <div
+              className={`${selected ? 'selected' : ''} ${item.image_url ? 'with-image' : ''}`}
+              onClick={() => this.itemClick(item)}
+              key={index}
+            >
+              {confirm ? (selected ? RadioOn : RadioOff) : null}
+              <div className="c">
+                <div className="title">{item.title}</div>
+                {item.subtitle ? <div className="subtitle">{item.subtitle}</div> : null}
+              </div>
+              {item.image_url ? <div className="image" style={{ backgroundImage: `url(${item.image_url})` }} /> : null}
+            </div>
+          )
+        })}
       </InputMethodContainer>
     )
   }

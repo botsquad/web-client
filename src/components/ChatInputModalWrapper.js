@@ -20,7 +20,12 @@ export default class ChatInputModalWrapper extends React.Component {
   render() {
     const { children, component } = this.props
     return (
-      <ChatInputModal {...component.props} onCancel={this.cancel} onFinish={this.finish} inputMethodOverride={component.state.inputMethodOverride}>
+      <ChatInputModal
+        {...component.props}
+        onCancel={this.cancel}
+        onFinish={this.finish}
+        inputMethodOverride={component.state.inputMethodOverride}
+      >
         {children}
       </ChatInputModal>
     )

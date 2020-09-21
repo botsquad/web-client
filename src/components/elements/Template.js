@@ -43,7 +43,8 @@ function renderButton(b, idx, handler) {
   return (
     <span className="button" key={idx} onClick={() => buttonClick(b, handler)}>
       {b.title}
-    </span>)
+    </span>
+  )
 }
 
 function arrowButton(icon) {
@@ -59,15 +60,16 @@ function host(url) {
 
 function renderGenericElement(element, idx, handler, message, full) {
   const defaultAction = full
-                      ? (element.default_action ? () => buttonClick(element.default_action, handler) : null)
-                      : () => handler.component.showModal(message, { index: idx })
-
+    ? element.default_action
+      ? () => buttonClick(element.default_action, handler)
+      : null
+    : () => handler.component.showModal(message, { index: idx })
 
   return (
     <div className="element" key={idx}>
-      {element.image_url
-      ? <div onClick={defaultAction} className="image" style={{ backgroundImage: `url(${element.image_url})` }} />
-      : null}
+      {element.image_url ? (
+        <div onClick={defaultAction} className="image" style={{ backgroundImage: `url(${element.image_url})` }} />
+      ) : null}
       {!full ? OpenModal : null}
       <div className="action-area">
         <div className="content" onClick={defaultAction}>
@@ -75,11 +77,12 @@ function renderGenericElement(element, idx, handler, message, full) {
           {element.subtitle ? <div className="subtitle">{element.subtitle}</div> : null}
           {element.default_action && full ? <div className="url">{host(element.default_action.url)}</div> : null}
         </div>
-        {element.buttons && full
-        ? <div className="template-buttons">{element.buttons.map((b, bidx) => renderButton(b, bidx, handler))}</div>
-        : null}
+        {element.buttons && full ? (
+          <div className="template-buttons">{element.buttons.map((b, bidx) => renderButton(b, bidx, handler))}</div>
+        ) : null}
       </div>
-    </div>)
+    </div>
+  )
 }
 
 export default class Template extends React.Component {
@@ -104,7 +107,7 @@ export default class Template extends React.Component {
           </div>
         )
 
-      case 'generic':
+      case 'generic': {
         const singleCls = payload.elements.length === 1 ? ' single' : ''
         if (modal) {
           const settings = {
@@ -120,28 +123,33 @@ export default class Template extends React.Component {
           }
           return (
             <Slider {...settings}>
-              {payload.elements.map((element, i) =>
+              {payload.elements.map((element, i) => (
                 <div className="slick-element" key={i}>
                   {renderGenericElement(element, i, handler, message, true)}
                 </div>
-              )}
+              ))}
             </Slider>
           )
         }
         const full = modal || !payload.modal
         return (
-          <Slider className={className + (full ? ' full' : '') + singleCls} arrows={false} variableWidth infinite={false}>
+          <Slider
+            className={className + (full ? ' full' : '') + singleCls}
+            arrows={false}
+            variableWidth
+            infinite={false}
+          >
             {payload.elements.map((element, i) => renderGenericElement(element, i, handler, message, full))}
           </Slider>
         )
-
+      }
       case 'list':
         return (
           <div className={className}>
             {payload.elements.map((element, i) => renderGenericElement(element, i, handler, message, true))}
-            {payload.buttons.length
-            ? <div className="template-buttons">{payload.buttons.map((b, bidx) => renderButton(b, bidx, handler))}</div>
-            : null}
+            {payload.buttons.length ? (
+              <div className="template-buttons">{payload.buttons.map((b, bidx) => renderButton(b, bidx, handler))}</div>
+            ) : null}
           </div>
         )
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import { compose, withProps } from 'recompose'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import { MyLocation } from '../icons'
@@ -21,9 +21,9 @@ class Map extends React.Component {
   }
 
   componentDidMount() {
-    const geocoder = new google.maps.Geocoder;
+    const geocoder = new google.maps.Geocoder()
     const latlng = transformLngLon(this.props.message.payload)
-    geocoder.geocode({ 'location': latlng }, (results) => {
+    geocoder.geocode({ location: latlng }, results => {
       if (results && results[0]) {
         const address = results[0].formatted_address
         this.setState({ address })
@@ -58,22 +58,21 @@ class Map extends React.Component {
 }
 
 const ComposedMap = compose(
-  withProps((r) => {
+  withProps(r => {
     const { clientHeight } = r.handler.getClientDimensions()
     const height = Math.floor(clientHeight * 0.6) + 'px'
     const mapsApiKey = r.handler.getMapsAPIKey()
 
     return {
       googleMapURL: `https://maps.googleapis.com/maps/api/js?v=3.exp&key=${mapsApiKey}&libraries=geometry,drawing,places`,
-      loadingElement: <div style={{ height,  width: '100%' }} />,
+      loadingElement: <div style={{ height, width: '100%' }} />,
       containerElement: <div style={{ height: '100%', width: '100%' }} />,
       mapElement: <div style={{ height, width: '100%' }} />,
     }
   }),
   withScriptjs,
-  withGoogleMap
+  withGoogleMap,
 )(Map)
-
 
 class StaticLocation extends React.PureComponent {
   render() {

@@ -32,16 +32,16 @@ export default class NotificationManager {
     this.documentTitle = document.title
     window.addEventListener('focus', this.windowFocusChange.bind(this))
     window.addEventListener('blur', this.windowFocusChange.bind(this))
-    document.addEventListener('pause', this.cordovaFocusChange.bind(this, false), false);
-    document.addEventListener('resume', this.cordovaFocusChange.bind(this, true), false);
+    document.addEventListener('pause', this.cordovaFocusChange.bind(this, false), false)
+    document.addEventListener('resume', this.cordovaFocusChange.bind(this, true), false)
   }
 
   componentWillUnmount() {
     this._clearNotificationUI()
     window.removeEventListener('focus', this.windowFocusChange.bind(this))
     window.removeEventListener('blur', this.windowFocusChange.bind(this))
-    document.removeEventListener('pause', this.cordovaFocusChange.bind(this, false), false);
-    document.removeEventListener('resume', this.cordovaFocusChange.bind(this, true), false);
+    document.removeEventListener('pause', this.cordovaFocusChange.bind(this, false), false)
+    document.removeEventListener('resume', this.cordovaFocusChange.bind(this, true), false)
   }
 
   play() {
@@ -123,7 +123,9 @@ export default class NotificationManager {
   }
 
   mayPlaySound() {
-    return (this.component.props.host && this.component.props.host.mayPlaySound()) ||
-           (this.component.externalInterface && this.component.externalInterface.mayPlaySound())
+    return (
+      (this.component.props.host && this.component.props.host.mayPlaySound()) ||
+      (this.component.externalInterface && this.component.externalInterface.mayPlaySound())
+    )
   }
 }

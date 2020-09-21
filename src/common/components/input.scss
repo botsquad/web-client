@@ -23,7 +23,7 @@
       }
     }
     button {
-      background: rgba(255,255,255,0);
+      background: rgba(255, 255, 255, 0);
     }
   }
 
@@ -96,7 +96,9 @@
       &.has-message {
         background-color: var(--botsquad-main-color);
         color: white;
-        svg { fill: white; }
+        svg {
+          fill: white;
+        }
       }
       width: 50px;
       margin-right: 0;
@@ -109,14 +111,16 @@
 
   .input-menu {
     button {
-      width: 50px; height: 50px;
+      width: 50px;
+      height: 50px;
       margin-right: 10px;
       border-radius: 50%;
       text-align: center;
     }
     span.menu {
       position: absolute;
-      right: 0; top: 0;
+      right: 0;
+      top: 0;
       opacity: 0;
       transition: all 400ms ease-out;
       button:last-child {
@@ -130,11 +134,15 @@
 }
 
 input.upload-trigger {
-  font-size: 0; width: 0; height: 0; line-height: 0;
+  font-size: 0;
+  width: 0;
+  height: 0;
+  line-height: 0;
   display: inline-block;
   flex: 0;
   position: fixed;
-  bottom: 0; right: 0;
+  bottom: 0;
+  right: 0;
   z-index: -100;
   opacity: 0;
 }

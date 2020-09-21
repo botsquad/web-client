@@ -31,7 +31,9 @@ class Map extends React.Component {
 
     return (
       <GoogleMap
-        ref={(m) => { this.map = m }}
+        ref={m => {
+          this.map = m
+        }}
         defaultZoom={config.zoom}
         defaultCenter={center}
         center={center}
@@ -51,7 +53,7 @@ class Map extends React.Component {
 }
 
 const ComposedMap = compose(
-  withProps((props) => {
+  withProps(props => {
     const mapsApiKey = props.handler.getMapsAPIKey()
 
     return {
@@ -62,7 +64,7 @@ const ComposedMap = compose(
     }
   }),
   withScriptjs,
-  withGoogleMap
+  withGoogleMap,
 )(Map)
 
 export default class LocationPicker extends React.Component {
@@ -93,13 +95,16 @@ export default class LocationPicker extends React.Component {
       return
     }
     this.setState({ findingLocation: true })
-    navigator.geolocation.getCurrentPosition(({ coords }) => {
-      const position = { lat: coords.latitude, lon: coords.longitude }
-      this.setState({ position, center: position, findingLocation: false })
-    }, () => {
-      this.setState({ findingLocation: false })
-      alert('Could not retrieve your current position, please check your location settings.')
-    })
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        const position = { lat: coords.latitude, lon: coords.longitude }
+        this.setState({ position, center: position, findingLocation: false })
+      },
+      () => {
+        this.setState({ findingLocation: false })
+        alert('Could not retrieve your current position, please check your location settings.')
+      },
+    )
   }
 
   setPosition = ({ position, center }) => {
@@ -113,10 +118,24 @@ export default class LocationPicker extends React.Component {
       <InputMethodContainer
         {...this.props}
         className={`fixed-height location-picker ${this.state.findingLocation ? 'finding' : ''}`}
-        below={!this.state.hasSubmitted ? <button disabled={this.state.position === null} onClick={this.submit}>{button_label || chatLabel(this, 'location_picker_select')}</button> : null}
+        below={
+          !this.state.hasSubmitted ? (
+            <button disabled={this.state.position === null} onClick={this.submit}>
+              {button_label || chatLabel(this, 'location_picker_select')}
+            </button>
+          ) : null
+        }
       >
-        <div className="btn my-location" onClick={this.setMyLocation}>{MyLocation}</div>
-        <ComposedMap handler={this.props.handler} onChange={this.setPosition} position={this.state.position} center={this.state.center} config={this.props.config} />
+        <div className="btn my-location" onClick={this.setMyLocation}>
+          {MyLocation}
+        </div>
+        <ComposedMap
+          handler={this.props.handler}
+          onChange={this.setPosition}
+          position={this.state.position}
+          center={this.state.center}
+          config={this.props.config}
+        />
       </InputMethodContainer>
     )
   }

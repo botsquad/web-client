@@ -7,7 +7,7 @@ function askForLocation(handler) {
 }
 
 function uploadImage(handler) {
-  handler.component.uploader.trigger('image/*', (file) => {
+  handler.component.uploader.trigger('image/*', file => {
     handler.sendFile(file)
   })
 }
@@ -32,11 +32,11 @@ function renderButton({ content_type, title, image_url }, idx, handler) {
   if (content_type === 'text') {
     return (
       <div className="button" key={idx} onClick={() => handler.send('message', { text: title, input_type: 'touch' })}>
-        { image_url &&
+        {image_url && (
           <div className="icon">
             <img src={image_url} alt="icon" />
           </div>
-        }
+        )}
         <span className="label">{title}</span>
       </div>
     )
@@ -49,7 +49,6 @@ export default function QuickReplies(props) {
   const { buttons, handler, className } = props
 
   return (
-    <div className={`quick-replies ${className || ''}`}>
-      {buttons.map((b, idx) => renderButton(b, idx, handler))}
-    </div>)
+    <div className={`quick-replies ${className || ''}`}>{buttons.map((b, idx) => renderButton(b, idx, handler))}</div>
+  )
 }

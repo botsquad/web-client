@@ -1,5 +1,5 @@
-@import "../common/mixins";
-@import "../common/variables";
+@import '../common/mixins';
+@import '../common/variables';
 
 @mixin bubble {
   display: inline-block;
@@ -9,15 +9,15 @@
 @mixin modal-open-icon {
   > svg {
     position: absolute;
-    top: 2px; right: 2px;
+    top: 2px;
+    right: 2px;
     fill: #fff;
     z-index: 2;
-    filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.5));
+    filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.5));
   }
 }
 
 .botsquad-components {
-
   @keyframes slide-in {
     0% {
       opacity: 0;
@@ -92,9 +92,9 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(0,0,0,0.3);
+    background: rgba(0, 0, 0, 0.3);
     &:hover {
-      background: rgba(0,0,0,0.6);
+      background: rgba(0, 0, 0, 0.6);
     }
   }
 
@@ -119,7 +119,9 @@
     animation: fadein 1000ms forwards linear;
     animation-delay: 500ms;
 
-    svg { fill: #666; }
+    svg {
+      fill: #666;
+    }
   }
 
   .chat-window {
@@ -152,11 +154,12 @@
 
   .chat-toast--wrapper {
     position: absolute;
-    top: 8px; left: 50%;
+    top: 8px;
+    left: 50%;
     transform: translate(-50%, 0);
     color: white;
     z-index: 100;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0, 0, 0, 0.8);
     padding: 8px 16px;
     border-radius: var(--botsquad-bubble-radius);
 
@@ -170,7 +173,6 @@
   }
 
   .chat-messages {
-
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-overflow-scrolling: touch;
     overflow: auto;
@@ -266,7 +268,7 @@
         width: 8px;
         float: left;
         margin: 0 2px;
-        background-color: #9E9EA1;
+        background-color: #9e9ea1;
         display: block;
         border-radius: 50%;
         opacity: 0.4;
@@ -372,13 +374,13 @@
   .bubble {
     margin-bottom: 1px;
 
-    &:first-of-type{
-      span{
+    &:first-of-type {
+      span {
         border-top-right-radius: var(--botsquad-bubble-radius);
       }
     }
-    &:last-of-type{
-      span{
+    &:last-of-type {
+      span {
         border-bottom-right-radius: var(--botsquad-bubble-radius);
       }
     }
@@ -447,12 +449,14 @@
           list-style-type: decimal;
           list-style-position: inside;
         }
-        ul ul, ol ul {
+        ul ul,
+        ol ul {
           list-style-type: circle;
           list-style-position: inside;
           margin-left: 15px;
         }
-        ol ol, ul ol {
+        ol ol,
+        ul ol {
           list-style-type: lower-latin;
           list-style-position: inside;
           margin-left: 15px;
@@ -471,7 +475,6 @@
           color: black;
         }
       }
-
 
       // builtin classes
       &.large {
@@ -500,12 +503,13 @@
         background-color: var(--botsquad-secondary-color);
         color: black;
         &:before {
-          content: "…";
+          content: '…';
         }
       }
     }
 
-    &.media, &.location {
+    &.media,
+    &.location {
       display: inline-block;
 
       img {
@@ -538,8 +542,8 @@
       .frame-wrapper {
         &:before {
           @include cover;
-          content: "";
-          background-color: rgba(255,255,255,0.15);
+          content: '';
+          background-color: rgba(255, 255, 255, 0.15);
           z-index: 10;
         }
 
@@ -552,7 +556,8 @@
 
         > iframe {
           @include cover;
-          width: 100%; height: 100%;
+          width: 100%;
+          height: 100%;
           overflow: hidden;
           border: 0;
         }
@@ -681,7 +686,7 @@
           div.content {
             flex: 1;
             padding: 8px;
-            color: rgba(0, 0, 0, .40);
+            color: rgba(0, 0, 0, 0.4);
             padding-bottom: 8px;
             background-color: var(--botsquad-ui-background-color);
             border: var(--botsquad-border-style);
@@ -744,7 +749,7 @@
           margin-right: 8px;
           width: 40px;
           height: 40px;
-          @media(min-width: 480px) {
+          @media (min-width: 480px) {
             width: 60px;
             height: 60px;
           }
@@ -754,13 +759,12 @@
         }
 
         .action-area {
-
           div.content {
             cursor: pointer;
             flex: 1;
             padding: 8px;
             line-height: 1.4;
-            color: rgba(0, 0, 0, .40);
+            color: rgba(0, 0, 0, 0.4);
             margin-bottom: 0;
             .url {
               text-decoration: underline;
@@ -784,7 +788,7 @@
     margin-top: 10px;
     text-align: center;
     > .button {
-      transition: opacity .3s ease-out, transform .3s ease-out;
+      transition: opacity 0.3s ease-out, transform 0.3s ease-out;
       @include bubble;
       display: inline-block;
       background-color: var(--botsquad-ui-background-color);
@@ -823,21 +827,37 @@
       }
     }
     &.recent {
-      >.button {
+      > .button {
         transform: translate(0, -40%);
         opacity: 0;
         animation: appear var(--botsquad-animation-delay) forwards ease-out;
 
-        &:nth-of-type(1) { animation-delay: calc(300ms + 0ms); }
-        &:nth-of-type(2) { animation-delay: calc(300ms + 100ms); }
-        &:nth-of-type(3) { animation-delay: calc(300ms + 200ms); }
-        &:nth-of-type(4) { animation-delay: calc(300ms + 240ms); }
-        &:nth-of-type(5) { animation-delay: calc(300ms + 280ms); }
-        &:nth-of-type(6) { animation-delay: calc(300ms + 400ms); }
-        &:nth-of-type(7) { animation-delay: calc(300ms + 450ms); }
+        &:nth-of-type(1) {
+          animation-delay: calc(300ms + 0ms);
+        }
+        &:nth-of-type(2) {
+          animation-delay: calc(300ms + 100ms);
+        }
+        &:nth-of-type(3) {
+          animation-delay: calc(300ms + 200ms);
+        }
+        &:nth-of-type(4) {
+          animation-delay: calc(300ms + 240ms);
+        }
+        &:nth-of-type(5) {
+          animation-delay: calc(300ms + 280ms);
+        }
+        &:nth-of-type(6) {
+          animation-delay: calc(300ms + 400ms);
+        }
+        &:nth-of-type(7) {
+          animation-delay: calc(300ms + 450ms);
+        }
 
         @for $i from 8 through 24 {
-          &:nth-of-type(#{$i}) { animation-delay: calc(300ms + 500ms); }
+          &:nth-of-type(#{$i}) {
+            animation-delay: calc(300ms + 500ms);
+          }
         }
       }
     }
@@ -845,16 +865,17 @@
 
   &.layout-embedded {
     .bubble.media {
-      img, .frame-wrapper {
+      img,
+      .frame-wrapper {
         cursor: pointer;
       }
     }
   }
 
-  @import "../common/components/loader";
-  @import "../common/components/input";
-  @import "../common/components/modal";
-  @import "../common/components/input_method";
+  @import '../common/components/loader';
+  @import '../common/components/input';
+  @import '../common/components/modal';
+  @import '../common/components/input_method';
 }
 
-@import "../common/components/rtl";
+@import '../common/components/rtl';

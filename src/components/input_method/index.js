@@ -37,5 +37,9 @@ export default function elementFactory(method, props, inputModal) {
      return <Barcode {...props} config={payload} inputModal={inputModal} />
      }
    */
-  return <div>Unsupported input method: <b>{type}</b></div>
+  return (
+    <div>
+      Unsupported input method: <b>{type}</b>
+    </div>
+  )
 }

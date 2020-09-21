@@ -1,4 +1,3 @@
-
 .chat-modal {
   @include cover;
   position: absolute;
@@ -8,7 +7,8 @@
 
   > div.close {
     position: absolute;
-    right: 16px; top: 16px;
+    right: 16px;
+    top: 16px;
     z-index: 2;
     width: 24px;
     pointer-events: none;
@@ -26,14 +26,15 @@
 
   .overlay {
     @include cover;
-    background: radial-gradient(circle at center,rgba(0,0,0,.3),rgba(0,0,0,.55));
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.55));
     // background: radial-gradient(circle at center,rgba(0,0,0,0.1), rgba(0,0,0,0.35));
     -webkit-overflow-scrolling: touch;
   }
   .modal {
     right: auto;
     bottom: auto;
-    top: 50%; left: 50%;
+    top: 50%;
+    left: 50%;
 
     animation: slide-in-modal-up 250ms forwards ease-out;
 
@@ -72,7 +73,8 @@
       position: relative;
       > iframe {
         @include cover;
-        width: 100%; height: 100%;
+        width: 100%;
+        height: 100%;
         overflow: hidden;
         border: 0;
       }
@@ -105,7 +107,6 @@
 }
 
 div.slick-slider {
-
   &.single > div.slick-list {
     display: flex;
     flex-direction: row;
@@ -197,7 +198,7 @@ div.slick-slider {
         div.content {
           flex: 1;
           padding: 8px;
-          color: rgba(0, 0, 0, .40);
+          color: rgba(0, 0, 0, 0.4);
           padding-bottom: 8px;
           background-color: var(--botsquad-ui-background-color);
           border: var(--botsquad-border-style);
@@ -233,20 +234,25 @@ div.slick-slider {
 
       svg {
         fill: var(--botsquad-main-color);
-        width: 32px; height: 32px;
+        width: 32px;
+        height: 32px;
       }
 
       background-color: var(--botsquad-ui-background-color);
       &:active {
         background-color: var(--botsquad-main-color);
-        svg { fill: white; }
+        svg {
+          fill: white;
+        }
       }
 
       &.slick-disabled {
         opacity: 0.5;
         &:active {
           background-color: var(--botsquad-ui-background-color);
-          svg { fill: var(--botsquad-main-color); }
+          svg {
+            fill: var(--botsquad-main-color);
+          }
         }
       }
 
@@ -266,6 +272,5 @@ div.slick-slider {
         left: 50%;
       }
     }
-
   }
 }

@@ -44,7 +44,7 @@ export default class extends React.Component {
       }
     } else {
       const event = this.props.events[inputIndex]
-      const inputMethod = { ...event.payload, time: event.time || (new Date()).getTime() }
+      const inputMethod = { ...event.payload, time: event.time || new Date().getTime() }
       if (!isEqual(this.state.inputMethod, inputMethod)) {
         this.setState({ inputMethod })
         this.scrollToBottom()
@@ -63,7 +63,10 @@ export default class extends React.Component {
   }
 
   allDisabled() {
-    return this.props.settings.hide_input || (this.isDisabled('text') && this.isDisabled('location') && this.isDisabled('image'))
+    return (
+      this.props.settings.hide_input ||
+      (this.isDisabled('text') && this.isDisabled('location') && this.isDisabled('image'))
+    )
   }
 
   render() {

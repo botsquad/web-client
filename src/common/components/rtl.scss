@@ -5,7 +5,7 @@
     transform: scale(-1, 1);
   }
 
-  .chat-messages   {
+  .chat-messages {
     padding-right: calc(16px + var(--botsquad-bot-avatar-size));
     padding-left: 8px;
   }
@@ -74,5 +74,4 @@
       }
     }
   }
-
 }
