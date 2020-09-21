@@ -1,4 +1,5 @@
 import { setCookieUserId } from '../common/util'
+import API from './api'
 
 export default function botChatHandler(component, socket, bot_id, params) {
   if (!socket) {
@@ -47,7 +48,7 @@ export default function botChatHandler(component, socket, bot_id, params) {
 
         if (component.props.onChannel) {
           if (!component.mounted) return
-          component.props.onChannel(channel, joinResult)
+          component.props.onChannel(channel, joinResult, new API(component.handler))
         }
 
         channel.on('history', ({ events, next }) => {
