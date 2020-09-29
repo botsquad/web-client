@@ -48,7 +48,7 @@ export default function botChatHandler(component, socket, bot_id, params) {
 
         if (component.props.onChannel) {
           if (!component.mounted) return
-          component.props.onChannel(channel, joinResult, new API(component.handler))
+          component.props.onChannel(channel, joinResult, new API(component.handler, component.eventDispatcher))
         }
 
         channel.on('history', ({ events, next }) => {

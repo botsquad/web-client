@@ -1,6 +1,7 @@
 import React from 'react'
 import { Socket } from 'phoenix'
 import locale2 from 'locale2'
+import { EventEmitter } from 'fbemitter'
 
 import { getUserInfo } from '../common/util'
 import ChatWindow from './ChatWindow'
@@ -169,6 +170,7 @@ export default class Chat extends React.Component {
     if (!props.socket) {
       this.state.socket.connect()
     }
+    this.eventDispatcher = new EventEmitter()
   }
 
   componentWillReceiveProps(newProps) {
@@ -235,6 +237,7 @@ export default class Chat extends React.Component {
   }
 
   addEvent(event) {
+    this.eventDispatcher.emit('chat_event', event)
     this.setState({
       typing: false,
       events: this.state.events.concat([this.normalizeEvent(event)]),
