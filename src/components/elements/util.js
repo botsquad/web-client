@@ -1,4 +1,5 @@
 import marked from 'marked'
+import { SpeechMarkdown } from 'speechmarkdown-js'
 
 export function messageHasModal({ type, payload }) {
   if (type === 'location') {
@@ -37,10 +38,22 @@ export function processText(string) {
     }
     markdownOpts = { renderer, breaks: true, gfm: true }
   }
-  return { __html: marked(escapeHtml(string), markdownOpts) }
+  return { __html: marked(escapeHtml(stripSpeechmarkdown(string)), markdownOpts) }
 }
 
 const SCAN_BLIP = 'https://s3.eu-central-1.amazonaws.com/bsqd/audio/4ae396ab-fac5-4757-bb2e-7734d0e32ae1.dat'
+
 export function scannerSound() {
   return new Audio(SCAN_BLIP)
+}
+
+const SMD = new SpeechMarkdown()
+
+export function stripSpeechmarkdown(string) {
+  try {
+    return SMD.toText(string)
+  } catch (e) {
+    console.error(e)
+    return string
+  }
 }
