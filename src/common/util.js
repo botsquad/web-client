@@ -172,8 +172,8 @@ export function getUserInfo() {
   const timezone = jstz.determine()
   return {
     timezone: timezone.name(),
-    locale: locale2.replace('-', '_'),
     extra: {
+      browser_locale: locale2.replace('-', '_'),
       user_agent: navigator.userAgent,
       web_push_capable: 'PushManager' in window,
     },
