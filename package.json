@@ -1,10 +1,7 @@
 {
   "name": "@botsquad/web-client",
   "version": "0.5.1",
-  "sideEffects": [
-    "*.scss",
-    "*.css"
-  ],
+  "sideEffects": ["*.scss", "*.css"],
   "main": "dist/main.js",
   "engines": {
     "node": ">=0.4.5"
@@ -14,7 +11,6 @@
     "build": "NODE_ENV=production webpack --config webpack.prod.config.js --mode production",
     "stats": "NODE_ENV=development webpack --json | webpack-bundle-size-analyzer",
     "dev": "webpack-dev-server --hot --host 0.0.0.0 --config ./webpack.config.js",
-    "start": "webpack-dev-server --public sdk.botsqd.com --host 0.0.0.0 --config ./webpack.config.js --mode production",
     "test": "mocha --require @babel/register test/**/*.js",
     "lint": "eslint --ext js src",
     "prepare": "install-peers"

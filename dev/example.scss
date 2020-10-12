@@ -2,7 +2,9 @@ html {
   background: #779999;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 .app {
   margin: 20px;
@@ -21,11 +23,10 @@ html {
   left: 50%;
   top: 50%;
   background: white;
-  box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
 
   display: flex;
   flex-direction: column;
-
 }
 
 @media (max-width: 480px) {
@@ -37,6 +38,10 @@ html {
 
 .botsi-web-client {
   flex: 1;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
 }
 
 a {
