@@ -126,15 +126,19 @@ export default class ChatMessages extends React.Component {
 
     const key = group.messages[0].time
 
-    const name = group.as ? group.as.first_name + ' ' + (group.as.last_name || '') : null
+    const name = group.as ? (group.as.first_name + ' ' + (group.as.last_name || '')).trim() : null
+
     return (
       <div key={key} className={`bubble-group ${group.messages[0].self ? 'self' : 'bot'} ${group.class || ''}`}>
         {!this.props.hideAvatars && group.avatar ? (
-          <div
-            className="avatar"
-            style={{ backgroundImage: group.avatar ? `url(${group.avatar})` : null }}
-            title={name}
-          />
+          <div className="as">
+            <div
+              className="avatar"
+              style={{ backgroundImage: group.avatar ? `url(${group.avatar})` : null }}
+              title={name}
+            />
+            {name?.length ? <div className="name">{name}</div> : null}
+          </div>
         ) : null}
         <div className="bubble-container">{group.messages.map(this.renderMessage.bind(this))}</div>
       </div>

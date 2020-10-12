@@ -300,10 +300,10 @@
     position: relative;
 
     .name {
-      color: var(--botsquad-ui-color);
-      font-size: 60%;
+      font-size: 75%;
       padding-top: 8px;
       margin-bottom: 4px;
+      opacity: 0.7;
     }
 
     .avatar {
@@ -320,6 +320,19 @@
     &.bot {
       text-align: left;
 
+      .as {
+        margin-top: 8px;
+      }
+
+      @include phone {
+        .as {
+          display: flex;
+          flex-direction: row;
+          .name {
+            margin-left: 8px;
+          }
+        }
+      }
       .avatar {
         left: calc(-8px - var(--botsquad-bot-avatar-size));
         width: var(--botsquad-bot-avatar-size);
@@ -328,7 +341,7 @@
         @include phone {
           position: relative;
           left: 0;
-          margin-bottom: 8px;
+          margin-bottom: 4px;
         }
       }
 
