@@ -3,6 +3,7 @@
   "version": "0.6.0",
   "sideEffects": ["*.scss", "*.css"],
   "main": "dist/main.js",
+  "typings": "types/index.d.ts",
   "engines": {
     "node": ">=0.4.5"
   },
