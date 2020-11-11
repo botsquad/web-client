@@ -1,5 +1,5 @@
 import React from 'react'
-import { Channel } from 'phoenix'
+import { Socket, Channel } from 'phoenix'
 
 declare module '@botsquad/web-client' {
   export function processText(input: string): { __html: any }
@@ -22,4 +22,27 @@ declare module '@botsquad/web-client' {
     play(): void
     closeConversation(g: string): void
   }
+
+  type Event = { name: string; payload?: any }
+
+  type ChatProps = {
+    bot_id: string
+    socket?: Socket
+    params?: Record<string, any>
+    onHideInput?: (flag: boolean) => void
+    settings?: Record<string, any>
+    localePrefs?: string[]
+    closeConversation?: () => void
+    mapApiKey?: string
+    onChannel?: (channel: Channel) => void
+    onChannelLeave?: () => void
+    onClose?: () => void
+    onEmit?: (event: Event) => void
+    notificationManager?: boolean
+    online?: boolean
+  }
+
+  type Chat = React.Component<ChatProps>
+
+  export default Chat
 }
