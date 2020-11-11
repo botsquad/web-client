@@ -1,6 +1,6 @@
 {
   "name": "@botsquad/web-client",
-  "version": "0.6.6",
+  "version": "0.6.7",
   "sideEffects": ["*.scss", "*.css"],
   "main": "dist/main.js",
   "typings": "types/index.d.ts",
