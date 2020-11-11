@@ -34,6 +34,8 @@ declare module '@botsquad/web-client' {
     localePrefs?: string[]
     closeConversation?: () => void
     mapsApiKey?: string
+    botAvatar?: string
+    userAvatar?: string
     onChannel?: (channel: Channel) => void
     onChannelLeave?: () => void
     onClose?: () => void
