@@ -33,7 +33,7 @@ declare module '@botsquad/web-client' {
     settings?: Record<string, any>
     localePrefs?: string[]
     closeConversation?: () => void
-    mapApiKey?: string
+    mapsApiKey?: string
     onChannel?: (channel: Channel) => void
     onChannelLeave?: () => void
     onClose?: () => void
