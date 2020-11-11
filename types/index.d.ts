@@ -42,5 +42,7 @@ declare module '@botsquad/web-client' {
     online?: boolean
   }
 
-  export type ChatComponent = React.Component<ChatProps>
+  export default class Chat extends React.Component<ChatProps> {
+    props: ChatProps
+  }
 }
