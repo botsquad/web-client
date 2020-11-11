@@ -23,9 +23,9 @@ declare module '@botsquad/web-client' {
     closeConversation(g: string): void
   }
 
-  type Event = { name: string; payload?: any }
+  export type Emit = { event: string; payload?: any }
 
-  type ChatProps = {
+  export type ChatProps = {
     bot_id: string
     socket?: Socket
     params?: Record<string, any>
@@ -37,12 +37,10 @@ declare module '@botsquad/web-client' {
     onChannel?: (channel: Channel) => void
     onChannelLeave?: () => void
     onClose?: () => void
-    onEmit?: (event: Event) => void
+    onEmit?: (event: Emit) => void
     notificationManager?: boolean
     online?: boolean
   }
 
   export type ChatComponent = React.Component<ChatProps>
-
-  export default ChatComponent
 }
