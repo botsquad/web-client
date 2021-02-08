@@ -8,6 +8,7 @@ const LABELS = {
     de: 'Wählen Sie einen Ort',
     fr: "Choisissez l'emplacement",
     es: 'Elegir ubicación',
+    da: 'Vælg placering',
     ar: 'اختيار موقع',
   },
   form_submit_button: {
@@ -17,6 +18,7 @@ const LABELS = {
     de: 'Senden',
     fr: 'Enregistrer',
     es: 'Guardar',
+    da: 'Indsend',
     ar: 'إرسال',
   },
   cancel: {
@@ -26,6 +28,7 @@ const LABELS = {
     de: 'Abbrechen',
     fr: 'Annuler',
     es: 'Cancelar',
+    da: 'Afbestille',
     ar: 'إلغاء',
   },
   text_input_placeholder: {
@@ -35,6 +38,7 @@ const LABELS = {
     de: 'Nachricht schreiben…',
     fr: 'Tapez le message…',
     es: 'Escriba mensaje…',
+    da: 'Skriv en besked…',
     ar: 'اكتب رسالة ...',
   },
   new_conversation: {
@@ -44,43 +48,8 @@ const LABELS = {
     de: 'Neues Gespräch',
     fr: 'Nouvelle conversation',
     es: 'Nueva conversacion',
+    da: 'Ny samtale',
     ar: 'محادثة جديدة',
-  },
-  conversations: {
-    $i18n: true,
-    en: 'Your Conversations',
-    nl: 'Uw gesprekken',
-    de: 'Ihre Gespräche',
-    fr: 'Vous conversations',
-    es: 'Ustedes conversaciones',
-    ar: 'المحادثات',
-  },
-  show_all: {
-    $i18n: true,
-    en: 'show all',
-    nl: 'toon alles',
-    de: 'zeige alles',
-    fr: 'montre tout',
-    es: 'mostrar todo',
-    ar: 'عرض الكل',
-  },
-  conversation_cta: {
-    $i18n: true,
-    en: 'Start a conversation',
-    nl: 'Begin een gesprek',
-    de: 'Eine Konversation beginnen',
-    fr: 'Commencer une conversation',
-    es: 'Iniciar una conversación',
-    ar: 'بدء محادثة',
-  },
-  team_message: {
-    $i18n: true,
-    en: 'Our team typically responds in 5 minutes.',
-    nl: 'Ons team reageert gewoonlijk binnen 5 minuten.',
-    de: 'Unser Team antwortet normalerweise innerhalb von 5 Minuten.',
-    fr: 'Notre équipe répond normalement en 5 minutes.',
-    es: 'Nuestro equipo responde normalmente en 5 minutos.',
-    ar: 'يستجيب فريقنا عادة في 5 دقائق.',
   },
 }
 
