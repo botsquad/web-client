@@ -4,8 +4,9 @@ import { Socket, Channel } from 'phoenix'
 declare module '@botsquad/web-client' {
   export function processText(input: string): { __html: any }
 
-  export const I18n = {
-    resolveTranslations: (input: any, locales: string[]) => any,
+  export class I18n {
+    resolveTranslations: (input: any, locales: string[]) => any
+    localePreflist: (locale: string, bot: any) => string[]
   }
 
   export type I18nValue = { $i18n: true }
@@ -42,6 +43,27 @@ declare module '@botsquad/web-client' {
     onEmit?: (event: Emit) => void
     notificationManager?: boolean
     online?: boolean
+    hideAvatars?: boolean
+    onJoinError?: (payload: { reason: string }) => void
+    onError?: (message: string) => void
+    onDebug?: (info: DebugInfo) => void
+  }
+
+  type BotProcesses = {
+    master?: true
+    group?: string
+  }
+
+  export type Meta = {
+    readonly dialog?: string | null
+    readonly file?: string | null
+    readonly line?: string | number
+  }
+
+  export type DebugInfo = {
+    meta: Meta | null
+    context: Record<string, string> | null
+    processes: BotProcesses
   }
 
   export default class Chat extends React.Component<ChatProps> {
