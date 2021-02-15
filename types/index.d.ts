@@ -69,4 +69,17 @@ declare module '@botsquad/web-client' {
   export default class Chat extends React.Component<ChatProps> {
     props: ChatProps
   }
+
+  export class UploadTrigger extends React.Component {
+    callback: () => void
+    state: {
+      accept: string
+    }
+    onChange: (e: React.ChangeEvent) => void
+    trigger: (accept: string, callback: (file: any) => void) => void
+
+    render: () => React.ReactNode
+  }
+
+  export function inputMethodFactory(method: {type: any, payload: any, time?: any}, props: any, inputModal: any) => React.ReactNode
 }
