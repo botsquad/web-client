@@ -47,6 +47,7 @@ declare module '@botsquad/web-client' {
     onJoinError?: (payload: { reason: string }) => void
     onError?: (message: string) => void
     onDebug?: (info: DebugInfo) => void
+    makeChannelTopic?: (botId: string, params: Record<string, any>) => string | null
   }
 
   type BotProcesses = {

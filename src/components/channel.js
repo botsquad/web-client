@@ -6,7 +6,9 @@ export default function botChatHandler(component, socket, bot_id, params) {
     return null
   }
 
-  const topic = `bot:${bot_id}~${params.g || 'main'}`
+  const defaultTopic = `bot:${bot_id}~${params.g || 'main'}`
+  const topic = component.props.makeChannelTopic?.(bot_id, params) || defaultTopic
+
   const channel = socket.channel(topic, params)
 
   let joined = false
