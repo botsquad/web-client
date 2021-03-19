@@ -13,6 +13,13 @@ function elementValue(e) {
   return e.value.trim()
 }
 
+function removeEmpty(obj) {
+  Object.keys(obj).forEach(function(key) {
+    ;(obj[key] && typeof obj[key] === 'object' && removeEmpty(obj[key])) || (obj[key] === null && delete obj[key])
+  })
+  return obj
+}
+
 export default class extends React.Component {
   state = {
     hasSubmitted: false,
@@ -24,7 +31,7 @@ export default class extends React.Component {
   componentWillMount() {
     const { default_value } = this.props.config
     if (default_value) {
-      this.setState({ formData: default_value })
+      this.setState({ formData: removeEmpty(default_value) })
     }
 
     const { read_only_data } = this.props.message || {}
