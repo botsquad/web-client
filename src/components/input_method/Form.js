@@ -74,7 +74,7 @@ export default class extends React.Component {
   }
 
   getUiSchema() {
-    return this.props.config.schema.ui_schema || {}
+    return this.props.config.ui_schema || {}
   }
 
   render() {
