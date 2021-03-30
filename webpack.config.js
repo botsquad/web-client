@@ -1,8 +1,8 @@
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 
 const dev = process.env.NODE_ENV !== 'production'
-const path = require('path');
-const webpack = require('webpack');
+const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
   devtool: 'sourcemap',
@@ -10,17 +10,17 @@ module.exports = {
   target: 'web',
   devtool: 'cheap-module-eval-source-map',
   devServer: {
-    contentBase: path.join(__dirname, "dev")
+    contentBase: path.join(__dirname, 'dev'),
   },
   entry: {
     main: './src/index',
-    example: './dev/example'
+    example: './dev/example',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
-    libraryTarget: "umd",
-    library: "@botsquad/web-client"
+    libraryTarget: 'umd',
+    library: '@botsquad/web-client',
   },
   resolve: {
     extensions: ['.js'],
@@ -35,11 +35,11 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              babelrc: true
-            }
+              babelrc: true,
+            },
           },
-          'webpack-conditional-loader'
-        ]
+          'webpack-conditional-loader',
+        ],
       },
       {
         test: /\.html$/,
@@ -47,19 +47,15 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'postcss-loader',
-          'sass-loader',
-        ]
+        use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+      },
+      {
+        test: /[^min]\.css$/,
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.min\.css$/,
-        use: [
-          'style-loader',
-          'css-loader',
-        ]
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(eot|svg|ttf|gif|png|jpg|woff|woff2)$/,
@@ -71,5 +67,5 @@ module.exports = {
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.HotModuleReplacementPlugin(),
     new OptimizeCSSAssetsPlugin({}),
-  ]
-};
+  ],
+}

@@ -5,6 +5,7 @@ import debounce from 'lodash/debounce'
 import { chatLabel } from '../../common/labels'
 import { Edit } from '../icons'
 import InputMethodContainer from './InputMethodContainer'
+import Widgets from './FormWidgets'
 
 function elementValue(e) {
   if (e.type === 'checkbox') {
@@ -73,7 +74,7 @@ export default class extends React.Component {
   }
 
   getUiSchema() {
-    return this.props.config.ui_schema || {}
+    return this.props.config.schema.ui_schema || {}
   }
 
   render() {
@@ -88,7 +89,6 @@ export default class extends React.Component {
     if (!config || !config.schema) {
       return <span>Missing &#39;config.schema&#39; in form</span>
     }
-
     return (
       <InputMethodContainer
         {...this.props}
@@ -116,6 +116,7 @@ export default class extends React.Component {
             disabled={disabled}
             onChange={this.onChange}
             transformErrors={this.validate}
+            widgets={Widgets}
           >
             <span
               ref={r => {
