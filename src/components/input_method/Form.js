@@ -5,8 +5,12 @@ import debounce from 'lodash/debounce'
 import { chatLabel } from '../../common/labels'
 import { Edit } from '../icons'
 import InputMethodContainer from './InputMethodContainer'
+import Widgets from './FormWidgets'
 
 function elementValue(e) {
+  if (e.classList.contains('PhoneInputCountrySelect')) {
+    return ''
+  }
   if (e.type === 'checkbox') {
     return e.checked ? '✓' : ''
   }
@@ -45,7 +49,7 @@ export default class extends React.Component {
     // create a readable text for the form submit
     let text = [
       ...this._form.querySelectorAll(
-        'input[type=text],input[type=email],input[type=number],input[type=range],input[type=date],textarea,select,input[type=checkbox]',
+        'input[type=text],input[type=email],input[type=number],input[type=range],input[type=date],input[type=tel],textarea,select,input[type=checkbox]',
       ),
     ]
       .map(elementValue)
@@ -88,6 +92,7 @@ export default class extends React.Component {
     if (!config || !config.schema) {
       return <span>Missing &#39;config.schema&#39; in form</span>
     }
+    const formContext = { localePrefs: this.props.localePrefs }
 
     return (
       <InputMethodContainer
@@ -109,6 +114,7 @@ export default class extends React.Component {
             liveValidate
             noHtml5Validate
             idPrefix={'bsqd-form'}
+            formContext={formContext}
             showErrorList={false}
             schema={config.schema}
             uiSchema={this.getUiSchema()}
@@ -116,6 +122,7 @@ export default class extends React.Component {
             disabled={disabled}
             onChange={this.onChange}
             transformErrors={this.validate}
+            widgets={Widgets}
           >
             <span
               ref={r => {

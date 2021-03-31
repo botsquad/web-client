@@ -275,6 +275,7 @@
       }
       select,
       input[type='text'],
+      input[type='tel'],
       input[type='email'],
       textarea {
         border: var(--botsquad-border-style);
