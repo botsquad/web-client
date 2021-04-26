@@ -521,13 +521,34 @@
       }
     }
 
+    &.media + .media {
+      margin-top: 10px;
+    }
+
     &.media,
     &.location {
       display: inline-block;
 
+      &.image {
+        max-width: 70%;
+      }
+
+      .caption {
+        color: var(--botsquad-ui-color);
+        font-size: 0.8em;
+        padding: 2px;
+        p {
+          margin: 0;
+        }
+      }
+
+      &.web .caption {
+        padding-top: 8px;
+      }
+
       img {
         background: white;
-        max-width: 70%;
+        width: 100%;
         height: auto;
         border: var(--botsquad-border-style);
       }

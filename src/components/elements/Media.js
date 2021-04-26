@@ -1,5 +1,6 @@
 import React from 'react'
 import { EventEmitter } from 'fbemitter'
+import { processText } from './util'
 
 export const mediaEvents = new EventEmitter()
 
@@ -33,10 +34,10 @@ class ModalWrapper extends React.PureComponent {
       w = clientWidth
       h = clientHeight
     } else if (clientRatio > ratio) {
-      w = Math.floor(clientWidth * 0.9)
+      w = Math.floor(clientWidth * 0.9) - 8
       h = Math.floor(w * ratio)
     } else {
-      h = Math.floor(clientHeight * 0.9)
+      h = Math.floor(clientHeight * 0.9) - 8
       w = Math.floor(h / ratio)
     }
     component.style.width = `${w}px`
@@ -94,6 +95,7 @@ export class ImageMedia extends React.PureComponent {
     return (
       <ModalWrapper
         {...this.props}
+        className={`image ${this.props.className}`}
         ref={w => {
           wrapper = w
         }}
@@ -111,6 +113,7 @@ export class ImageMedia extends React.PureComponent {
             }
           }}
         />
+        {payload.caption ? <div className="caption" dangerouslySetInnerHTML={processText(payload.caption)} /> : null}
       </ModalWrapper>
     )
   }
@@ -165,20 +168,25 @@ export class WebMedia extends React.Component {
             role="presentation"
           />
         ) : (
-          <div
-            className="frame-wrapper"
-            ref={c => {
-              component = c
-            }}
-          >
-            <iframe
-              src={payload.url}
-              scrolling="no"
-              onLoad={() => {
-                if (onLoad) onLoad()
-                tryResize()
+          <div>
+            <div
+              className="frame-wrapper "
+              ref={c => {
+                component = c
               }}
-            />
+            >
+              <iframe
+                src={payload.url}
+                scrolling="no"
+                onLoad={() => {
+                  if (onLoad) onLoad()
+                  tryResize()
+                }}
+              />
+            </div>
+            {payload.caption ? (
+              <div className="caption" dangerouslySetInnerHTML={processText(payload.caption)} />
+            ) : null}
           </div>
         )}
       </ModalWrapper>
@@ -200,6 +208,7 @@ export class AudioMedia extends React.Component {
     return (
       <div className={`${className} audio`}>
         <audio src={payload.url} controls ref={this.audio} />
+        {payload.caption ? <div className="caption" dangerouslySetInnerHTML={processText(payload.caption)} /> : null}
       </div>
     )
   }
@@ -239,6 +248,7 @@ export class VideoMedia extends React.Component {
     return (
       <div className={`${className} video`}>
         <video src={payload.url} controls />
+        {payload.caption ? <div className="caption" dangerouslySetInnerHTML={processText(payload.caption)} /> : null}
       </div>
     )
   }

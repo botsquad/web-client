@@ -66,6 +66,17 @@
       height: 100%;
     }
 
+    .caption {
+      color: var(--botsquad-ui-color);
+      font-size: 0.8em;
+      border-top: 0;
+      padding: 4px 2px;
+      margin-top: 4px;
+      p {
+        margin: 0;
+      }
+    }
+
     img {
       display: block;
     }
