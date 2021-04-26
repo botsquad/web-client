@@ -100,20 +100,22 @@ export class ImageMedia extends React.PureComponent {
           wrapper = w
         }}
       >
-        <img
-          role="presentation"
-          ref={c => {
-            component = c
-          }}
-          src={payload.url}
-          onLoad={event => {
-            if (onLoad) onLoad()
-            if (wrapper && component) {
-              wrapper.triggerResize(event, component, event.target.height / event.target.width)
-            }
-          }}
-        />
-        {payload.caption ? <div className="caption" dangerouslySetInnerHTML={processText(payload.caption)} /> : null}
+        <div>
+          <img
+            role="presentation"
+            ref={c => {
+              component = c
+            }}
+            src={payload.url}
+            onLoad={event => {
+              if (onLoad) onLoad()
+              if (wrapper && component) {
+                wrapper.triggerResize(event, component, event.target.height / event.target.width)
+              }
+            }}
+          />
+          {payload.caption ? <div className="caption" dangerouslySetInnerHTML={processText(payload.caption)} /> : null}
+        </div>
       </ModalWrapper>
     )
   }
