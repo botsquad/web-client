@@ -29,9 +29,9 @@ describe('processText', function() {
     let s
 
     s = util.processText('[klik hier](https://example.com/x.html)').__html
-    assert.equal('<p><a href="https://example.com/x.html">klik hier</a></p>\n', s)
+    assert.equal('<p><a target="_top" href="https://example.com/x.html">klik hier</a></p>\n', s)
 
     s = util.processText('[klik hier](/x.html)').__html
-    assert.equal('<p><a href="/x.html">klik hier</a></p>\n', s)
+    assert.equal('<p><a target="_top" href="/x.html">klik hier</a></p>\n', s)
   })
 })

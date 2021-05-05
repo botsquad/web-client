@@ -38,7 +38,7 @@ export function processText(string) {
       const html = linkRenderer.call(renderer, href, title, text)
       const url = new URL(href, document.location.href)
       if (url.host === document.location.host) {
-        return html
+        return html.replace(/^<a /, '<a target="_top" ')
       }
       return html.replace(/^<a /, '<a target="_blank" rel="nofollow" ')
     }
