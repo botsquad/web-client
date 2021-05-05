@@ -93,7 +93,10 @@ export function resolveTranslationsLocales(value, locales) {
   // regular object
   if (value.$i18n === true) {
     // this is a translation object
-    return (locales || ['en']).reduce((translated, lang) => translated || value[lang], null)
+    return (
+      (locales || ['en']).reduce((translated, lang) => translated || value[lang], null) ||
+      value[Object.keys(value).filter(k => k.match(/^[a-z]/))[0]]
+    )
   }
 
   Object.keys(value).forEach(k => {
