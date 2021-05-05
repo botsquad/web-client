@@ -1,5 +1,6 @@
 import marked from 'marked'
 import { SpeechMarkdown } from 'speechmarkdown-js'
+import { URL } from 'whatwg-url'
 
 export function messageHasModal({ type, payload }) {
   if (type === 'location') {
@@ -32,8 +33,13 @@ export function processText(string) {
   if (!markdownOpts) {
     const renderer = new marked.Renderer()
     const linkRenderer = renderer.link
+
     renderer.link = (href, title, text) => {
       const html = linkRenderer.call(renderer, href, title, text)
+      const url = new URL(href, document.location.href)
+      if (url.host === document.location.host) {
+        return html
+      }
       return html.replace(/^<a /, '<a target="_blank" rel="nofollow" ')
     }
     markdownOpts = { renderer, breaks: true, gfm: true }
