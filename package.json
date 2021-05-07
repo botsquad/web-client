@@ -1,10 +1,7 @@
 {
   "name": "@botsquad/web-client",
   "version": "0.8.4",
-  "sideEffects": [
-    "*.scss",
-    "*.css"
-  ],
+  "sideEffects": ["*.scss", "*.css"],
   "main": "dist/main.js",
   "typings": "types/index.d.ts",
   "engines": {
@@ -79,6 +76,7 @@
     "url-loader": "^1.0.1",
     "webpack": "^4.42.0",
     "webpack-auto-inject-version": "^1.2.2",
+    "webpack-bundle-analyzer": "^4.4.1",
     "webpack-cli": "^3.3.11",
     "webpack-conditional-loader": "^1.0.12",
     "webpack-dev-server": "^3.10.3"

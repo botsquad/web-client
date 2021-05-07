@@ -1,4 +1,5 @@
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 const dev = process.env.NODE_ENV !== 'production'
 const path = require('path')
@@ -68,4 +69,9 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new OptimizeCSSAssetsPlugin({}),
   ],
+}
+
+if (process.env.ANALYZE === 'true') {
+  console.log('** Enabling bundle analyzer')
+  module.exports.plugins.push(new BundleAnalyzerPlugin())
 }
