@@ -1,6 +1,6 @@
 import marked from 'marked'
 import { SpeechMarkdown } from 'speechmarkdown-js'
-import { URL } from 'whatwg-url'
+import URL from 'url-parse'
 
 export function messageHasModal({ type, payload }) {
   if (type === 'location') {

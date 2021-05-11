@@ -1,7 +1,10 @@
 {
   "name": "@botsquad/web-client",
   "version": "0.8.4",
-  "sideEffects": ["*.scss", "*.css"],
+  "sideEffects": [
+    "*.scss",
+    "*.css"
+  ],
   "main": "dist/main.js",
   "typings": "types/index.d.ts",
   "engines": {
@@ -120,7 +123,7 @@
     "react-transition-group": "^4.0.0",
     "recompose": "^0.27.0",
     "speechmarkdown-js": "^1.6.0",
-    "whatwg-fetch": "^2.0.3",
-    "whatwg-url": "^8.5.0"
+    "url-parse": "^1.5.1",
+    "whatwg-fetch": "^2.0.3"
   }
 }
