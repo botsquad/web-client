@@ -46,7 +46,9 @@ export default function botChatHandler(component, socket, bot_id, params) {
           })
         }
 
-        setCookieUserId(joinResult.user_id)
+        if (params.user_id && joinResult.user_id && params.user_id !== joinResult.user_id) {
+          setCookieUserId(joinResult.user_id)
+        }
 
         if (component.props.onChannel) {
           if (!component.mounted) return
