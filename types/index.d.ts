@@ -4,6 +4,8 @@ import { Socket, Channel } from 'phoenix'
 declare module '@botsquad/web-client' {
   export function processText(input: string): { __html: any }
 
+  export function processTemplate(input: string, parameters: Record<string, string>): string
+
   export const I18n = {
     resolveTranslations: (input: any, locales: string[]) => any,
     localePreflist: (locale: string, bot: any) => string[]
