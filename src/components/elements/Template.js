@@ -142,7 +142,7 @@ export default class Template extends React.Component {
             </Slider>
           )
         }
-        const full = modal || !payload.modal
+        const full = modal || payload.modal === false
         return (
           <Slider
             className={className + (full ? ' full' : '') + singleCls}
@@ -158,9 +158,7 @@ export default class Template extends React.Component {
         return (
           <div className={className}>
             {payload.elements.map((element, i) => renderGalleryElement(element, i, handler, message, true))}
-            {payload.buttons.length ? (
-              <div className="template-buttons">{payload.buttons.map((b, bidx) => renderButton(b, bidx, handler))}</div>
-            ) : null}
+            {payload.button ? <div className="template-buttons">{renderButton(payload.button, 0, handler)}</div> : null}
           </div>
         )
 
