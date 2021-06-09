@@ -9,7 +9,7 @@ export function messageHasModal({ type, payload }) {
   if (type === 'media') {
     return payload.kind === 'web' || payload.kind === 'image'
   }
-  if (type === 'template' && payload.template_type === 'generic') {
+  if (type === 'template' && payload.template_type === 'gallery') {
     return true
   }
   return false
@@ -28,6 +28,16 @@ export function escapeHtml(string) {
 }
 
 let markdownOpts = null
+
+export function processTemplate(template, parameters) {
+  const isInnerHtml = !!template.__html
+  let str = isInnerHtml ? template.__html : template
+
+  str = Object.keys(parameters).reduce((str, k) => str.replace(`{{${k}}}`, parameters[k]), str)
+  str = str.replace(/\{\{.*?\}\}/g, '')
+
+  return isInnerHtml ? { __html: str } : str
+}
 
 export function processText(string) {
   if (!markdownOpts) {

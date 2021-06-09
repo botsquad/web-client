@@ -672,6 +672,9 @@
       overflow: hidden;
     }
 
+    &.text {
+      min-width: inherit;
+    }
     &.button {
       > span {
         border-bottom-left-radius: 0 !important;
@@ -679,7 +682,7 @@
       }
     }
 
-    &.generic {
+    &.gallery {
       width: 100%;
       display: flex;
       flex-direction: row;

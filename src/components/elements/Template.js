@@ -3,7 +3,7 @@ import Slider from 'react-slick'
 
 import InputMethodTemplate from './InputMethodTemplate'
 import { OpenModal, ArrowLeft, ArrowRight } from '../icons'
-import { processText } from './util'
+import { processText, processTemplate } from './util'
 
 import './css/slick.min.css'
 
@@ -58,7 +58,7 @@ function host(url) {
   return parser.hostname
 }
 
-function renderGenericElement(element, idx, handler, message, full) {
+function renderGalleryElement(element, idx, handler, message, full) {
   const defaultAction = full
     ? element.default_action
       ? () => buttonClick(element.default_action, handler)
@@ -92,14 +92,24 @@ export default class Template extends React.Component {
     const { payload } = message
 
     if (payload.template_type === 'card') {
-      payload.template_type = 'generic'
+      payload.template_type = 'gallery'
       payload.elements = [payload.card]
     }
 
     const className = `${this.props.className} ${payload.template_type}`
 
     switch (payload.template_type) {
-      case 'button':
+      case 'text':
+        if (typeof payload.text !== 'string') return null
+
+        return (
+          <div className={className}>
+            <span dangerouslySetInnerHTML={processTemplate(processText(payload.text), payload.parameters || {})} />
+          </div>
+        )
+
+      case 'button': // backward compatbile
+      case 'buttons':
         return (
           <div className={className}>
             <span dangerouslySetInnerHTML={processText(payload.text)} />
@@ -107,7 +117,8 @@ export default class Template extends React.Component {
           </div>
         )
 
-      case 'generic': {
+      case 'generic': // backward compatible
+      case 'gallery': {
         const singleCls = payload.elements.length === 1 ? ' single' : ''
         if (modal) {
           const settings = {
@@ -125,7 +136,7 @@ export default class Template extends React.Component {
             <Slider {...settings}>
               {payload.elements.map((element, i) => (
                 <div className="slick-element" key={i}>
-                  {renderGenericElement(element, i, handler, message, true)}
+                  {renderGalleryElement(element, i, handler, message, true)}
                 </div>
               ))}
             </Slider>
@@ -139,14 +150,14 @@ export default class Template extends React.Component {
             variableWidth
             infinite={false}
           >
-            {payload.elements.map((element, i) => renderGenericElement(element, i, handler, message, full))}
+            {payload.elements.map((element, i) => renderGalleryElement(element, i, handler, message, full))}
           </Slider>
         )
       }
       case 'list':
         return (
           <div className={className}>
-            {payload.elements.map((element, i) => renderGenericElement(element, i, handler, message, true))}
+            {payload.elements.map((element, i) => renderGalleryElement(element, i, handler, message, true))}
             {payload.buttons.length ? (
               <div className="template-buttons">{payload.buttons.map((b, bidx) => renderButton(b, bidx, handler))}</div>
             ) : null}
