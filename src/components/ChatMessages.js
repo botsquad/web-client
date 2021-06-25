@@ -66,7 +66,7 @@ export default class ChatMessages extends React.Component {
           messageGroups.unshift(currentGroup)
         }
         currentGroup = {
-          avatar: message.self ? userAvatar : message.as ? message.as.profile_picture : botAvatar,
+          avatar: message.self ? userAvatar : message.as ? message.as.profile_picture || botAvatar : botAvatar,
           messages: [message],
           class: message.payload.class || null,
           as: message.as,
