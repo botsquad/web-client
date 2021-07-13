@@ -553,6 +553,22 @@
         border: var(--botsquad-border-style);
       }
 
+      &.file > a {
+        @include bubble;
+        display: inline-flex;
+        flex-direction: row;
+        padding-left: 10px;
+        border-radius: $bubble-radius;
+        text-decoration: none;
+        align-items: center;
+        background-color: var(--botsquad-secondary-color);
+        color: black;
+        svg {
+          width: 24px;
+          height: 24px;
+        }
+      }
+
       &.video video {
         max-width: 90%;
         height: auto;

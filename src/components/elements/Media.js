@@ -1,6 +1,7 @@
 import React from 'react'
 import { EventEmitter } from 'fbemitter'
 import { processText } from './util'
+import { FileDownload } from '../icons'
 
 export const mediaEvents = new EventEmitter()
 
@@ -250,6 +251,23 @@ export class VideoMedia extends React.Component {
     return (
       <div className={`${className} video`}>
         <video src={payload.url} controls />
+        {payload.caption ? <div className="caption" dangerouslySetInnerHTML={processText(payload.caption)} /> : null}
+      </div>
+    )
+  }
+}
+
+export class FileMedia extends React.Component {
+  render() {
+    const { message, className } = this.props
+    const { payload } = message
+
+    return (
+      <div className={`${className} file`}>
+        <a className="file" href={payload.url} target="_blank" rel="noreferrer">
+          {FileDownload} {payload.url.replace(/.*\//, '').substr(0, 64)}
+        </a>
+
         {payload.caption ? <div className="caption" dangerouslySetInnerHTML={processText(payload.caption)} /> : null}
       </div>
     )

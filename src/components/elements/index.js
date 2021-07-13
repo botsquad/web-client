@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Text from './Text'
-import { ImageMedia, WebMedia, AudioMedia, VideoMedia } from './Media'
+import { ImageMedia, WebMedia, AudioMedia, VideoMedia, FileMedia } from './Media'
 import Template from './Template'
 import Location from './Location'
 
@@ -26,6 +26,10 @@ export default function elementFactory({ type, payload }, attrs) {
 
   if (type === 'media' && payload.kind === 'video') {
     element = <VideoMedia {...attrs} />
+  }
+
+  if (type === 'media' && payload.kind === 'file') {
+    element = <FileMedia {...attrs} />
   }
 
   if (type === 'template') {
