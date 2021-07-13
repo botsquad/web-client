@@ -262,13 +262,13 @@ export class FileMedia extends React.Component {
     const { message, className } = this.props
     const { payload } = message
 
+    const filename = payload.url.replace(/.*\//, '').substr(0, 64)
+
     return (
       <div className={`${className} file`}>
         <a className="file" href={payload.url} target="_blank" rel="noreferrer">
-          {FileDownload} {payload.url.replace(/.*\//, '').substr(0, 64)}
+          {FileDownload} {payload.caption || filename}
         </a>
-
-        {payload.caption ? <div className="caption" dangerouslySetInnerHTML={processText(payload.caption)} /> : null}
       </div>
     )
   }
