@@ -1,6 +1,42 @@
 import locale2 from 'locale2'
 
 const LABELS = {
+  image_picker_select: {
+    $i18n: true,
+    en: 'Choose image',
+    nl: 'Kies afbeelding',
+    de: 'Bild auswählen',
+    fr: "Choisissez l'image",
+    es: 'Elegir imagen',
+    da: 'Vælg billede',
+  },
+  audio_picker_select: {
+    $i18n: true,
+    en: 'Choose audio file',
+    nl: 'Kies geluidsbestand',
+    de: 'Ton auswählen',
+    fr: 'Choisissez le son',
+    es: 'Elige el sonido',
+    da: 'Vælg lydfil',
+  },
+  video_picker_select: {
+    $i18n: true,
+    en: 'Choose video',
+    nl: 'Kies video',
+    de: 'Video auswählen',
+    fr: 'Choisissez la vidéo',
+    es: 'Elige video',
+    da: 'Vælg video',
+  },
+  file_picker_select: {
+    $i18n: true,
+    en: 'Choose file',
+    nl: 'Kies bestand',
+    de: 'Datei wählen',
+    fr: 'Choisir le fichier',
+    es: 'Elija el archivo',
+    da: 'Vælg fil',
+  },
   location_picker_select: {
     $i18n: true,
     en: 'Choose location',

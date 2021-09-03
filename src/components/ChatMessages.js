@@ -284,6 +284,7 @@ export default class ChatMessages extends React.Component {
               className={`${lastMessage.payload.class} ${this.isRecent(lastMessage) ? ' recent' : ''}`}
               buttons={lastMessage.payload.quick_replies}
               handler={handler}
+              {...this.props}
             />
           ) : null}
 

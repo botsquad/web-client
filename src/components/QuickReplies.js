@@ -1,4 +1,5 @@
 import React from 'react'
+import { chatLabel } from '../common/labels'
 
 function askForLocation(handler) {
   navigator.geolocation.getCurrentPosition(({ coords }) => {
@@ -6,17 +7,24 @@ function askForLocation(handler) {
   })
 }
 
-function uploadImage(handler) {
-  handler.component.uploader.trigger('image/*', file => {
+function fileUpload(accept, handler) {
+  handler.component.uploader.trigger(accept, file => {
     handler.sendFile(file)
   })
 }
 
-function renderButton({ content_type, title, image_url }, idx, handler) {
-  if (content_type === 'image') {
+const FILE_UPLOADS = {
+  file: '',
+  image: 'image/*',
+  audio: 'audio/*',
+  video: 'video/*',
+}
+
+function renderButton({ content_type, title, image_url }, idx, handler, props) {
+  if (FILE_UPLOADS[content_type] !== undefined) {
     return (
-      <div className="button" key={idx} onClick={() => uploadImage(handler)}>
-        <span className="label">Upload image</span>
+      <div className="button" key={idx} onClick={() => fileUpload(FILE_UPLOADS[content_type], handler)}>
+        <span className="label">{chatLabel({ props }, content_type + '_picker_select')}</span>
       </div>
     )
   }
@@ -49,6 +57,8 @@ export default function QuickReplies(props) {
   const { buttons, handler, className } = props
 
   return (
-    <div className={`quick-replies ${className || ''}`}>{buttons.map((b, idx) => renderButton(b, idx, handler))}</div>
+    <div className={`quick-replies ${className || ''}`}>
+      {buttons.map((b, idx) => renderButton(b, idx, handler, props))}
+    </div>
   )
 }
