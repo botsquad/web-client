@@ -7,14 +7,6 @@ export default class NotificationManager {
     this.component = component
     this.hasCordovaFocus = null
     this._onFocusHandlers = []
-
-    this.sound = document.getElementById('botsquad-notification-audio')
-    if (!this.sound) {
-      this.sound = document.createElement('audio')
-      this.sound.src = SOUND
-      this.sound.setAttribute('id', 'botsquad-notification-audio')
-      document.body.appendChild(this.sound)
-    }
   }
 
   setChannel(channel) {
@@ -47,7 +39,16 @@ export default class NotificationManager {
   play() {
     if (this.mayPlaySound()) {
       try {
-        this.sound.play()
+        this.sound = document.getElementById('botsquad-notification-audio')
+        if (!this.sound) {
+          this.sound = document.createElement('audio')
+          this.sound.setAttribute('id', 'botsquad-notification-audio')
+          this.sound.onload = () => this.sound.play()
+          this.sound.src = SOUND
+          document.body.appendChild(this.sound)
+        } else {
+          this.sound.play()
+        }
       } catch (e) {
         // autoplay audio is disabled
       }
