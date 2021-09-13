@@ -1,9 +1,10 @@
 import React from 'react'
 import Quagga from 'quagga'
 
-import { scannerSound } from '../elements/util'
 import InputMethodContainer from './InputMethodContainer'
 import { chatLabel } from '../../common/labels'
+
+const SCAN_BLIP = 'https://s3.eu-central-1.amazonaws.com/bsqd/audio/4ae396ab-fac5-4757-bb2e-7734d0e32ae1.dat'
 
 export default class Barcode extends React.Component {
   state = {
@@ -12,7 +13,7 @@ export default class Barcode extends React.Component {
   }
 
   componentDidMount() {
-    this.sound = scannerSound()
+    this.sound = Audio(SCAN_BLIP)
     const { readers } = this.props.config
 
     Quagga.init(

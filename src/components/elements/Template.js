@@ -3,7 +3,7 @@ import Slider from 'react-slick'
 
 import InputMethodTemplate from './InputMethodTemplate'
 import { OpenModal, ArrowLeft, ArrowRight } from '../icons'
-import { processText, processTemplate } from './util'
+import { TextUtil } from '@botsquad/sdk'
 
 import './css/slick.min.css'
 
@@ -104,7 +104,12 @@ export default class Template extends React.Component {
 
         return (
           <div className={className}>
-            <span dangerouslySetInnerHTML={processTemplate(processText(payload.text), payload.parameters || {})} />
+            <span
+              dangerouslySetInnerHTML={TextUtil.processTemplate(
+                TextUtil.processText(payload.text),
+                payload.parameters || {},
+              )}
+            />
           </div>
         )
 
@@ -112,7 +117,7 @@ export default class Template extends React.Component {
       case 'buttons':
         return (
           <div className={className}>
-            <span dangerouslySetInnerHTML={processText(payload.text)} />
+            <span dangerouslySetInnerHTML={TextUtil.processText(payload.text)} />
             <div className="template-buttons">{payload.buttons.map((b, idx) => renderButton(b, idx, handler))}</div>
           </div>
         )

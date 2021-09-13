@@ -1080,6 +1080,18 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@botsquad/sdk@^0.14.1":
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/@botsquad/sdk/-/sdk-0.14.1.tgz#a6c1d2aaf898fdad975227e9ef03364d8f62be9c"
+  integrity sha512-GGl2Ln9z0BW8FNMPnNKkw/kaWFrooFKKkFioearpLOrCwKWXXAEDowfY2nm85ei0x/eb7vDl5SuQ5IlSlGt7PQ==
+  dependencies:
+    marked "^3.0.3"
+    phoenix "^1.5.7"
+    speechmarkdown-js "^1.9.0"
+    ste-simple-events "^1.6.3"
+    url-parse "^1.5.3"
+    whatwg-fetch "^3.0.0"
+
 "@eslint/eslintrc@^0.1.3":
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/@eslint/eslintrc/-/eslintrc-0.1.3.tgz#7d1a2b2358552cc04834c0979bd4275362e37085"
@@ -6579,6 +6591,11 @@ marked@^0.7.0:
   resolved "https://registry.yarnpkg.com/marked/-/marked-0.7.0.tgz#b64201f051d271b1edc10a04d1ae9b74bb8e5c0e"
   integrity sha512-c+yYdCZJQrsRjTPhUx7VKkApw9bwDkNbHUKo1ovgcfDjb2kc8rLuRbIFyXL5WOEUwzSSKo3IXpph2K6DqB/KZg==
 
+marked@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-3.0.3.tgz#d81ff0f9e29cef0a177327fe009b460f31aa5862"
+  integrity sha512-4oIDhVSQ2s+xNCfek9OnZgCQR/WykGCom02JzIIvi4Pme+MIwPYqvGVW8CQWOXeoZu0TtVB6pTxIuoLm+dKqDA==
+
 marker-clusterer-plus@^2.1.4:
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/marker-clusterer-plus/-/marker-clusterer-plus-2.1.4.tgz#f8eff74d599dab3b7d0e3fed5264ea0e704f5d67"
@@ -8010,6 +8027,11 @@ phoenix@1.4:
   version "1.4.17"
   resolved "https://registry.yarnpkg.com/phoenix/-/phoenix-1.4.17.tgz#3b8a60a1ca704e0787acf47640bcd79f9a257172"
   integrity sha512-La4NCJR4rfx/d0ifP8zsZCBBQ03D2aLf64QEvKP976+iKjm+KTQcGgBY5EGLAfUNnElH32FeDomdA07VVc6Nfg==
+
+phoenix@^1.5.7:
+  version "1.5.12"
+  resolved "https://registry.yarnpkg.com/phoenix/-/phoenix-1.5.12.tgz#25c8529320a2ef5247ae0ad5f0d0a1399d2da3b9"
+  integrity sha512-794ftgpmGOiEFyQKf96ARuJmxqh5JwQ1arQEqFp22qmDHomVK5ucS+SdJxfPZ9o1ZYXbMn52GWAjOLHzhNywIw==
 
 picomatch@^2.0.4, picomatch@^2.2.1:
   version "2.2.2"
@@ -9882,6 +9904,14 @@ speechmarkdown-js@^1.6.0:
     myna-parser "^2.5.1"
     tslib "^1.10.0"
 
+speechmarkdown-js@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/speechmarkdown-js/-/speechmarkdown-js-1.9.0.tgz#da92bb2babec6b17d71b2feb10bd473a647f1605"
+  integrity sha512-dS3cozAUjr2IupNBRlbBWW5nwHcWB7eamR0H22n5pHhUNqQmSkanIDuvQY8LhJr5QBxaVTiXEjLx+KXaXqxQXw==
+  dependencies:
+    myna-parser "^2.5.1"
+    tslib "^1.10.0"
+
 split-on-first@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/split-on-first/-/split-on-first-1.1.0.tgz#f610afeee3b12bce1d0c30425e76398b78249a5f"
@@ -9952,6 +9982,18 @@ stdout-stream@^1.4.0:
   integrity sha512-j4emi03KXqJWcIeF8eIXkjMFN1Cmb8gUlDYGeBALLPo5qdyTfA9bOtl8m33lRoC+vFMkP3gl0WsDr6+gzxbbTA==
   dependencies:
     readable-stream "^2.0.1"
+
+ste-core@^1.7.2:
+  version "1.7.3"
+  resolved "https://registry.yarnpkg.com/ste-core/-/ste-core-1.7.3.tgz#91cba0aa606827c9944661abfb50740ef1a5ef3e"
+  integrity sha512-DP3BMV+NkTP1ayvIOgNkp+sbbBVPWhuYR9xuybIckL/lHt+fIZUaisFmI+0UumaGTDWLTmk6Ybck023dKvwGiw==
+
+ste-simple-events@^1.6.3:
+  version "1.7.3"
+  resolved "https://registry.yarnpkg.com/ste-simple-events/-/ste-simple-events-1.7.3.tgz#0a2aec72c89742011767eb1574c35bd598180d5d"
+  integrity sha512-QgtEQE0tG4BEkn+WWewOwz4GYvZQrPPczhkzxMmh5KKMsIwbb/kryH71/nbKEUJ5/FZUwXqsMLLM2Ugrg08EvQ==
+  dependencies:
+    ste-core "^1.7.2"
 
 stealthy-require@^1.1.1:
   version "1.1.1"
@@ -10745,6 +10787,14 @@ url-parse@^1.5.1:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
 
+url-parse@^1.5.3:
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.3.tgz#71c1303d38fb6639ade183c2992c8cc0686df862"
+  integrity sha512-IIORyIQD9rvj0A4CLWsHkBBJuNqWpFQe224b6j9t/ABmquIS0qDU2pY6kl6AuOrL5OkCXHMCFNe1jBcuAggjvQ==
+  dependencies:
+    querystringify "^2.1.1"
+    requires-port "^1.0.0"
+
 url@^0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/url/-/url-0.11.0.tgz#3838e97cfc60521eb73c525a8e55bfdd9e2e28f1"
@@ -11120,6 +11170,11 @@ whatwg-fetch@^2.0.3:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-2.0.4.tgz#dde6a5df315f9d39991aa17621853d720b85566f"
   integrity sha512-dcQ1GWpOD/eEQ97k66aiEVpNnapVj90/+R+SXTPYGHpYBBypfKJEQjLrvMZ7YXbKm21gXd4NcuxUTjiv1YtLng==
+
+whatwg-fetch@^3.0.0:
+  version "3.6.2"
+  resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-3.6.2.tgz#dced24f37f2624ed0281725d51d0e2e3fe677f8c"
+  integrity sha512-bJlen0FcuU/0EMLrdbJ7zOnW6ITZLrZMIarMUVmdKtsGvZna8vxKYaexICWPfZ8qwf9fzNq+UEIZrnSaApt6RA==
 
 whatwg-mimetype@^2.3.0:
   version "2.3.0"

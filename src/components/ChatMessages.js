@@ -6,9 +6,21 @@ import QuickReplies from './QuickReplies'
 import ChatInput from './ChatInput'
 import elementFactory from './elements'
 import { shortDateTimeFormat } from '../common/util'
-import { messageHasModal } from './elements/util'
 
 export const chatMessagesEvents = new EventEmitter()
+
+function messageHasModal({ type, payload }) {
+  if (type === 'location') {
+    return true
+  }
+  if (type === 'media') {
+    return payload.kind === 'web' || payload.kind === 'image'
+  }
+  if (type === 'template' && payload.template_type === 'gallery') {
+    return true
+  }
+  return false
+}
 
 export default class ChatMessages extends React.Component {
   state = {

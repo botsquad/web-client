@@ -100,7 +100,7 @@ export function determineUILocale(initialLocale, bot) {
   } else {
     _uiLocale = locale
   }
-  if (typeof LABELS[_uiLocale] === 'undefined') {
+  if (typeof LABELS.cancel[_uiLocale] === 'undefined') {
     _uiLocale = 'en'
   }
   return _uiLocale
@@ -112,6 +112,19 @@ export function localePreflist(userLocale, bot) {
     prefList.unshift(userLocale)
   }
   return prefList
+}
+
+export function resolveTranslations(value, userLocale, bot) {
+  if (typeof value !== 'object') {
+    return value
+  }
+
+  if (!bot) {
+    // userLocale is a list
+    return resolveTranslationsLocales(value, userLocale)
+  }
+
+  return resolveTranslationsLocales(value, localePreflist(userLocale, bot))
 }
 
 export function resolveTranslationsLocales(value, locales) {
@@ -133,25 +146,13 @@ export function resolveTranslationsLocales(value, locales) {
       (locales || ['en']).reduce((translated, lang) => translated || value[lang], null) ||
       value[Object.keys(value).filter(k => k.match(/^[a-z]/))[0]]
     )
+    i
   }
 
   Object.keys(value).forEach(k => {
     value[k] = resolveTranslations(value[k], locales)
   })
   return value
-}
-
-export function resolveTranslations(value, userLocale, bot) {
-  if (typeof value !== 'object') {
-    return value
-  }
-
-  if (!bot) {
-    // userLocale is a list
-    return resolveTranslationsLocales(value, userLocale)
-  }
-
-  return resolveTranslationsLocales(value, localePreflist(userLocale, bot))
 }
 
 export function fixedLabel(key, prefList) {

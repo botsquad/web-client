@@ -1,5 +1,5 @@
 import React from 'react'
-import { processText } from './util'
+import { TextUtil } from '@botsquad/sdk'
 
 export default class Text extends React.PureComponent {
   render() {
@@ -11,7 +11,7 @@ export default class Text extends React.PureComponent {
 
     return (
       <div className={className}>
-        <span dangerouslySetInnerHTML={processText(message.payload.message)} />
+        <span dangerouslySetInnerHTML={TextUtil.processText(message.payload.message)} />
       </div>
     )
   }

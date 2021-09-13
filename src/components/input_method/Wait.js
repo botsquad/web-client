@@ -3,7 +3,7 @@ import InputMethodContainer from './InputMethodContainer'
 import { buttonClick } from '../elements/Template'
 import { Closed } from '../icons'
 import { fixedLabel } from '../../common/labels'
-import { processText } from '../elements/util'
+import { TextUtil } from '@botsquad/sdk'
 
 function renderImplicitCloseButton(props) {
   if (props.type !== 'closed') {
@@ -74,7 +74,7 @@ function Wait(props) {
 
       {props.type === 'closed' ? <span className="closed">{Closed}</span> : null}
 
-      {description ? <div className="description" dangerouslySetInnerHTML={processText(description)} /> : null}
+      {description ? <div className="description" dangerouslySetInnerHTML={TextUtil.processText(description)} /> : null}
 
       {wait_time && waitTime >= 0 ? formatTime(waitTime, wait_time) : null}
     </InputMethodContainer>

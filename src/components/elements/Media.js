@@ -1,6 +1,6 @@
 import React from 'react'
 import { EventEmitter } from 'fbemitter'
-import { processText } from './util'
+import { TextUtil } from '@botsquad/sdk'
 import { FileDownload } from '../icons'
 
 export const mediaEvents = new EventEmitter()
@@ -115,7 +115,9 @@ export class ImageMedia extends React.PureComponent {
               }
             }}
           />
-          {payload.caption ? <div className="caption" dangerouslySetInnerHTML={processText(payload.caption)} /> : null}
+          {payload.caption ? (
+            <div className="caption" dangerouslySetInnerHTML={TextUtil.processText(payload.caption)} />
+          ) : null}
         </div>
       </ModalWrapper>
     )
@@ -188,7 +190,7 @@ export class WebMedia extends React.Component {
               />
             </div>
             {payload.caption ? (
-              <div className="caption" dangerouslySetInnerHTML={processText(payload.caption)} />
+              <div className="caption" dangerouslySetInnerHTML={TextUtil.processText(payload.caption)} />
             ) : null}
           </div>
         )}
@@ -211,7 +213,9 @@ export class AudioMedia extends React.Component {
     return (
       <div className={`${className} audio`}>
         <audio src={payload.url} controls ref={this.audio} />
-        {payload.caption ? <div className="caption" dangerouslySetInnerHTML={processText(payload.caption)} /> : null}
+        {payload.caption ? (
+          <div className="caption" dangerouslySetInnerHTML={TextUtil.processText(payload.caption)} />
+        ) : null}
       </div>
     )
   }
@@ -251,7 +255,9 @@ export class VideoMedia extends React.Component {
     return (
       <div className={`${className} video`}>
         <video src={payload.url} controls />
-        {payload.caption ? <div className="caption" dangerouslySetInnerHTML={processText(payload.caption)} /> : null}
+        {payload.caption ? (
+          <div className="caption" dangerouslySetInnerHTML={TextUtil.processText(payload.caption)} />
+        ) : null}
       </div>
     )
   }
