@@ -1,18 +1,21 @@
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
-const dev = process.env.NODE_ENV !== 'production'
 const path = require('path')
 const webpack = require('webpack')
 
+const devServer = {
+  port: 8082,
+  hot: true,
+  headers: { 'Access-Control-Allow-Origin': '*' },
+  static: { directory: path.join(__dirname, 'dev') },
+}
+
 module.exports = {
-  devtool: 'sourcemap',
   mode: 'development',
   target: 'web',
-  devtool: 'cheap-module-eval-source-map',
-  devServer: {
-    contentBase: path.join(__dirname, 'dev'),
-  },
+  devtool: 'cheap-module-source-map',
+  devServer,
   entry: {
     main: './src/index',
     example: './dev/example',
@@ -64,11 +67,7 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    new webpack.HotModuleReplacementPlugin(),
-    new OptimizeCSSAssetsPlugin({}),
-  ],
+  plugins: [new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/), new OptimizeCSSAssetsPlugin({})],
 }
 
 if (process.env.ANALYZE === 'true') {
