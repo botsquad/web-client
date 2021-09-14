@@ -1080,10 +1080,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@botsquad/sdk@^0.14.1":
-  version "0.14.1"
-  resolved "https://registry.yarnpkg.com/@botsquad/sdk/-/sdk-0.14.1.tgz#a6c1d2aaf898fdad975227e9ef03364d8f62be9c"
-  integrity sha512-GGl2Ln9z0BW8FNMPnNKkw/kaWFrooFKKkFioearpLOrCwKWXXAEDowfY2nm85ei0x/eb7vDl5SuQ5IlSlGt7PQ==
+"@botsquad/sdk@^0.14.3":
+  version "0.14.3"
+  resolved "https://registry.yarnpkg.com/@botsquad/sdk/-/sdk-0.14.3.tgz#04e45fd2726816c7af57d9b9abe25cb16e09241f"
+  integrity sha512-XY0wWj+RtfAVCjF4Z/X4KfKJln3dfCfvK9SBOaefTNz8NwcxH1XzXMaqwPi+BQFxqn/EpKkBDkfoGvIO2DHT8g==
   dependencies:
     marked "^3.0.3"
     phoenix "^1.5.7"
