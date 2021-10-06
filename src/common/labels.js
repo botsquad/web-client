@@ -9,6 +9,7 @@ const LABELS = {
     fr: "Choisissez l'image",
     es: 'Elegir imagen',
     da: 'Vælg billede',
+    fi: 'Valitse kuva',
   },
   audio_picker_select: {
     $i18n: true,
@@ -18,6 +19,7 @@ const LABELS = {
     fr: 'Choisissez le son',
     es: 'Elige el sonido',
     da: 'Vælg lydfil',
+    fi: 'Valitse äänitiedosto',
   },
   video_picker_select: {
     $i18n: true,
@@ -27,6 +29,7 @@ const LABELS = {
     fr: 'Choisissez la vidéo',
     es: 'Elige video',
     da: 'Vælg video',
+    fi: 'Valitse video',
   },
   file_picker_select: {
     $i18n: true,
@@ -36,6 +39,7 @@ const LABELS = {
     fr: 'Choisir le fichier',
     es: 'Elija el archivo',
     da: 'Vælg fil',
+    fi: 'Valitse tiedosto',
   },
   location_picker_select: {
     $i18n: true,
@@ -45,6 +49,7 @@ const LABELS = {
     fr: "Choisissez l'emplacement",
     es: 'Elegir ubicación',
     da: 'Vælg placering',
+    fi: 'Valitse sijainti',
     ar: 'اختيار موقع',
   },
   form_submit_button: {
@@ -55,6 +60,7 @@ const LABELS = {
     fr: 'Enregistrer',
     es: 'Guardar',
     da: 'Indsend',
+    fi: 'Lähetä',
     ar: 'إرسال',
   },
   cancel: {
@@ -65,6 +71,7 @@ const LABELS = {
     fr: 'Annuler',
     es: 'Cancelar',
     da: 'Afbestille',
+    fi: 'Peruuttaa',
     ar: 'إلغاء',
   },
   text_input_placeholder: {
@@ -75,6 +82,7 @@ const LABELS = {
     fr: 'Tapez le message…',
     es: 'Escriba mensaje…',
     da: 'Skriv en besked…',
+    fi: 'Kirjoita viesti…',
     ar: 'اكتب رسالة ...',
   },
   new_conversation: {
@@ -85,6 +93,7 @@ const LABELS = {
     fr: 'Nouvelle conversation',
     es: 'Nueva conversacion',
     da: 'Ny samtale',
+    fi: 'Uusi keskustelu',
     ar: 'محادثة جديدة',
   },
 }
