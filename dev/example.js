@@ -6,7 +6,7 @@ import WebClient from '../src/index'
 import './example.scss'
 
 const user_id = 'u2'
-const bot_id = 'd7e131a2-b080-4e56-b386-814bf7ed4b7a'
+const bot_id = '5340a013-434a-4568-8799-05173e8f7383'
 
 const socket = new Socket('ws://localhost:4000/socket')
 socket.connect()
