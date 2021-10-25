@@ -100,6 +100,10 @@ export default class ChatInput extends React.Component {
 
   upload(accept) {
     this.props.handler.component.uploader.trigger(accept, file => {
+      if (file.size > 10 * 1024 * 1024) {
+        alert('File is too large, please select a smaller file.')
+        return
+      }
       this.props.handler.sendFile(file)
       this.props.chatMessages.scrollToBottom()
       this.setState({ menuOpen: false })
