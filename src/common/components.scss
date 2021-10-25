@@ -506,9 +506,12 @@
       }
     }
 
+    &.text.large-emoji span p {
+      font-size: 1.8em;
+    }
+
     &.media {
       position: relative;
-      // @include modal-open-icon;
 
       span.loading {
         display: inline-block;

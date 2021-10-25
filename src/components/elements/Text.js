@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 import { TextUtil } from '@botsquad/sdk'
 
 export default class Text extends React.PureComponent {
@@ -9,8 +10,10 @@ export default class Text extends React.PureComponent {
       return null
     }
 
+    const emoji = /^\p{Emoji}$/u.test(message.payload.message.trim())
+
     return (
-      <div className={className}>
+      <div className={classNames(className, { 'large-emoji': emoji })}>
         <span dangerouslySetInnerHTML={TextUtil.processText(message.payload.message)} />
       </div>
     )
