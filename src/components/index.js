@@ -84,7 +84,7 @@ class ChatHandler {
           if (type !== 'video' && type !== 'audio' && type !== 'image') {
             type = 'file'
           }
-          this.send('attachment', { type, url: public_url })
+          this.send('attachment', { type, url: public_url, caption: name })
           this.component.setState({ upload: null })
         },
         () => {
@@ -290,7 +290,7 @@ export default class Chat extends React.Component {
     }
     if (type === 'user_attachment') {
       type = 'media'
-      payload = { url: payload.url, kind: payload.type }
+      payload = { url: payload.url, kind: payload.type, caption: payload.caption }
     }
     const renderable = ['media', 'text', 'location', 'template'].indexOf(type) >= 0
     return { type, self, payload, renderable, time, as }
