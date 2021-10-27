@@ -1,8 +1,12 @@
-export function uploadFile(file, signed_request, resolve, reject, progressHandler) {
+export function uploadFile(file, signed_request, resolve, reject, progressHandler, contentType) {
   let error = false
 
   const xhr = new XMLHttpRequest()
   xhr.open('PUT', signed_request)
+
+  if (contentType) {
+    xhr.setRequestHeader('content-type', contentType)
+  }
 
   xhr.upload.onprogress = evt => {
     if (evt.lengthComputable && progressHandler && !error) {

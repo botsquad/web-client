@@ -75,7 +75,7 @@ class ChatHandler {
     const { name } = file
     let { type } = file
     this.component.setState({ upload: { name, type, progress: 0 } })
-    this.channel.push('get_upload_url', { name, type }).receive('ok', ({ upload_url, public_url }) => {
+    this.channel.push('get_upload_url', { type }).receive('ok', ({ upload_url, public_url }) => {
       uploadFile(
         file,
         upload_url,
@@ -96,6 +96,7 @@ class ChatHandler {
             upload: { ...this.component.state.upload, progress },
           })
         },
+        file.type,
       )
     })
   }
