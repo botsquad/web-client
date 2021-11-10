@@ -1,15 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Socket } from 'phoenix'
+//import { Socket } from 'phoenix'
 
 import WebClient from '../src/index'
 import './example.scss'
 
 const user_id = 'u2'
-const bot_id = '5340a013-434a-4568-8799-05173e8f7383'
+const bot_id = '5b9e0beb-3c3d-4567-a0f4-63fa02fd588b'
 
-const socket = new Socket('ws://localhost:4000/socket')
-socket.connect()
+//const socket = new Socket('ws://localhost:4000/socket')
+//socket.connect()
 
 function App() {
   return (
@@ -19,7 +19,6 @@ function App() {
           bot_id={bot_id}
           params={{ user_id }}
           hideAvatars
-          socket={socket}
           settings={{ alwaysFocus: true, chat_config: { disabled_inputs: [] } }}
         />
       </div>
