@@ -4,6 +4,7 @@ module.exports = {
     document: true,
     google: true,
   },
+  ignorePatterns: ["index.d.ts"],
   parser: 'babel-eslint',
   parserOptions: {
     ecmaVersion: 2020, // Allows for the parsing of modern ECMAScript features

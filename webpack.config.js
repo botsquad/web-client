@@ -27,7 +27,7 @@ module.exports = {
     library: '@botsquad/web-client',
   },
   resolve: {
-    extensions: ['.js'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
     modules: ['node_modules'],
   },
   module: {
@@ -50,6 +50,15 @@ module.exports = {
         loader: 'raw-loader',
       },
       {
+        test: /\.d\.ts$/,
+        loader: 'ignore-loader'
+      },
+      {
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        exclude: /node_modules|\.d\.ts$/
+      },
+      {
         test: /\.scss$/,
         use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
       },
@@ -67,7 +76,10 @@ module.exports = {
       },
     ],
   },
-  plugins: [new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/), new OptimizeCSSAssetsPlugin({})],
+  plugins: [new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/), new OptimizeCSSAssetsPlugin({}), new webpack.HotModuleReplacementPlugin()],
+
+
+  
 }
 
 if (process.env.ANALYZE === 'true') {
