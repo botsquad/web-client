@@ -1,8 +1,27 @@
 {
     "compilerOptions": {
-      "sourceMap": true,
+      "moduleResolution": "node",
+      "target": "es5",
       "jsx": "react",
-      "target": "ES6",
+      "module": "commonjs",
+      "lib": ["es2016", "es2017", "es2019", "dom"],
+      "strict": true,
+      "sourceMap": true,
+      "allowSyntheticDefaultImports": true,
+      "checkJs": false,
+      "allowJs": true,
       "esModuleInterop": true,
+      "baseUrl": "./src",
+      "typeRoots": ["node_modules/@types", "custom_types"],
+      "forceConsistentCasingInFileNames": true,
+      "experimentalDecorators": true,
+      "noImplicitReturns": true,
+      "noImplicitThis": true,
+      "noImplicitAny": false,
+      "strictNullChecks": true,
+      "suppressImplicitAnyIndexErrors": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "resolveJsonModule": true
     }
   }
