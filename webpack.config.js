@@ -27,13 +27,25 @@ module.exports = {
     library: '@botsquad/web-client',
   },
   resolve: {
-    extensions: ['.js'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
     modules: ['node_modules'],
   },
   module: {
     rules: [
       {
-        test: [/\.js?$/],
+        test: /\.ts(x?)$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true,
+            },
+          },
+        ],
+      },
+      {
+        test: [/\.jsx?$/],
         exclude: /node_modules/,
         use: [
           {
