@@ -15,7 +15,7 @@
     "build": "NODE_ENV=production webpack --config webpack.prod.config.js --mode production && npm run types",
     "stats": "NODE_ENV=development webpack --json | webpack-bundle-size-analyzer",
     "dev": "webpack-dev-server --hot --host 0.0.0.0 --config ./webpack.config.js",
-    "test": "mocha --require @babel/register test/**/*.js",
+    "test": "mocha --require ts-node/register test/**/*.js test/**/*.ts",
     "lint": "eslint --ext js src",
     "prepare": "install-peers"
   },
@@ -81,6 +81,7 @@
     "style-loader": "^0.19.0",
     "terser-webpack-plugin": "^5.2.4",
     "ts-loader": "^9.2.6",
+    "ts-node": "^10.4.0",
     "typescript": "^4.4.4",
     "url-loader": "^4.1.1",
     "webpack": "^5.52.1",
