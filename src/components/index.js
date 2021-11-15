@@ -144,7 +144,7 @@ class ChatHandler {
   }
 
   getMapsAPIKey() {
-    return this.component.props.mapsApiKey || process.env.GOOGLE_MAPS_API_KEY || ''
+    return this.component.props.mapsApiKey || ''
   }
 }
 
