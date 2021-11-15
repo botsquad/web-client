@@ -10,7 +10,7 @@ const devServer = {
   headers: { 'Access-Control-Allow-Origin': '*' },
   static: { directory: path.join(__dirname, 'dev') },
 }
-
+require('dotenv').config({ path: './.devenv' })
 module.exports = {
   mode: 'development',
   target: 'web',
@@ -67,7 +67,13 @@ module.exports = {
       },
     ],
   },
-  plugins: [new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/), new OptimizeCSSAssetsPlugin({})],
+  plugins: [
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new OptimizeCSSAssetsPlugin({}),
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(process.env),
+    }),
+  ],
 }
 
 if (process.env.ANALYZE === 'true') {
