@@ -109,7 +109,7 @@
     "js-cookie": "^2.2.0",
     "jstz": "^2.0.0",
     "locale2": "^2.1.4",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "marked": "^0.7.0",
     "npm": "^6.14.6",
     "npm-run-all": "^4.1.2",
@@ -128,7 +128,7 @@
     "react-transition-group": "^4.0.0",
     "recompose": "^0.27.0",
     "speechmarkdown-js": "^1.6.0",
-    "url-parse": "^1.5.1",
+    "url-parse": "^1.5.2",
     "whatwg-fetch": "^2.0.3"
   }
 }
