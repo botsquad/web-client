@@ -14,8 +14,6 @@ React component for the web.
 
     npm install @botsquad/web-client
 
-## Example code
-
 ## Development
 
     Install dependencies with yarn install
@@ -23,6 +21,8 @@ React component for the web.
 Create a .devenv in the root folder and add the contents of template.devenv and replace the variables with the keys you have.
 
     Run in development with yarn run dev
+
+## Example code
 
 ```javascript
 import React from 'react'
