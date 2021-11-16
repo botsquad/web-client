@@ -1,17 +1,17 @@
-interface TextPayload {
+interface Text {
   message: string
   quick_replies?: { content_type: string; title: string }[]
 }
 
-interface LocationPayload {
+interface Location {
   lat: number
   lon: number
 }
 
-type mediaKinds = 'video' | 'audio' | 'web'
+type mediaKinds = 'video' | 'audio' | 'web' | 'image'
 
 interface Media {
-  kind: string
+  kind: mediaKinds
   url: string
   caption?: string
   preview_image?: string
@@ -86,8 +86,8 @@ interface CardTemplate {
 
 interface TextTemplate {
   parameters: string[]
-  template_type: 'text'
   text: string
+  template_type: 'text'
 }
 
 type Template = TextTemplate | CardTemplate | ListTemplate | GalleryTemplate | ButtonsTemplate
@@ -100,7 +100,7 @@ interface As {
 }
 
 interface Message {
-  payload: Text | Media | Template
+  payload: Text | Media | Template | Location
   renderable: boolean
   self: boolean
   time: number
