@@ -15,6 +15,7 @@ interface Props {
   handler: any
   inputModal: any
   inline: boolean
+  rest: any
 }
 
 enum SizeMap {
@@ -43,7 +44,7 @@ const InputMethodContainer = ({ config, className, below, headerControl, childre
     )
   }
 
-  const classList = `input-method--container ${height} ${className || ''}`.split(' ')
+  const classList = `input-method--container ${height} ${className || ''} rest`.split(' ')
 
   let inlineStyle: {
     height?: string
@@ -70,7 +71,7 @@ const InputMethodContainer = ({ config, className, below, headerControl, childre
   }, [])
 
   return (
-    <div className={classList.join()} style={inlineStyle}>
+    <div className={classList.join(' ')} style={inlineStyle}>
       {!required || caption ? renderHeader(caption, required) : null}
       {headerControl && (
         <div className="input-method-header">
