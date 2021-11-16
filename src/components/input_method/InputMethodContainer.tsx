@@ -17,6 +17,12 @@ interface Props {
   inline: boolean
 }
 
+enum SizeMap {
+  Compact = 0.5,
+  Tall = 0.75,
+  Full = 1,
+}
+
 const InputMethodContainer = ({ config, className, below, headerControl, children, handler, inputModal, inline }) => {
   const { required, caption, height } = config
 
@@ -44,13 +50,8 @@ const InputMethodContainer = ({ config, className, below, headerControl, childre
     maxHeight?: string
   }
 
-  enum SizeMap {
-    Compact = 0.5,
-    Tall = 0.75,
-    Full = 1,
-  }
-
   useEffect(() => {
+    inlineStyle = {}
     const { required, caption } = config
     const { clientHeight } = handler.getClientDimensions()
     const maxHeight = required && !caption ? clientHeight : clientHeight + 45
@@ -63,6 +64,8 @@ const InputMethodContainer = ({ config, className, below, headerControl, childre
     if (classList.includes('tall')) size = SizeMap.Tall
     if (classList.includes('full')) size = SizeMap.Full
     const attr = classList.includes('fixed-height') ? 'height' : 'maxHeight'
+    console.log(maxHeight)
+    console.log(inlineStyle)
     inlineStyle[attr] = `${Math.floor(size * maxHeight)}px`
   }, [])
 
