@@ -99,8 +99,7 @@ interface As {
   user_id?: string
 }
 
-interface Message {
-  payload: Text | Media | Template | Location
+interface DefaultMessageParams {
   renderable: boolean
   self: boolean
   time: number
@@ -108,3 +107,25 @@ interface Message {
   delay?: string | number
   id?: string
 }
+
+type Message = {
+  payload: Text & Media & Template & Location
+} & DefaultMessageParams
+
+export type TextMessage = {
+  payload: Text
+} & DefaultMessageParams
+
+export type MediaMessage = {
+  payload: Media
+} & DefaultMessageParams
+
+export type LocationMessage = {
+  payload: Location
+} & DefaultMessageParams
+
+export type TemplateMessage = {
+  payload: Template
+} & DefaultMessageParams
+
+export default Message
