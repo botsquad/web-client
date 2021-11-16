@@ -18,13 +18,19 @@ interface Media {
   class?: string
 }
 
-interface ButtonsTemplate {
+interface Button {
   title: string
   type: string
   url: string
   webview_height_ration?: string
   fallback_url?: string
   webview_share_button?: string
+}
+
+interface ButtonsTemplate {
+  buttons: Button[]
+  template_type: 'buttons'
+  text: string
 }
 
 interface TemplateElementButton {
