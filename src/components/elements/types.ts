@@ -1,16 +1,16 @@
-interface Text {
+export interface Text {
   message: string
   quick_replies?: { content_type: string; title: string }[]
 }
 
-interface Location {
+export interface Location {
   lat: number
   lon: number
 }
 
-type mediaKinds = 'video' | 'audio' | 'web' | 'image' | 'file'
+export type mediaKinds = 'video' | 'audio' | 'web' | 'image' | 'file'
 
-interface Media {
+export interface Media {
   kind: mediaKinds
   url: string
   caption?: string
@@ -18,7 +18,7 @@ interface Media {
   class?: string
 }
 
-interface Button {
+export interface Button {
   title: string
   type: string
   url: string
@@ -27,25 +27,25 @@ interface Button {
   webview_share_button?: string
 }
 
-interface ButtonsTemplate {
+export interface ButtonsTemplate {
   buttons: Button[]
   template_type: 'buttons'
   text: string
 }
 
-interface TemplateElementButton {
+export interface TemplateElementButton {
   event: string
   payload?: string
   title: string
   type: string
 }
 
-interface TemplateDefaultAction {
+export interface TemplateDefaultAction {
   type: string
   url: string
 }
 
-interface GalleryElement {
+export interface GalleryElement {
   buttons: TemplateElementButton[]
   default_action: TemplateDefaultAction
   image_url: string
@@ -53,53 +53,53 @@ interface GalleryElement {
   title: string
 }
 
-interface GalleryTemplate {
+export interface GalleryTemplate {
   elements: GalleryElement[]
   template_type: 'gallery'
 }
 
-interface ListElement {
+export interface ListElement {
   default_action: TemplateDefaultAction
   image_url: string
   subtitle: string
   title: string
 }
 
-interface ListTemplate {
+export interface ListTemplate {
   button: TemplateElementButton
   elements: ListElement[]
   template_type: 'list'
 }
 
-interface Card {
+export interface Card {
   buttons: TemplateElementButton[]
   image_url: string
   subtitle: string
   title: string
 }
 
-interface CardTemplate {
+export interface CardTemplate {
   card: Card
   elements: Card[]
   template: 'gallery'
 }
 
-interface TextTemplate {
+export interface TextTemplate {
   parameters: string[]
   text: string
   template_type: 'text'
 }
 
-type Template = TextTemplate | CardTemplate | ListTemplate | GalleryTemplate | ButtonsTemplate
+export type Template = TextTemplate | CardTemplate | ListTemplate | GalleryTemplate | ButtonsTemplate
 
-interface As {
+export interface As {
   first_name?: string
   last_name?: string
   profile_picture?: string
   user_id?: string
 }
 
-interface DefaultMessageParams {
+export interface DefaultMessageParams {
   renderable: boolean
   self: boolean
   time: number
@@ -108,24 +108,8 @@ interface DefaultMessageParams {
   id?: string
 }
 
-type Message = {
-  payload: Text & Media & Template & Location
-} & DefaultMessageParams
-
-export type TextMessage = {
-  payload: Text
-} & DefaultMessageParams
-
-export type MediaMessage = {
-  payload: Media
-} & DefaultMessageParams
-
-export type LocationMessage = {
-  payload: Location
-} & DefaultMessageParams
-
-export type TemplateMessage = {
-  payload: Template
+type Message<T extends Media | Text | Location | Template> = {
+  payload: T
 } & DefaultMessageParams
 
 export default Message
