@@ -102,6 +102,7 @@
     "@botsquad/sdk": "^0.14.3",
     "@botsquad/web-client": "^0.10.10",
     "@types/lodash": "^4.14.177",
+    "@types/react-slick": "^0.23.7",
     "babel-loader": "^8.0.0",
     "classnames": "^2.2.6",
     "color": "^3.0.0",
