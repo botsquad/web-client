@@ -47,7 +47,7 @@ export interface TemplateDefaultAction {
 
 export interface GalleryElement {
   buttons: TemplateElementButton[]
-  default_action: TemplateDefaultAction
+  default_action?: TemplateDefaultAction
   image_url: string
   subtitle: string
   title: string
@@ -59,29 +59,24 @@ export interface GalleryTemplate {
 }
 
 export interface ListElement {
-  default_action: TemplateDefaultAction
+  default_action?: TemplateDefaultAction
   image_url: string
   subtitle: string
   title: string
 }
 
 export interface ListTemplate {
+  default_action?: TemplateDefaultAction
   button: TemplateElementButton
   elements: ListElement[]
   template_type: 'list'
 }
 
-export interface Card {
-  buttons: TemplateElementButton[]
-  image_url: string
-  subtitle: string
-  title: string
-}
-
+// Card Is Basically a gallery with one Gallery element (the Card)
 export interface CardTemplate {
-  card: Card
-  elements: Card[]
-  template: 'gallery'
+  card: GalleryElement
+  elements: GalleryElement[]
+  template_type: 'card'
 }
 
 export interface TextTemplate {
@@ -113,3 +108,19 @@ type Message<T extends Media | Text | Location | Template> = {
 } & DefaultMessageParams
 
 export default Message
+
+function isTextTemplate(someVar: Template): someVar is TextTemplate {
+  return someVar.template_type === 'text'
+}
+function isCardTemplate(someVar: Template): someVar is CardTemplate {
+  return someVar.template_type === 'card'
+}
+function isGalleryTemplate(someVar: Template): someVar is GalleryTemplate {
+  return someVar.template_type === 'gallery'
+}
+function isListTemplate(someVar: Template): someVar is ListTemplate {
+  return someVar.template_type === 'list'
+}
+function isButtonsTemplate(someVar: Template): someVar is ListTemplate {
+  return someVar.template_type === 'buttons'
+}
