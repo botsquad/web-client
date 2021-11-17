@@ -8,7 +8,7 @@ interface Location {
   lon: number
 }
 
-type mediaKinds = 'video' | 'audio' | 'web' | 'image'
+type mediaKinds = 'video' | 'audio' | 'web' | 'image' | 'file'
 
 interface Media {
   kind: mediaKinds
