@@ -1,9 +1,15 @@
 import React from 'react'
 
 import inputMethodFactory from '../input_method'
+import { Location } from './types'
 
-export default class InputMethodTemplate extends React.Component {
-  finish(type, payload, config) {
+interface Props {
+  payload: any
+  handler: any
+}
+
+export default class InputMethodTemplate extends React.Component<Props> {
+  finish(type: string, payload: any, config: any) {
     if (type === 'location' && !config?.event) {
       // send raw
       this.props.handler.send(type, payload)
@@ -26,7 +32,7 @@ export default class InputMethodTemplate extends React.Component {
     const { payload } = this.props
 
     return inputMethodFactory(
-      { type: payload.input_method, payload },
+      { type: payload.input_method, payload, time: null },
       { inline: true, inputModal: this, ...this.props },
       this,
     )
