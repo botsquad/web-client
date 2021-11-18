@@ -29,7 +29,7 @@ export interface Button {
 
 export interface ButtonsTemplate {
   buttons: Button[]
-  template_type: 'buttons'
+  template_type: 'buttons' | 'button'
   text: string
 }
 
@@ -55,7 +55,7 @@ export interface GalleryElement {
 
 export interface GalleryTemplate {
   elements: GalleryElement[]
-  template_type: 'gallery'
+  template_type: 'gallery' | 'generic'
 }
 
 export interface ListElement {
@@ -116,11 +116,11 @@ function isCardTemplate(someVar: Template): someVar is CardTemplate {
   return someVar.template_type === 'card'
 }
 function isGalleryTemplate(someVar: Template): someVar is GalleryTemplate {
-  return someVar.template_type === 'gallery'
+  return someVar.template_type === 'gallery' || someVar.template_type === 'generic'
 }
 function isListTemplate(someVar: Template): someVar is ListTemplate {
   return someVar.template_type === 'list'
 }
 function isButtonsTemplate(someVar: Template): someVar is ListTemplate {
-  return someVar.template_type === 'buttons'
+  return someVar.template_type === 'buttons' || someVar.template_type === 'button'
 }
