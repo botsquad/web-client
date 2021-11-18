@@ -17,6 +17,7 @@ import Message, {
   ListElement,
   TemplateElementButton,
 } from './types'
+//handler probably a function/ handlerEvent is probably a string
 export function buttonClick(button: TemplateElementButton, handler: any, handleEvent: any) {
   let payload
 
@@ -49,6 +50,7 @@ export function buttonClick(button: TemplateElementButton, handler: any, handleE
   }
 }
 
+//handler is probably a function
 function renderButton(b: TemplateElementButton, idx: number, handler: any) {
   return (
     <span className="button" key={idx} onClick={() => buttonClick(b, handler, null)}>
