@@ -18,36 +18,26 @@ export interface Media {
   class?: string
 }
 
-export interface Button {
+export interface TemplateElementButton {
+  event: string
+  payload: string
   title: string
   type: string
-  url: string
-  webview_height_ration?: string
-  fallback_url?: string
-  webview_share_button?: string
+  json?: string
+  hide_modal?: boolean
+  url?: string
 }
 
 export interface ButtonsTemplate {
-  buttons: Button[]
+  buttons: TemplateElementButton[]
   template_type: 'buttons' | 'button'
   text: string
-}
-
-export interface TemplateElementButton {
-  event: string
-  payload?: string
-  title: string
-  type: string
-}
-
-export interface TemplateDefaultAction {
-  type: string
-  url: string
+  default_action?: TemplateElementButton
 }
 
 export interface GalleryElement {
   buttons: TemplateElementButton[]
-  default_action?: TemplateDefaultAction
+  default_action?: TemplateElementButton
   image_url: string
   subtitle: string
   title: string
@@ -59,14 +49,13 @@ export interface GalleryTemplate {
 }
 
 export interface ListElement {
-  default_action?: TemplateDefaultAction
+  default_action?: TemplateElementButton
   image_url: string
   subtitle: string
   title: string
 }
 
 export interface ListTemplate {
-  default_action?: TemplateDefaultAction
   button: TemplateElementButton
   elements: ListElement[]
   template_type: 'list'
