@@ -17,7 +17,7 @@ import Message, {
   ListElement,
   TemplateElementButton,
 } from './types'
-//handler probably a function/ handlerEvent is probably a string
+//handler probably a function/ handlerEvent is a function
 export function buttonClick(button: TemplateElementButton, handler: any, handleEvent: any) {
   let payload
 
