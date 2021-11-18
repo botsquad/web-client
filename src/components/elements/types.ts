@@ -85,7 +85,14 @@ export interface TextTemplate {
   template_type: 'text'
 }
 
-export type Template = TextTemplate | CardTemplate | ListTemplate | GalleryTemplate | ButtonsTemplate
+export interface InputTemplate {
+  data: any
+  template_id: string
+  type: string
+  template_type: 'input_method'
+}
+
+export type Template = TextTemplate | CardTemplate | ListTemplate | GalleryTemplate | ButtonsTemplate | InputTemplate
 
 export interface As {
   first_name?: string
