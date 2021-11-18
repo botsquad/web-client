@@ -80,7 +80,7 @@ export interface CardTemplate {
 }
 
 export interface TextTemplate {
-  parameters: string[]
+  parameters: { [key: string]: string }
   text: string
   template_type: 'text'
 }
