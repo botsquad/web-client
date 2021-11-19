@@ -13,9 +13,9 @@ export type mediaKinds = 'video' | 'audio' | 'web' | 'image' | 'file'
 export interface Media {
   kind: mediaKinds
   url: string
+  class: string
   caption?: string
   preview_image?: string
-  class?: string
 }
 
 export interface TemplateElementButton {
