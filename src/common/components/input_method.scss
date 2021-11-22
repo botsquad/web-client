@@ -398,6 +398,19 @@
     background-color: #ffffff;
   }
 }
+.bubble .input-method--container.wait div.content {
+  background: none;
+  color: var(--botsquad-ui-color);
+  svg path:not([fill]) {
+    fill: var(--botsquad-ui-color);
+  }
+}
+.bubble .input-method--container.wait div.captioned {
+  color: var(--botsquad-ui-color);
+  background: none;
+  justify-content: center;
+  padding-bottom: 0;
+}
 
 .input-method--container.numeric {
   .content {
