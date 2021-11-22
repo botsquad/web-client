@@ -405,6 +405,9 @@
     fill: var(--botsquad-ui-color);
   }
 }
+.bubble .input-method--container.wait div.below {
+  background: none;
+}
 .bubble .input-method--container.wait div.captioned {
   color: var(--botsquad-ui-color);
   background: none;
