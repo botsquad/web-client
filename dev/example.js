@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 //import { Socket } from 'phoenix'
 
@@ -12,6 +12,8 @@ const mapsApiKey = process.env.GOOGLE_MAPS_API_KEY
 //socket.connect()
 
 function App() {
+  const [hide_input, setHideinput] = useState(false)
+
   return (
     <div className="app">
       <div className="botsquad-components layout-docked">
@@ -19,8 +21,9 @@ function App() {
           bot_id={bot_id}
           params={{ user_id }}
           mapsApiKey={mapsApiKey}
+          onHideInput={setHideinput}
           hideAvatars
-          settings={{ alwaysFocus: true, chat_config: { disabled_inputs: [] } }}
+          settings={{ alwaysFocus: true, chat_config: { disabled_inputs: [] }, hide_input }}
         />
       </div>
     </div>
