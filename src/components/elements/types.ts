@@ -6,6 +6,8 @@ export interface Text {
 export interface Location {
   lat: number
   lon: number
+  maptype?: string
+  zoom?: number
 }
 
 export type mediaKinds = 'video' | 'audio' | 'web' | 'image' | 'file'
@@ -105,18 +107,18 @@ type Message<T extends Media | Text | Location | Template> = {
 
 export default Message
 
-function isTextTemplate(someVar: Template): someVar is TextTemplate {
+export function isTextTemplate(someVar: Template): someVar is TextTemplate {
   return someVar.template_type === 'text'
 }
-function isCardTemplate(someVar: Template): someVar is CardTemplate {
+export function isCardTemplate(someVar: Template): someVar is CardTemplate {
   return someVar.template_type === 'card'
 }
-function isGalleryTemplate(someVar: Template): someVar is GalleryTemplate {
+export function isGalleryTemplate(someVar: Template): someVar is GalleryTemplate {
   return someVar.template_type === 'gallery' || someVar.template_type === 'generic'
 }
-function isListTemplate(someVar: Template): someVar is ListTemplate {
+export function isListTemplate(someVar: Template): someVar is ListTemplate {
   return someVar.template_type === 'list'
 }
-function isButtonsTemplate(someVar: Template): someVar is ListTemplate {
+export function isButtonsTemplate(someVar: Template): someVar is ListTemplate {
   return someVar.template_type === 'buttons' || someVar.template_type === 'button'
 }
