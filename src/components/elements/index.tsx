@@ -4,8 +4,14 @@ import Text from './Text'
 import { ImageMedia, WebMedia, AudioMedia, VideoMedia, FileMedia } from './Media'
 import Template from './Template'
 import Location from './Location'
+import { Payload } from './types'
 
-export default function elementFactory({ type, payload }, attrs) {
+interface elementFactory {
+  message: { type?: 'text' | 'media' | 'template' | 'location'; payload?: Payload }
+  attrs: any
+}
+
+export default function elementFactory({ type, payload }, attrs): React.FC {
   let element = null
 
   if (type === 'text') {
