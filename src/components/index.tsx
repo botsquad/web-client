@@ -342,7 +342,12 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
       const lastInputState = history
         .concat([])
         .reverse()
-        .find(c => c.type === 'emit' && c.payload.event === 'hide_input')
+        .find(c => {
+          return (
+            (c.type === 'emit' && c.payload.event === 'hide_input') ||
+            (c.type === 'message' && c.payload.input_method === 'closed')
+          )
+        })
       if (lastInputState) {
         const hide_input = JSON.parse(lastInputState.payload.json)
         if (this.props.onHideInput) {

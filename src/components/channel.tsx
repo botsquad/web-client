@@ -75,6 +75,9 @@ export default function botChatHandler(
         })
         channel.on('message', event => {
           if (!component.mounted) return
+          if (event.payload?.input_method === 'closed' && component.props.onHideInput) {
+            component.props.onHideInput(event.payload)
+          }
           component.setState({ online: true })
           component.addEvent({ ...event, time: new Date().getTime() })
         })
