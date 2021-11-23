@@ -1,26 +1,31 @@
 import React from 'react'
 import { chatLabel } from '../common/labels'
 
-function askForLocation(handler) {
+function askForLocation(handler: any) {
   navigator.geolocation.getCurrentPosition(({ coords }) => {
     handler.send('location', { lat: coords.latitude, lon: coords.longitude })
   })
 }
 
-function fileUpload(accept, handler) {
+function fileUpload(accept: any, handler: any) {
   handler.component.uploader.trigger(accept, file => {
     handler.sendFile(file)
   })
 }
 
-const FILE_UPLOADS = {
-  file: '',
-  image: 'image/*',
-  audio: 'audio/*',
-  video: 'video/*',
+enum FILE_UPLOADS {
+  file = '',
+  image = 'image/*',
+  audio = 'audio/*',
+  video = 'video/*',
 }
 
-function renderButton({ content_type, title, image_url }, idx, handler, props) {
+function renderButton(
+  { content_type, title, image_url }: { content_type: string; title: string; image_url: string },
+  idx: any,
+  handler: any,
+  props: any,
+) {
   if (FILE_UPLOADS[content_type] !== undefined) {
     return (
       <div className="button" key={idx} onClick={() => fileUpload(FILE_UPLOADS[content_type], handler)}>
@@ -53,7 +58,13 @@ function renderButton({ content_type, title, image_url }, idx, handler, props) {
   return null
 }
 
-export default function QuickReplies(props) {
+interface QuickRepliesProps {
+  buttons: any[]
+  handler: any
+  className: string
+}
+
+const QuickReplies: React.FC<QuickRepliesProps> = props => {
   const { buttons, handler, className } = props
 
   return (
@@ -62,3 +73,4 @@ export default function QuickReplies(props) {
     </div>
   )
 }
+export default QuickReplies
