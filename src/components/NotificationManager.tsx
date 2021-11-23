@@ -1,19 +1,37 @@
+import { Channel } from 'phoenix'
+import React from 'react'
+
 const NUMBERS = ['❶', '❷', '❸', '❹', '❺', '❻', '❼', '❽', '❾', '❿']
 const SOUND = 'https://s3.eu-central-1.amazonaws.com/bsqd/audio/df56cb16-124c-4975-8a86-bbdd0dd20102.dat'
 const NOTIFICATION_CLEAR_TIME = 5000
 
-export default class NotificationManager {
-  constructor(component) {
+interface NotificationManagerProps {
+  component: any
+}
+
+export default class NotificationManager extends React.Component<NotificationManagerProps> {
+  component: any //React.Component & { handler?: { channel?: Channel },props:{host:any,externalInterface:any} }
+  hasCordovaFocus: boolean | null
+  _onFocusHandlers: (() => void)[]
+  channel: Channel
+  documentTitle: string
+  sound: HTMLElement | HTMLAudioElement | null
+  _hidden: boolean
+  clearer: ReturnType<typeof setTimeout> | null
+  hasFocus: boolean
+
+  constructor(component: React.Component & { handler?: { channel?: Channel } }) {
+    super({ component })
     this.component = component
     this.hasCordovaFocus = null
     this._onFocusHandlers = []
   }
 
-  setChannel(channel) {
+  setChannel(channel: Channel) {
     this.channel = channel
   }
 
-  _push(event, payload) {
+  _push(event: string, payload: object) {
     const channel = this.channel || (this.component.handler && this.component.handler.channel)
     if (channel) {
       channel.push(event, payload)
@@ -41,13 +59,13 @@ export default class NotificationManager {
       try {
         this.sound = document.getElementById('botsquad-notification-audio')
         if (!this.sound) {
-          this.sound = document.createElement('audio')
-          this.sound.setAttribute('id', 'botsquad-notification-audio')
-          this.sound.onload = () => this.sound.play()
-          this.sound.src = SOUND
-          document.body.appendChild(this.sound)
+          let sound = document.createElement('audio')
+          sound.setAttribute('id', 'botsquad-notification-audio')
+          sound.onload = () => sound.play()
+          sound.src = SOUND
+          document.body.appendChild(sound)
         } else {
-          this.sound.play()
+          ;(this.sound as HTMLAudioElement).play()
         }
       } catch (e) {
         // autoplay audio is disabled
@@ -55,7 +73,7 @@ export default class NotificationManager {
     }
   }
 
-  onFocus(callback) {
+  onFocus(callback: () => void) {
     if (!this.isHidden()) {
       callback()
     } else {
@@ -63,7 +81,7 @@ export default class NotificationManager {
     }
   }
 
-  cordovaFocusChange(flag) {
+  cordovaFocusChange(flag: boolean) {
     this.hasCordovaFocus = flag
     this.windowFocusChange()
   }
@@ -95,7 +113,7 @@ export default class NotificationManager {
     this._push('set_presence', { away: this.isHidden() })
   }
 
-  notifyMessageCount(messageCount) {
+  notifyMessageCount(messageCount: number) {
     if (messageCount > 0) {
       if (this.isHidden()) {
         this.play()

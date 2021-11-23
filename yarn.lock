@@ -1466,6 +1466,11 @@
   resolved "https://registry.npmjs.org/@types/node/-/node-14.0.12.tgz"
   integrity sha512-/sjzehvjkkpvLpYtN6/2dv5kg41otMGuHQUt9T2aiAuIfleCQRQHXXzF1eAw/qkZTj5Kcf4JSTf7EIizHocy6Q==
 
+"@types/phoenix@^1.5.3":
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/@types/phoenix/-/phoenix-1.5.3.tgz#80706952320b3bf49b5f138504dbfd0f7875650e"
+  integrity sha512-7fasDSyLIU0GAeVqaFNY3qQU4Ki5ZUUqF8L01EeFHbY3Qazo1pGZFjMkxMd1vZCS66tEBArC7zi7WKo6ZpOCNw==
+
 "@types/prop-types@*":
   version "15.7.4"
   resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.4.tgz"

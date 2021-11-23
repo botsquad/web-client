@@ -103,6 +103,7 @@
     "@botsquad/web-client": "^0.10.10",
     "@types/googlemaps": "^3.43.3",
     "@types/lodash": "^4.14.177",
+    "@types/phoenix": "^1.5.3",
     "@types/react-slick": "^0.23.7",
     "babel-loader": "^8.0.0",
     "classnames": "^2.2.6",
