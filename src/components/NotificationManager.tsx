@@ -20,7 +20,7 @@ export default class NotificationManager extends React.Component<NotificationMan
   clearer: ReturnType<typeof setTimeout> | null
   hasFocus: boolean
 
-  constructor(component: React.Component & { handler?: { channel?: Channel } }) {
+  constructor(component: React.Component) {
     super({ component })
     this.component = component
     this.hasCordovaFocus = null
