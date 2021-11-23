@@ -101,6 +101,7 @@
     "@babel/polyfill": "^7.4.3",
     "@botsquad/sdk": "^0.14.3",
     "@botsquad/web-client": "^0.10.10",
+    "@types/classnames": "^2.3.1",
     "@types/googlemaps": "^3.43.3",
     "@types/lodash": "^4.14.177",
     "@types/phoenix": "^1.5.3",
