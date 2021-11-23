@@ -101,7 +101,7 @@ export interface DefaultMessageParams {
   id?: string
 }
 
-export type Payload = Media | Text | Location | Template
+export type Payload = Media & Text & Location & Template
 
 type Message<T extends Media | Text | Location | Template> = {
   payload: T

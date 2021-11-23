@@ -1,13 +1,21 @@
-import React from 'react'
+import React, { createRef, useEffect, useRef } from 'react'
 import ReactGesture from 'react-gesture'
 
 import { Close } from './icons'
 import elementFactory from './elements'
+import Message, { Payload } from './elements/types'
 
-export default class ChatModal extends React.Component {
-  modalElement = React.createRef()
+interface ChatModalProps {
+  message: Message<Payload>
+  hiding: boolean
+  handler: any
+  modalParams: any
+  rest: any
+}
 
-  renderMessage(message, modalParams) {
+export default class ChatModal extends React.Component<ChatModalProps> {
+  div: HTMLDivElement
+  renderMessage(message: Message<Payload>, modalParams: any) {
     const cls = `content ${message.self ? 'self' : 'bot'} ` + message.type
 
     const attrs = {
@@ -30,7 +38,10 @@ export default class ChatModal extends React.Component {
   render() {
     const { message, hiding, modalParams } = this.props
     return (
-      <div className={`chat-modal ${hiding ? 'hiding' : ''} ${message.payload.class || ''}`} ref={this.modalElement}>
+      <div
+        className={`chat-modal ${hiding ? 'hiding' : ''} ${message.payload.class || ''}`}
+        onTouchMove={e => e.preventDefault()}
+      >
         <ReactGesture onSwipeUp={this.hide} onClick={this.hide} onTap={this.hide}>
           <div className="overlay" />
         </ReactGesture>
@@ -45,10 +56,5 @@ export default class ChatModal extends React.Component {
         <div className="close">{Close}</div>
       </div>
     )
-  }
-
-  componentDidMount() {
-    // prevent scrolling of the body behind the modal, while the modal is opened
-    this.modalElement.current.addEventListener('touchmove', e => e.preventDefault(), false)
   }
 }
