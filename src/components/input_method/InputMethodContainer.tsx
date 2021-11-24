@@ -64,8 +64,6 @@ const InputMethodContainer = ({ config, className, below, headerControl, childre
     if (classList.includes('tall')) size = SizeMap.Tall
     if (classList.includes('full')) size = SizeMap.Full
     const attr = classList.includes('fixed-height') ? 'height' : 'maxHeight'
-    console.log(maxHeight)
-    console.log(inlineStyle)
     inlineStyle[attr] = `${Math.floor(size * maxHeight)}px`
   }, [])
 

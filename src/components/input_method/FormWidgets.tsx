@@ -2,7 +2,7 @@ import React from 'react'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 
-function defaultCountry(localePrefs) {
+function defaultCountry(localePrefs: string[]) {
   const lang = (localePrefs[0] || 'en').substr(0, 2)
   switch (lang) {
     case 'en':
@@ -13,8 +13,14 @@ function defaultCountry(localePrefs) {
   return lang.toUpperCase()
 }
 
-function makeInputComponent({ disabled, autofocus, placeholder }) {
-  return React.forwardRef(function CustomInput(props, ref) {
+interface MakeInputComponentProps {
+  disabled: boolean
+  autofocus: boolean
+  placeholder: string
+}
+
+function makeInputComponent({ disabled, autofocus, placeholder }: MakeInputComponentProps) {
+  return React.forwardRef(function CustomInput(props: any, ref) {
     return (
       <input
         ref={ref}
@@ -28,8 +34,18 @@ function makeInputComponent({ disabled, autofocus, placeholder }) {
   })
 }
 
-class PhoneNumberWidget extends React.Component {
-  constructor(props) {
+interface PhoneNumberWidgetProps {
+  value: string
+  onChange: (value: string) => void
+  formContext: { localePrefs: string[] }
+  disabled: boolean
+  autofocus: boolean
+  placeholder: string
+}
+
+class PhoneNumberWidget extends React.Component<PhoneNumberWidgetProps> {
+  inputComponent: any
+  constructor(props: PhoneNumberWidgetProps) {
     super(props)
     this.inputComponent = makeInputComponent(this.props)
   }
