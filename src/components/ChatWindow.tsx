@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import classNames, { Argument } from 'classnames'
 
 import ChatMessages from './ChatMessages'
@@ -15,7 +15,7 @@ const ChatWindow: React.FC<ChatWindowProps> = props => {
   useEffect(() => {
     window.addEventListener('orientationchange', () => setForceUpdater(!forceUpdater))
   }, [])
-  let chatMessages = React.createRef<any>()
+  let chatMessages = useRef<any>()
 
   const { online } = props
   const layout = `layout-${props.settings.layout || 'docked'}`

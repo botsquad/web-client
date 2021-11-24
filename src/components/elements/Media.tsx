@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { EventEmitter } from 'fbemitter'
 import { TextUtil } from '@botsquad/sdk'
 import Message, { Media } from './types'
@@ -238,7 +238,7 @@ interface AudioMediaProps {
 
 export const AudioMedia: React.FC<AudioMediaProps> = React.memo(
   ({ message, className, handler }) => {
-    let audio = React.createRef<HTMLAudioElement>()
+    let audio = useRef<HTMLAudioElement>(null)
     const [hasAudio, setHasAudio] = useState(false)
 
     useEffect(() => {
