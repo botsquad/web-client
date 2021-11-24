@@ -9,7 +9,7 @@ export function shortDateTimeFormat(dt) {
   const m = moment(dt)
   const now = moment()
   if (m.year() !== now.year()) {
-    return m.format('D MMM Y')
+    return m.format('D/M/YYYY')
   }
   if (m.format('D MMM') !== now.format('D MMM')) {
     return m.format('D MMM')
@@ -95,13 +95,7 @@ export function setCookieUserId(userId) {
 export function getCookieUserId() {
   let userId = Cookie.get(USER_COOKIE)
   if (!userId || !userId.length) {
-    userId =
-      Math.random()
-        .toString(36)
-        .substring(2, 15) +
-      Math.random()
-        .toString(36)
-        .substring(2, 15)
+    userId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
     setCookieUserId(userId)
   }
   return userId
@@ -249,7 +243,7 @@ export function getQueryParams() {
     .replace(/(^\?)/, '')
     .split('&')
     .map(
-      function(n) {
+      function (n) {
         return (n = n.split('=')), (this[n[0]] = n[1]), this
       }.bind({}),
     )[0]
@@ -278,7 +272,5 @@ export function hostCheck(domains) {
 }
 
 export function newGroup() {
-  return Math.random()
-    .toString(36)
-    .substring(2, 10)
+  return Math.random().toString(36).substring(2, 10)
 }
