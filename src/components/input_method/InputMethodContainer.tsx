@@ -1,4 +1,3 @@
-import { string } from 'prop-types'
 import React, { useEffect } from 'react'
 import { Close } from '../icons'
 

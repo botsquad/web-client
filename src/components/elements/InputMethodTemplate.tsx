@@ -1,7 +1,6 @@
 import React from 'react'
 
 import inputMethodFactory from '../input_method'
-import { Location } from './types'
 
 interface Props {
   payload: any
