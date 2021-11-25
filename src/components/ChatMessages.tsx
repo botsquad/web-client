@@ -6,10 +6,11 @@ import QuickReplies from './QuickReplies'
 import ChatInput from './ChatInput'
 import elementFactory from './elements'
 import { shortDateTimeFormat } from '../common/util'
+import { Payload } from './elements/types'
 
 export const chatMessagesEvents = new EventEmitter()
 
-function messageHasModal({ type, payload }) {
+function messageHasModal({ type, payload }: { type: string; payload: Payload }) {
   if (type === 'location') {
     return true
   }
@@ -22,12 +23,29 @@ function messageHasModal({ type, payload }) {
   return false
 }
 
-export default class ChatMessages extends React.Component {
+interface ChatMessagesProps {
+  handler: any
+  settings: { layout: string }
+  host: any
+  hideAvatars: boolean
+  elementFactory: any
+  typingAs: any
+  botAvatar: any
+  channel: any
+  upload: { type: any; progress: any; retry: any }
+  typing: boolean
+  userAvatar: any
+  events: any
+  conversationMeta: any
+}
+
+export default class ChatMessages extends React.Component<ChatMessagesProps> {
   state = {
     messageGroups: [],
     lastMessage: null,
     loading: false,
   }
+  scrollToBottomListener: any
 
   componentDidMount() {
     this.groupMessages(this.props)
@@ -38,12 +56,12 @@ export default class ChatMessages extends React.Component {
     this.scrollToBottomListener.remove()
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps(newProps: ChatMessagesProps) {
     this.setState({ loading: false })
     this.groupMessages(newProps)
   }
 
-  _connectFormEvents(events) {
+  _connectFormEvents(events: any) {
     const formLookup = {}
     for (const m of events) {
       if (m.type === 'template' && m.payload.template_type === 'input_method') {
@@ -58,14 +76,14 @@ export default class ChatMessages extends React.Component {
     }
   }
 
-  groupMessages(props) {
+  groupMessages(props: ChatMessagesProps) {
     const { events, userAvatar, botAvatar, conversationMeta } = props
 
     // convert all events into groups of messages
     const messageGroups = []
     let lastMessage = false
     let lastModalMessage = null
-    let currentGroup = false
+    let currentGroup: any = false
 
     this._connectFormEvents(events)
 
@@ -261,7 +279,7 @@ export default class ChatMessages extends React.Component {
     }
   }
 
-  wrapperElement = React.createRef()
+  wrapperElement = React.createRef<HTMLDivElement>()
 
   render() {
     const { upload, typing, handler, hideAvatars, userAvatar } = this.props
