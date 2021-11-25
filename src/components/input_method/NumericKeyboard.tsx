@@ -13,6 +13,7 @@ const KEYS = [
 interface NumericKeyboardProps {
   config: { finish_on_key: string; num_digits: number; required: boolean; caption: string }
   inputModal: any
+  settings: any
 }
 
 const NumericKeyboard: React.FC<NumericKeyboardProps> = props => {
@@ -28,12 +29,14 @@ const NumericKeyboard: React.FC<NumericKeyboardProps> = props => {
     if (config.finish_on_key) {
       return null
     }
-
-    return (
-      <button disabled={!value.length} onClick={finish}>
-        {chatLabel({ props }, 'form_submit_button')}
-      </button>
-    )
+    if (props.settings) {
+      return (
+        <button disabled={!value.length} onClick={finish}>
+          {chatLabel({ props }, 'form_submit_button')}
+        </button>
+      )
+    }
+    return null
   }
 
   const add = (key: string) => {
