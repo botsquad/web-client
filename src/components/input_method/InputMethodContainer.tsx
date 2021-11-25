@@ -5,7 +5,7 @@ interface InputMethodContainerProps {
   config: {
     required: boolean
     caption: string
-    height: string | number
+    height?: string | number
   }
   className: string
   below: React.ReactNode
@@ -57,7 +57,7 @@ const InputMethodContainer: React.FC<InputMethodContainerProps> = ({
   let inlineStyle: {
     height?: string
     maxHeight?: string
-  }
+  } = {}
 
   useEffect(() => {
     inlineStyle = {}

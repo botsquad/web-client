@@ -10,7 +10,12 @@ const KEYS = [
   ['*', '0', '#'],
 ]
 
-function NumericKeyboard(props) {
+interface NumericKeyboardProps {
+  config: { finish_on_key: string; num_digits: number; required: boolean; caption: string }
+  inputModal: any
+}
+
+const NumericKeyboard: React.FC<NumericKeyboardProps> = props => {
   const { config, inputModal } = props
 
   const [value, setValue] = useState('')
@@ -31,7 +36,7 @@ function NumericKeyboard(props) {
     )
   }
 
-  const add = key => {
+  const add = (key: string) => {
     if (config.finish_on_key === key) {
       finish()
       return
