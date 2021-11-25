@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Close } from '../icons'
 
-interface Props {
+interface InputMethodContainerProps {
   config: {
     required: boolean
     caption: string
@@ -9,12 +9,12 @@ interface Props {
   }
   className: string
   below: React.ReactNode
-  headerControl: React.ReactNode
-  children: React.ReactNode
-  handler: any
-  inputModal: any
-  inline: boolean
-  rest: any
+  headerControl?: React.ReactNode
+  children?: React.ReactNode
+  handler?: any
+  inputModal?: any
+  inline?: boolean
+  rest?: any
 }
 
 enum SizeMap {
@@ -23,7 +23,16 @@ enum SizeMap {
   Full = 1,
 }
 
-const InputMethodContainer = ({ config, className, below, headerControl, children, handler, inputModal, inline }) => {
+const InputMethodContainer: React.FC<InputMethodContainerProps> = ({
+  config,
+  className,
+  below,
+  headerControl,
+  children,
+  handler,
+  inputModal,
+  inline,
+}) => {
   const { required, caption, height } = config
 
   const cancel = () => {
