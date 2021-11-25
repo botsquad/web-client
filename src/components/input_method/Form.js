@@ -64,7 +64,6 @@ export default class extends React.Component {
       text = '…'
     }
     const data = this.state.formData
-    console.log(text)
     this.props.inputModal.finish('message', { type: 'form', text, data }, this.props.config)
   }
 
