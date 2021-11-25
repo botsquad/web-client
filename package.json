@@ -108,6 +108,7 @@
     "@types/phoenix": "^1.5.3",
     "@types/react-phone-number-input": "^3.0.13",
     "@types/react-slick": "^0.23.7",
+    "@types/recompose": "^0.30.9",
     "babel-loader": "^8.0.0",
     "classnames": "^2.2.6",
     "color": "^3.0.0",
