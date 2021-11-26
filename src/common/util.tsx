@@ -5,7 +5,7 @@ import locale2 from 'locale2'
 
 const ua = navigator.userAgent
 
-export function shortDateTimeFormat(dt) {
+export function shortDateTimeFormat(dt: string) {
   const m = moment(dt)
   const now = moment()
   if (m.year() !== now.year()) {
@@ -38,7 +38,7 @@ export function isLandscape() {
 }
 
 export function isIE() {
-  return !!window.MSInputMethodContext && !!document.documentMode
+  return !!window['MSInputMethodContext'] && !!document['documentMode']
 }
 
 export function isMobile() {
@@ -145,13 +145,12 @@ function getUrlParameter(name) {
 }
 
 export function getChannelParams(defaultId) {
-  const params = {}
+  const params = { delegate_token: undefined, user_id: undefined }
 
   const delegate_token = getUrlParameter('u')
   if (delegate_token) {
     params.delegate_token = delegate_token
   }
-
   params.user_id = defaultId || getCookieUserId()
 
   return params
@@ -174,37 +173,17 @@ export function getUserInfo() {
   }
 }
 
-export function parseUrl(url) {
+export function parseUrl(url: string) {
   const parser = document.createElement('a')
   parser.href = url
   return parser
 }
 
-export function getAPIEndpoint(socketUrl, botId, path) {
-  const parsed = parseUrl(socketUrl)
-  return `${parsed.protocol.replace(/^ws/, 'http')}//${parsed.host}/api/bot/${botId}` + (path ? '/' + path : '')
-}
-
-function urlBase64ToUint8Array(base64String) {
+function urlBase64ToUint8Array(base64String: string) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
   const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/')
   const rawData = window.atob(base64)
   return Uint8Array.from([...rawData].map(char => char.charCodeAt(0)))
-}
-
-export function subscribeToPushEvents(socketUrl, botId, userId, pushManager, applicationServerKey) {
-  return pushManager
-    .subscribe({ userVisibleOnly: true, applicationServerKey: urlBase64ToUint8Array(applicationServerKey) })
-    .then(subscription => {
-      const body = JSON.stringify({ subscription, user_id: userId })
-      const endpoint = getAPIEndpoint(socketUrl, botId, 'push_subscribe')
-      return fetch(endpoint, { method: 'POST', mode: 'cors', headers: { 'content-type': 'application/json' }, body })
-    })
-}
-export function registerFirebaseToken(socketUrl, botId, userId, token) {
-  const body = JSON.stringify({ user_id: userId, firebase: token })
-  const endpoint = getAPIEndpoint(socketUrl, botId, 'push_subscribe')
-  return fetch(endpoint, { method: 'POST', mode: 'cors', headers: { 'content-type': 'application/json' }, body })
 }
 
 export function setupSocketReconnectBehaviour(socket, channel, notificationManager) {
@@ -249,7 +228,7 @@ export function getQueryParams() {
     )[0]
 }
 
-export function hostCheck(domains) {
+export function hostCheck(domains: any[]) {
   const { hostname } = document.location
   if (
     hostname === 'localhost' ||
