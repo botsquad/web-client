@@ -1,4 +1,11 @@
-export function uploadFile(file, signed_request, resolve, reject, progressHandler, contentType) {
+export function uploadFile(
+  file: Document | XMLHttpRequestBodyInit,
+  signed_request: string,
+  resolve: ([string]: any) => void,
+  reject: ([string]: any) => void,
+  progressHandler: ([string]: any) => void,
+  contentType: string,
+) {
   let error = false
 
   const xhr = new XMLHttpRequest()
