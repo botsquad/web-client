@@ -1,6 +1,7 @@
 import React from 'react'
 import Form from 'react-jsonschema-form'
 import debounce from 'lodash/debounce'
+import moment from 'dayjs'
 
 import { chatLabel } from '../../common/labels'
 import { Edit } from '../icons'
@@ -14,11 +15,14 @@ function elementValue(e) {
   if (e.type === 'checkbox') {
     return e.checked ? '✓' : ''
   }
+  if (e.type === 'date') {
+    return moment(e.value).format('D/M/YYYY')
+  }
   return e.value.trim()
 }
 
 function removeEmpty(obj) {
-  Object.keys(obj).forEach(function(key) {
+  Object.keys(obj).forEach(function (key) {
     ;(obj[key] && typeof obj[key] === 'object' && removeEmpty(obj[key])) || (obj[key] === null && delete obj[key])
   })
   return obj
