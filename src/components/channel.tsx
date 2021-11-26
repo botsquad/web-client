@@ -1,7 +1,7 @@
 import { setCookieUserId } from '../common/util'
 import API from './api'
 
-export default function botChatHandler(component, socket, bot_id, params) {
+export default function botChatHandler(component: any, socket: any, bot_id: number, params: any) {
   if (!socket) {
     return null
   }
