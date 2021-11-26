@@ -4,18 +4,27 @@ import debounce from 'lodash/debounce'
 import { ImageUpload, AudioUpload, FileUpload, LocationShare, Arrow, More, Close } from './icons'
 import { isiOS } from '../common/util'
 import ChatInputModalWrapper from './ChatInputModalWrapper'
-import { chatMessagesEvents } from './ChatMessages'
+import ChatMessages, { chatMessagesEvents } from './ChatMessages'
 import { chatLabel } from '../common/labels'
 
-export default class ChatInput extends React.Component {
+interface ChatInputProps {
+  chatMessages: ChatMessages
+  handler: any
+  settings: any
+  onClose: () => void
+  online: boolean
+}
+
+export default class ChatInput extends React.Component<ChatInputProps> {
   state = {
     hasMessage: false,
     message: '',
     inputFocus: false,
     inputMethodOverride: null,
+    menuOpen: null,
   }
   _input = null
-
+  _blurrer: ReturnType<typeof setTimeout> | null = null
   showLocationInput() {
     this.setState(
       {
@@ -132,8 +141,8 @@ export default class ChatInput extends React.Component {
     }, 10)
   }
 
-  inputDiv = React.createRef()
-  input = React.createRef()
+  inputDiv = React.createRef<HTMLDivElement>()
+  input = React.createRef<HTMLInputElement>()
 
   renderDocked() {
     return (
