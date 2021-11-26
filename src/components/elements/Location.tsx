@@ -101,16 +101,18 @@ const StaticLocation: React.FC<StaticLocationProps> = ({ className, message, han
 interface LocationProps {
   message: Message<LocationType>
   modal: any
+  handler: any
+  className: any
   rest: any
 }
 
-const Location = ({ message, modal, handler, ...rest }) => {
+const Location: React.FC<LocationProps> = props => {
+  const { message, modal } = props
   const { payload } = message
   if (!payload || !payload.lat) {
     return null
   }
 
-  const props: any = { message, modal, handler, ...rest }
   if (modal) {
     return <ComposedMap {...props} />
   }

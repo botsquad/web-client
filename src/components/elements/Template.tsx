@@ -111,10 +111,10 @@ interface Props {
   className: string
 }
 
-const Template: React.FC<Props> = ({ handler, message, modal, modalParams, className: classes }) => {
+const Template: React.FC<Props> = props => {
+  const { handler, message, modal, modalParams, className: classes } = props
   const { clientWidth } = handler.getClientDimensions()
   const { payload } = message
-  const props = { handler, message, modal, modalParams, classes }
 
   //Adding the template type to the class names, except if it is a card then it becomes a gallery (cards are one element galleries)
   const className = `${classes} + ${payload.template_type === 'card' ? 'gallery' : payload.template_type}`

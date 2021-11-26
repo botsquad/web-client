@@ -74,20 +74,12 @@ interface ImageMediaProps {
   className: string
   handler: any
   modal: any
-  rest: any
 }
 
-export const ImageMedia: React.FC<ImageMediaProps> = ({ message, onLoad, className, handler, modal, ...rest }) => {
+export const ImageMedia: React.FC<ImageMediaProps> = props => {
+  const { message, onLoad, className } = props
   const [loading, setLoading] = useState(true)
   const [retry, setRetry] = useState(0)
-  const props = {
-    message,
-    onLoad,
-    className,
-    handler,
-    modal,
-    ...rest,
-  }
   const { payload } = message
   let wrapper: ModalWrapper | null = null
   let component: HTMLElement | null = null

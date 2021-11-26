@@ -8,7 +8,7 @@ import LocationPicker from './LocationPicker'
 import Wait from './Wait'
 import NumericKeyboard from './NumericKeyboard'
 
-export default function elementFactory(method: { type: string; payload: any; time: any }, props: any, inputModal) {
+export default function elementFactory(method: { type: string; payload: any; time: any }, props: any, inputModal: any) {
   const { type, payload, time } = method
 
   if (type === 'item_picker' && payload.mode === 'single') {
