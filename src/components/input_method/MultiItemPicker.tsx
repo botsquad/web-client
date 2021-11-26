@@ -4,8 +4,17 @@ import InputMethodContainer from './InputMethodContainer'
 import { CheckboxOn, CheckboxOff } from '../icons'
 import { chatLabel } from '../../common/labels'
 
-export default class MultiItemPicker extends React.Component {
-  state = {
+interface MultiItemPickerProps {
+  config: any
+  inputModal: any
+}
+interface MultiItemPickerStateProps {
+  hasSubmitted: boolean
+  selected: any[]
+}
+
+export default class MultiItemPicker extends React.Component<MultiItemPickerProps> {
+  state: MultiItemPickerStateProps = {
     hasSubmitted: false,
     selected: [],
   }
@@ -60,7 +69,7 @@ export default class MultiItemPicker extends React.Component {
           </button>
         }
       >
-        {items.map((item, index) => {
+        {items.map((item, index: number) => {
           const selected = this.state.selected.find(i => i.value === item.value)
           return (
             <div
