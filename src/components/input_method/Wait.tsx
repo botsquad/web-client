@@ -5,7 +5,13 @@ import { Closed } from '../icons'
 import { fixedLabel } from '../../common/labels'
 import { TextUtil } from '@botsquad/sdk'
 
-function renderImplicitCloseButton(props) {
+interface renderImplicitCloseButtonProps {
+  type: string
+  handler: any
+  localePrefs: any
+}
+
+const renderImplicitCloseButton: React.FC<renderImplicitCloseButtonProps> = props => {
   if (props.type !== 'closed') {
     return null
   }
@@ -26,11 +32,11 @@ function renderButton(button, props) {
   return <button onClick={() => buttonClick(button, props.handler, onClick)}>{button.title}</button>
 }
 
-function pad(n, char = '0') {
+function pad(n: number, char = '0') {
   return (n < 10 ? char : '') + Math.floor(n)
 }
 
-function formatTime(waitTime, total) {
+function formatTime(waitTime: number, total: number) {
   const delta = total - waitTime
   return (
     <span className="time">
@@ -39,7 +45,16 @@ function formatTime(waitTime, total) {
   )
 }
 
-function Wait(props) {
+interface WaitProps {
+  type: string
+  config: any
+  time: number
+  inputModal: any
+  handler: any
+  localePrefs: any
+}
+
+const Wait: React.FC<WaitProps> = props => {
   const { type } = props
   const { description, wait_time, button } = props.config
   const [waitTime, setWaitTime] = useState(0)
