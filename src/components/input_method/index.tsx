@@ -10,7 +10,7 @@ import NumericKeyboard from './NumericKeyboard'
 
 export default function elementFactory(method: { type: string; payload: any; time: any }, props: any, inputModal: any) {
   const { type, payload, time } = method
-
+  console.log(props)
   if (type === 'item_picker' && payload.mode === 'single') {
     return <SingleItemPicker {...props} config={payload} inputModal={inputModal} />
   }

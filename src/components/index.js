@@ -15,7 +15,7 @@ import UploadTrigger from './UploadTrigger'
 
 import './index.scss'
 
-class ChatHandler {
+export class ChatHandler {
   constructor(component) {
     this.component = component
     this.channel = null
