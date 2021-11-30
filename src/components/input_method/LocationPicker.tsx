@@ -74,6 +74,8 @@ interface LocationPickerProps {
   config: any
   inputModal: any
   handler: any
+  settings: any
+  localePrefs: string[]
 }
 const LocationPicker: React.FC<LocationPickerProps> = props => {
   const [hasSubmitted, setHasSubmitted] = useState(false)
@@ -130,7 +132,7 @@ const LocationPicker: React.FC<LocationPickerProps> = props => {
       below={
         !hasSubmitted ? (
           <button disabled={position === null} onClick={submit}>
-            {button_label || chatLabel({ props }, 'location_picker_select')}
+            {button_label || chatLabel(props.settings, props.localePrefs, 'location_picker_select')}
           </button>
         ) : null
       }

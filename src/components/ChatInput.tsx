@@ -13,6 +13,7 @@ interface ChatInputProps {
   settings: any
   onClose: () => void
   online: boolean
+  localePrefs: string[]
 }
 
 export default class ChatInput extends React.Component<ChatInputProps> {
@@ -146,7 +147,10 @@ export default class ChatInput extends React.Component<ChatInputProps> {
 
   renderDocked() {
     return (
-      <ChatInputModalWrapper component={this} cancelLabel={chatLabel(this, 'cancel')}>
+      <ChatInputModalWrapper
+        component={this}
+        cancelLabel={chatLabel(this.props.settings, this.props.localePrefs, 'cancel')}
+      >
         {operatorActive => (
           <div className="chat-input docked" ref={this.inputDiv}>
             <div className="input">
@@ -155,7 +159,7 @@ export default class ChatInput extends React.Component<ChatInputProps> {
                   type="text"
                   value={this.state.message}
                   readOnly={!this.props.online}
-                  placeholder={chatLabel(this, 'text_input_placeholder')}
+                  placeholder={chatLabel(this.props.settings, this.props.localePrefs, 'text_input_placeholder')}
                   ref={this.input}
                   onFocus={() => this.onInputFocus()}
                   onBlur={() => this.onInputBlur()}
@@ -192,7 +196,10 @@ export default class ChatInput extends React.Component<ChatInputProps> {
 
   renderEmbedded() {
     return (
-      <ChatInputModalWrapper component={this} cancelLabel={chatLabel(this, 'cancel')}>
+      <ChatInputModalWrapper
+        component={this}
+        cancelLabel={chatLabel(this.props.settings, this.props.localePrefs, 'cancel')}
+      >
         {operatorActive => (
           <div
             className={`chat-input embedded ${this.state.menuOpen ? 'menu-open' : ''} ${
@@ -232,7 +239,7 @@ export default class ChatInput extends React.Component<ChatInputProps> {
                   type="text"
                   value={this.state.message}
                   readOnly={!this.props.online}
-                  placeholder={chatLabel(this, 'text_input_placeholder')}
+                  placeholder={chatLabel(this.props.settings, this.props.localePrefs, 'text_input_placeholder')}
                   ref={this.input}
                   onKeyUp={e => this.onKeyUp(e)}
                   onFocus={() => this.onFocus()}

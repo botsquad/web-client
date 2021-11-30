@@ -7,10 +7,8 @@ import { chatLabel } from '../../common/labels'
 interface MultiItemPickerProps {
   config: any
   inputModal: any
-}
-interface MultiItemPickerStateProps {
-  hasSubmitted: boolean
-  selected: any[]
+  settings: any
+  localePrefs: string[]
 }
 
 const MultiItemPicker: React.FC<MultiItemPickerProps> = props => {
@@ -60,7 +58,7 @@ const MultiItemPicker: React.FC<MultiItemPickerProps> = props => {
       className="item-picker multiple confirm"
       below={
         <button disabled={selected.length === 0 || hasSubmitted} onClick={submit}>
-          {button_label || chatLabel({ props }, 'form_submit_button')}
+          {button_label || chatLabel(props.settings, props.localePrefs, 'form_submit_button')}
         </button>
       }
     >

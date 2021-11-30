@@ -14,6 +14,7 @@ interface NumericKeyboardProps {
   config: { finish_on_key: string; num_digits: number; required: boolean; caption: string }
   inputModal: any
   settings: any
+  localePrefs: string[]
 }
 
 const NumericKeyboard: React.FC<NumericKeyboardProps> = props => {
@@ -32,7 +33,7 @@ const NumericKeyboard: React.FC<NumericKeyboardProps> = props => {
     if (props.settings) {
       return (
         <button disabled={!value.length} onClick={finish}>
-          {chatLabel({ props }, 'form_submit_button')}
+          {chatLabel(props.settings, props.localePrefs, 'form_submit_button')}
         </button>
       )
     }

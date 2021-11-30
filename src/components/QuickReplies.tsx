@@ -29,7 +29,7 @@ function renderButton(
   if (FILE_UPLOADS[content_type] !== undefined) {
     return (
       <div className="button" key={idx} onClick={() => fileUpload(FILE_UPLOADS[content_type], handler)}>
-        <span className="label">{chatLabel({ props }, content_type + '_picker_select')}</span>
+        <span className="label">{chatLabel(props.settings, props.localePrefs, content_type + '_picker_select')}</span>
       </div>
     )
   }

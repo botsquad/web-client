@@ -33,6 +33,7 @@ interface FormProps {
   message: any
   inputModal: any
   localePrefs: any
+  settings: any
 }
 
 const ClientForm: React.FC<FormProps> = props => {
@@ -121,7 +122,7 @@ const ClientForm: React.FC<FormProps> = props => {
       below={
         !disabled && (
           <button disabled={hasError || hasSubmitted} onClick={submit}>
-            {config.button_label || chatLabel({ props }, 'form_submit_button')}
+            {config.button_label || chatLabel(props.settings, props.localePrefs, 'form_submit_button')}
           </button>
         )
       }
