@@ -1,6 +1,6 @@
-import classNames from 'classnames'
+import React from 'react'
 import { Channel, Socket } from 'phoenix'
-import { createContext, ReactNode, useContext, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 import ChatMessages from '../ChatMessages'
 import InputMethodTemplate from '../elements/InputMethodTemplate'
 import Message, { Payload } from '../elements/types'
@@ -79,7 +79,7 @@ const DEFAULT_INPUT_METHOD_PROPS: InputMethodProps = {
 const InputMethodPropsContext = createContext<InputMethodProps>(DEFAULT_INPUT_METHOD_PROPS)
 const InputMethodUpdateContext = createContext<(name: keyof InputMethodProps, value: any) => void>(null)
 
-const ElementFactoryProvider = (props: any) => {
+const InputMethodContext = (props: any) => {
   const [values, setValues] = useState<InputMethodProps>({
     ...props,
   })
@@ -94,3 +94,5 @@ const ElementFactoryProvider = (props: any) => {
     </InputMethodPropsContext.Provider>
   )
 }
+
+export default InputMethodContext
