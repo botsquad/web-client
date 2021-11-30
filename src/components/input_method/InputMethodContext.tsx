@@ -15,37 +15,39 @@ export function useInputMethodPropsUpdate() {
 }
 
 interface InputMethodProps {
+  config: any
   bot_id: string
-  channel: Channel
+  channel: Channel | null
   className: string
   conversationMeta: any
   events: any[]
-  handler: ChatHandler
+  handler: ChatHandler | null
   hideAvatars: boolean
   inline: boolean
-  inputModal: InputMethodTemplate
+  inputModal: InputMethodTemplate | null
   joined: boolean
   layout: string
   localePrefs: string[]
   mapsApiKey: string
-  message: Message<Payload>
+  message: Message<Payload> | null
   modalHiding: boolean
-  onLoad: () => void
+  onLoad: (() => void) | null
   online: boolean
   params: any
   payload: any
   settings: any
-  socket: Socket
+  socket: Socket | null
   typing: boolean
   typingAs: any
   upload: any
-  chatMessages: ChatMessages
+  chatMessages: ChatMessages | null
   inputMethodOverride: any
-  onCancel: () => void
-  onFinish: () => void
+  onCancel: (() => void) | null
+  onFinish: (() => void) | null
 }
 
 const DEFAULT_INPUT_METHOD_PROPS: InputMethodProps = {
+  config: null,
   bot_id: '',
   channel: null,
   className: '',
@@ -56,7 +58,7 @@ const DEFAULT_INPUT_METHOD_PROPS: InputMethodProps = {
   inline: false,
   inputModal: null,
   joined: false,
-  layout: undefined,
+  layout: '',
   localePrefs: [],
   mapsApiKey: '',
   message: null,
@@ -77,11 +79,11 @@ const DEFAULT_INPUT_METHOD_PROPS: InputMethodProps = {
 }
 
 const InputMethodPropsContext = createContext<InputMethodProps>(DEFAULT_INPUT_METHOD_PROPS)
-const InputMethodUpdateContext = createContext<(name: keyof InputMethodProps, value: any) => void>(null)
+const InputMethodUpdateContext = createContext<((name: keyof InputMethodProps, value: any) => void) | null>(null)
 
 const InputMethodContext = (props: any) => {
   const [values, setValues] = useState<InputMethodProps>({
-    ...props,
+    ...props.props,
   })
 
   const updateValues = (name: keyof InputMethodProps, value: any) => {

@@ -1,20 +1,12 @@
 import React, { useEffect } from 'react'
 import { Close } from '../icons'
+import { useInputMethodProps } from './InputMethodContext'
 
 interface InputMethodContainerProps {
-  config: {
-    required: boolean
-    caption: string
-    height?: string | number
-  }
   className: string
   below: React.ReactNode
   headerControl?: React.ReactNode
   children?: React.ReactNode
-  handler?: any
-  inputModal?: any
-  inline?: boolean
-  rest?: any
 }
 
 enum SizeMap {
@@ -23,20 +15,13 @@ enum SizeMap {
   Full = 1,
 }
 
-const InputMethodContainer: React.FC<InputMethodContainerProps> = ({
-  config,
-  className,
-  below,
-  headerControl,
-  children,
-  handler,
-  inputModal,
-  inline,
-}) => {
+const InputMethodContainer: React.FC<InputMethodContainerProps> = ({ below, headerControl, className, children }) => {
+  console.log(useInputMethodProps())
+  const { config, handler, inputModal, inline } = useInputMethodProps()
   const { required, caption, height } = config
 
   const cancel = () => {
-    inputModal.cancel()
+    if (inputModal && inputModal.cancel) inputModal.cancel()
   }
 
   const renderHeader = (caption: string, required: boolean) => {

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 
 import SingleItemPicker from './SingleItemPicker'
 import MultiItemPicker from './MultiItemPicker'
@@ -43,5 +43,5 @@ export default function elementFactory(method: { type: string; payload: any; tim
      }
    */
 
-  return <InputMethodContext props={props}>{element}</InputMethodContext>
+  return <InputMethodContext props={{ ...props, config: payload, inputModal }}>{element}</InputMethodContext>
 }

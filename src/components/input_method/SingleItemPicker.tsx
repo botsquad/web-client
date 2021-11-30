@@ -3,27 +3,13 @@ import React, { useEffect, useState } from 'react'
 import InputMethodContainer from './InputMethodContainer'
 import { RadioOn, RadioOff } from '../icons'
 import { chatLabel } from '../../common/labels'
+import { useInputMethodProps } from './InputMethodContext'
 
-interface SingleItemPickerProps {
-  config: {
-    default_value: any
-    items: any[]
-    confirm: boolean
-    button_label: React.ReactNode
-    required: boolean
-    caption: string
-    height: string | number
-  }
-  inputModal: any
-  settings: any
-  localeRefs: any
-}
-
-const SingleItemPicker: React.FC<SingleItemPickerProps> = props => {
+const SingleItemPicker: React.FC = () => {
+  const { config, inputModal, settings, localePrefs } = useInputMethodProps()
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const [selectedItem, setSelectedItem] = useState<any>(null)
 
-  const { config, inputModal } = props
   useEffect(() => {
     const { default_value, items } = config
     if (default_value) {
@@ -42,7 +28,7 @@ const SingleItemPicker: React.FC<SingleItemPickerProps> = props => {
 
   const submitItem = ({ value, title }) => {
     setHasSubmitted(true)
-    inputModal.finish('message', { type: 'item_picker', text: title, data: value }, config)
+    inputModal!.finish('message', { type: 'item_picker', text: title, data: value }, config)
   }
 
   const itemClick = (item: any) => {
@@ -57,12 +43,11 @@ const SingleItemPicker: React.FC<SingleItemPickerProps> = props => {
 
   return (
     <InputMethodContainer
-      {...props}
       className={`item-picker single ${confirm ? 'confirm' : ''}`}
       below={
         confirm ? (
           <button disabled={!selectedItem || hasSubmitted} onClick={submit}>
-            {button_label || chatLabel({ props }, 'form_submit_button')}
+            {button_label || chatLabel({ props: { settings, localePrefs } }, 'form_submit_button')}
           </button>
         ) : null
       }
