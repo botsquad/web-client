@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import InputMethodContainer from './InputMethodContainer'
 import { CheckboxOn, CheckboxOff } from '../icons'
@@ -13,22 +13,19 @@ interface MultiItemPickerStateProps {
   selected: any[]
 }
 
-export default class MultiItemPicker extends React.Component<MultiItemPickerProps> {
-  state: MultiItemPickerStateProps = {
-    hasSubmitted: false,
-    selected: [],
-  }
+const MultiItemPicker: React.FC<MultiItemPickerProps> = props => {
+  const [hasSubmitted, setHasSubmitted] = useState(false)
+  const [selected, setSelected] = useState<any[]>([])
 
-  componentWillMount() {
-    const { default_value, items } = this.props.config
+  useEffect(() => {
+    const { default_value, items } = props.config
     if (Array.isArray(default_value)) {
       const selected = items.filter(({ value }) => default_value.find(v => v === value))
-      this.setState({ selected })
+      setSelected(selected)
     }
-  }
+  }, [])
 
-  submit = () => {
-    const { selected } = this.state
+  const submit = () => {
     if (selected.length === 0) {
       return
     }
@@ -36,57 +33,56 @@ export default class MultiItemPicker extends React.Component<MultiItemPickerProp
     const text = selected.map(({ title }) => title).join(', ')
     const data = selected.map(({ value }) => value)
 
-    this.setState({ hasSubmitted: true })
-    this.props.inputModal.finish('message', { type: 'item_picker', text, data }, this.props.config)
+    setHasSubmitted(true)
+    props.inputModal.finish('message', { type: 'item_picker', text, data }, props.config)
   }
 
-  itemClick(item) {
-    let { selected } = this.state
-    if (selected.find(i => i.value === item.value)) {
+  const itemClick = item => {
+    let newSelected = [...selected]
+    if (newSelected.find(i => i.value === item.value)) {
       // remove
-      selected = selected.filter(i => i.value !== item.value)
+      newSelected = newSelected.filter(i => i.value !== item.value)
     } else {
-      selected.push(item)
+      newSelected.push(item)
     }
     selected.sort((a, b) => {
       if (a.value < b.value) return -1
       if (a.value > b.value) return 1
       return 0
     })
-    this.setState({ selected })
+    setSelected(newSelected)
   }
 
-  render() {
-    const { items, button_label } = this.props.config
+  const { items, button_label } = props.config
 
-    return (
-      <InputMethodContainer
-        {...this.props}
-        className="item-picker multiple confirm"
-        below={
-          <button disabled={this.state.selected.length === 0 || this.state.hasSubmitted} onClick={this.submit}>
-            {button_label || chatLabel(this, 'form_submit_button')}
-          </button>
-        }
-      >
-        {items.map((item, index: number) => {
-          const selected = this.state.selected.find(i => i.value === item.value)
-          return (
-            <div
-              className={`${selected ? 'selected' : ''} ${item.image_url ? 'with-image' : ''}`}
-              onClick={() => this.itemClick(item)}
-              key={index}
-            >
-              {selected ? CheckboxOn : CheckboxOff}
-              <div className="c">
-                <div className="title">{item.title}</div>
-                {item.subtitle ? <div className="subtitle">{item.subtitle}</div> : null}
-              </div>
-              {item.image_url ? <div className="image" style={{ backgroundImage: `url(${item.image_url})` }} /> : null}
+  return (
+    <InputMethodContainer
+      className="item-picker multiple confirm"
+      below={
+        <button disabled={selected.length === 0 || hasSubmitted} onClick={submit}>
+          {button_label || chatLabel({ props }, 'form_submit_button')}
+        </button>
+      }
+    >
+      {items.map((item, index: number) => {
+        const newSelected = selected.find(i => i.value === item.value)
+        return (
+          <div
+            className={`${newSelected ? 'selected' : ''} ${item.image_url ? 'with-image' : ''}`}
+            onClick={() => itemClick(item)}
+            key={index}
+          >
+            {newSelected ? CheckboxOn : CheckboxOff}
+            <div className="c">
+              <div className="title">{item.title}</div>
+              {item.subtitle ? <div className="subtitle">{item.subtitle}</div> : null}
             </div>
-          )
-        })}
-      </InputMethodContainer>
-    )
-  }
+            {item.image_url ? <div className="image" style={{ backgroundImage: `url(${item.image_url})` }} /> : null}
+          </div>
+        )
+      })}
+    </InputMethodContainer>
+  )
 }
+
+export default MultiItemPicker
