@@ -26,7 +26,7 @@ export default function elementFactory(method: { type: string; payload: any; tim
     element = <LocationPicker />
   }
   if (type === 'form') {
-    element = <Form {...props} config={payload} inputModal={inputModal} />
+    element = <Form />
   }
   if (type === 'wait') {
     element = <Wait {...props} time={time} type={type} config={payload} inputModal={inputModal} />

@@ -7,6 +7,7 @@ import { chatLabel } from '../../common/labels'
 import { Edit } from '../icons'
 import InputMethodContainer from './InputMethodContainer'
 import Widgets from './FormWidgets'
+import { useInputMethodProps } from './InputMethodContext'
 
 function elementValue(e: any) {
   if (e.classList.contains('PhoneInputCountrySelect')) {
@@ -36,20 +37,23 @@ interface FormProps {
   settings: any
 }
 
-const ClientForm: React.FC<FormProps> = props => {
+const ClientForm: React.FC<FormProps> = () => {
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const [formData, setFormData] = useState({})
   const [hasError, setHasError] = useState(false)
   const [disabled, setDisabled] = useState(false)
   const [error, _] = useState<any>(null)
   const [form, setForm] = useState<any>()
+
+  const { config, message, inputModal, localePrefs, settings } = useInputMethodProps()
+
   useEffect(() => {
-    const { default_value } = props.config
+    const { default_value } = config
     if (default_value) {
       setFormData(removeEmpty(default_value))
     }
 
-    const { read_only_data } = props.message || {}
+    const { read_only_data } = message || {} //TODO: Find what this means
     if (read_only_data) {
       setFormData(read_only_data)
       setDisabled(true)
@@ -73,7 +77,7 @@ const ClientForm: React.FC<FormProps> = props => {
       text = '…'
     }
     const data = formData
-    props.inputModal.finish('message', { type: 'form', text, data }, props.config)
+    inputModal!.finish('message', { type: 'form', text, data }, config)
   }
 
   const onChange = ({ formData }) => {
@@ -90,10 +94,8 @@ const ClientForm: React.FC<FormProps> = props => {
   }
 
   const getUiSchema = () => {
-    return props.config.ui_schema || {}
+    return config.ui_schema || {}
   }
-
-  const { config } = props
 
   let headerControl: ReactNode = null
   if (disabled) {
@@ -112,17 +114,16 @@ const ClientForm: React.FC<FormProps> = props => {
   if (!config || !config.schema) {
     return <span>Missing &#39;config.schema&#39; in form</span>
   }
-  const formContext = { localePrefs: props.localePrefs }
+  const formContext = { localePrefs }
 
   return (
     <InputMethodContainer
-      {...props}
       className="form"
       headerControl={headerControl}
       below={
         !disabled && (
           <button disabled={hasError || hasSubmitted} onClick={submit}>
-            {config.button_label || chatLabel(props.settings, props.localePrefs, 'form_submit_button')}
+            {config.button_label || chatLabel(settings, localePrefs, 'form_submit_button')}
           </button>
         )
       }
