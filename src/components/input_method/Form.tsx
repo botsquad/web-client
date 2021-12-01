@@ -29,15 +29,7 @@ function removeEmpty(obj: object) {
   return obj
 }
 
-interface FormProps {
-  config: any
-  message: any
-  inputModal: any
-  localePrefs: any
-  settings: any
-}
-
-const ClientForm: React.FC<FormProps> = () => {
+const ClientForm: React.FC = () => {
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const [formData, setFormData] = useState({})
   const [hasError, setHasError] = useState(false)
