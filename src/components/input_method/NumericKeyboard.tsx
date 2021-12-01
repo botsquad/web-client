@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import InputMethodContainer from './InputMethodContainer'
 import { ArrowBack } from '../icons'
 import { chatLabel } from '../../common/labels'
+import { useInputMethodProps, useInputMethodPropsUpdate } from './InputMethodContext'
 
 const KEYS = [
   ['1', '2', '3'],
@@ -10,30 +11,23 @@ const KEYS = [
   ['*', '0', '#'],
 ]
 
-interface NumericKeyboardProps {
-  config: { finish_on_key: string; num_digits: number; required: boolean; caption: string }
-  inputModal: any
-  settings: any
-  localePrefs: string[]
-}
-
-const NumericKeyboard: React.FC<NumericKeyboardProps> = props => {
-  const { config, inputModal } = props
+const NumericKeyboard: React.FC = () => {
+  const { config, inputModal, settings, localePrefs } = useInputMethodProps()
 
   const [value, setValue] = useState('')
 
   const finish = () => {
-    inputModal.finish('message', { type: 'numeric', text: value, data: value })
+    inputModal!.finish('message', { type: 'numeric', text: value, data: value }, null)
   }
 
   const button = () => {
     if (config.finish_on_key) {
       return null
     }
-    if (props.settings) {
+    if (settings) {
       return (
         <button disabled={!value.length} onClick={finish}>
-          {chatLabel(props.settings, props.localePrefs, 'form_submit_button')}
+          {chatLabel(settings, localePrefs, 'form_submit_button')}
         </button>
       )
     }
@@ -59,7 +53,7 @@ const NumericKeyboard: React.FC<NumericKeyboardProps> = props => {
   }
 
   return (
-    <InputMethodContainer {...props} className="numeric" below={button()}>
+    <InputMethodContainer className="numeric" below={button()}>
       <div className="display">
         <span>{value}</span>
         <button onClick={backspace}>{ArrowBack}</button>
