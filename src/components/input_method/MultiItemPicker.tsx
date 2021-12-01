@@ -5,8 +5,13 @@ import { CheckboxOn, CheckboxOff } from '../icons'
 import { chatLabel } from '../../common/labels'
 import { useInputMethodProps } from './InputMethodContext'
 
-const MultiItemPicker: React.FC = () => {
-  const { config, inputModal, settings, localePrefs } = useInputMethodProps()
+interface MultiItemPickerProps {
+  settings: any
+  localePrefs: string[]
+}
+
+const MultiItemPicker: React.FC<MultiItemPickerProps> = ({ settings, localePrefs }) => {
+  const { config, inputModal } = useInputMethodProps()
 
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const [selected, setSelected] = useState<any[]>([])

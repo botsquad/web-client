@@ -8,34 +8,58 @@ import LocationPicker from './LocationPicker'
 import Wait from './Wait'
 import NumericKeyboard from './NumericKeyboard'
 import InputMethodContext from './InputMethodContext'
-export default function elementFactory(method: { type: string; payload: any; time: any }, props: any, inputModal: any) {
-  const { type, payload, time } = method
+import InputMethodTemplate from 'components/elements/InputMethodTemplate'
+import { ChatHandler } from '../index'
+import Message, { Payload } from '../elements/types'
+
+interface MethodProps {
+  type: string
+  payload: any
+  time: number
+}
+
+interface FactoryProps {
+  config: any
+  handler: ChatHandler | null
+  inline: boolean
+  inputModal: InputMethodTemplate | null
+  settings: any
+  localePrefs: string[]
+  message: Message<Payload>
+}
+
+export default function elementFactory(
+  { type, payload, time }: MethodProps,
+  props: FactoryProps,
+  inputModal: InputMethodTemplate,
+) {
+  const { handler, inline, settings, localePrefs, message } = props
+
   let element = (
     <div>
       Unsupported input method: <b>{type}</b>
     </div>
   )
-
   if (type === 'item_picker' && payload.mode === 'single') {
-    element = <SingleItemPicker />
+    element = <SingleItemPicker {...{ settings, localePrefs }} />
   }
   if (type === 'item_picker' && payload.mode === 'multiple') {
-    element = <MultiItemPicker />
+    element = <MultiItemPicker {...{ settings, localePrefs }} />
   }
   if (type === 'location') {
-    element = <LocationPicker />
+    element = <LocationPicker {...{ settings, localePrefs }} />
   }
   if (type === 'form') {
-    element = <Form />
+    element = <Form {...{ message, settings, localePrefs }} />
   }
   if (type === 'wait') {
-    element = <Wait {...props} time={time} type={type} />
+    element = <Wait {...{ time, type }} />
   }
   if (type === 'closed') {
-    element = <Wait {...props} time={time} type={type} />
+    element = <Wait {...{ time, type }} />
   }
   if (type === 'numeric') {
-    element = <NumericKeyboard {...props} time={time} type={type} config={payload} inputModal={inputModal} />
+    element = <NumericKeyboard {...{ settings, localePrefs }} />
   }
   /*
      if (type === 'barcode') {
@@ -43,5 +67,5 @@ export default function elementFactory(method: { type: string; payload: any; tim
      }
    */
 
-  return <InputMethodContext props={{ ...props, config: payload, inputModal }}>{element}</InputMethodContext>
+  return <InputMethodContext props={{ handler, inline, config: payload, inputModal }}>{element}</InputMethodContext>
 }

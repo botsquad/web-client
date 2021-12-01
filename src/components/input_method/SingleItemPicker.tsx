@@ -5,8 +5,13 @@ import { RadioOn, RadioOff } from '../icons'
 import { chatLabel } from '../../common/labels'
 import { useInputMethodProps } from './InputMethodContext'
 
-const SingleItemPicker: React.FC = () => {
-  const { config, inputModal, settings, localePrefs } = useInputMethodProps()
+interface SingleItemPickerProps {
+  settings: any
+  localePrefs: string[]
+}
+
+const SingleItemPicker: React.FC<SingleItemPickerProps> = ({ settings, localePrefs }) => {
+  const { config, inputModal } = useInputMethodProps()
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const [selectedItem, setSelectedItem] = useState<any>(null)
 

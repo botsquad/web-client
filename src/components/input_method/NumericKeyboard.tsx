@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import InputMethodContainer from './InputMethodContainer'
 import { ArrowBack } from '../icons'
 import { chatLabel } from '../../common/labels'
-import { useInputMethodProps, useInputMethodPropsUpdate } from './InputMethodContext'
+import { useInputMethodProps } from './InputMethodContext'
 
 const KEYS = [
   ['1', '2', '3'],
@@ -11,8 +11,13 @@ const KEYS = [
   ['*', '0', '#'],
 ]
 
-const NumericKeyboard: React.FC = () => {
-  const { config, inputModal, settings, localePrefs } = useInputMethodProps()
+interface NumericKeyboardProps {
+  settings: any
+  localePrefs: string[]
+}
+
+const NumericKeyboard: React.FC<NumericKeyboardProps> = ({ settings, localePrefs }) => {
+  const { config, inputModal } = useInputMethodProps()
 
   const [value, setValue] = useState('')
 

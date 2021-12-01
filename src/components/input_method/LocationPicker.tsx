@@ -71,13 +71,18 @@ const ComposedMap = compose<MapProps, { children?: ReactNode }>(
   withGoogleMap,
 )(Map)
 
-const LocationPicker: React.FC = () => {
+interface LocationPickerProps {
+  settings: any
+  localePrefs: string[]
+}
+
+const LocationPicker: React.FC<LocationPickerProps> = ({ settings, localePrefs }) => {
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const [position, setPosition] = useState<LocationType | null>(null)
   const [center, setCenter] = useState<LocationType | null>(null)
   const [findingLocation, setFindingLocation] = useState(false)
 
-  const { config, inputModal, handler, settings, localePrefs } = useInputMethodProps()
+  const { config, inputModal, handler } = useInputMethodProps()
 
   useEffect(() => {
     const { default_value, center: center2 } = config

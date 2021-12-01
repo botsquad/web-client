@@ -8,6 +8,7 @@ import { Edit } from '../icons'
 import InputMethodContainer from './InputMethodContainer'
 import Widgets from './FormWidgets'
 import { useInputMethodProps } from './InputMethodContext'
+import Message, { Payload } from 'components/elements/types'
 
 function elementValue(e: any) {
   if (e.classList.contains('PhoneInputCountrySelect')) {
@@ -29,7 +30,13 @@ function removeEmpty(obj: object) {
   return obj
 }
 
-const ClientForm: React.FC = () => {
+interface ClientFormProps {
+  message: Message<Payload>
+  localePrefs: string[]
+  settings: any
+}
+
+const ClientForm: React.FC<ClientFormProps> = ({ message, localePrefs, settings }) => {
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const [formData, setFormData] = useState({})
   const [hasError, setHasError] = useState(false)
@@ -37,7 +44,7 @@ const ClientForm: React.FC = () => {
   const [error, _] = useState<any>(null)
   const [form, setForm] = useState<any>()
 
-  const { config, message, inputModal, localePrefs, settings } = useInputMethodProps()
+  const { config, inputModal } = useInputMethodProps()
 
   useEffect(() => {
     const { default_value } = config
