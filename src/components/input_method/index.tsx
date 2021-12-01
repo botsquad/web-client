@@ -29,10 +29,10 @@ export default function elementFactory(method: { type: string; payload: any; tim
     element = <Form />
   }
   if (type === 'wait') {
-    element = <Wait {...props} time={time} type={type} config={payload} inputModal={inputModal} />
+    element = <Wait {...props} time={time} type={type} />
   }
   if (type === 'closed') {
-    element = <Wait {...props} time={time} type={type} config={payload} inputModal={inputModal} />
+    element = <Wait {...props} time={time} type={type} />
   }
   if (type === 'numeric') {
     element = <NumericKeyboard {...props} time={time} type={type} config={payload} inputModal={inputModal} />

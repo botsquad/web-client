@@ -4,23 +4,24 @@ import { buttonClick } from '../elements/Template'
 import { Closed } from '../icons'
 import { fixedLabel } from '../../common/labels'
 import { TextUtil } from '@botsquad/sdk'
+import { useInputMethodProps, useInputMethodPropsUpdate } from './InputMethodContext'
 
 interface renderImplicitCloseButtonProps {
   type: string
-  handler: any
-  localePrefs: any
 }
 
 const renderImplicitCloseButton: React.FC<renderImplicitCloseButtonProps> = props => {
+  const { handler, localePrefs } = useInputMethodProps()
+
   if (props.type !== 'closed') {
     return null
   }
-  const { closeConversation } = props.handler.component.props
+  const { closeConversation } = handler.component.props
   if (!closeConversation) {
     return null
   }
 
-  return <button onClick={closeConversation}>{fixedLabel('new_conversation', props.localePrefs)}</button>
+  return <button onClick={closeConversation}>{fixedLabel('new_conversation', localePrefs)}</button>
 }
 
 function renderButton(button, props) {
@@ -47,26 +48,26 @@ function formatTime(waitTime: number, total: number) {
 
 interface WaitProps {
   type: string
-  config: any
   time: number
-  inputModal: any
-  handler: any
-  localePrefs: any
 }
 
 const Wait: React.FC<WaitProps> = props => {
-  const { type } = props
-  const { description, wait_time, button } = props.config
+  const { config, inputModal } = useInputMethodProps()
+  const updateValues = useInputMethodPropsUpdate()
+
+  const { type, time } = props
+
+  const { description, wait_time, button } = config
   const [waitTime, setWaitTime] = useState(0)
 
   const tick = () => {
     if (!wait_time || waitTime < 0) return
 
-    const delta = Math.floor((new Date().getTime() - props.time) / 1000)
+    const delta = Math.floor((new Date().getTime() - time) / 1000)
 
     if (delta > wait_time) {
       setWaitTime(-1)
-      props.inputModal.finish('message', { type: 'wait', text: 'Timeout', data: { timeout: true } }, props.config)
+      inputModal!.finish('message', { type: 'wait', text: 'Timeout', data: { timeout: true } }, config)
     } else {
       setWaitTime(delta)
     }
@@ -78,11 +79,14 @@ const Wait: React.FC<WaitProps> = props => {
     return () => clearInterval(interval)
   }, [])
 
+  useEffect(() => {
+    updateValues('inline', type === 'closed') // FIXME: This might need to be an actual prop pass inside InputMethodContainer
+  }, [type])
+
   return (
     <InputMethodContainer
       {...props}
       className="wait"
-      inline={type === 'closed'}
       below={renderButton(button, props) || renderImplicitCloseButton(props)}
     >
       {type === 'wait' && typeof wait_time !== 'undefined' && <div className="loader" />}

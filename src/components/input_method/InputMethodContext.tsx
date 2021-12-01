@@ -78,8 +78,11 @@ const DEFAULT_INPUT_METHOD_PROPS: InputMethodProps = {
   onFinish: null,
 }
 
+type inputMethodUpdateType = (name: keyof InputMethodProps, value: any) => void
+
 const InputMethodPropsContext = createContext<InputMethodProps>(DEFAULT_INPUT_METHOD_PROPS)
-const InputMethodUpdateContext = createContext<((name: keyof InputMethodProps, value: any) => void) | null>(null)
+// {} as inputMethodUpdateType prevents showing that it could be null
+const InputMethodUpdateContext = createContext<inputMethodUpdateType>({} as inputMethodUpdateType)
 
 const InputMethodContext = (props: any) => {
   const [values, setValues] = useState<InputMethodProps>({
