@@ -6,6 +6,7 @@ import { chatLabel } from '../../common/labels'
 import { MyLocation } from '../icons'
 import InputMethodContainer from './InputMethodContainer'
 import { Location as LocationType } from '../elements/types'
+import { useInputMethodProps } from './InputMethodContext'
 
 function transformLngLon(position: LocationType) {
   return position ? { lat: position.lat, lng: position.lon } : null
@@ -70,21 +71,16 @@ const ComposedMap = compose<MapProps, { children?: ReactNode }>(
   withGoogleMap,
 )(Map)
 
-interface LocationPickerProps {
-  config: any
-  inputModal: any
-  handler: any
-  settings: any
-  localePrefs: string[]
-}
-const LocationPicker: React.FC<LocationPickerProps> = props => {
+const LocationPicker: React.FC = () => {
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const [position, setPosition] = useState<LocationType | null>(null)
   const [center, setCenter] = useState<LocationType | null>(null)
   const [findingLocation, setFindingLocation] = useState(false)
 
+  const { config, inputModal, handler, settings, localePrefs } = useInputMethodProps()
+
   useEffect(() => {
-    const { default_value, center: center2 } = props.config
+    const { default_value, center: center2 } = config
     if (default_value) {
       setPosition(default_value)
       setCenter(default_value)
@@ -96,7 +92,7 @@ const LocationPicker: React.FC<LocationPickerProps> = props => {
 
   const submit = () => {
     setHasSubmitted(true)
-    props.inputModal.finish('location', position, props.config)
+    inputModal!.finish('location', position, config)
   }
 
   const setMyLocation = () => {
@@ -123,16 +119,15 @@ const LocationPicker: React.FC<LocationPickerProps> = props => {
     setCenter(center)
   }
 
-  const { button_label } = props.config
+  const { button_label } = config
 
   return (
     <InputMethodContainer
-      {...props}
       className={`fixed-height location-picker ${findingLocation ? 'finding' : ''}`}
       below={
         !hasSubmitted ? (
           <button disabled={position === null} onClick={submit}>
-            {button_label || chatLabel(props.settings, props.localePrefs, 'location_picker_select')}
+            {button_label || chatLabel(settings, localePrefs, 'location_picker_select')}
           </button>
         ) : null
       }
@@ -141,11 +136,11 @@ const LocationPicker: React.FC<LocationPickerProps> = props => {
         {MyLocation}
       </div>
       <ComposedMap
-        handler={props.handler}
+        handler={handler}
         onChange={setPositionAndCenter}
         position={position}
         center={center}
-        config={props.config}
+        config={config}
       />
     </InputMethodContainer>
   )

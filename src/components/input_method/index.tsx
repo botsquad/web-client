@@ -20,10 +20,10 @@ export default function elementFactory(method: { type: string; payload: any; tim
     element = <SingleItemPicker />
   }
   if (type === 'item_picker' && payload.mode === 'multiple') {
-    element = <MultiItemPicker {...props} config={payload} inputModal={inputModal} />
+    element = <MultiItemPicker />
   }
   if (type === 'location') {
-    element = <LocationPicker {...props} config={payload} inputModal={inputModal} />
+    element = <LocationPicker />
   }
   if (type === 'form') {
     element = <Form {...props} config={payload} inputModal={inputModal} />
