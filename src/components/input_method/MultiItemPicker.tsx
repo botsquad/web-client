@@ -3,20 +3,16 @@ import React, { useEffect, useState } from 'react'
 import InputMethodContainer from './InputMethodContainer'
 import { CheckboxOn, CheckboxOff } from '../icons'
 import { chatLabel } from '../../common/labels'
+import { useInputMethodProps } from './InputMethodContext'
 
-interface MultiItemPickerProps {
-  config: any
-  inputModal: any
-  settings: any
-  localePrefs: string[]
-}
+const MultiItemPicker: React.FC = () => {
+  const { config, inputModal, settings, localePrefs } = useInputMethodProps()
 
-const MultiItemPicker: React.FC<MultiItemPickerProps> = props => {
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const [selected, setSelected] = useState<any[]>([])
 
   useEffect(() => {
-    const { default_value, items } = props.config
+    const { default_value, items } = config
     if (Array.isArray(default_value)) {
       const selected = items.filter(({ value }) => default_value.find(v => v === value))
       setSelected(selected)
@@ -32,7 +28,7 @@ const MultiItemPicker: React.FC<MultiItemPickerProps> = props => {
     const data = selected.map(({ value }) => value)
 
     setHasSubmitted(true)
-    props.inputModal.finish('message', { type: 'item_picker', text, data }, props.config)
+    inputModal!.finish('message', { type: 'item_picker', text, data }, config)
   }
 
   const itemClick = item => {
@@ -51,14 +47,14 @@ const MultiItemPicker: React.FC<MultiItemPickerProps> = props => {
     setSelected(newSelected)
   }
 
-  const { items, button_label } = props.config
+  const { items, button_label } = config
 
   return (
     <InputMethodContainer
       className="item-picker multiple confirm"
       below={
         <button disabled={selected.length === 0 || hasSubmitted} onClick={submit}>
-          {button_label || chatLabel(props.settings, props.localePrefs, 'form_submit_button')}
+          {button_label || chatLabel(settings, localePrefs, 'form_submit_button')}
         </button>
       }
     >
