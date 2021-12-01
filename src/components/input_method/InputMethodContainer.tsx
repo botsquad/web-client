@@ -16,7 +16,6 @@ enum SizeMap {
 }
 
 const InputMethodContainer: React.FC<InputMethodContainerProps> = ({ below, headerControl, className, children }) => {
-  console.log(useInputMethodProps())
   const { config, handler, inputModal, inline } = useInputMethodProps()
   const { required, caption, height } = config
 

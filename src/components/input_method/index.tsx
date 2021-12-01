@@ -17,7 +17,7 @@ export default function elementFactory(method: { type: string; payload: any; tim
   )
 
   if (type === 'item_picker' && payload.mode === 'single') {
-    element = <SingleItemPicker {...props} config={payload} inputModal={inputModal} />
+    element = <SingleItemPicker />
   }
   if (type === 'item_picker' && payload.mode === 'multiple') {
     element = <MultiItemPicker {...props} config={payload} inputModal={inputModal} />
