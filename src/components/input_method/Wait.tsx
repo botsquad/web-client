@@ -80,7 +80,7 @@ const Wait: React.FC<WaitProps> = props => {
   }, [])
 
   useEffect(() => {
-    updateValues('inline', type === 'closed') // FIXME: This might need to be an actual prop pass inside InputMethodContainer
+    updateValues('inline', type === 'closed')
   }, [type])
 
   return (

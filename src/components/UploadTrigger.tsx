@@ -24,6 +24,7 @@ export default class UploadTrigger extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     return (
       <input
         className="upload-trigger"
