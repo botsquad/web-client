@@ -44,8 +44,6 @@ interface ChatProps {
   inputMethodOverride: any
   onCancel: () => void
   onFinish: () => void
-  toast: { message: string }
-  toastHiding: boolean
   showToast: (toast: { message: string }) => void
   hiding: boolean
   modal: Message<Payload>
@@ -81,8 +79,6 @@ const DEFAULT_INPUT_METHOD_PROPS: ChatProps = {
   inputMethodOverride: null,
   onCancel: null,
   onFinish: null,
-  toast: null,
-  toastHiding: false,
   showToast: null,
   hiding: false,
   modal: null,

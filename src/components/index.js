@@ -164,6 +164,8 @@ export default class Chat extends React.Component {
       joined: null,
       localePrefs: props.localePrefs || [locale2.replace(/-.*$/, '')],
       socket: props.socket || new Socket('wss://bsqd.me/socket'),
+      toastHiding: true,
+      toast: null,
     }
     this.handler = new ChatHandler(this)
     if (props.notificationManager) {
