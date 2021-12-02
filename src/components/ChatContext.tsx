@@ -43,8 +43,9 @@ interface ChatProps {
   inputMethodOverride: any
   onCancel: () => void
   onFinish: () => void
-  toast: any // TODO: {message:string}
+  toast: { message: string }
   toastHiding: boolean
+  showToast: (toast: { message: string }) => void
   hiding: boolean
   modal: Message<Payload>
   modalParams: any
@@ -79,6 +80,9 @@ const DEFAULT_INPUT_METHOD_PROPS: ChatProps = {
   inputMethodOverride: null,
   onCancel: null,
   onFinish: null,
+  toast: null,
+  toastHiding: false,
+  showToast: null,
   hiding: false,
   modal: null,
   modalParams: null,
@@ -90,7 +94,7 @@ const ChatPropsContext = createContext<ChatProps>(DEFAULT_INPUT_METHOD_PROPS)
 // {} as ChatUpdateType prevents showing that it could be null
 const ChatUpdateContext = createContext<ChatUpdateType>({} as ChatUpdateType)
 
-const InputMethodContext = (props: any) => {
+const ChatContext = (props: any) => {
   const [values, setValues] = useState<ChatProps>({
     ...props.props,
   })
@@ -106,4 +110,4 @@ const InputMethodContext = (props: any) => {
   )
 }
 
-export default InputMethodContext
+export default ChatContext

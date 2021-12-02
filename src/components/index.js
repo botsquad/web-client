@@ -14,6 +14,7 @@ import { Offline } from './icons'
 import UploadTrigger from './UploadTrigger'
 
 import './index.scss'
+import ChatContext from './ChatContext'
 
 export class ChatHandler {
   constructor(component) {
@@ -305,35 +306,37 @@ export default class Chat extends React.Component {
       : this.state.localePrefs
     const props = { ...this.props, localePrefs }
     const { modal, ...state } = this.state
-
+    const allProps = { ...props, ...state, handler: this.handler }
     return (
-      <div className="botsi-web-client" ref={this.root}>
-        <ChatWindow
-          {...props}
-          online={this.state.online}
-          channel={this.handler.channel}
-          {...state}
-          handler={this.handler}
-          conversationMeta={this.state.conversationMeta}
-        />
-        {this.state.toast ? <ChatToast toast={this.state.toast} hiding={this.state.toastHiding} /> : null}
-        {this.state.modal ? (
-          <ChatModal
+      <ChatContext>
+        <div className="botsi-web-client" ref={this.root}>
+          <ChatWindow
             {...props}
-            {...this.state}
+            online={this.state.online}
+            channel={this.handler.channel}
+            {...state}
             handler={this.handler}
-            message={this.state.modal}
-            hiding={this.state.modalHiding}
+            conversationMeta={this.state.conversationMeta}
           />
-        ) : null}
-        {!this.state.online ? <span className="offline">{Offline}</span> : null}
-        <UploadTrigger
-          ref={uploader => {
-            this.uploader = uploader
-          }}
-        />
-        {this.state.joined === false ? <div className="loader joining" /> : null}
-      </div>
+          {this.state.toast ? <ChatToast toast={this.state.toast} hiding={this.state.toastHiding} /> : null}
+          {this.state.modal ? (
+            <ChatModal
+              {...props}
+              {...this.state}
+              handler={this.handler}
+              message={this.state.modal}
+              hiding={this.state.modalHiding}
+            />
+          ) : null}
+          {!this.state.online ? <span className="offline">{Offline}</span> : null}
+          <UploadTrigger
+            ref={uploader => {
+              this.uploader = uploader
+            }}
+          />
+          {this.state.joined === false ? <div className="loader joining" /> : null}
+        </div>
+      </ChatContext>
     )
   }
 
