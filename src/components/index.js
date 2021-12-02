@@ -306,9 +306,17 @@ export default class Chat extends React.Component {
       : this.state.localePrefs
     const props = { ...this.props, localePrefs }
     const { modal, ...state } = this.state
-    const allProps = { ...props, ...state, handler: this.handler }
+    const allProps = {
+      ...props,
+      ...this.state,
+      conversationMeta: this.state.conversationMeta,
+      online: this.state.online,
+      channel: this.handler.channel,
+      handler: this.handler,
+      showToast: this.showToast,
+    }
     return (
-      <ChatContext>
+      <ChatContext props={{ ...allProps }}>
         <div className="botsi-web-client" ref={this.root}>
           <ChatWindow
             {...props}

@@ -1,5 +1,6 @@
+import { Argument } from 'classnames'
 import { Channel, Socket } from 'phoenix'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { createContext, useContext, useState } from 'react'
 import { ChatHandler } from '.'
 import ChatMessages from './ChatMessages'
@@ -31,10 +32,10 @@ interface ChatProps {
   message: Message<Payload>
   modalHiding: boolean
   onLoad: () => void
-  online: boolean
+  online: Argument
   params: any
   payload: any
-  settings: any
+  settings: any // { layout: string, }
   socket: Socket
   typing: boolean
   typingAs: any
@@ -98,6 +99,14 @@ const ChatContext = (props: any) => {
   const [values, setValues] = useState<ChatProps>({
     ...props.props,
   })
+
+  useEffect(() => {
+    updateValues('conversationMeta', props.props.conversationMeta)
+  }, [props.props.conversationMeta])
+
+  useEffect(() => {
+    updateValues('events', props.props.events)
+  }, [props.props.events])
 
   const updateValues = (name: keyof ChatProps, value: any) => {
     setValues({ ...values, [name]: value })
