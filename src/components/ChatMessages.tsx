@@ -52,7 +52,7 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
 
   componentDidMount() {
     console.log('[Chat Messages Props]', this.props)
-    // const chatPropsUpdate = useChatPropsUpdate()
+    // const chatPropsUpdate = useChatPropsUpdate() Preparing to use Context
     // chatPropsUpdate('scrollToBottom', this.scrollToBottom)
     this.groupMessages(this.props)
     this.scrollToBottomListener = chatMessagesEvents.addListener('scrollToBottom', this.scrollToBottom)
