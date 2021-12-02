@@ -6,7 +6,7 @@ import ChatInput from './ChatInput'
 import { deviceClasses } from '../common/util'
 import { useChatProps } from './ChatContext'
 
-const ChatWindow: React.FC<ChatWindowProps> = () => {
+const ChatWindow: React.FC = () => {
   const { online, settings } = useChatProps()
   const { ...allProps } = useChatProps()
   const [forceUpdater, setForceUpdater] = useState(false) // this is only used to force update the component
