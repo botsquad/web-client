@@ -97,12 +97,8 @@ const ChatContext = (props: any) => {
   })
 
   useEffect(() => {
-    updateValues('conversationMeta', props.props.conversationMeta)
-  }, [props.props.conversationMeta])
-
-  useEffect(() => {
-    updateValues('events', props.props.events)
-  }, [props.props.events])
+    setValues({ ...props.props })
+  }, [props.props])
 
   const updateValues = (name: keyof ChatProps, value: any) => {
     setValues({ ...values, [name]: value })

@@ -6,16 +6,9 @@ import ChatInput from './ChatInput'
 import { deviceClasses } from '../common/util'
 import { useChatProps } from './ChatContext'
 
-interface ChatWindowProps {
-  settings: { layout: string }
-  online: Argument
-}
-
-const ChatWindow: React.FC<ChatWindowProps> = props => {
-  console.log('[Passed Props]', props)
+const ChatWindow: React.FC<ChatWindowProps> = () => {
   const { online, settings } = useChatProps()
   const { ...allProps } = useChatProps()
-  console.log('[All Props]', allProps)
   const [forceUpdater, setForceUpdater] = useState(false) // this is only used to force update the component
   useEffect(() => {
     window.addEventListener('orientationchange', () => setForceUpdater(!forceUpdater))
@@ -26,8 +19,8 @@ const ChatWindow: React.FC<ChatWindowProps> = props => {
 
   return (
     <div className={classNames('chat-window', { online }, layout, deviceClasses())}>
-      <ChatMessages {...props} ref={chatMessages} />
-      {props.settings.layout !== 'embedded' ? <ChatInput {...props} chatMessages={chatMessages.current} /> : null}
+      <ChatMessages {...useChatProps()} ref={chatMessages} />
+      {settings.layout !== 'embedded' ? <ChatInput {...useChatProps()} chatMessages={chatMessages.current} /> : null}
     </div>
   )
 }
