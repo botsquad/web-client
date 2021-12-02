@@ -7,6 +7,7 @@ import ChatInput from './ChatInput'
 import elementFactory from './elements'
 import { shortDateTimeFormat } from '../common/util'
 import { Payload } from './elements/types'
+import { useChatProps, useChatPropsUpdate } from './ChatContext'
 
 export const chatMessagesEvents = new EventEmitter()
 
@@ -40,6 +41,8 @@ interface ChatMessagesProps {
 }
 
 export default class ChatMessages extends React.Component<ChatMessagesProps> {
+  // const {handler, settings, host, hideAvatars, elementFactory, typingAs, botAvatar, channel, upload, typing, userAvatar, events, conversationMeta} = useChatProps()
+
   state = {
     messageGroups: [],
     lastMessage: null,
@@ -48,6 +51,9 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
   scrollToBottomListener: any
 
   componentDidMount() {
+    console.log('[Chat Messages Props]', this.props)
+    // const chatPropsUpdate = useChatPropsUpdate()
+    // chatPropsUpdate('scrollToBottom', this.scrollToBottom)
     this.groupMessages(this.props)
     this.scrollToBottomListener = chatMessagesEvents.addListener('scrollToBottom', this.scrollToBottom)
   }

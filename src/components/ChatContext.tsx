@@ -48,6 +48,11 @@ interface ChatProps {
   hiding: boolean
   modal: Message<Payload>
   modalParams: any
+  host: any
+  elementFactory: any
+  botAvatar: any
+  userAvatar: any
+  scrollToBottom: () => void
 }
 
 const DEFAULT_INPUT_METHOD_PROPS: ChatProps = {
@@ -74,7 +79,7 @@ const DEFAULT_INPUT_METHOD_PROPS: ChatProps = {
   socket: null,
   typing: false,
   typingAs: null,
-  upload: null,
+  upload: null, // { type: any; progress: any; retry: any }
   chatMessages: null,
   inputMethodOverride: null,
   onCancel: null,
@@ -83,6 +88,11 @@ const DEFAULT_INPUT_METHOD_PROPS: ChatProps = {
   hiding: false,
   modal: null,
   modalParams: null,
+  host: null,
+  elementFactory: null,
+  botAvatar: null,
+  userAvatar: null,
+  scrollToBottom: null,
 }
 
 type ChatUpdateType = (name: keyof ChatProps, value: any) => void
@@ -97,7 +107,7 @@ const ChatContext = (props: any) => {
   })
 
   useEffect(() => {
-    setValues({ ...props.props })
+    setValues({ ...values, ...props.props })
   }, [props.props])
 
   const updateValues = (name: keyof ChatProps, value: any) => {
