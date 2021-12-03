@@ -4,7 +4,8 @@ import classNames, { Argument } from 'classnames'
 import ChatMessages from './ChatMessages'
 import ChatInput from './ChatInput'
 import { deviceClasses } from '../common/util'
-import { useChatProps } from './ChatContext'
+import { useChatProps, useChatPropsUpdate } from './ChatContext'
+import { update } from 'lodash'
 
 const ChatWindow: React.FC = () => {
   const { online, settings } = useChatProps()
@@ -13,10 +14,8 @@ const ChatWindow: React.FC = () => {
   useEffect(() => {
     window.addEventListener('orientationchange', () => setForceUpdater(!forceUpdater))
   }, [])
-  let chatMessages = useRef<any>()
-
   const layout = `layout-${settings.layout || 'docked'}`
-  const { scrollToBottom } = allProps
+  const { scrollToBottom } = useChatProps()
   return (
     <div className={classNames('chat-window', { online }, layout, deviceClasses())}>
       <ChatMessages {...allProps} />

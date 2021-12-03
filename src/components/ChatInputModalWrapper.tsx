@@ -3,8 +3,11 @@ import React from 'react'
 import ChatInputModal from './ChatInputModal'
 
 interface ChatInputModalWrapperProps {
+  inputMethodOverride: any
+  setInputMethodOverride: any
   component: any
   cancelLabel: string
+  componentProps: any
 }
 
 const ChatInputModalWrapper: React.FC<ChatInputModalWrapperProps> = props => {

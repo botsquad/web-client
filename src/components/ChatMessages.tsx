@@ -62,14 +62,15 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
   const [lastMessage, setLastMessage] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [scrollToBottomListener, setScrollToBottomListener] = useState<EventSubscription>(null)
-  const chatPropsUpdate = useChatPropsUpdate() //Preparing to use Context
+  const updater = useChatPropsUpdate() //Preparing to use Context
   let wrapperElement = React.createRef<HTMLDivElement>()
 
   useEffect(() => {
-    console.log('[Chat Messages Props]', props)
-    chatPropsUpdate('scrollToBottom', scrollToBottom)
     groupMessages(props)
     setScrollToBottomListener(chatMessagesEvents.addListener('scrollToBottom', scrollToBottom))
+    setTimeout(() => {
+      updater({ scrollToBottom })
+    }, 0)
     return () => {
       scrollToBottomListener.remove()
     }

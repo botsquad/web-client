@@ -40,7 +40,6 @@ interface ChatProps {
   typing: boolean
   typingAs: any
   upload: any
-  chatMessages: ChatMessages
   inputMethodOverride: any
   onCancel: () => void
   onFinish: () => void
@@ -80,7 +79,6 @@ const DEFAULT_INPUT_METHOD_PROPS: ChatProps = {
   typing: false,
   typingAs: null,
   upload: null, // { type: any; progress: any; retry: any }
-  chatMessages: null,
   inputMethodOverride: null,
   onCancel: null,
   onFinish: null,
@@ -95,7 +93,7 @@ const DEFAULT_INPUT_METHOD_PROPS: ChatProps = {
   scrollToBottom: null,
 }
 
-type ChatUpdateType = (name: keyof ChatProps, value: any) => void
+type ChatUpdateType = (update: any) => void
 
 const ChatPropsContext = createContext<ChatProps>(DEFAULT_INPUT_METHOD_PROPS)
 // {} as ChatUpdateType prevents showing that it could be null
@@ -103,6 +101,7 @@ const ChatUpdateContext = createContext<ChatUpdateType>({} as ChatUpdateType)
 
 const ChatContext = (props: any) => {
   const [values, setValues] = useState<ChatProps>({
+    ...DEFAULT_INPUT_METHOD_PROPS,
     ...props.props,
   })
 
@@ -110,8 +109,12 @@ const ChatContext = (props: any) => {
     setValues({ ...values, ...props.props })
   }, [props.props])
 
-  const updateValues = (name: keyof ChatProps, value: any) => {
-    setValues({ ...values, [name]: value })
+  const updateValues = update => {
+    console.log(update)
+    setValues(prevState => {
+      const newValues = { ...prevState, ...update }
+      return newValues
+    })
   }
 
   return (
