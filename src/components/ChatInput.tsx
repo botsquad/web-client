@@ -8,7 +8,7 @@ import ChatMessages, { chatMessagesEvents } from './ChatMessages'
 import { chatLabel } from '../common/labels'
 
 interface ChatInputProps {
-  chatMessages: ChatMessages
+  scrollToBottom: () => void
   handler: any
   settings: any
   onClose: () => void
@@ -35,7 +35,7 @@ export default class ChatInput extends React.Component<ChatInputProps> {
         },
         menuOpen: false,
       },
-      () => this.props.chatMessages.scrollToBottom(), //TODO: useEffect
+      () => this.props.scrollToBottom(), //TODO: useEffect
     )
   }
 
@@ -44,7 +44,7 @@ export default class ChatInput extends React.Component<ChatInputProps> {
     if (message.length > 0) {
       this.props.handler.send('message', { text: message, input_type: 'keyboard' })
     }
-    this.setState({ message: '', hasMessage: false }, () => this.props.chatMessages.scrollToBottom()) //TODO: useEffect
+    this.setState({ message: '', hasMessage: false }, () => this.props.scrollToBottom()) //TODO: useEffect
     if (this.input.current) {
       const { alwaysFocus } = this.props.settings
       if (alwaysFocus) {
@@ -71,7 +71,7 @@ export default class ChatInput extends React.Component<ChatInputProps> {
 
   onKeyUp(e) {
     const { layout } = this.props.settings
-    this.props.chatMessages.scrollToBottom() //TODO: useEffect
+    this.props.scrollToBottom() //TODO: useEffect
 
     if (e.keyCode === 13) {
       this.sendTypingOn.cancel()
@@ -115,7 +115,7 @@ export default class ChatInput extends React.Component<ChatInputProps> {
         return
       }
       this.props.handler.sendFile(file)
-      this.props.chatMessages.scrollToBottom() //TODO: useEffect
+      this.props.scrollToBottom() //TODO: useEffect
       this.setState({ menuOpen: false })
     })
   }

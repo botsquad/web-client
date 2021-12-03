@@ -16,11 +16,11 @@ const ChatWindow: React.FC = () => {
   let chatMessages = useRef<any>()
 
   const layout = `layout-${settings.layout || 'docked'}`
-
+  const { scrollToBottom } = allProps
   return (
     <div className={classNames('chat-window', { online }, layout, deviceClasses())}>
-      <ChatMessages {...useChatProps()} ref={chatMessages} />
-      {settings.layout !== 'embedded' ? <ChatInput {...useChatProps()} chatMessages={chatMessages.current} /> : null}
+      <ChatMessages {...allProps} />
+      {settings.layout !== 'embedded' ? <ChatInput {...allProps} scrollToBottom={scrollToBottom} /> : null}
     </div>
   )
 }
