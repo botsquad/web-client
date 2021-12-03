@@ -5,33 +5,33 @@ import ChatInputModal from './ChatInputModal'
 interface ChatInputModalWrapperProps {
   inputMethodOverride: any
   setInputMethodOverride: any
-  component: any
+  handler: any
   cancelLabel: string
   componentProps: any
 }
 
 const ChatInputModalWrapper: React.FC<ChatInputModalWrapperProps> = props => {
   const cancel = () => {
-    const { component, cancelLabel } = props
-    if (component.state.inputMethodOverride) {
-      component.setState({ inputMethodOverride: null })
+    const { inputMethodOverride, setInputMethodOverride, handler, cancelLabel } = props
+    if (inputMethodOverride) {
+      setInputMethodOverride(null)
     } else {
-      component.props.handler.send('message', { type: 'cancel', text: cancelLabel })
+      handler.send('message', { type: 'cancel', text: cancelLabel })
     }
   }
 
   const finish = () => {
-    const { component } = props
-    component.setState({ inputMethodOverride: null })
+    const { setInputMethodOverride } = props
+    setInputMethodOverride(null)
   }
 
-  const { children, component } = props
+  const { children } = props
   return (
     <ChatInputModal
-      {...component.props}
+      {...props.componentProps}
       onCancel={cancel}
       onFinish={finish}
-      inputMethodOverride={component.state.inputMethodOverride}
+      inputMethodOverride={props.inputMethodOverride}
     >
       {children}
     </ChatInputModal>
