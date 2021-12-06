@@ -178,7 +178,7 @@ const Template: React.FC<Props> = props => {
 
   const RenderInputMethodTemplate = (payload: InputTemplate) => (
     <div className={className}>
-      <InputMethodTemplate className={className} payload={payload} {...props} />
+      <InputMethodTemplate className={className} {...props} payload={payload} />
     </div>
   )
   const template_type = payload.template_type

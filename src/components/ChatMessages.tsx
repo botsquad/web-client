@@ -220,7 +220,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
 
   const renderMessage = message => {
     const cls = `bubble ${message.self ? 'self' : 'bot'} ` + message.type
-
+    console.log(message)
     const attrs = {
       ...props,
       key: message.time,

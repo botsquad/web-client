@@ -110,7 +110,6 @@ const ChatContext = (props: any) => {
   }, [props.props])
 
   const updateValues = update => {
-    console.log(update)
     setValues(prevState => {
       const newValues = { ...prevState, ...update }
       return newValues
