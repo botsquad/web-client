@@ -1,7 +1,7 @@
 // input method -- container
 .input-method--container {
   user-select: none;
-
+  align-self: center;
   width: 100%;
   @media (min-width: 480px) {
     width: 480px;
