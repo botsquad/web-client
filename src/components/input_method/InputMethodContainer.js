@@ -41,22 +41,4 @@ export default class InputMethodContainer extends React.Component {
       </div>
     )
   }
-
-  componentDidMount() {
-    const { required, caption } = this.props.config
-    const { clientHeight } = this.props.handler.getClientDimensions()
-    const maxHeight = required && !caption ? clientHeight : clientHeight + 45
-
-    const { style, classList } = this.div
-    if (classList.contains('qr') || classList.contains('barcode')) {
-      return
-    }
-
-    let size = 'compact'
-    if (classList.contains('tall')) size = 'tall'
-    if (classList.contains('full')) size = 'full'
-    const sizeMap = { full: 1, compact: 0.5, tall: 0.75 }
-    const attr = classList.contains('fixed-height') ? 'height' : 'max-height'
-    style[attr] = Math.floor(sizeMap[size] * maxHeight) + 'px'
-  }
 }
