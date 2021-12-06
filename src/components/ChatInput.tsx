@@ -41,11 +41,18 @@ const ChatInput: React.FC<ChatInputProps> = props => {
       menuOpen === false &&
       inputMethodOverride.type === 'location' &&
       inputMethodOverride.payload.zoom === 12 &&
-      inputMethodOverride.payload.height === 'compact'
+      inputMethodOverride.payload.height === 'compact' &&
+      props.scrollToBottom
     ) {
       props.scrollToBottom()
     }
   }, [inputMethodOverride, menuOpen])
+
+  useEffect(() => {
+    if (props.scrollToBottom) {
+      props.scrollToBottom()
+    }
+  }, [props.scrollToBottom])
 
   const sendMessage = () => {
     const newMessage = message.trim()
@@ -65,7 +72,9 @@ const ChatInput: React.FC<ChatInputProps> = props => {
   }
 
   useEffect(() => {
-    if (message === '' && !hasMessage) props.scrollToBottom()
+    if (message === '' && !hasMessage && props.scrollToBottom) {
+      props.scrollToBottom()
+    }
   }, [message, hasMessage])
 
   const sendTypingFactory = payload => {
@@ -85,7 +94,9 @@ const ChatInput: React.FC<ChatInputProps> = props => {
 
   const onKeyUp = e => {
     const { layout } = props.settings
-    props.scrollToBottom()
+    if (props.scrollToBottom) {
+      props.scrollToBottom()
+    }
 
     if (e.keyCode === 13) {
       sendTypingOn.cancel()
@@ -133,7 +144,9 @@ const ChatInput: React.FC<ChatInputProps> = props => {
         return
       }
       props.handler.sendFile(file)
-      props.scrollToBottom()
+      if (props.scrollToBottom) {
+        props.scrollToBottom()
+      }
       setMenuOpen(false)
     })
   }
@@ -277,6 +290,7 @@ const ChatInput: React.FC<ChatInputProps> = props => {
   const { layout } = props.settings
   return layout === 'embedded' ? renderEmbedded() : renderDocked()
 }
+export default ChatInput
 
 // export default class ChatInput extends React.Component<ChatInputProps> {
 //   state = {
