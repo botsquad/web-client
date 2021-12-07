@@ -52,6 +52,7 @@ interface ChatProps {
   botAvatar: any
   userAvatar: any
   scrollToBottom: () => void
+  onClose: () => void
 }
 
 const DEFAULT_INPUT_METHOD_PROPS: ChatProps = {
@@ -91,6 +92,7 @@ const DEFAULT_INPUT_METHOD_PROPS: ChatProps = {
   botAvatar: null,
   userAvatar: null,
   scrollToBottom: null,
+  onClose: null,
 }
 
 type ChatUpdateType = (update: any) => void

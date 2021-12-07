@@ -6,13 +6,14 @@ import { isiOS } from '../common/util'
 import ChatInputModalWrapper from './ChatInputModalWrapper'
 import ChatMessages, { chatMessagesEvents } from './ChatMessages'
 import { chatLabel } from '../common/labels'
+import { Argument } from 'classnames'
 
 interface ChatInputProps {
   scrollToBottom: () => void
   handler: any
   settings: any
   onClose: () => void
-  online: boolean
+  online: Argument
   localePrefs: string[]
 }
 
