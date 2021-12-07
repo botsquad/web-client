@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import isEqual from 'lodash/isEqual'
 import { EventEmitter, EventSubscription } from 'fbemitter'
 
@@ -41,22 +41,22 @@ interface ChatMessagesProps {
 }
 
 const ChatMessages: React.FC<ChatMessagesProps> = props => {
-  // const {
-  //   handler,
-  //   settings,
-  //   host,
-  //   hideAvatars,
-  //   elementFactory,
-  //   typingAs,
-  //   botAvatar,
-  //   channel,
-  //   upload,
-  //   typing,
-  //   userAvatar,
-  //   events,
-  //   conversationMeta,
-  // } = useChatProps()
-  const allProps = useChatProps
+  const {
+    // handler,
+    settings,
+    // host,
+    // hideAvatars,
+    // elementFactory,
+    // typingAs,
+    // botAvatar,
+    // channel,
+    // upload,
+    // typing,
+    // userAvatar,
+    // events,
+    // conversationMeta,
+  } = useChatProps()
+  const allProps = useChatProps()
 
   const [messageGroups, setMessageGroups] = useState<any[]>([])
   const [lastMessage, setLastMessage] = useState<any>(null)
@@ -65,12 +65,20 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
   const updater = useChatPropsUpdate() //Preparing to use Context
   let wrapperElement = React.createRef<HTMLDivElement>()
 
+  const scrollToBottom = () => {
+    const { layout } = settings
+    if (layout === 'embedded' && props.host) {
+      // scroll the document
+      props.host.scrollToBottom()
+    } else if (wrapperElement.current) {
+      wrapperElement.current.scrollTop = wrapperElement.current.scrollHeight
+    }
+  }
+
   useEffect(() => {
     groupMessages(props)
     setScrollToBottomListener(chatMessagesEvents.addListener('scrollToBottom', scrollToBottom))
-    setTimeout(() => {
-      updater({ scrollToBottom })
-    }, 0)
+    updater({ scrollToBottom })
     return () => {
       scrollToBottomListener.remove()
     }
@@ -82,7 +90,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
   }, [props, allProps])
 
   useEffect(() => {
-    if (props.settings.layout === 'embedded') {
+    if (settings.layout === 'embedded') {
       // do not autoload history, for now
       return
     }
@@ -96,7 +104,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
     ) {
       loadHistory()
     }
-  }, [props, allProps])
+  }, [props, allProps, wrapperElement])
 
   const _connectFormEvents = (events: any) => {
     const formLookup = {}
@@ -173,16 +181,6 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
     setLastMessage(lastMessage)
   }
 
-  const scrollToBottom = () => {
-    const { layout } = props.settings
-    if (layout === 'embedded' && props.host) {
-      // scroll the document
-      props.host.scrollToBottom()
-    } else if (wrapperElement.current) {
-      wrapperElement.current.scrollTop = wrapperElement.current.scrollHeight
-    }
-  }
-
   const renderMessageGroup = (group, index) => {
     if (group.hasReadUntil) {
       return (
@@ -220,14 +218,13 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
 
   const renderMessage = message => {
     const cls = `bubble ${message.self ? 'self' : 'bot'} ` + message.type
-    console.log(message)
     const attrs = {
       ...props,
       key: message.time,
       message,
       className:
         cls + (message.payload.class ? ' ' + message.payload.class : '') + (isRecent(message) ? ' recent' : ''),
-      layout: props.settings.layout,
+      layout: settings.layout,
       onLoad: () => scrollToBottom(),
     }
 
@@ -314,6 +311,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
   const { upload, typing, handler, hideAvatars, userAvatar } = props
 
   if (isRecent(lastMessage) || typing || upload) {
+    console.log('[Get More lastMessage]')
     setTimeout(() => scrollToBottom(), 0)
   }
 
@@ -325,7 +323,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
       onScroll={onScroll}
     >
       <div className="inner">
-        {props.settings.layout === 'embedded' ? (
+        {settings.layout === 'embedded' ? (
           <div className="bubble-group self">
             {!hideAvatars && userAvatar ? (
               <div

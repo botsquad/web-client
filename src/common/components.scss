@@ -251,6 +251,9 @@
   }
 
   .bubble-group.typing {
+    height: 38px;
+    overflow: hidden;
+    margin-bottom: 0;
     .avatar {
       display: none;
       bottom: 3px;
@@ -261,7 +264,7 @@
       animation: appear 200ms forwards linear;
       display: inline-block;
       will-change: transform;
-      padding: 20px 7px 10px 7px;
+      padding: 15px 7px 15px 7px;
 
       span {
         height: 8px;
