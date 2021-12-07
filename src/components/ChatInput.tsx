@@ -7,17 +7,9 @@ import ChatInputModalWrapper from './ChatInputModalWrapper'
 import ChatMessages, { chatMessagesEvents } from './ChatMessages'
 import { chatLabel } from '../common/labels'
 import { Argument } from 'classnames'
+import { useChatProps } from './ChatContext'
 
-interface ChatInputProps {
-  scrollToBottom: () => void
-  handler: any
-  settings: any
-  onClose: () => void
-  online: Argument
-  localePrefs: string[]
-}
-
-const ChatInput: React.FC<ChatInputProps> = props => {
+const ChatInput: React.FC = () => {
   const [hasMessage, setHasMessage] = useState(false)
   const [message, setMessage] = useState('')
   const [inputFocus, setInputFocus] = useState(false)
@@ -29,6 +21,8 @@ const ChatInput: React.FC<ChatInputProps> = props => {
   let inputDiv = React.createRef<HTMLDivElement>()
   let input = React.createRef<HTMLInputElement>()
 
+  const { scrollToBottom, handler, settings, onClose, online, localePrefs } = useChatProps()
+  const allProps = useChatProps()
   const showLocationInput = () => {
     setInputMethodOverride({
       type: 'location',
@@ -43,27 +37,27 @@ const ChatInput: React.FC<ChatInputProps> = props => {
       inputMethodOverride.type === 'location' &&
       inputMethodOverride.payload.zoom === 12 &&
       inputMethodOverride.payload.height === 'compact' &&
-      props.scrollToBottom
+      scrollToBottom
     ) {
-      props.scrollToBottom()
+      scrollToBottom()
     }
   }, [inputMethodOverride, menuOpen])
 
   useEffect(() => {
-    if (props.scrollToBottom) {
-      props.scrollToBottom()
+    if (scrollToBottom) {
+      scrollToBottom()
     }
-  }, [props.scrollToBottom])
+  }, [scrollToBottom])
 
   const sendMessage = () => {
     const newMessage = message.trim()
     if (newMessage.length > 0) {
-      props.handler.send('message', { text: newMessage, input_type: 'keyboard' })
+      handler.send('message', { text: newMessage, input_type: 'keyboard' })
     }
     setMessage('')
     setHasMessage(false)
     if (input.current) {
-      const { alwaysFocus } = props.settings
+      const { alwaysFocus } = settings
       if (alwaysFocus) {
         input.current.focus()
       } else {
@@ -73,14 +67,14 @@ const ChatInput: React.FC<ChatInputProps> = props => {
   }
 
   useEffect(() => {
-    if (message === '' && !hasMessage && props.scrollToBottom) {
-      props.scrollToBottom()
+    if (message === '' && !hasMessage && scrollToBottom) {
+      scrollToBottom()
     }
   }, [message, hasMessage])
 
   const sendTypingFactory = payload => {
     return () => {
-      props.handler.send('typing', payload)
+      handler.send('typing', payload)
     }
   }
 
@@ -94,9 +88,9 @@ const ChatInput: React.FC<ChatInputProps> = props => {
   }
 
   const onKeyUp = e => {
-    const { layout } = props.settings
-    if (props.scrollToBottom) {
-      props.scrollToBottom()
+    const { layout } = settings
+    if (scrollToBottom) {
+      scrollToBottom()
     }
 
     if (e.keyCode === 13) {
@@ -110,8 +104,8 @@ const ChatInput: React.FC<ChatInputProps> = props => {
 
     if (e.keyCode === 27) {
       if (layout !== 'embedded') {
-        if (props.handler.component.props.onClose) {
-          props.handler.component.props.onClose()
+        if (handler.component.props.onClose) {
+          handler.component.props.onClose()
         }
       } else {
         setMessage('')
@@ -139,21 +133,21 @@ const ChatInput: React.FC<ChatInputProps> = props => {
   }
 
   const upload = accept => {
-    props.handler.component.uploader.trigger(accept, file => {
+    handler.component.uploader.trigger(accept, file => {
       if (file.size > 10 * 1024 * 1024) {
         alert('File is too large, please select a smaller file.')
         return
       }
-      props.handler.sendFile(file)
-      if (props.scrollToBottom) {
-        props.scrollToBottom()
+      handler.sendFile(file)
+      if (scrollToBottom) {
+        scrollToBottom()
       }
       setMenuOpen(false)
     })
   }
 
   const isDisabled = item => {
-    return props.settings.chat_config.disabled_inputs?.indexOf(item) >= 0
+    return settings.chat_config.disabled_inputs?.indexOf(item) >= 0
   }
 
   const onInputFocus = () => {
@@ -179,9 +173,9 @@ const ChatInput: React.FC<ChatInputProps> = props => {
       <ChatInputModalWrapper
         inputMethodOverride={inputMethodOverride}
         setInputMethodOverride={setInputMethodOverride}
-        handler={props.handler}
-        componentProps={{ ...props }}
-        cancelLabel={chatLabel(props.settings, props.localePrefs, 'cancel')}
+        handler={handler}
+        componentProps={{ ...allProps }}
+        cancelLabel={chatLabel(settings, localePrefs, 'cancel')}
       >
         {operatorActive => (
           <div className="chat-input docked" ref={inputDiv}>
@@ -190,8 +184,8 @@ const ChatInput: React.FC<ChatInputProps> = props => {
                 <input
                   type="text"
                   value={message}
-                  readOnly={!props.online}
-                  placeholder={chatLabel(props.settings, props.localePrefs, 'text_input_placeholder')}
+                  readOnly={!online}
+                  placeholder={chatLabel(settings, localePrefs, 'text_input_placeholder')}
                   ref={input}
                   onFocus={() => onInputFocus()}
                   onBlur={() => onInputBlur()}
@@ -201,12 +195,12 @@ const ChatInput: React.FC<ChatInputProps> = props => {
               ) : null}
             </div>
             {!hasMessage && (operatorActive || !isDisabled('location')) ? (
-              <button disabled={!props.online} onClick={() => showLocationInput()}>
+              <button disabled={!online} onClick={() => showLocationInput()}>
                 {LocationShare}
               </button>
             ) : null}
             {!hasMessage && !isDisabled('image') ? (
-              <button disabled={!props.online} onClick={() => upload('image/*,video/*')}>
+              <button disabled={!online} onClick={() => upload('image/*,video/*')}>
                 {ImageUpload}
               </button>
             ) : null}
@@ -214,7 +208,7 @@ const ChatInput: React.FC<ChatInputProps> = props => {
             {hasMessage || (isDisabled('image') && isDisabled('location')) ? (
               <button
                 className={`send ${hasMessage ? 'has-message' : ''}`}
-                disabled={!props.online || !hasMessage}
+                disabled={!online || !hasMessage}
                 onClick={() => sendMessage()}
               >
                 {Arrow}
@@ -231,9 +225,9 @@ const ChatInput: React.FC<ChatInputProps> = props => {
       <ChatInputModalWrapper
         inputMethodOverride={inputMethodOverride}
         setInputMethodOverride={setInputMethodOverride}
-        handler={props.handler}
-        componentProps={{ ...props }}
-        cancelLabel={chatLabel(props.settings, props.localePrefs, 'cancel')}
+        handler={handler}
+        componentProps={{ ...allProps }}
+        cancelLabel={chatLabel(settings, localePrefs, 'cancel')}
       >
         {operatorActive => (
           <div className={`chat-input embedded ${menuOpen ? 'menu-open' : ''} ${inputFocus ? 'input-focus' : ''}`}>
@@ -242,16 +236,16 @@ const ChatInput: React.FC<ChatInputProps> = props => {
                 {menuOpen ? (
                   <button onClick={() => setMenuOpen((prev: boolean) => !prev)}>{menuOpen ? Close : More}</button>
                 ) : null}
-                <button disabled={!props.online} onClick={() => showLocationInput()}>
+                <button disabled={!online} onClick={() => showLocationInput()}>
                   {LocationShare}
                 </button>
-                <button disabled={!props.online} onClick={() => upload('image/*,video/*')}>
+                <button disabled={!online} onClick={() => upload('image/*,video/*')}>
                   {ImageUpload}
                 </button>
-                <button disabled={!props.online} onClick={() => upload('*/*')}>
+                <button disabled={!online} onClick={() => upload('*/*')}>
                   {FileUpload}
                 </button>
-                <button disabled={!props.online} onClick={() => upload('audio/*')}>
+                <button disabled={!online} onClick={() => upload('audio/*')}>
                   {AudioUpload}
                 </button>
               </span>
@@ -265,8 +259,8 @@ const ChatInput: React.FC<ChatInputProps> = props => {
                 <input
                   type="text"
                   value={message}
-                  readOnly={!props.online}
-                  placeholder={chatLabel(props.settings, props.localePrefs, 'text_input_placeholder')}
+                  readOnly={!online}
+                  placeholder={chatLabel(settings, localePrefs, 'text_input_placeholder')}
                   ref={input}
                   onKeyUp={e => onKeyUp(e)}
                   onFocus={() => onFocus()}
@@ -275,7 +269,7 @@ const ChatInput: React.FC<ChatInputProps> = props => {
                 />
                 <button
                   className={`send ${hasMessage ? 'has-message' : ''}`}
-                  disabled={!props.online}
+                  disabled={!online}
                   onClick={() => sendMessage()}
                 >
                   {Arrow}
@@ -288,7 +282,7 @@ const ChatInput: React.FC<ChatInputProps> = props => {
     )
   }
 
-  const { layout } = props.settings
+  const { layout } = settings
   return layout === 'embedded' ? renderEmbedded() : renderDocked()
 }
 export default ChatInput
