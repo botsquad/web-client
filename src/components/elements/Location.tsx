@@ -103,7 +103,6 @@ interface LocationProps {
   modal: any
   handler: any
   className: any
-  rest: any
 }
 
 const Location: React.FC<LocationProps> = props => {

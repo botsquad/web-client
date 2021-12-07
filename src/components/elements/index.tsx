@@ -5,15 +5,22 @@ import { ImageMedia, WebMedia, AudioMedia, VideoMedia, FileMedia } from './Media
 import Template from './Template'
 import Location from './Location'
 import { Payload } from './types'
+import Message, { Text as MessageText } from './types'
 
-interface elementFactory {
-  message: { type?: 'text' | 'media' | 'template' | 'location'; payload?: Payload }
-  attrs: any
+interface AttributesProp {
+  className: string
+  message: Message<Payload>
+  handler: any
+  modal: any
+  onLoad: () => void
+  modalParams?: { index?: number }
 }
 
-export default function elementFactory({ type, payload }, attrs): React.FC {
-  let element = null
+type MessageProp = { type?: 'text' | 'media' | 'template' | 'location'; payload?: Payload }
 
+export default function elementFactory({ type, payload }: MessageProp, attrs: AttributesProp): React.FC {
+  let element = null
+  console.log()
   if (type === 'text') {
     element = <Text {...attrs} />
   }
