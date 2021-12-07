@@ -154,7 +154,11 @@ const ChatMessages: React.FC = () => {
     }
 
     if (handler) {
-      handler._lastModal = lastModalMessage
+      if (handler._lastModal !== lastModalMessage) {
+        const newHandler = handler
+        newHandler._lastModal = lastModalMessage //FIXME: Do not add new properties to already used objects
+        updater({ handler: newHandler })
+      }
     }
 
     setMessageGroups(messageGroups)
