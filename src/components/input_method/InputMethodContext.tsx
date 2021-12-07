@@ -16,6 +16,7 @@ interface InputMethodProps {
   handler: ChatHandler | null
   inline: boolean
   inputModal: InputMethodTemplate | null
+  localePrefs: string[]
 }
 
 const DEFAULT_INPUT_METHOD_PROPS: InputMethodProps = {
@@ -23,6 +24,7 @@ const DEFAULT_INPUT_METHOD_PROPS: InputMethodProps = {
   handler: null,
   inline: false,
   inputModal: null,
+  localePrefs: [],
 }
 
 type inputMethodUpdateType = (name: keyof InputMethodProps, value: any) => void

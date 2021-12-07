@@ -13,11 +13,10 @@ const KEYS = [
 
 interface NumericKeyboardProps {
   settings: any
-  localePrefs: string[]
 }
 
-const NumericKeyboard: React.FC<NumericKeyboardProps> = ({ settings, localePrefs }) => {
-  const { config, inputModal } = useInputMethodProps()
+const NumericKeyboard: React.FC<NumericKeyboardProps> = ({ settings }) => {
+  const { config, inputModal, localePrefs } = useInputMethodProps()
 
   const [value, setValue] = useState('')
 

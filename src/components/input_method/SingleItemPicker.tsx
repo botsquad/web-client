@@ -7,11 +7,10 @@ import { useInputMethodProps } from './InputMethodContext'
 
 interface SingleItemPickerProps {
   settings: any
-  localePrefs: string[]
 }
 
-const SingleItemPicker: React.FC<SingleItemPickerProps> = ({ settings, localePrefs }) => {
-  const { config, inputModal } = useInputMethodProps()
+const SingleItemPicker: React.FC<SingleItemPickerProps> = ({ settings }) => {
+  const { config, inputModal, localePrefs } = useInputMethodProps()
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const [selectedItem, setSelectedItem] = useState<any>(null)
 

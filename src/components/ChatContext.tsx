@@ -3,7 +3,6 @@ import { Channel, Socket } from 'phoenix'
 import React, { useEffect } from 'react'
 import { createContext, useContext, useState } from 'react'
 import { ChatHandler } from '.'
-import ChatMessages from './ChatMessages'
 import InputMethodTemplate from './elements/InputMethodTemplate'
 import Message, { Payload } from './elements/types'
 
@@ -17,7 +16,7 @@ export function useChatPropsUpdate() {
 
 interface ChatProps {
   bot_id: string
-  channel: Channel
+  channel: Channel & { hasMoreHistory: () => boolean; getMoreHistory: () => any }
   className: string
   conversationMeta: any
   events: any[]

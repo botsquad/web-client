@@ -52,7 +52,7 @@ interface WaitProps {
 }
 
 const Wait: React.FC<WaitProps> = props => {
-  const { config, inputModal } = useInputMethodProps()
+  const { config, inputModal, handler } = useInputMethodProps()
   const updateValues = useInputMethodPropsUpdate()
 
   const { type, time } = props
@@ -82,12 +82,12 @@ const Wait: React.FC<WaitProps> = props => {
   useEffect(() => {
     updateValues('inline', type === 'closed')
   }, [type])
-
+  const renderButtonProps = { config, inputModal, handler }
   return (
     <InputMethodContainer
       {...props}
       className="wait"
-      below={renderButton(button, props) || renderImplicitCloseButton(props)}
+      below={renderButton(button, renderButtonProps) || renderImplicitCloseButton(props)}
     >
       {type === 'wait' && typeof wait_time !== 'undefined' && <div className="loader" />}
 

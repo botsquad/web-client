@@ -7,11 +7,10 @@ import { useInputMethodProps } from './InputMethodContext'
 
 interface MultiItemPickerProps {
   settings: any
-  localePrefs: string[]
 }
 
-const MultiItemPicker: React.FC<MultiItemPickerProps> = ({ settings, localePrefs }) => {
-  const { config, inputModal } = useInputMethodProps()
+const MultiItemPicker: React.FC<MultiItemPickerProps> = ({ settings }) => {
+  const { config, inputModal, localePrefs } = useInputMethodProps()
 
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const [selected, setSelected] = useState<any[]>([])

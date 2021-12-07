@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import isEqual from 'lodash/isEqual'
 import { EventEmitter, EventSubscription } from 'fbemitter'
 
 import QuickReplies from './QuickReplies'
 import ChatInput from './ChatInput'
-import elementFactory from './elements'
+import ElementFactory from './elements'
 import { shortDateTimeFormat } from '../common/util'
 import { Payload } from './elements/types'
 import { useChatProps, useChatPropsUpdate } from './ChatContext'
@@ -24,37 +24,23 @@ function messageHasModal({ type, payload }: { type: string; payload: Payload }) 
   return false
 }
 
-interface ChatMessagesProps {
-  handler: any
-  settings: { layout: string }
-  host: any
-  hideAvatars: boolean
-  elementFactory: any
-  typingAs: any
-  botAvatar: any
-  channel: any
-  upload: { type: any; progress: any; retry: any }
-  typing: boolean
-  userAvatar: any
-  events: any
-  conversationMeta: any
-}
+interface ChatMessagesProps {}
 
-const ChatMessages: React.FC<ChatMessagesProps> = props => {
+const ChatMessages: React.FC = () => {
   const {
-    // handler,
+    handler,
     settings,
-    // host,
-    // hideAvatars,
-    // elementFactory,
-    // typingAs,
-    // botAvatar,
-    // channel,
-    // upload,
-    // typing,
-    // userAvatar,
-    // events,
-    // conversationMeta,
+    host,
+    hideAvatars,
+    elementFactory,
+    typingAs,
+    botAvatar,
+    channel,
+    upload,
+    typing,
+    userAvatar,
+    events,
+    conversationMeta,
   } = useChatProps()
   const allProps = useChatProps()
 
@@ -67,18 +53,20 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
 
   const scrollToBottom = () => {
     const { layout } = settings
-    if (layout === 'embedded' && props.host) {
+    if (layout === 'embedded' && host) {
       // scroll the document
-      props.host.scrollToBottom()
+      host.scrollToBottom()
     } else if (wrapperElement.current) {
       wrapperElement.current.scrollTop = wrapperElement.current.scrollHeight
     }
   }
 
   useEffect(() => {
-    groupMessages(props)
+    groupMessages(allProps)
     setScrollToBottomListener(chatMessagesEvents.addListener('scrollToBottom', scrollToBottom))
     updater({ scrollToBottom })
+    scrollToBottom()
+
     return () => {
       scrollToBottomListener.remove()
     }
@@ -86,8 +74,8 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
 
   useEffect(() => {
     setLoading(false)
-    groupMessages(props) // change to allProps
-  }, [props, allProps])
+    groupMessages(allProps) // change to allProps
+  }, [allProps])
 
   useEffect(() => {
     if (settings.layout === 'embedded') {
@@ -95,16 +83,10 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
       return
     }
     const wrapper = wrapperElement.current
-    if (
-      wrapper &&
-      wrapper.scrollHeight <= wrapper.offsetHeight &&
-      props.channel &&
-      props.channel.hasMoreHistory() &&
-      !loading
-    ) {
+    if (wrapper && wrapper.scrollHeight <= wrapper.offsetHeight && channel && channel.hasMoreHistory() && !loading) {
       loadHistory()
     }
-  }, [props, allProps, wrapperElement])
+  }, [allProps, wrapperElement])
 
   const _connectFormEvents = (events: any) => {
     const formLookup = {}
@@ -122,8 +104,6 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
   }
 
   const groupMessages = (props: ChatMessagesProps) => {
-    const { events, userAvatar, botAvatar, conversationMeta } = props
-
     // convert all events into groups of messages
     const messageGroups = []
     let lastMessage = false
@@ -173,8 +153,8 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
       }
     }
 
-    if (props.handler) {
-      props.handler._lastModal = lastModalMessage
+    if (handler) {
+      handler._lastModal = lastModalMessage
     }
 
     setMessageGroups(messageGroups)
@@ -194,7 +174,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
 
     return (
       <div key={index} className={`bubble-group ${group.messages[0].self ? 'self' : 'bot'} ${group.class || ''}`}>
-        {!props.hideAvatars && group.avatar ? (
+        {!hideAvatars && group.avatar ? (
           <div className="as">
             <div
               className="avatar"
@@ -219,7 +199,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
   const renderMessage = message => {
     const cls = `bubble ${message.self ? 'self' : 'bot'} ` + message.type
     const attrs = {
-      ...props,
+      ...allProps,
       key: message.time,
       message,
       className:
@@ -228,7 +208,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
       onLoad: () => scrollToBottom(),
     }
 
-    return (props.elementFactory ? props.elementFactory(message, attrs) : null) || elementFactory(message, attrs)
+    return (elementFactory ? elementFactory(message, attrs) : null) || ElementFactory(message, attrs)
   }
 
   const renderUpload = ({ progress, type, retry }) => {
@@ -237,8 +217,8 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
         <div className="upload">
           <span className="label">Upload failed…</span>
           <div className="retry">
-            <button onClick={() => props.handler.sendFile(retry)}>Retry</button>
-            <button onClick={() => props.handler.cancelUpload()}>×</button>
+            <button onClick={() => handler.sendFile(retry)}>Retry</button>
+            <button onClick={() => handler.cancelUpload()}>×</button>
           </div>
         </div>
       )
@@ -270,13 +250,11 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
   }
 
   const renderTyping = () => {
-    const avatar = props.typingAs ? props.typingAs.profile_picture : props.botAvatar
+    const avatar = typingAs ? typingAs.profile_picture : botAvatar
 
     return (
       <div className="bubble-group bot typing">
-        {!props.hideAvatars ? (
-          <div className="avatar" style={{ backgroundImage: avatar ? `url(${avatar})` : null }} />
-        ) : null}
+        {!hideAvatars ? <div className="avatar" style={{ backgroundImage: avatar ? `url(${avatar})` : null }} /> : null}
         <div className="typing">
           <span />
           <span />
@@ -289,7 +267,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
   const checkLinkClick = e => {
     const url = e.target?.getAttribute('href')
     if (url) {
-      props.handler.sendLinkClick(url)
+      handler.sendLinkClick(url)
     }
   }
 
@@ -298,20 +276,16 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
   }
 
   useEffect(() => {
-    if (loading === true) props.channel.getMoreHistory()
-    scrollToBottom()
+    if (loading === true) channel.getMoreHistory()
   }, [loading])
 
   const onScroll = () => {
-    if (props.channel && props.channel.hasMoreHistory() && wrapperElement.current.scrollTop < 10 && !loading) {
+    if (channel && channel.hasMoreHistory() && wrapperElement.current.scrollTop < 10 && !loading) {
       loadHistory()
     }
   }
 
-  const { upload, typing, handler, hideAvatars, userAvatar } = props
-
   if (isRecent(lastMessage) || typing || upload) {
-    console.log('[Get More lastMessage]')
     setTimeout(() => scrollToBottom(), 0)
   }
 
@@ -326,12 +300,9 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
         {settings.layout === 'embedded' ? (
           <div className="bubble-group self">
             {!hideAvatars && userAvatar ? (
-              <div
-                className="avatar"
-                style={{ backgroundImage: props.userAvatar ? `url(${props.userAvatar})` : null }}
-              />
+              <div className="avatar" style={{ backgroundImage: userAvatar ? `url(${userAvatar})` : null }} />
             ) : null}
-            <ChatInput {...props} scrollToBottom={scrollToBottom} />
+            <ChatInput {...allProps} scrollToBottom={scrollToBottom} />
           </div>
         ) : null}
 
@@ -340,7 +311,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = props => {
             className={`${lastMessage.payload.class} ${isRecent(lastMessage) ? ' recent' : ''}`}
             buttons={lastMessage.payload.quick_replies}
             handler={handler}
-            {...props}
+            {...allProps}
           />
         ) : null}
 

@@ -41,16 +41,16 @@ export default function elementFactory(
     </div>
   )
   if (type === 'item_picker' && payload.mode === 'single') {
-    element = <SingleItemPicker {...{ settings, localePrefs }} />
+    element = <SingleItemPicker {...{ settings }} />
   }
   if (type === 'item_picker' && payload.mode === 'multiple') {
-    element = <MultiItemPicker {...{ settings, localePrefs }} />
+    element = <MultiItemPicker {...{ settings }} />
   }
   if (type === 'location') {
-    element = <LocationPicker {...{ settings, localePrefs }} />
+    element = <LocationPicker {...{ settings }} />
   }
   if (type === 'form') {
-    element = <Form {...{ message, settings, localePrefs }} />
+    element = <Form {...{ message, settings }} />
   }
   if (type === 'wait') {
     element = <Wait {...{ time, type }} />
@@ -59,7 +59,7 @@ export default function elementFactory(
     element = <Wait {...{ time, type }} />
   }
   if (type === 'numeric') {
-    element = <NumericKeyboard {...{ settings, localePrefs }} />
+    element = <NumericKeyboard {...{ settings }} />
   }
   /*
      if (type === 'barcode') {
@@ -67,5 +67,9 @@ export default function elementFactory(
      }
    */
 
-  return <InputMethodContext props={{ handler, inline, config: payload, inputModal }}>{element}</InputMethodContext>
+  return (
+    <InputMethodContext props={{ handler, inline, config: payload, inputModal, localePrefs }}>
+      {element}
+    </InputMethodContext>
+  )
 }

@@ -32,11 +32,10 @@ function removeEmpty(obj: object) {
 
 interface ClientFormProps {
   message: Message<Payload>
-  localePrefs: string[]
   settings: any
 }
 
-const ClientForm: React.FC<ClientFormProps> = ({ message, localePrefs, settings }) => {
+const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const [formData, setFormData] = useState({})
   const [hasError, setHasError] = useState(false)
@@ -44,7 +43,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, localePrefs, settings 
   const [error, _] = useState<any>(null)
   const [form, setForm] = useState<any>()
 
-  const { config, inputModal } = useInputMethodProps()
+  const { config, inputModal, localePrefs } = useInputMethodProps()
 
   useEffect(() => {
     const { default_value } = config
