@@ -154,73 +154,72 @@ function determineAspect(cls: string) {
 
 interface WebMediaProps {
   message: Message<Media>
-  onLoad: any
+  onLoad: () => void
   modal: any
   className: string
   handler: any
 }
 
-export class WebMedia extends React.Component<WebMediaProps> {
-  shouldComponentUpdate(nextProps: WebMediaProps) {
-    return this.props.message.payload.url !== nextProps.message.payload.url
+const WebMediaNonMemoized: React.FC<WebMediaProps> = props => {
+  const { message, onLoad } = props
+  const { payload } = message
+  const { preview_image } = payload
+  let component: HTMLDivElement | null = null
+  let wrapper: ModalWrapper | null = null
+  const aspect = determineAspect(payload.class)
+  const tryResize = (t: number | null) => {
+    const resize = () => wrapper && component && wrapper.triggerResize(null, component, aspect)
+    setTimeout(resize, 0)
+    if (t) setTimeout(resize, t)
   }
 
-  render() {
-    const { message, onLoad } = this.props
-    const { payload } = message
-    const { preview_image } = payload
-    let component: HTMLDivElement | null = null
-    let wrapper: ModalWrapper | null = null
-    const aspect = determineAspect(payload.class)
-    const tryResize = (t: number | null) => {
-      const resize = () => wrapper && component && wrapper.triggerResize(null, component, aspect)
-      setTimeout(resize, 0)
-      if (t) setTimeout(resize, t)
-    }
-
-    return (
-      <ModalWrapper
-        {...this.props}
-        className={`web ${this.props.className}`}
-        ref={w => {
-          wrapper = w
-          tryResize(100)
-        }}
-      >
-        {preview_image && !this.props.modal ? (
-          <img
+  return (
+    <ModalWrapper
+      {...props}
+      className={`web ${props.className}`}
+      ref={w => {
+        wrapper = w
+        tryResize(100)
+      }}
+    >
+      {preview_image && !props.modal ? (
+        <img
+          ref={c => {
+            component = c
+          }}
+          src={preview_image}
+          role="presentation"
+        />
+      ) : (
+        <div>
+          <div
+            className="frame-wrapper "
             ref={c => {
               component = c
             }}
-            src={preview_image}
-            role="presentation"
-          />
-        ) : (
-          <div>
-            <div
-              className="frame-wrapper "
-              ref={c => {
-                component = c
+          >
+            <iframe
+              src={payload.url}
+              scrolling="no"
+              onLoad={() => {
+                if (onLoad) onLoad()
+                tryResize(null)
               }}
-            >
-              <iframe
-                src={payload.url}
-                scrolling="no"
-                onLoad={() => {
-                  if (onLoad) onLoad()
-                  tryResize(null)
-                }}
-              />
-            </div>
-            {payload.caption ? (
-              <div className="caption" dangerouslySetInnerHTML={TextUtil.processText(payload.caption)} />
-            ) : null}
+            />
           </div>
-        )}
-      </ModalWrapper>
-    )
-  }
+          {payload.caption ? (
+            <div className="caption" dangerouslySetInnerHTML={TextUtil.processText(payload.caption)} />
+          ) : null}
+        </div>
+      )}
+    </ModalWrapper>
+  )
 }
+
+export const WebMedia = React.memo(
+  WebMediaNonMemoized,
+  (props, nextProps) => props.message.payload.url === nextProps.message.payload.url,
+)
 
 interface AudioMediaProps {
   message: Message<Media>
