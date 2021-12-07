@@ -35,8 +35,8 @@ class ModalWrapper extends React.PureComponent<ModalProps> {
     component = component || this._component
 
     const { clientWidth, clientHeight, clientRatio } = this.props.handler.getClientDimensions()
-
-    this.props.modal.div.classList.toggle('prefer-height', ratio > clientRatio)
+    console.log(this.props.modal)
+    this.props.modal.div.classList.toggle('prefer-height', ratio > clientRatio) //FIXME: modal is now functional so only the div should be exposed
 
     let w: number
     let h: number
