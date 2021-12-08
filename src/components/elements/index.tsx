@@ -11,7 +11,6 @@ interface AttributesProp {
   className: string
   message: Message<Payload>
   handler: any
-  modal: any
   onLoad: () => void
   getModalDiv: (() => HTMLDivElement) | null
   setModalDiv: ((div: HTMLDivElement) => void) | null
