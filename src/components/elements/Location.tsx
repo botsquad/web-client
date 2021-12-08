@@ -100,19 +100,19 @@ const StaticLocation: React.FC<StaticLocationProps> = ({ className, message, han
 
 interface LocationProps {
   message: Message<LocationType>
-  modal: any
+  toggleModalPreferHeight: ((condition: boolean) => void) | null
   handler: any
   className: any
 }
 
 const Location: React.FC<LocationProps> = props => {
-  const { message, modal } = props
+  const { message, toggleModalPreferHeight } = props
   const { payload } = message
   if (!payload || !payload.lat) {
     return null
   }
 
-  if (modal) {
+  if (toggleModalPreferHeight) {
     return <ComposedMap {...props} />
   }
 

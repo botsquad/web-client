@@ -12,8 +12,7 @@ interface AttributesProp {
   message: Message<Payload>
   handler: any
   onLoad: () => void
-  getModalDiv: (() => HTMLDivElement) | null
-  setModalDiv: ((div: HTMLDivElement) => void) | null
+  toggleModalPreferHeight: ((condition: boolean) => void) | null
   modalParams?: { index?: number }
 }
 

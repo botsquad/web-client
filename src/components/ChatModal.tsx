@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import ReactGesture from 'react-gesture'
 
 import { Close } from './icons'
@@ -14,56 +14,46 @@ interface ChatModalProps {
   rest: any
 }
 
-export default class ChatModal extends React.Component<ChatModalProps> {
-  div: HTMLDivElement
-  renderMessage(message: Message<Payload>, modalParams: any) {
+const ChatModal: React.FC<ChatModalProps> = props => {
+  let div = useRef<HTMLDivElement>()
+  const renderMessage = (message: Message<Payload>, modalParams: any) => {
     const cls = `content ${message.self ? 'self' : 'bot'} ` + message.type
 
     const attrs = {
-      ...this.props,
+      ...props,
       message,
       className: cls + (message.payload.class ? ' ' + message.payload.class : ''),
       modalParams,
-      modal: this,
-      setModalDiv: this.setModalDiv,
-      getModalDiv: this.getModalDiv,
+      toggleModalPreferHeight,
     }
 
     return elementFactory(message, attrs)
   }
 
-  hide = () => {
-    if (this.props.hiding) return
-    this.props.handler.component.hideModal()
-    this.props.handler.send('event', { name: '$modal_close', payload: {} })
+  const hide = () => {
+    if (props.hiding) return
+    props.handler.component.hideModal()
+    props.handler.send('event', { name: '$modal_close', payload: {} })
   }
 
-  setModalDiv = (div: HTMLDivElement) => {
-    this.div = div
+  const toggleModalPreferHeight = (condition: boolean) => {
+    div.current.classList.toggle('prefer-height', condition)
   }
 
-  getModalDiv = () => this.div
-
-  render() {
-    const { message, hiding, modalParams } = this.props
-    return (
-      <div
-        className={`chat-modal ${hiding ? 'hiding' : ''} ${message.payload.class || ''}`}
-        onTouchMove={e => e.preventDefault()}
-      >
-        <ReactGesture onSwipeUp={this.hide} onClick={this.hide} onTap={this.hide}>
-          <div className="overlay" />
-        </ReactGesture>
-        <div
-          className={`modal ${message.type}`}
-          ref={div => {
-            this.div = div
-          }}
-        >
-          {this.renderMessage(message, modalParams)}
-        </div>
-        <div className="close">{Close}</div>
+  const { message, hiding, modalParams } = props
+  return (
+    <div
+      className={`chat-modal ${hiding ? 'hiding' : ''} ${message.payload.class || ''}`}
+      onTouchMove={e => e.preventDefault()}
+    >
+      <ReactGesture onSwipeUp={hide} onClick={hide} onTap={hide}>
+        <div className="overlay" />
+      </ReactGesture>
+      <div className={`modal ${message.type}`} ref={div}>
+        {renderMessage(message, modalParams)}
       </div>
-    )
-  }
+      <div className="close">{Close}</div>
+    </div>
+  )
 }
+export default ChatModal

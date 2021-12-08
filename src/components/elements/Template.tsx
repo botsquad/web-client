@@ -106,13 +106,13 @@ function renderGalleryElement(
 interface Props {
   handler: any //{ getClientDimensions(): { clientWidth: number }, component:{showModal:function} }
   message: Message<TemplateType>
-  modal: any //Probably react Element
+  toggleModalPreferHeight: ((condition: boolean) => void) | null
   modalParams?: { index?: number }
   className: string
 }
 
 const Template: React.FC<Props> = props => {
-  const { handler, message, modal, modalParams, className: classes } = props
+  const { handler, message, toggleModalPreferHeight, modalParams, className: classes } = props
   const { clientWidth } = handler.getClientDimensions()
   const { payload } = message
 
@@ -147,7 +147,8 @@ const Template: React.FC<Props> = props => {
   const RenderGalleryTemplate = (payload: GalleryTemplate) => {
     // This is for the case that gallery is a card
     const singleClass = payload.elements.length === 1 ? ' single' : ''
-    if (modal) {
+    if (toggleModalPreferHeight) {
+      //TODO: toggleModalPreferHeight is to show that a modal exists!!! it should be changed to something else
       const settings = {
         className: 'center' + singleClass,
         centerMode: true,
