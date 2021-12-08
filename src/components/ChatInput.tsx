@@ -7,27 +7,31 @@ import ChatInputModalWrapper from './ChatInputModalWrapper'
 import ChatMessages, { chatMessagesEvents } from './ChatMessages'
 import { chatLabel } from '../common/labels'
 import { Argument } from 'classnames'
-import { useChatProps } from './ChatContext'
+import { useChatProps, useChatPropsUpdate } from './ChatContext'
 
 const ChatInput: React.FC = () => {
   const [hasMessage, setHasMessage] = useState(false)
   const [message, setMessage] = useState('')
   const [inputFocus, setInputFocus] = useState(false)
-  const [inputMethodOverride, setInputMethodOverride] = useState<any>(null)
   const [menuOpen, setMenuOpen] = useState<any>(null)
   const [_input, set_Input] = useState<any>(null)
   const [_blurrer, set_Blurrer] = useState<ReturnType<typeof setTimeout> | null>(null)
 
+  const updater = useChatPropsUpdate()
+
   let inputDiv = React.createRef<HTMLDivElement>()
   let input = React.createRef<HTMLInputElement>()
 
-  const { scrollToBottom, handler, settings, onClose, online, localePrefs } = useChatProps()
+  const { scrollToBottom, handler, settings, onClose, online, localePrefs, inputMethodOverride } = useChatProps()
   const allProps = useChatProps()
   const showLocationInput = () => {
-    setInputMethodOverride({
-      type: 'location',
-      payload: { zoom: 12, height: 'compact' },
+    updater({
+      inputMethodOverride: {
+        type: 'location',
+        payload: { zoom: 12, height: 'compact' },
+      },
     })
+
     setMenuOpen(false)
   }
 
@@ -171,8 +175,6 @@ const ChatInput: React.FC = () => {
   const renderDocked = () => {
     return (
       <ChatInputModalWrapper
-        inputMethodOverride={inputMethodOverride}
-        setInputMethodOverride={setInputMethodOverride}
         handler={handler}
         componentProps={{ ...allProps }}
         cancelLabel={chatLabel(settings, localePrefs, 'cancel')}
@@ -223,8 +225,6 @@ const ChatInput: React.FC = () => {
   const renderEmbedded = () => {
     return (
       <ChatInputModalWrapper
-        inputMethodOverride={inputMethodOverride}
-        setInputMethodOverride={setInputMethodOverride}
         handler={handler}
         componentProps={{ ...allProps }}
         cancelLabel={chatLabel(settings, localePrefs, 'cancel')}

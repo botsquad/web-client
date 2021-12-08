@@ -19,7 +19,6 @@ interface MethodProps {
 }
 
 interface FactoryProps {
-  config: any
   handler: ChatHandler | null
   inline: boolean
   inputModal: InputMethodTemplate | null
