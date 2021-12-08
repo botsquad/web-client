@@ -314,8 +314,6 @@ const ChatMessages: React.FC = () => {
           <QuickReplies
             className={`${lastMessage.payload.class} ${isRecent(lastMessage) ? ' recent' : ''}`}
             buttons={lastMessage.payload.quick_replies}
-            handler={handler}
-            {...allProps}
           />
         ) : null}
 

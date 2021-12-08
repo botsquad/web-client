@@ -11,7 +11,6 @@ interface ChatModalProps {
   handler: any
   modalParams: any
   onLoad: () => void
-  rest: any
 }
 
 const ChatModal: React.FC<ChatModalProps> = props => {

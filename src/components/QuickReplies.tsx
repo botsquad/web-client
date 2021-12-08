@@ -1,5 +1,6 @@
 import React from 'react'
 import { chatLabel } from '../common/labels'
+import { useChatProps } from './ChatContext'
 
 function askForLocation(handler: any) {
   navigator.geolocation.getCurrentPosition(({ coords }) => {
@@ -22,14 +23,15 @@ enum FILE_UPLOADS {
 
 function renderButton(
   { content_type, title, image_url }: { content_type: string; title: string; image_url: string },
-  idx: any,
+  idx: number,
   handler: any,
-  props: any,
+  settings: any,
+  localePrefs: string[],
 ) {
   if (FILE_UPLOADS[content_type] !== undefined) {
     return (
       <div className="button" key={idx} onClick={() => fileUpload(FILE_UPLOADS[content_type], handler)}>
-        <span className="label">{chatLabel(props.settings, props.localePrefs, content_type + '_picker_select')}</span>
+        <span className="label">{chatLabel(settings, localePrefs, content_type + '_picker_select')}</span>
       </div>
     )
   }
@@ -59,17 +61,15 @@ function renderButton(
 }
 
 interface QuickRepliesProps {
-  buttons: any[]
-  handler: any
+  buttons: { content_type: string; title: string; image_url: string }[]
   className: string
 }
 
-const QuickReplies: React.FC<QuickRepliesProps> = props => {
-  const { buttons, handler, className } = props
-
+const QuickReplies: React.FC<QuickRepliesProps> = ({ buttons, className }) => {
+  const { handler, settings, localePrefs } = useChatProps()
   return (
     <div className={`quick-replies ${className || ''}`}>
-      {buttons.map((b, idx) => renderButton(b, idx, handler, props))}
+      {buttons.map((b, idx) => renderButton(b, idx, handler, settings, localePrefs))}
     </div>
   )
 }

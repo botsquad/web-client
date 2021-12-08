@@ -9,7 +9,6 @@ interface ChatInputModalWrapperProps {
   cancelLabel: string
   componentProps: any
 }
-//FIXME: All Modals need to extract their functions not themselves
 const ChatInputModalWrapper: React.FC<ChatInputModalWrapperProps> = props => {
   const cancel = () => {
     const { inputMethodOverride, setInputMethodOverride, handler, cancelLabel } = props

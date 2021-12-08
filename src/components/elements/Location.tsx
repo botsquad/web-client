@@ -113,6 +113,7 @@ const Location: React.FC<LocationProps> = props => {
   }
 
   if (toggleModalPreferHeight) {
+    //TODO: toggleModalPreferHeight is to show that a modal exists!!! it should be changed to something else
     return <ComposedMap {...props} />
   }
 
