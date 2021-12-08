@@ -16,7 +16,7 @@ interface AttributesProp {
   modalParams?: { index?: number }
 }
 
-type MessageProp = { type?: 'text' | 'media' | 'template' | 'location'; payload?: Payload }
+type MessageProp = Message<Payload>
 
 export default function elementFactory({ type, payload }: MessageProp, attrs: AttributesProp): React.FC {
   let element = null

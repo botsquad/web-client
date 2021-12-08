@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import classNames, { Argument } from 'classnames'
+import classNames from 'classnames'
 
 import ChatMessages from './ChatMessages'
 import ChatInput from './ChatInput'
 import { deviceClasses } from '../common/util'
-import { useChatProps, useChatPropsUpdate } from './ChatContext'
-import { update } from 'lodash'
+import { useChatProps } from './ChatContext'
 
 const ChatWindow: React.FC = () => {
   const { online, settings } = useChatProps()

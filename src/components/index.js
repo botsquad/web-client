@@ -157,7 +157,6 @@ export default class Chat extends React.Component {
       typing: false,
       typingAs: null,
       upload: null,
-      modal: null,
       modalHiding: false,
       conversationMeta: {},
       online: true,
@@ -166,6 +165,7 @@ export default class Chat extends React.Component {
       socket: props.socket || new Socket('wss://bsqd.me/socket'),
       toastHiding: true,
       toast: null,
+      message: null,
     }
     this.handler = new ChatHandler(this)
     if (props.notificationManager) {
@@ -205,15 +205,15 @@ export default class Chat extends React.Component {
 
   showModal(message, modalParams) {
     console.log(message)
-    this.setState({ modal: message, modalParams }) // FIXME: For some reason modal becomes a message :/
+    this.setState({ message, modalParams }) // FIXME: For some reason modal becomes a message :/
   }
 
   hideModal() {
-    if (this.state.modal === null) {
+    if (this.state.message === null) {
       return
     }
     this.setState({ modalHiding: true })
-    setTimeout(() => this.setState({ modal: null, modalHiding: false }), 300)
+    setTimeout(() => this.setState({ message: null, modalHiding: false }), 300)
   }
 
   showToast(toast) {
@@ -308,7 +308,7 @@ export default class Chat extends React.Component {
       ? [this.state.conversationMeta?.locale]
       : this.state.localePrefs
     const props = { ...this.props, localePrefs }
-    const { modal, ...state } = this.state
+    const { message, ...state } = this.state
     const allProps = {
       ...props,
       ...state,
@@ -317,25 +317,20 @@ export default class Chat extends React.Component {
       channel: this.handler.channel,
       handler: this.handler,
       showToast: this.showToast,
+      message: message,
+      online: this.state.online,
     }
     return (
       <ChatContext props={{ ...allProps }}>
         <div className="botsi-web-client" ref={this.root}>
-          <ChatWindow
-            {...props}
-            online={this.state.online}
-            channel={this.handler.channel}
-            {...state}
-            handler={this.handler}
-            conversationMeta={this.state.conversationMeta}
-          />
+          <ChatWindow />
           {this.state.toast ? <ChatToast toast={this.state.toast} hiding={this.state.toastHiding} /> : null}
-          {this.state.modal ? (
+          {this.state.message ? (
             <ChatModal
               {...props}
               {...this.state}
               handler={this.handler}
-              message={this.state.modal}
+              message={this.state.message}
               hiding={this.state.modalHiding}
             />
           ) : null}
