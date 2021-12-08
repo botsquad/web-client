@@ -306,7 +306,7 @@ const ChatMessages: React.FC = () => {
             {!hideAvatars && userAvatar ? (
               <div className="avatar" style={{ backgroundImage: userAvatar ? `url(${userAvatar})` : null }} />
             ) : null}
-            <ChatInput {...allProps} scrollToBottom={scrollToBottom} />
+            <ChatInput />
           </div>
         ) : null}
 

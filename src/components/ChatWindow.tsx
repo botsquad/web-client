@@ -18,8 +18,8 @@ const ChatWindow: React.FC = () => {
   const { scrollToBottom } = useChatProps()
   return (
     <div className={classNames('chat-window', { online }, layout, deviceClasses())}>
-      <ChatMessages {...allProps} />
-      {settings.layout !== 'embedded' ? <ChatInput {...allProps} scrollToBottom={scrollToBottom} /> : null}
+      <ChatMessages />
+      {settings.layout !== 'embedded' ? <ChatInput /> : null}
     </div>
   )
 }
