@@ -8,7 +8,8 @@ export const mediaEvents = new EventEmitter()
 
 interface ModalProps {
   handler: any
-  modal: any
+  getModalDiv: (() => HTMLDivElement) | null
+  setModalDiv: ((div: HTMLDivElement) => void) | null
   message: Message<Media>
   className: string
   children: React.ReactNode
@@ -17,7 +18,7 @@ interface ModalProps {
 class ModalWrapper extends React.PureComponent<ModalProps> {
   _component: any = null
   onClick = () => {
-    if (this.props.modal) {
+    if (this.props.getModalDiv) {
       this.props.handler.component.hideModal()
     } else {
       this.props.handler.component.showModal(this.props.message)
@@ -25,7 +26,7 @@ class ModalWrapper extends React.PureComponent<ModalProps> {
   }
 
   triggerResize = (_: any, component: any, ratio: number) => {
-    if (!this.props.modal || (!component && !this._component)) {
+    if (!this.props.getModalDiv || !this.props.setModalDiv || (!component && !this._component)) {
       return
     }
     if (component && !this._component) {
@@ -35,8 +36,10 @@ class ModalWrapper extends React.PureComponent<ModalProps> {
     component = component || this._component
 
     const { clientWidth, clientHeight, clientRatio } = this.props.handler.getClientDimensions()
-    console.log(this.props.modal)
-    this.props.modal.div.classList.toggle('prefer-height', ratio > clientRatio) //FIXME: modal is now functional so only the div should be exposed
+
+    let newDiv = this.props.getModalDiv()
+    newDiv.classList.toggle('prefer-height', ratio > clientRatio)
+    this.props.setModalDiv(newDiv)
 
     let w: number
     let h: number
@@ -54,7 +57,7 @@ class ModalWrapper extends React.PureComponent<ModalProps> {
     component.style.height = `${h}px`
   }
   render() {
-    if (this.props.modal) {
+    if (this.props.getModalDiv) {
       return this.props.children as React.FC
     }
 
@@ -73,7 +76,8 @@ interface ImageMediaProps {
   onLoad: () => void
   className: string
   handler: any
-  modal: any
+  getModalDiv: (() => HTMLDivElement) | null
+  setModalDiv: ((div: HTMLDivElement) => void) | null
 }
 
 export const ImageMedia: React.FC<ImageMediaProps> = props => {
@@ -155,7 +159,8 @@ function determineAspect(cls: string) {
 interface WebMediaProps {
   message: Message<Media>
   onLoad: () => void
-  modal: any
+  getModalDiv: (() => HTMLDivElement) | null
+  setModalDiv: ((div: HTMLDivElement) => void) | null
   className: string
   handler: any
 }
@@ -182,7 +187,7 @@ const WebMediaNonMemoized: React.FC<WebMediaProps> = props => {
         tryResize(100)
       }}
     >
-      {preview_image && !props.modal ? (
+      {preview_image && !props.getModalDiv ? (
         <img
           ref={c => {
             component = c

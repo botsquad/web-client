@@ -10,6 +10,7 @@ interface ChatModalProps {
   hiding: boolean
   handler: any
   modalParams: any
+  onLoad: () => void
   rest: any
 }
 
@@ -24,6 +25,8 @@ export default class ChatModal extends React.Component<ChatModalProps> {
       className: cls + (message.payload.class ? ' ' + message.payload.class : ''),
       modalParams,
       modal: this,
+      setModalDiv: this.setModalDiv,
+      getModalDiv: this.getModalDiv,
     }
 
     return elementFactory(message, attrs)
@@ -34,6 +37,12 @@ export default class ChatModal extends React.Component<ChatModalProps> {
     this.props.handler.component.hideModal()
     this.props.handler.send('event', { name: '$modal_close', payload: {} })
   }
+
+  setModalDiv = (div: HTMLDivElement) => {
+    this.div = div
+  }
+
+  getModalDiv = () => this.div
 
   render() {
     const { message, hiding, modalParams } = this.props

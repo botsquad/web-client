@@ -13,6 +13,8 @@ interface AttributesProp {
   handler: any
   modal: any
   onLoad: () => void
+  getModalDiv: (() => HTMLDivElement) | null
+  setModalDiv: ((div: HTMLDivElement) => void) | null
   modalParams?: { index?: number }
 }
 
@@ -20,7 +22,6 @@ type MessageProp = Message<Payload>
 
 export default function elementFactory({ type, payload }: MessageProp, attrs: AttributesProp): React.FC {
   let element = null
-  console.log()
   if (type === 'text') {
     element = <Text {...attrs} />
   }
