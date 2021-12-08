@@ -23,7 +23,6 @@ const ChatInput: React.FC = () => {
   let input = React.createRef<HTMLInputElement>()
 
   const { scrollToBottom, handler, settings, onClose, online, localePrefs, inputMethodOverride } = useChatProps()
-  const allProps = useChatProps()
   const showLocationInput = () => {
     updater({
       inputMethodOverride: {
@@ -174,11 +173,7 @@ const ChatInput: React.FC = () => {
 
   const renderDocked = () => {
     return (
-      <ChatInputModalWrapper
-        handler={handler}
-        componentProps={{ ...allProps }}
-        cancelLabel={chatLabel(settings, localePrefs, 'cancel')}
-      >
+      <ChatInputModalWrapper handler={handler} cancelLabel={chatLabel(settings, localePrefs, 'cancel')}>
         {operatorActive => (
           <div className="chat-input docked" ref={inputDiv}>
             <div className="input">
@@ -224,11 +219,7 @@ const ChatInput: React.FC = () => {
 
   const renderEmbedded = () => {
     return (
-      <ChatInputModalWrapper
-        handler={handler}
-        componentProps={{ ...allProps }}
-        cancelLabel={chatLabel(settings, localePrefs, 'cancel')}
-      >
+      <ChatInputModalWrapper handler={handler} cancelLabel={chatLabel(settings, localePrefs, 'cancel')}>
         {operatorActive => (
           <div className={`chat-input embedded ${menuOpen ? 'menu-open' : ''} ${inputFocus ? 'input-focus' : ''}`}>
             <div className="input-menu">

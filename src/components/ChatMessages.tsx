@@ -41,15 +41,15 @@ const ChatMessages: React.FC = () => {
     userAvatar,
     events,
     conversationMeta,
+    modalParams,
   } = useChatProps()
-  const allProps = useChatProps()
 
   const [messageGroups, setMessageGroups] = useState<any[]>([])
   const [lastMessage, setLastMessage] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [scrollToBottomListener, setScrollToBottomListener] = useState<EventSubscription>(null)
   const [scrollToBottomAtStart, setScrollToBottomAtStart] = useState(true)
-  const updater = useChatPropsUpdate() //Preparing to use Context
+  const updater = useChatPropsUpdate()
   let wrapperElement = React.createRef<HTMLDivElement>()
 
   const scrollToBottom = () => {
@@ -63,7 +63,7 @@ const ChatMessages: React.FC = () => {
   }
 
   useEffect(() => {
-    groupMessages(allProps)
+    groupMessages()
     setScrollToBottomListener(chatMessagesEvents.addListener('scrollToBottom', scrollToBottom))
     updater({ scrollToBottom })
     return () => {
@@ -81,8 +81,8 @@ const ChatMessages: React.FC = () => {
 
   useEffect(() => {
     setLoading(false)
-    groupMessages(allProps) // change to allProps
-  }, [allProps])
+    groupMessages()
+  }, [useChatProps()])
 
   useEffect(() => {
     if (settings.layout === 'embedded') {
@@ -93,7 +93,7 @@ const ChatMessages: React.FC = () => {
     if (wrapper && wrapper.scrollHeight <= wrapper.offsetHeight && channel && channel.hasMoreHistory() && !loading) {
       loadHistory()
     }
-  }, [allProps, wrapperElement])
+  }, [useChatProps(), wrapperElement])
 
   const _connectFormEvents = (events: any) => {
     const formLookup = {}
@@ -110,7 +110,7 @@ const ChatMessages: React.FC = () => {
     }
   }
 
-  const groupMessages = (props: ChatMessagesProps) => {
+  const groupMessages = () => {
     // convert all events into groups of messages
     const messageGroups = []
     let lastMessage = false
@@ -210,12 +210,14 @@ const ChatMessages: React.FC = () => {
   const renderMessage = message => {
     const cls = `bubble ${message.self ? 'self' : 'bot'} ` + message.type
     const attrs = {
-      ...allProps,
-      key: message.time,
+      modalParams,
+      handler,
       message,
+      key: message.time,
       className:
         cls + (message.payload.class ? ' ' + message.payload.class : '') + (isRecent(message) ? ' recent' : ''),
       layout: settings.layout,
+      toggleModalPreferHeight: null,
       onLoad: () => scrollToBottom(),
     }
 

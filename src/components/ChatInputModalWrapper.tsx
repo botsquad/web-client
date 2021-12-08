@@ -6,7 +6,6 @@ import ChatInputModal from './ChatInputModal'
 interface ChatInputModalWrapperProps {
   handler: any
   cancelLabel: string
-  componentProps: any
   children: React.ReactNode
 }
 const ChatInputModalWrapper: React.FC<ChatInputModalWrapperProps> = props => {
