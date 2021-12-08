@@ -311,7 +311,7 @@ export default class Chat extends React.Component {
     const { modal, ...state } = this.state
     const allProps = {
       ...props,
-      ...this.state,
+      ...state,
       conversationMeta: this.state.conversationMeta,
       online: this.state.online,
       channel: this.handler.channel,
