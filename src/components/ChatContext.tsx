@@ -1,5 +1,5 @@
 import { Argument } from 'classnames'
-import { Channel, Socket } from 'phoenix'
+import { Channel } from 'phoenix'
 import React, { useEffect } from 'react'
 import { createContext, useContext, useState } from 'react'
 import { ChatHandler } from '.'

@@ -4,9 +4,8 @@ import debounce from 'lodash/debounce'
 import { ImageUpload, AudioUpload, FileUpload, LocationShare, Arrow, More, Close } from './icons'
 import { isiOS } from '../common/util'
 import ChatInputModalWrapper from './ChatInputModalWrapper'
-import ChatMessages, { chatMessagesEvents } from './ChatMessages'
+import { chatMessagesEvents } from './ChatMessages'
 import { chatLabel } from '../common/labels'
-import { Argument } from 'classnames'
 import { useChatProps, useChatPropsUpdate } from './ChatContext'
 
 const ChatInput: React.FC = () => {

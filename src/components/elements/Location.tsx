@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState } from 'react'
-import { compose, mapProps, withProps } from 'recompose'
+import { compose, withProps } from 'recompose'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import { MyLocation } from '../icons'
 import Message, { Location as LocationType } from './types'
