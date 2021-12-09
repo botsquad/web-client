@@ -5,6 +5,7 @@ import { createContext, useContext, useState } from 'react'
 import { ChatHandler } from '.'
 import InputMethodTemplate from './elements/InputMethodTemplate'
 import Message, { Payload } from './elements/types'
+import ElementFactory from './elements'
 
 export function useChatProps() {
   return useContext(ChatPropsContext)
@@ -25,7 +26,14 @@ interface ChatProps {
   localePrefs: string[]
   message: Message<Payload>
   online: Argument
-  settings: any // { layout: string, }
+  settings: {
+    layout: string
+    alwaysFocus: boolean
+    chat_config: any
+    ui_labels: any
+    hide_input: boolean
+    [key: string]: any // For everything else that might be needed
+  }
   typing: boolean
   typingAs: any
   upload: any
@@ -33,7 +41,7 @@ interface ChatProps {
   modal: Message<Payload>
   modalParams: any
   host: any
-  elementFactory: any
+  elementFactory: typeof ElementFactory
   botAvatar: any
   userAvatar: any
   scrollToBottom: () => void
@@ -53,7 +61,7 @@ const DEFAULT_INPUT_METHOD_PROPS: ChatProps = {
   settings: null,
   typing: false,
   typingAs: null,
-  upload: null, // { type: any; progress: any; retry: any }
+  upload: null,
   inputMethodOverride: null,
   modal: null,
   modalParams: null,

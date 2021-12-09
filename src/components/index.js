@@ -204,7 +204,7 @@ export default class Chat extends React.Component {
   }
 
   showModal(message, modalParams) {
-    this.setState({ modal: message, modalParams }) // TODO: Rename modal to name
+    this.setState({ modal: message, modalParams }) // TODO: Rename modal to message!!!
   }
 
   hideModal() {
