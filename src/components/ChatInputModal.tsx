@@ -8,7 +8,7 @@ import { useChatProps } from './ChatContext'
 interface ChatInputModalProps {
   onCancel: () => void
   onFinish: () => void
-  children?: ([string]: any) => any
+  children?: React.ReactNode
 }
 
 const ChatInputModal: React.FC<ChatInputModalProps> = props => {

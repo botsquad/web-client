@@ -15,35 +15,21 @@ export function useChatPropsUpdate() {
 }
 
 interface ChatProps {
-  bot_id: string
   channel: Channel & { hasMoreHistory: () => boolean; getMoreHistory: () => any }
-  className: string
   conversationMeta: any
   events: any[]
   handler: ChatHandler
   hideAvatars: boolean
   inline: boolean
   inputModal: InputMethodTemplate
-  joined: boolean
-  layout: string
   localePrefs: string[]
-  mapsApiKey: string
   message: Message<Payload>
-  modalHiding: boolean
-  onLoad: () => void
   online: Argument
-  params: any
-  payload: any
   settings: any // { layout: string, }
-  socket: Socket
   typing: boolean
   typingAs: any
   upload: any
   inputMethodOverride: any
-  onCancel: () => void
-  onFinish: () => void
-  showToast: (toast: { message: string }) => void
-  hiding: boolean
   modal: Message<Payload>
   modalParams: any
   host: any
@@ -51,39 +37,24 @@ interface ChatProps {
   botAvatar: any
   userAvatar: any
   scrollToBottom: () => void
-  onClose: () => void
 }
 
 const DEFAULT_INPUT_METHOD_PROPS: ChatProps = {
-  bot_id: '',
   channel: null,
-  className: '',
   conversationMeta: null,
   events: [],
   handler: null,
   hideAvatars: false,
   inline: false,
   inputModal: null,
-  joined: false,
-  layout: undefined,
   localePrefs: [],
-  mapsApiKey: '',
   message: null,
-  modalHiding: false,
-  onLoad: null,
   online: false,
-  params: null,
-  payload: null,
   settings: null,
-  socket: null,
   typing: false,
   typingAs: null,
   upload: null, // { type: any; progress: any; retry: any }
   inputMethodOverride: null,
-  onCancel: null,
-  onFinish: null,
-  showToast: null,
-  hiding: false,
   modal: null,
   modalParams: null,
   host: null,
@@ -91,7 +62,6 @@ const DEFAULT_INPUT_METHOD_PROPS: ChatProps = {
   botAvatar: null,
   userAvatar: null,
   scrollToBottom: null,
-  onClose: null,
 }
 
 type ChatUpdateType = (update: any) => void

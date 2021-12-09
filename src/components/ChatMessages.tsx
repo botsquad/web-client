@@ -24,8 +24,6 @@ function messageHasModal({ type, payload }: { type: string; payload: Payload }) 
   return false
 }
 
-interface ChatMessagesProps {}
-
 const ChatMessages: React.FC = () => {
   const {
     handler,

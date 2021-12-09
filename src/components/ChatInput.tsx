@@ -22,7 +22,7 @@ const ChatInput: React.FC = () => {
   let inputDiv = React.createRef<HTMLDivElement>()
   let input = React.createRef<HTMLInputElement>()
 
-  const { scrollToBottom, handler, settings, onClose, online, localePrefs, inputMethodOverride } = useChatProps()
+  const { scrollToBottom, handler, settings, online, localePrefs, inputMethodOverride } = useChatProps()
   const showLocationInput = () => {
     updater({
       inputMethodOverride: {
