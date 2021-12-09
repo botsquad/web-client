@@ -52,6 +52,7 @@ const ChatMessages: React.FC = () => {
 
   const scrollToBottom = () => {
     const { layout } = settings
+
     if (layout === 'embedded' && host) {
       // scroll the document
       host.scrollToBottom()
@@ -182,7 +183,10 @@ const ChatMessages: React.FC = () => {
     const name = group.as ? (group.as.first_name + ' ' + (group.as.last_name || '')).trim() : null
 
     return (
-      <div key={index} className={`bubble-group ${group.messages[0].self ? 'self' : 'bot'} ${group.class || ''}`}>
+      <div
+        key={index + Math.random()}
+        className={`bubble-group ${group.messages[0].self ? 'self' : 'bot'} ${group.class || ''}`}
+      >
         {!hideAvatars && group.avatar ? (
           <div className="as">
             <div
@@ -296,8 +300,10 @@ const ChatMessages: React.FC = () => {
     }
   }
 
+  useEffect(() => console.log(typing, messageGroups.length, events), [typing, events])
+
   if (isRecent(lastMessage) || typing || upload) {
-    setTimeout(() => scrollToBottom(), 0)
+    setTimeout(() => scrollToBottom(), 50)
   }
 
   return (

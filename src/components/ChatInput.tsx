@@ -45,12 +45,6 @@ const ChatInput: React.FC = () => {
     }
   }, [inputMethodOverride, menuOpen])
 
-  useEffect(() => {
-    if (scrollToBottom) {
-      scrollToBottom()
-    }
-  }, [scrollToBottom])
-
   const sendMessage = () => {
     const newMessage = message.trim()
     if (newMessage.length > 0) {
@@ -156,7 +150,6 @@ const ChatInput: React.FC = () => {
     chatMessagesEvents.emit('scrollToBottom')
     setTimeout(() => chatMessagesEvents.emit('scrollToBottom'), 200)
     setTimeout(() => chatMessagesEvents.emit('scrollToBottom'), 500)
-
     if (!isiOS()) return
     const mb = inputDiv.current.style.marginBottom
     inputDiv.current.style.marginBottom = mb === '-1px' ? '0' : '-1px'
