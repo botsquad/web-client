@@ -300,8 +300,6 @@ const ChatMessages: React.FC = () => {
     }
   }
 
-  useEffect(() => console.log(typing, messageGroups.length, events), [typing, events])
-
   if (isRecent(lastMessage) || typing || upload) {
     setTimeout(() => scrollToBottom(), 50)
   }

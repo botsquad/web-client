@@ -5,13 +5,13 @@ import { ImageMedia, WebMedia, AudioMedia, VideoMedia, FileMedia } from './Media
 import Template from './Template'
 import Location from './Location'
 import { Payload } from './types'
-import Message, { Text as MessageText } from './types'
+import Message from './types'
 
 interface AttributesProp {
   className: string
   message: Message<Payload>
   handler: any
-  onLoad: () => void
+  onLoad: (() => void) | null
   toggleModalPreferHeight: ((condition: boolean) => void) | null
   modalParams?: { index?: number }
 }
@@ -19,7 +19,7 @@ interface AttributesProp {
 type MessageProp = Message<Payload>
 
 export default function elementFactory({ type, payload }: MessageProp, attrs: AttributesProp): React.FC {
-  let element = null
+  let element: any = null
   if (type === 'text') {
     element = <Text {...attrs} />
   }

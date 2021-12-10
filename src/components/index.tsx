@@ -1,5 +1,5 @@
-import React from 'react'
-import { Socket } from 'phoenix'
+import React, { createRef } from 'react'
+import { Channel, Socket } from 'phoenix'
 import locale2 from 'locale2'
 import { EventEmitter } from 'fbemitter'
 
@@ -15,8 +15,16 @@ import UploadTrigger from './UploadTrigger'
 
 import './index.scss'
 import ChatContext from './ChatContext'
+import { DebugInfo, Emit } from '@botsquad/web-client'
+import { Argument } from 'classnames'
+import Message, { Payload } from './elements/types'
 
 export class ChatHandler {
+  component: any //typeof Chat
+  channel: any
+  _activeAudio: any
+  _audioElements: any
+  _eventQueue: any[]
   constructor(component) {
     this.component = component
     this.channel = null
@@ -29,7 +37,7 @@ export class ChatHandler {
     this.leaveChannel()
     this.component.setState({ upload: null, typing: false, events: [] })
     params = { ...params, context: params.context || { user: getUserInfo() } }
-    botChannelJoin(this.component, socket, bot_id, params).then(channel => {
+    botChannelJoin(this.component, socket, bot_id, params)!.then(channel => {
       this.channel = channel
       this._eventQueue.forEach(({ type, payload }) => {
         this.send(type, payload)
@@ -149,7 +157,58 @@ export class ChatHandler {
   }
 }
 
-export default class Chat extends React.Component {
+interface ChatProps {
+  bot_id: string
+  socket?: Socket
+  params?: Record<string, any>
+  onHideInput?: (flag: boolean) => void
+  settings?: Record<string, any>
+  localePrefs?: string[]
+  closeConversation?: () => void
+  mapsApiKey?: string
+  botAvatar?: string
+  userAvatar?: string
+  onChannel?: (channel: Channel) => void
+  onChannelLeave?: () => void
+  onClose?: () => void
+  onEmit?: (event: Emit) => void
+  notificationManager?: boolean
+  online?: boolean
+  hideAvatars?: boolean
+  onJoinError?: (payload: { reason: string }) => void
+  onError?: (message: string) => void
+  onDebug?: (info: DebugInfo) => void
+  makeChannelTopic?: (botId: string, params: Record<string, any>) => string | null
+}
+
+interface ChatState {
+  events: any[]
+  typing: boolean
+  typingAs: any
+  upload: any
+  modal: Message<Payload> | null
+  modalHiding: boolean
+  conversationMeta: any
+  online: Argument
+  localePrefs: string[]
+  joined: boolean
+  socket: Socket
+  toastHiding: boolean
+  toast: any
+  modalParams: any
+}
+
+export default class Chat extends React.Component<ChatProps, ChatState> {
+  handler: any // ChatHandler
+  notificationManager: NotificationManager
+  eventDispatcher: EventEmitter
+  _onlineTimeout: ReturnType<typeof setTimeout>
+  mounted: boolean
+  _toastClearer: ReturnType<typeof setTimeout> | null
+  _toastClearer2: ReturnType<typeof setTimeout>
+  windowElement: any
+  root = createRef<HTMLDivElement>()
+  uploader: UploadTrigger | null
   constructor(props) {
     super(props)
     this.state = {
@@ -161,11 +220,12 @@ export default class Chat extends React.Component {
       modalHiding: false,
       conversationMeta: {},
       online: true,
-      joined: null,
+      joined: false,
       localePrefs: props.localePrefs || [locale2.replace(/-.*$/, '')],
       socket: props.socket || new Socket('wss://bsqd.me/socket'),
       toastHiding: true,
       toast: null,
+      modalParams: null,
     }
     this.handler = new ChatHandler(this)
     if (props.notificationManager) {
@@ -204,7 +264,7 @@ export default class Chat extends React.Component {
   }
 
   showModal(message, modalParams) {
-    this.setState({ modal: message, modalParams }) // TODO: Rename modal to message!!!
+    this.setState({ modal: message, modalParams })
   }
 
   hideModal() {
@@ -216,7 +276,7 @@ export default class Chat extends React.Component {
   }
 
   showToast(toast) {
-    clearTimeout(this._toastClearer)
+    clearTimeout(this._toastClearer!)
     clearTimeout(this._toastClearer2)
 
     this.setState({ toast, toastHiding: false })
@@ -225,14 +285,16 @@ export default class Chat extends React.Component {
       this.setState({ toastHiding: true })
 
       setTimeout(() => {
-        this._toastClearer = this.setState({ toast: null, toastHiding: false })
+        this._toastClearer = null
+        this.setState({ toast: null, toastHiding: false })
+        // this._toastClearer =  //
       }, 500)
     }, 4000)
   }
 
   triggerModal() {
     if (this.handler._lastModal) {
-      this.showModal(this.handler._lastModal)
+      this.showModal(this.handler._lastModal, null)
     }
   }
 
@@ -300,8 +362,6 @@ export default class Chat extends React.Component {
     return { type, self, payload, renderable, time, as }
   }
 
-  root = React.createRef()
-
   render() {
     const localePrefs = this.state.conversationMeta?.locale
       ? [this.state.conversationMeta?.locale]
@@ -317,22 +377,21 @@ export default class Chat extends React.Component {
       handler: this.handler,
       showToast: this.showToast,
       message: this.state.modal,
-      online: this.state.online,
+    }
+
+    const chatModalProps = {
+      handler: this.handler,
+      message: this.state.modal as Message<Payload>,
+      hiding: this.state.modalHiding,
+      modalParams: this.state.modalParams,
+      onLoad: null,
     }
     return (
       <ChatContext props={{ ...allProps }}>
         <div className="botsi-web-client" ref={this.root}>
           <ChatWindow />
           {this.state.toast ? <ChatToast toast={this.state.toast} hiding={this.state.toastHiding} /> : null}
-          {this.state.modal ? (
-            <ChatModal
-              {...props}
-              {...this.state}
-              handler={this.handler}
-              message={this.state.modal}
-              hiding={this.state.modalHiding}
-            />
-          ) : null}
+          {this.state.modal ? <ChatModal {...chatModalProps} /> : null}
           {!this.state.online ? <span className="offline">{Offline}</span> : null}
           <UploadTrigger
             ref={uploader => {
@@ -351,6 +410,6 @@ export default class Chat extends React.Component {
     if (this.notificationManager) {
       this.notificationManager.componentDidMount()
     }
-    this.windowElement = this.root.current.querySelector('.chat-window')
+    this.windowElement = this.root.current!.querySelector('.chat-window')
   }
 }

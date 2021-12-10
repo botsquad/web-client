@@ -10,7 +10,7 @@ interface ChatModalProps {
   hiding: boolean
   handler: any
   modalParams: any
-  onLoad: () => void
+  onLoad: (() => void) | null
 }
 
 const ChatModal: React.FC<ChatModalProps> = props => {

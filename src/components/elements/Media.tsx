@@ -70,7 +70,7 @@ class ModalWrapper extends React.PureComponent<ModalProps> {
 
 interface ImageMediaProps {
   message: Message<Media>
-  onLoad: () => void
+  onLoad: (() => void) | null
   className: string
   handler: any
   toggleModalPreferHeight: ((condition: boolean) => void) | null
@@ -154,7 +154,7 @@ function determineAspect(cls: string) {
 
 interface WebMediaProps {
   message: Message<Media>
-  onLoad: () => void
+  onLoad: (() => void) | null
   toggleModalPreferHeight: ((condition: boolean) => void) | null
 
   className: string
