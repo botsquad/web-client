@@ -206,7 +206,7 @@ const ChatMessages: React.FC = () => {
     if (!message) {
       return false
     }
-    return new Date().getTime() - message.time < 1000
+    return new Date().getTime() - message.time < 500
   }
 
   const renderMessage = message => {
