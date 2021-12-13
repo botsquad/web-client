@@ -17,6 +17,7 @@ import Message, {
   ListElement,
   TemplateElementButton,
 } from './types'
+import { ChatHandler } from 'components'
 //handler probably a function/ handlerEvent is a function
 export function buttonClick(button: TemplateElementButton, handler: any, handleEvent: any) {
   let payload
@@ -73,7 +74,7 @@ function host(url: string) {
 function renderGalleryElement(
   element: GalleryElement | ListElement,
   idx: number,
-  handler: any,
+  handler: ChatHandler,
   message: Message<TemplateType>,
   full: boolean,
 ) {

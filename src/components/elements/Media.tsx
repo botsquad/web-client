@@ -3,11 +3,12 @@ import { EventEmitter } from 'fbemitter'
 import { TextUtil } from '@botsquad/sdk'
 import Message, { Media } from './types'
 import { FileDownload } from '../icons'
+import { ChatHandler } from 'components'
 
 export const mediaEvents = new EventEmitter()
 
 interface ModalProps {
-  handler: any
+  handler: ChatHandler
   toggleModalPreferHeight: ((condition: boolean) => void) | null
   message: Message<Media>
   className: string
@@ -72,7 +73,7 @@ interface ImageMediaProps {
   message: Message<Media>
   onLoad: (() => void) | null
   className: string
-  handler: any
+  handler: ChatHandler
   toggleModalPreferHeight: ((condition: boolean) => void) | null
 }
 
@@ -158,7 +159,7 @@ interface WebMediaProps {
   toggleModalPreferHeight: ((condition: boolean) => void) | null
 
   className: string
-  handler: any
+  handler: ChatHandler
 }
 
 const WebMediaNonMemoized: React.FC<WebMediaProps> = props => {
@@ -225,7 +226,7 @@ export const WebMedia = React.memo(
 interface AudioMediaProps {
   message: Message<Media>
   className: string
-  handler: any
+  handler: ChatHandler
 }
 
 export const AudioMedia: React.FC<AudioMediaProps> = React.memo(

@@ -1,10 +1,11 @@
+import { ChatHandler } from 'components'
 import React from 'react'
 
 import inputMethodFactory from '../input_method'
 
 interface Props {
   payload: any
-  handler: any
+  handler: ChatHandler
 }
 
 export default class InputMethodTemplate extends React.Component<Props> {

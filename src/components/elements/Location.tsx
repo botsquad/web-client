@@ -3,13 +3,14 @@ import { compose, withProps } from 'recompose'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import { MyLocation } from '../icons'
 import Message, { Location as LocationType } from './types'
+import { ChatHandler } from 'components'
 function transformLngLon(position: LocationType) {
   return position ? { lat: position.lat, lng: position.lon } : null
 }
 
 interface MapProps {
   message: Message<LocationType>
-  handler: any
+  handler: ChatHandler
 }
 
 const Map: React.FC<MapProps> = ({ message, handler }) => {
@@ -75,7 +76,7 @@ const ComposedMap = compose<MapProps, { children?: ReactNode }>(
 
 interface StaticLocationProps {
   className: string
-  handler: any
+  handler: ChatHandler
   message: Message<LocationType>
 }
 
@@ -101,7 +102,7 @@ const StaticLocation: React.FC<StaticLocationProps> = ({ className, message, han
 interface LocationProps {
   message: Message<LocationType>
   toggleModalPreferHeight: ((condition: boolean) => void) | null
-  handler: any
+  handler: ChatHandler
   className: any
 }
 

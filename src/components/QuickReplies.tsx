@@ -1,3 +1,4 @@
+import { ChatHandler } from 'components'
 import React from 'react'
 import { chatLabel } from '../common/labels'
 import { useChatProps } from './ChatContext'
@@ -24,7 +25,7 @@ enum FILE_UPLOADS {
 function renderButton(
   { content_type, title, image_url }: { content_type: string; title: string; image_url: string },
   idx: number,
-  handler: any,
+  handler: ChatHandler,
   settings: Record<string, any>,
   localePrefs: string[],
 ) {

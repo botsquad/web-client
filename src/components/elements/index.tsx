@@ -6,11 +6,12 @@ import Template from './Template'
 import Location from './Location'
 import { Payload } from './types'
 import Message from './types'
+import { ChatHandler } from 'components'
 
 interface AttributesProp {
   className: string
   message: Message<Payload>
-  handler: any
+  handler: ChatHandler
   onLoad: (() => void) | null
   toggleModalPreferHeight: ((condition: boolean) => void) | null
   modalParams?: { index?: number }

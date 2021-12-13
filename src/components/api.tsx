@@ -1,3 +1,4 @@
+import { ChatHandler } from 'components'
 import Message, { Payload } from './elements/types'
 
 export default class API {
