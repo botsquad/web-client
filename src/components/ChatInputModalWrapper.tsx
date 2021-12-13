@@ -1,10 +1,11 @@
+import { ChatHandler } from 'components'
 import React from 'react'
 import { useChatProps, useChatPropsUpdate } from './ChatContext'
 
 import ChatInputModal from './ChatInputModal'
 
 interface ChatInputModalWrapperProps {
-  handler: any
+  handler: ChatHandler
   cancelLabel: string
   children: React.ReactNode
 }

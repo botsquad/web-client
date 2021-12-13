@@ -6,7 +6,7 @@ import { chatLabel } from '../../common/labels'
 import { useInputMethodProps } from './InputMethodContext'
 
 interface SingleItemPickerProps {
-  settings: any
+  settings: Record<string, any>
 }
 
 const SingleItemPicker: React.FC<SingleItemPickerProps> = ({ settings }) => {

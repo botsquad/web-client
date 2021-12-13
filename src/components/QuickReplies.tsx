@@ -25,7 +25,7 @@ function renderButton(
   { content_type, title, image_url }: { content_type: string; title: string; image_url: string },
   idx: number,
   handler: any,
-  settings: any,
+  settings: Record<string, any>,
   localePrefs: string[],
 ) {
   if (FILE_UPLOADS[content_type] !== undefined) {

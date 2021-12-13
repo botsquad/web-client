@@ -22,7 +22,7 @@ interface FactoryProps {
   handler: ChatHandler | null
   inline: boolean
   inputModal: InputMethodTemplate | null
-  settings: any
+  settings: Record<string, any>
   localePrefs: string[]
   message: Message<Payload>
 }

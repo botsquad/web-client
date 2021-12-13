@@ -15,15 +15,6 @@ export function useChatPropsUpdate() {
   return useContext(ChatUpdateContext)
 }
 
-interface Settings {
-  layout: string
-  alwaysFocus: boolean
-  chat_config: any
-  ui_labels: any
-  hide_input: boolean
-  [key: string]: any // For everything else that might be needed
-}
-
 interface ChatProps {
   channel: Channel & { hasMoreHistory: () => boolean; getMoreHistory: () => any }
   conversationMeta: any
@@ -35,7 +26,7 @@ interface ChatProps {
   localePrefs: string[]
   message: Message<Payload>
   online: Argument
-  settings: Settings
+  settings: Record<string, any>
   typing: boolean
   typingAs: any
   upload: any

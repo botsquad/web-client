@@ -7,6 +7,7 @@ import { MyLocation } from '../icons'
 import InputMethodContainer from './InputMethodContainer'
 import { Location as LocationType } from '../elements/types'
 import { useInputMethodProps } from './InputMethodContext'
+import { ChatHandler } from 'components'
 
 function transformLngLon(position: LocationType) {
   return position ? { lat: position.lat, lng: position.lon } : null
@@ -17,7 +18,7 @@ interface MapProps {
   position: LocationType
   config: { zoom?: number }
   onChange: ([string]: any) => void
-  handler: any
+  handler: ChatHandler
 }
 
 const Map: React.FC<MapProps> = props => {
@@ -74,7 +75,7 @@ const ComposedMap = compose<MapProps, { children?: ReactNode }>(
 )(Map)
 
 interface LocationPickerProps {
-  settings: any
+  settings: Record<string, any>
 }
 
 const LocationPicker: React.FC<LocationPickerProps> = ({ settings }) => {

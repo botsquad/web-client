@@ -4,11 +4,12 @@ import ReactGesture from 'react-gesture'
 import { Close } from './icons'
 import elementFactory from './elements'
 import Message, { Payload } from './elements/types'
+import { ChatHandler } from 'components'
 
 interface ChatModalProps {
   message: Message<Payload>
   hiding: boolean
-  handler: any
+  handler: ChatHandler
   modalParams: any
   onLoad: (() => void) | null
 }

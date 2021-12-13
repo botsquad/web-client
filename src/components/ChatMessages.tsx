@@ -26,15 +26,8 @@ function messageHasModal({ type, payload }: { type: string; payload: Payload }) 
 }
 
 interface ChatMessagesProps {
-  handler: ChatHandler & { _lastModal: any }
-  settings: {
-    layout: string
-    alwaysFocus: boolean
-    chat_config: any
-    ui_labels: any
-    hide_input: boolean
-    [key: string]: any // For everything else that might be needed
-  }
+  handler: ChatHandler
+  settings: Record<string, any>
   host: any
   hideAvatars: boolean
   elementFactory: typeof ElementFactory

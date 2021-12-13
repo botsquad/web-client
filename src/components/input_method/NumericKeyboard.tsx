@@ -12,7 +12,7 @@ const KEYS = [
 ]
 
 interface NumericKeyboardProps {
-  settings: any
+  settings: Record<string, any>
 }
 
 const NumericKeyboard: React.FC<NumericKeyboardProps> = ({ settings }) => {

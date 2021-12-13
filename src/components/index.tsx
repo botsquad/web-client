@@ -25,6 +25,7 @@ export class ChatHandler {
   _activeAudio: any
   _audioElements: any
   _eventQueue: any[]
+  _lastModal: any
   constructor(component) {
     this.component = component
     this.channel = null
@@ -199,7 +200,7 @@ interface ChatState {
 }
 
 export default class Chat extends React.Component<ChatProps, ChatState> {
-  handler: any // ChatHandler
+  handler: ChatHandler
   notificationManager: NotificationManager
   eventDispatcher: EventEmitter
   _onlineTimeout: ReturnType<typeof setTimeout>

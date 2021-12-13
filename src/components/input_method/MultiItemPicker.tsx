@@ -6,7 +6,7 @@ import { chatLabel } from '../../common/labels'
 import { useInputMethodProps } from './InputMethodContext'
 
 interface MultiItemPickerProps {
-  settings: any
+  settings: Record<string, any>
 }
 
 const MultiItemPicker: React.FC<MultiItemPickerProps> = ({ settings }) => {

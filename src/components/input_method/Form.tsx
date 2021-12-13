@@ -32,7 +32,7 @@ function removeEmpty(obj: object) {
 
 interface ClientFormProps {
   message: Message<Payload>
-  settings: any
+  settings: Record<string, any>
 }
 
 const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
