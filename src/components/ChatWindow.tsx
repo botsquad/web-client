@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import ChatMessages from './ChatMessages'
 import ChatInput from './ChatInput'
 import { deviceClasses } from '../common/util'
-import { useChatProps } from './ChatContext'
+import { useChatProps, useChatPropsUpdate } from './ChatContext'
 
 const ChatWindow: React.FC = () => {
   const { online, settings } = useChatProps()
@@ -12,10 +12,11 @@ const ChatWindow: React.FC = () => {
   useEffect(() => {
     window.addEventListener('orientationchange', () => setForceUpdater(!forceUpdater))
   }, [])
+  const allProps = useChatProps()
   const layout = `layout-${settings.layout || 'docked'}`
   return (
     <div className={classNames('chat-window', { online }, layout, deviceClasses())}>
-      <ChatMessages />
+      <ChatMessages {...allProps} updater={useChatPropsUpdate()} />
       {settings.layout !== 'embedded' ? <ChatInput /> : null}
     </div>
   )

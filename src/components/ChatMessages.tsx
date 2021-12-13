@@ -8,6 +8,8 @@ import ElementFactory from './elements'
 import { shortDateTimeFormat } from '../common/util'
 import { Payload } from './elements/types'
 import { useChatProps, useChatPropsUpdate } from './ChatContext'
+import { ChatHandler } from 'components'
+import { Channel } from 'phoenix'
 
 export const chatMessagesEvents = new EventEmitter()
 
@@ -24,77 +26,59 @@ function messageHasModal({ type, payload }: { type: string; payload: Payload }) 
   return false
 }
 
-const ChatMessages: React.FC = () => {
-  const {
-    handler,
-    settings,
-    host,
-    hideAvatars,
-    elementFactory,
-    typingAs,
-    botAvatar,
-    channel,
-    upload,
-    typing,
-    userAvatar,
-    events,
-    conversationMeta,
-    modalParams,
-  } = useChatProps()
+interface ChatMessagesProps {
+  handler: ChatHandler
+  settings: {
+    layout: string
+    alwaysFocus: boolean
+    chat_config: any
+    ui_labels: any
+    hide_input: boolean
+    [key: string]: any // For everything else that might be needed
+  }
+  host: any
+  hideAvatars: boolean
+  elementFactory: typeof ElementFactory
+  typingAs: any
+  botAvatar: any
+  channel: Channel & { hasMoreHistory: () => boolean; getMoreHistory: () => any }
+  upload: { type: any; progress: any; retry: any }
+  typing: boolean
+  userAvatar: any
+  events: any[]
+  conversationMeta: any
+  updater: (update: any) => void
+}
 
-  const [messageGroups, setMessageGroups] = useState<any[]>([])
-  const [lastMessage, setLastMessage] = useState<any>(null)
-  const [loading, setLoading] = useState(false)
-  const [scrollToBottomListener, setScrollToBottomListener] = useState<EventSubscription>(null)
-  const [scrollToBottomAtStart, setScrollToBottomAtStart] = useState(true)
-  const updater = useChatPropsUpdate()
-  let wrapperElement = React.createRef<HTMLDivElement>()
+export default class ChatMessages extends React.Component<ChatMessagesProps> {
+  // const {handler, settings, host, hideAvatars, elementFactory, typingAs, botAvatar, channel, upload, typing, userAvatar, events, conversationMeta} = useChatProps()
 
-  const scrollToBottom = () => {
-    const { layout } = settings
+  state = {
+    messageGroups: [],
+    lastMessage: null,
+    loading: false,
+  }
+  scrollToBottomListener: any
 
-    if (layout === 'embedded' && host) {
-      // scroll the document
-      host.scrollToBottom()
-    } else if (wrapperElement.current) {
-      wrapperElement.current.scrollTop = wrapperElement.current.scrollHeight
-    }
+  componentDidMount() {
+    console.log('[Chat Messages Props]', this.props)
+    // const chatPropsUpdate = useChatPropsUpdate() Preparing to use Context
+    // chatPropsUpdate('scrollToBottom', this.scrollToBottom)
+    this.groupMessages(this.props)
+    this.scrollToBottomListener = chatMessagesEvents.addListener('scrollToBottom', this.scrollToBottom)
+    this.props.updater({ scrollToBottom: this.scrollToBottom })
   }
 
-  useEffect(() => {
-    groupMessages()
-    setScrollToBottomListener(chatMessagesEvents.addListener('scrollToBottom', scrollToBottom))
-    updater({ scrollToBottom })
-    return () => {
-      scrollToBottomListener.remove()
-    }
-  }, [])
+  componentWillUnmount() {
+    this.scrollToBottomListener.remove()
+  }
 
-  // INITIAL SCROLL
-  useEffect(() => {
-    if (scrollToBottomAtStart && messageGroups.length !== 0) {
-      scrollToBottom()
-      setScrollToBottomAtStart(false)
-    }
-  }, [messageGroups])
+  componentWillReceiveProps(newProps: ChatMessagesProps) {
+    this.setState({ loading: false })
+    this.groupMessages(newProps)
+  }
 
-  useEffect(() => {
-    setLoading(false)
-    groupMessages()
-  }, [useChatProps()])
-
-  useEffect(() => {
-    if (settings.layout === 'embedded') {
-      // do not autoload history, for now
-      return
-    }
-    const wrapper = wrapperElement.current
-    if (wrapper && wrapper.scrollHeight <= wrapper.offsetHeight && channel && channel.hasMoreHistory() && !loading) {
-      loadHistory()
-    }
-  }, [useChatProps(), wrapperElement])
-
-  const _connectFormEvents = (events: any) => {
+  _connectFormEvents(events: any) {
     const formLookup = {}
     for (const m of events) {
       if (m.type === 'template' && m.payload.template_type === 'input_method') {
@@ -109,20 +93,22 @@ const ChatMessages: React.FC = () => {
     }
   }
 
-  const groupMessages = () => {
+  groupMessages(props: ChatMessagesProps) {
+    const { events, userAvatar, botAvatar, conversationMeta } = props
+
     // convert all events into groups of messages
-    const messageGroups = []
+    const messageGroups: any[] = []
     let lastMessage = false
     let lastModalMessage = null
     let currentGroup: any = false
 
-    _connectFormEvents(events)
+    this._connectFormEvents(events)
 
     for (const message of events) {
       if (!message.renderable) {
         continue
       }
-      if (currentGroup === false || !isGroupable(message, lastMessage)) {
+      if (currentGroup === false || !this.isGroupable(message, lastMessage)) {
         if (currentGroup !== false) {
           messageGroups.unshift(currentGroup)
         }
@@ -143,9 +129,9 @@ const ChatMessages: React.FC = () => {
     if (currentGroup !== false) {
       messageGroups.unshift(currentGroup)
     }
-    if (lastMessage === null) {
-      setTimeout(() => scrollToBottom(), 50)
-      setTimeout(() => scrollToBottom(), 500)
+    if (this.state.lastMessage === null) {
+      setTimeout(() => this.scrollToBottom(), 50)
+      setTimeout(() => this.scrollToBottom(), 500)
     }
 
     const hasReadUntil =
@@ -159,19 +145,24 @@ const ChatMessages: React.FC = () => {
       }
     }
 
-    if (handler) {
-      if (handler._lastModal !== lastModalMessage) {
-        const newHandler = handler
-        newHandler._lastModal = lastModalMessage //FIXME: Do not add new properties to already used objects
-        updater({ handler: newHandler })
-      }
+    if (this.props.handler) {
+      this.props.handler._lastModal = lastModalMessage
     }
 
-    setMessageGroups(messageGroups)
-    setLastMessage(lastMessage)
+    this.setState({ messageGroups, lastMessage })
   }
 
-  const renderMessageGroup = (group, index) => {
+  scrollToBottom = () => {
+    const { layout } = this.props.settings
+    if (layout === 'embedded' && this.props.host) {
+      // scroll the document
+      this.props.host.scrollToBottom()
+    } else if (this.wrapperElement.current) {
+      this.wrapperElement.current.scrollTop = this.wrapperElement.current.scrollHeight
+    }
+  }
+
+  renderMessageGroup = group => {
     if (group.hasReadUntil) {
       return (
         <div key="hasReadUntil" className="has-read-until">
@@ -180,14 +171,13 @@ const ChatMessages: React.FC = () => {
       )
     }
 
+    const key = group.messages[0].time
+
     const name = group.as ? (group.as.first_name + ' ' + (group.as.last_name || '')).trim() : null
 
     return (
-      <div
-        key={index + Math.random()}
-        className={`bubble-group ${group.messages[0].self ? 'self' : 'bot'} ${group.class || ''}`}
-      >
-        {!hideAvatars && group.avatar ? (
+      <div key={key} className={`bubble-group ${group.messages[0].self ? 'self' : 'bot'} ${group.class || ''}`}>
+        {!this.props.hideAvatars && group.avatar ? (
           <div className="as">
             <div
               className="avatar"
@@ -197,43 +187,45 @@ const ChatMessages: React.FC = () => {
             {name?.length ? <div className="name">{name}</div> : null}
           </div>
         ) : null}
-        <div className="bubble-container">{group.messages.map(renderMessage)}</div>
+        <div className="bubble-container">{group.messages.map(this.renderMessage.bind(this))}</div>
       </div>
     )
   }
 
-  const isRecent = message => {
+  isRecent(message) {
     if (!message) {
       return false
     }
-    return new Date().getTime() - message.time < 500
+    return new Date().getTime() - message.time < 1000
   }
 
-  const renderMessage = message => {
+  renderMessage(message) {
     const cls = `bubble ${message.self ? 'self' : 'bot'} ` + message.type
+
     const attrs = {
-      modalParams,
-      handler,
-      message,
+      ...this.props,
       key: message.time,
+      message,
       className:
-        cls + (message.payload.class ? ' ' + message.payload.class : '') + (isRecent(message) ? ' recent' : ''),
-      layout: settings.layout,
+        cls + (message.payload.class ? ' ' + message.payload.class : '') + (this.isRecent(message) ? ' recent' : ''),
+      layout: this.props.settings.layout,
+      onLoad: () => this.scrollToBottom(),
       toggleModalPreferHeight: null,
-      onLoad: () => scrollToBottom(),
     }
 
-    return (elementFactory ? elementFactory(message, attrs) : null) || ElementFactory(message, attrs)
+    return (
+      (this.props.elementFactory ? this.props.elementFactory(message, attrs) : null) || ElementFactory(message, attrs)
+    )
   }
 
-  const renderUpload = ({ progress, type, retry }) => {
+  renderUpload({ progress, type, retry }) {
     if (retry) {
       return (
         <div className="upload">
           <span className="label">Upload failed…</span>
           <div className="retry">
-            <button onClick={() => handler.sendFile(retry)}>Retry</button>
-            <button onClick={() => handler.cancelUpload()}>×</button>
+            <button onClick={() => this.props.handler.sendFile(retry)}>Retry</button>
+            <button onClick={() => this.props.handler.cancelUpload()}>×</button>
           </div>
         </div>
       )
@@ -254,7 +246,7 @@ const ChatMessages: React.FC = () => {
     )
   }
 
-  const isGroupable = (a: any, b: any) => {
+  isGroupable(a, b) {
     return (
       a.self === b.self &&
       a.type === b.type &&
@@ -264,12 +256,14 @@ const ChatMessages: React.FC = () => {
     )
   }
 
-  const renderTyping = () => {
-    const avatar = typingAs ? typingAs.profile_picture : botAvatar
+  renderTyping() {
+    const avatar = this.props.typingAs ? this.props.typingAs.profile_picture : this.props.botAvatar
 
     return (
       <div className="bubble-group bot typing">
-        {!hideAvatars ? <div className="avatar" style={{ backgroundImage: avatar ? `url(${avatar})` : null }} /> : null}
+        {!this.props.hideAvatars ? (
+          <div className="avatar" style={{ backgroundImage: avatar ? `url(${avatar})` : null }} />
+        ) : null}
         <div className="typing">
           <span />
           <span />
@@ -279,64 +273,92 @@ const ChatMessages: React.FC = () => {
     )
   }
 
-  const checkLinkClick = e => {
+  checkLinkClick = e => {
     const url = e.target?.getAttribute('href')
     if (url) {
-      handler.sendLinkClick(url)
+      this.props.handler.sendLinkClick(url)
     }
   }
 
-  const loadHistory = () => {
-    setLoading(true)
+  loadHistory() {
+    this.setState({ loading: true }, () => {
+      this.props.channel.getMoreHistory()
+    })
   }
 
-  useEffect(() => {
-    if (loading === true) channel.getMoreHistory()
-  }, [loading])
-
-  const onScroll = () => {
-    if (channel && channel.hasMoreHistory() && wrapperElement.current.scrollTop < 10 && !loading) {
-      loadHistory()
+  onScroll = () => {
+    if (
+      this.props.channel &&
+      this.props.channel.hasMoreHistory() &&
+      this.wrapperElement.current.scrollTop < 10 &&
+      !this.state.loading
+    ) {
+      this.loadHistory()
     }
   }
 
-  if (isRecent(lastMessage) || typing || upload) {
-    setTimeout(() => scrollToBottom(), 50)
-  }
+  wrapperElement = React.createRef<HTMLDivElement>()
 
-  return (
-    <div
-      className={`chat-messages ${hideAvatars ? 'hide-avatars' : userAvatar ? 'user-avatar' : ''}`}
-      ref={wrapperElement}
-      onClick={checkLinkClick}
-      onScroll={onScroll}
-    >
-      <div className="inner">
-        {settings.layout === 'embedded' ? (
-          <div className="bubble-group self">
-            {!hideAvatars && userAvatar ? (
-              <div className="avatar" style={{ backgroundImage: userAvatar ? `url(${userAvatar})` : null }} />
-            ) : null}
-            <ChatInput />
-          </div>
-        ) : null}
+  render() {
+    const { upload, typing, handler, hideAvatars, userAvatar } = this.props
+    const { messageGroups, lastMessage } = this.state
 
-        {lastMessage && !lastMessage.self && lastMessage.payload.quick_replies && !typing && !upload ? (
-          <QuickReplies
-            className={`${lastMessage.payload.class} ${isRecent(lastMessage) ? ' recent' : ''}`}
-            buttons={lastMessage.payload.quick_replies}
-          />
-        ) : null}
+    if (this.isRecent(lastMessage) || typing || upload) {
+      setTimeout(() => this.scrollToBottom(), 0)
+    }
 
-        {upload ? renderUpload(upload) : null}
-        {typing ? renderTyping() : null}
+    return (
+      <div
+        className={`chat-messages ${hideAvatars ? 'hide-avatars' : userAvatar ? 'user-avatar' : ''}`}
+        ref={this.wrapperElement}
+        onClick={this.checkLinkClick}
+        onScroll={this.onScroll}
+      >
+        <div className="inner">
+          {this.props.settings.layout === 'embedded' ? (
+            <div className="bubble-group self">
+              {!hideAvatars && userAvatar ? (
+                <div
+                  className="avatar"
+                  style={{ backgroundImage: this.props.userAvatar ? `url(${this.props.userAvatar})` : null }}
+                />
+              ) : null}
+              <ChatInput />
+            </div>
+          ) : null}
 
-        {messageGroups.map(renderMessageGroup)}
+          {lastMessage && !lastMessage.self && lastMessage.payload.quick_replies && !typing && !upload ? (
+            <QuickReplies
+              className={`${lastMessage.payload.class} ${this.isRecent(lastMessage) ? ' recent' : ''}`}
+              buttons={lastMessage.payload.quick_replies}
+            />
+          ) : null}
 
-        {loading ? <span>…</span> : null}
+          {upload ? this.renderUpload(upload) : null}
+          {typing ? this.renderTyping() : null}
+
+          {messageGroups.map(this.renderMessageGroup)}
+
+          {this.state.loading ? <span>…</span> : null}
+        </div>
       </div>
-    </div>
-  )
-}
+    )
+  }
 
-export default ChatMessages
+  componentDidUpdate() {
+    if (this.props.settings.layout === 'embedded') {
+      // do not autoload history, for now
+      return
+    }
+    const wrapper = this.wrapperElement.current
+    if (
+      wrapper &&
+      wrapper.scrollHeight <= wrapper.offsetHeight &&
+      this.props.channel &&
+      this.props.channel.hasMoreHistory() &&
+      !this.state.loading
+    ) {
+      this.loadHistory()
+    }
+  }
+}
