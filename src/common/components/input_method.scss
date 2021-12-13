@@ -6,7 +6,7 @@
   @media (min-width: 480px) {
     width: 480px;
   }
-
+  max-height: 100%;
   display: flex;
   flex-direction: column;
   .content {
@@ -79,6 +79,7 @@
   .below {
     display: flex;
     flex-direction: row;
+    flex: 0 0 auto;
     button,
     .button {
       height: 50px;
