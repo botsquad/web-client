@@ -38,7 +38,7 @@ export function buttonClick(button: TemplateElementButton, handler: any, handleE
       handler.sendLinkClick(button.url)
       break
     case 'web_url':
-      if (button.url.startsWith('/')) {
+      if (button.url && button.url.startsWith('/')) {
         document.location.href = button.url
       } else {
         window.open(button.url, '_blank')
@@ -78,7 +78,7 @@ function renderGalleryElement(
   full: boolean,
 ) {
   const defaultAction = full
-    ? element.default_action
+    ? element && element.default_action
       ? () => buttonClick(element.default_action, handler, null)
       : null
     : () => handler.component.showModal(message, { index: idx })
@@ -86,14 +86,27 @@ function renderGalleryElement(
   return (
     <div className="element" key={idx}>
       {element.image_url ? (
-        <div onClick={defaultAction} className="image" style={{ backgroundImage: `url(${element.image_url})` }} />
+        <div
+          onClick={() => {
+            if (defaultAction) defaultAction()
+          }}
+          className="image"
+          style={{ backgroundImage: `url(${element.image_url})` }}
+        />
       ) : null}
       {!full ? OpenModal : null}
       <div className="action-area">
-        <div className="content" onClick={defaultAction}>
+        <div
+          className="content"
+          onClick={() => {
+            if (defaultAction) defaultAction()
+          }}
+        >
           <div className="title">{element.title}</div>
           {element.subtitle ? <div className="subtitle">{element.subtitle}</div> : null}
-          {element.default_action && full ? <div className="url">{host(element.default_action.url)}</div> : null}
+          {element.default_action && element.default_action.url && full ? (
+            <div className="url">{host(element.default_action.url)}</div>
+          ) : null}
         </div>
         {'buttons' in element && full ? (
           <div className="template-buttons">{element.buttons.map((b, bidx) => renderButton(b, bidx, handler))}</div>
@@ -179,7 +192,7 @@ const Template: React.FC<Props> = props => {
 
   const RenderInputMethodTemplate = (payload: InputTemplate) => (
     <div className={className}>
-      <InputMethodTemplate className={className} {...props} payload={payload} />
+      <InputMethodTemplate {...props} payload={payload} />
     </div>
   )
   const template_type = payload.template_type

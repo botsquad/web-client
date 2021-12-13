@@ -21,7 +21,9 @@ const NumericKeyboard: React.FC<NumericKeyboardProps> = ({ settings }) => {
   const [value, setValue] = useState('')
 
   const finish = () => {
-    inputModal!.finish('message', { type: 'numeric', text: value, data: value }, null)
+    if (inputModal) {
+      inputModal.finish('message', { type: 'numeric', text: value, data: value }, null)
+    }
   }
 
   const button = () => {

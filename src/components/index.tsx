@@ -276,7 +276,9 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
   }
 
   showToast(toast) {
-    clearTimeout(this._toastClearer!)
+    if (this._toastClearer) {
+      clearTimeout(this._toastClearer)
+    }
     clearTimeout(this._toastClearer2)
 
     this.setState({ toast, toastHiding: false })
@@ -410,6 +412,6 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
     if (this.notificationManager) {
       this.notificationManager.componentDidMount()
     }
-    this.windowElement = this.root.current!.querySelector('.chat-window')
+    if (this.root.current) this.windowElement = this.root.current.querySelector('.chat-window')
   }
 }

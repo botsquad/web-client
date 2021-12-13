@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { createRef, useRef } from 'react'
 import ReactGesture from 'react-gesture'
 
 import { Close } from './icons'
@@ -14,7 +14,7 @@ interface ChatModalProps {
 }
 
 const ChatModal: React.FC<ChatModalProps> = props => {
-  let div = useRef<HTMLDivElement>()
+  let div = createRef<HTMLDivElement>()
   const renderMessage = (message: Message<Payload>, modalParams: any) => {
     const cls = `content ${message.self ? 'self' : 'bot'} ` + message.type
 
@@ -36,7 +36,9 @@ const ChatModal: React.FC<ChatModalProps> = props => {
   }
 
   const toggleModalPreferHeight = (condition: boolean) => {
-    div.current.classList.toggle('prefer-height', condition)
+    if (div && div.current) {
+      div.current.classList.toggle('prefer-height', condition)
+    }
   }
 
   const { message, hiding, modalParams } = props

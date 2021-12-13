@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import isEqual from 'lodash/isEqual'
-import { EventEmitter, EventSubscription } from 'fbemitter'
+import { EventEmitter } from 'fbemitter'
 
 import QuickReplies from './QuickReplies'
 import ChatInput from './ChatInput'
 import ElementFactory from './elements'
 import { shortDateTimeFormat } from '../common/util'
 import { Payload } from './elements/types'
-import { useChatProps, useChatPropsUpdate } from './ChatContext'
 import { ChatHandler } from 'components'
 import { Channel } from 'phoenix'
 
@@ -27,7 +26,7 @@ function messageHasModal({ type, payload }: { type: string; payload: Payload }) 
 }
 
 interface ChatMessagesProps {
-  handler: ChatHandler
+  handler: ChatHandler & { _lastModal: any }
   settings: {
     layout: string
     alwaysFocus: boolean
@@ -50,10 +49,16 @@ interface ChatMessagesProps {
   updater: (update: any) => void
 }
 
+interface ChatMessagesState {
+  messageGroups: any[]
+  lastMessage: any
+  loading: boolean
+}
+
 export default class ChatMessages extends React.Component<ChatMessagesProps> {
   // const {handler, settings, host, hideAvatars, elementFactory, typingAs, botAvatar, channel, upload, typing, userAvatar, events, conversationMeta} = useChatProps()
 
-  state = {
+  state: ChatMessagesState = {
     messageGroups: [],
     lastMessage: null,
     loading: false,
@@ -181,8 +186,8 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
           <div className="as">
             <div
               className="avatar"
-              style={{ backgroundImage: group.avatar ? `url(${group.avatar})` : null }}
-              title={name}
+              style={{ backgroundImage: group.avatar ? `url(${group.avatar})` : '' }}
+              title={name ? name : ''}
             />
             {name?.length ? <div className="name">{name}</div> : null}
           </div>
@@ -262,7 +267,7 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
     return (
       <div className="bubble-group bot typing">
         {!this.props.hideAvatars ? (
-          <div className="avatar" style={{ backgroundImage: avatar ? `url(${avatar})` : null }} />
+          <div className="avatar" style={{ backgroundImage: avatar ? `url(${avatar})` : '' }} />
         ) : null}
         <div className="typing">
           <span />
@@ -290,6 +295,8 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
     if (
       this.props.channel &&
       this.props.channel.hasMoreHistory() &&
+      this.wrapperElement &&
+      this.wrapperElement.current &&
       this.wrapperElement.current.scrollTop < 10 &&
       !this.state.loading
     ) {
@@ -300,7 +307,7 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
   wrapperElement = React.createRef<HTMLDivElement>()
 
   render() {
-    const { upload, typing, handler, hideAvatars, userAvatar } = this.props
+    const { upload, typing, hideAvatars, userAvatar } = this.props
     const { messageGroups, lastMessage } = this.state
 
     if (this.isRecent(lastMessage) || typing || upload) {
@@ -320,7 +327,7 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
               {!hideAvatars && userAvatar ? (
                 <div
                   className="avatar"
-                  style={{ backgroundImage: this.props.userAvatar ? `url(${this.props.userAvatar})` : null }}
+                  style={{ backgroundImage: this.props.userAvatar ? `url(${this.props.userAvatar})` : '' }}
                 />
               ) : null}
               <ChatInput />

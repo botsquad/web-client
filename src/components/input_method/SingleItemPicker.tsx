@@ -32,7 +32,7 @@ const SingleItemPicker: React.FC<SingleItemPickerProps> = ({ settings }) => {
 
   const submitItem = ({ value, title }) => {
     setHasSubmitted(true)
-    inputModal!.finish('message', { type: 'item_picker', text: title, data: value }, config)
+    if (inputModal) inputModal.finish('message', { type: 'item_picker', text: title, data: value }, config)
   }
 
   const itemClick = (item: any) => {

@@ -151,15 +151,19 @@ const ChatInput: React.FC = () => {
     setTimeout(() => chatMessagesEvents.emit('scrollToBottom'), 200)
     setTimeout(() => chatMessagesEvents.emit('scrollToBottom'), 500)
     if (!isiOS()) return
-    const mb = inputDiv.current.style.marginBottom
-    inputDiv.current.style.marginBottom = mb === '-1px' ? '0' : '-1px'
+    if (inputDiv && inputDiv.current) {
+      const mb = inputDiv.current.style.marginBottom
+      inputDiv.current.style.marginBottom = mb === '-1px' ? '0' : '-1px'
+    }
   }
 
   const onInputBlur = () => {
     if (!isiOS()) return
     setTimeout(() => {
-      const mb = inputDiv.current.style.marginBottom
-      inputDiv.current.style.marginBottom = mb === '-1px' ? '0' : '-1px'
+      if (inputDiv && inputDiv.current) {
+        const mb = inputDiv.current.style.marginBottom
+        inputDiv.current.style.marginBottom = mb === '-1px' ? '0' : '-1px'
+      }
     }, 10)
   }
 

@@ -24,9 +24,11 @@ const Map: React.FC<MapProps> = props => {
   const [map, setMap] = useState<GoogleMap | null>()
 
   const setMarkerPosition = ({ latLng }) => {
-    const center = { lat: map!.getCenter().lat(), lon: map!.getCenter().lng() }
-    const position = { lat: latLng.lat(), lon: latLng.lng() }
-    props.onChange({ position, center })
+    if (map) {
+      const center = { lat: map.getCenter().lat(), lon: map!.getCenter().lng() }
+      const position = { lat: latLng.lat(), lon: latLng.lng() }
+      props.onChange({ position, center })
+    }
   }
 
   const { config, position } = props
@@ -96,7 +98,9 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ settings }) => {
 
   const submit = () => {
     setHasSubmitted(true)
-    inputModal!.finish('location', position, config)
+    if (inputModal) {
+      inputModal!.finish('location', position, config)
+    }
   }
 
   const setMyLocation = () => {

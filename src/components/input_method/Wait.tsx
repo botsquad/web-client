@@ -16,6 +16,9 @@ const renderImplicitCloseButton: React.FC<renderImplicitCloseButtonProps> = prop
   if (props.type !== 'closed') {
     return null
   }
+  if (!handler) {
+    return null
+  }
   const { closeConversation } = handler.component.props
   if (!closeConversation) {
     return null
@@ -67,7 +70,7 @@ const Wait: React.FC<WaitProps> = props => {
 
     if (delta > wait_time) {
       setWaitTime(-1)
-      inputModal!.finish('message', { type: 'wait', text: 'Timeout', data: { timeout: true } }, config)
+      if (inputModal) inputModal.finish('message', { type: 'wait', text: 'Timeout', data: { timeout: true } }, config)
     } else {
       setWaitTime(delta)
     }

@@ -32,7 +32,9 @@ const MultiItemPicker: React.FC<MultiItemPickerProps> = ({ settings }) => {
     const data = selected.map(({ value }) => value)
 
     setHasSubmitted(true)
-    inputModal!.finish('message', { type: 'item_picker', text, data }, config)
+    if (inputModal) {
+      inputModal.finish('message', { type: 'item_picker', text, data }, config)
+    }
   }
 
   const itemClick = item => {

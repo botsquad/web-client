@@ -51,7 +51,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
       setFormData(removeEmpty(default_value))
     }
 
-    const { read_only_data } = message || {} //TODO: Find what this means
+    const { read_only_data } = message || {}
     if (read_only_data) {
       setFormData(read_only_data)
       setDisabled(true)
@@ -75,7 +75,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
       text = '…'
     }
     const data = formData
-    inputModal!.finish('message', { type: 'form', text, data }, config)
+    if (inputModal) inputModal.finish('message', { type: 'form', text, data }, config)
   }
 
   const onChange = ({ formData }) => {

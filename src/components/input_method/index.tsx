@@ -30,7 +30,7 @@ interface FactoryProps {
 export default function elementFactory(
   { type, payload, time }: MethodProps,
   props: FactoryProps,
-  inputModal: InputMethodTemplate,
+  inputModal: { finish: (type: any, payload: any) => void; cancel: () => void },
 ) {
   const { handler, inline, settings, localePrefs, message } = props
 

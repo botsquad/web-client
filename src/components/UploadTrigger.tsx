@@ -20,7 +20,7 @@ export default class UploadTrigger extends React.Component {
   trigger(accept: string, callback: Callback) {
     this.callback = callback
     // Since this function is called externally the input will always be non-null (the component will be rendered by then )
-    this.setState({ accept }, () => this.input!.click())
+    if (this.input && this.input.click) this.setState({ accept }, () => this.input.click())
   }
 
   render() {

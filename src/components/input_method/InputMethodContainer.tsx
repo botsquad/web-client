@@ -46,18 +46,20 @@ const InputMethodContainer: React.FC<InputMethodContainerProps> = ({ below, head
   useEffect(() => {
     inlineStyle = {}
     const { required, caption } = config
-    const { clientHeight } = handler.getClientDimensions()
-    const maxHeight = required && !caption ? clientHeight : clientHeight + 45
+    if (handler) {
+      const { clientHeight } = handler.getClientDimensions()
+      const maxHeight = required && !caption ? clientHeight : clientHeight + 45
 
-    if (classList.includes('qr') || classList.includes('barcode')) {
-      return
+      if (classList.includes('qr') || classList.includes('barcode')) {
+        return
+      }
+
+      let size = SizeMap.Compact
+      if (classList.includes('tall')) size = SizeMap.Tall
+      if (classList.includes('full')) size = SizeMap.Full
+      const attr = classList.includes('fixed-height') ? 'height' : 'maxHeight'
+      inlineStyle[attr] = `${Math.floor(size * maxHeight)}px`
     }
-
-    let size = SizeMap.Compact
-    if (classList.includes('tall')) size = SizeMap.Tall
-    if (classList.includes('full')) size = SizeMap.Full
-    const attr = classList.includes('fixed-height') ? 'height' : 'maxHeight'
-    inlineStyle[attr] = `${Math.floor(size * maxHeight)}px`
   }, [])
 
   return (

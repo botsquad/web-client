@@ -105,6 +105,7 @@ export type Payload = Media & Text & Location & Template
 
 type Message<T extends Media | Text | Location | Template> = {
   payload: T
+  read_only_data: any
 } & DefaultMessageParams
 
 export default Message
