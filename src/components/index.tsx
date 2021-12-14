@@ -15,9 +15,27 @@ import UploadTrigger from './UploadTrigger'
 
 import './index.scss'
 import ChatContext from './ChatContext'
-import { DebugInfo, Emit } from '@botsquad/web-client'
 import { Argument } from 'classnames'
-import Message, { Payload } from './elements/types'
+import Message, { As, Payload } from './elements/types'
+
+export type Meta = {
+  readonly dialog?: string | null
+  readonly file?: string | null
+  readonly line?: string | number
+}
+
+type BotProcesses = {
+  master?: true
+  group?: string
+}
+
+export type DebugInfo = {
+  meta: Meta | null
+  context: Record<string, string> | null
+  processes: BotProcesses
+}
+
+export type Emit = { event: string; payload?: any }
 
 export class ChatHandler {
   component: any //typeof Chat
