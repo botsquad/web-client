@@ -155,7 +155,6 @@ export function resolveTranslationsLocales(value, locales) {
       (locales || ['en']).reduce((translated, lang) => translated || value[lang], null) ||
       value[Object.keys(value).filter(k => k.match(/^[a-z]/))[0]]
     )
-    i
   }
 
   Object.keys(value).forEach(k => {
