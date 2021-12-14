@@ -24,7 +24,7 @@ jobs:
 
       - name: Prepare
         run: |
-          npm install
+          npm install --legacy-peer-deps
 
       - name: Check
         run: |

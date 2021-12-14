@@ -68,7 +68,10 @@ module.exports = {
     ],
   },
   plugins: [
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.IgnorePlugin({
+      resourceRegExp: /^\.\/locale$/,
+      contextRegExp: /moment$/,
+    }),
     new OptimizeCSSAssetsPlugin({}),
     new webpack.DefinePlugin({
       'process.env': JSON.stringify(process.env),

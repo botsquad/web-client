@@ -28,7 +28,7 @@ function removeEmpty(obj) {
   return obj
 }
 
-export default class extends React.Component {
+export default class FormComponent extends React.Component {
   state = {
     hasSubmitted: false,
     formData: {},

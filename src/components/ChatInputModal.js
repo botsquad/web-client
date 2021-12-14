@@ -4,7 +4,7 @@ import isEqual from 'lodash/isEqual'
 
 import inputMethodFactory from './input_method'
 
-export default class extends React.Component {
+export default class ChatInputModal extends React.Component {
   state = {
     inputMethod: null,
     operatorActive: false,
