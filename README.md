@@ -1,6 +1,6 @@
 # BotSquad Web Client React component
 
-[![Build Status](https://travis-ci.org/botsquad/web-client.svg?branch=master)](https://travis-ci.org/botsquad/web-client)
+[![CI check/test/build](https://github.com/botsquad/web-client/actions/workflows/webpack.yml/badge.svg)](https://github.com/botsquad/web-client/actions/workflows/webpack.yml)
 [![npm (scoped)](https://img.shields.io/npm/v/@botsquad/web-client)](https://www.npmjs.com/package/@botsquad/web-client)
 
 The BotSquad Web Client components embeds Botsquad chatbots inside a
