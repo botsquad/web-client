@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import { createContext, useContext, useState } from 'react'
 import { ChatHandler } from '.'
 import InputMethodTemplate from './elements/InputMethodTemplate'
-import Message, { Payload } from './elements/types'
+import Message, { As, Payload } from './elements/types'
 import ElementFactory from './elements'
 
 export function useChatProps() {
@@ -18,7 +18,7 @@ export function useChatPropsUpdate() {
 interface ChatProps {
   channel: Channel & { hasMoreHistory: () => boolean; getMoreHistory: () => any }
   conversationMeta: any
-  events: any[]
+  events: Message<unknown>[]
   handler: ChatHandler
   hideAvatars: boolean
   inline: boolean
@@ -28,7 +28,7 @@ interface ChatProps {
   online: Argument
   settings: Record<string, any>
   typing: boolean
-  typingAs: any
+  typingAs: As
   upload: any
   inputMethodOverride: any
   modal: Message<Payload>

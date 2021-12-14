@@ -5,7 +5,7 @@ import locale2 from 'locale2'
 
 const ua = navigator.userAgent
 
-export function shortDateTimeFormat(dt: string) {
+export function shortDateTimeFormat(dt: string): string {
   const m = moment(dt)
   const now = moment()
   if (m.year() !== now.year()) {
@@ -17,31 +17,31 @@ export function shortDateTimeFormat(dt: string) {
   return m.format('H:mm')
 }
 
-export function isEdge() {
+export function isEdge(): boolean {
   return window.navigator.userAgent.indexOf('Edge') > -1
 }
 
-export function isiOS() {
+export function isiOS(): boolean {
   return ua.match(/Mobile/) && ua.match(/AppleWebKit/)
 }
 
-export function isiPad() {
+export function isiPad(): boolean {
   return ua.match(/iPad/)
 }
 
-export function isiPhone() {
+export function isiPhone(): boolean {
   return ua.match(/iPhone/)
 }
 
-export function isLandscape() {
+export function isLandscape(): boolean {
   return window.innerWidth > window.innerHeight
 }
 
-export function isIE() {
+export function isIE(): boolean {
   return !!window['MSInputMethodContext'] && !!document['documentMode']
 }
 
-export function isMobile() {
+export function isMobile(): boolean {
   if (isIE()) return false
   return document.body.clientWidth <= 480 || (ua.match(/Mobile/) && ua.match(/AppleWebKit/))
 }
@@ -73,7 +73,7 @@ export function getCookieUserId() {
   return userId
 }
 
-export function hasCookieUserId() {
+export function hasCookieUserId(): boolean {
   return !!Cookie.get(USER_COOKIE)
 }
 

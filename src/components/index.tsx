@@ -183,9 +183,9 @@ interface ChatProps {
 }
 
 interface ChatState {
-  events: any[]
+  events: Message<unknown>[]
   typing: boolean
-  typingAs: any
+  typingAs: As
   upload: any
   modal: Message<Payload> | null
   modalHiding: boolean

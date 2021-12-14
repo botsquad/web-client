@@ -1,7 +1,14 @@
+import Chat from 'components'
+import { Socket } from 'phoenix'
 import { setCookieUserId } from '../common/util'
 import API from './api'
 
-export default function botChatHandler(component: any, socket: any, bot_id: number, params: any) {
+export default function botChatHandler(
+  component: Chat,
+  socket: Socket,
+  bot_id: string,
+  params: Record<string, string>,
+) {
   if (!socket) {
     return null
   }

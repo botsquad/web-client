@@ -103,9 +103,10 @@ export interface DefaultMessageParams {
 
 export type Payload = Media & Text & Location & Template
 
-type Message<T extends Media | Text | Location | Template> = {
+type Message<T extends Media | Text | Location | Template | unknown> = {
   payload: T
   read_only_data: any
+  as: As
 } & DefaultMessageParams
 
 export default Message

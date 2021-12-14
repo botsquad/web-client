@@ -6,7 +6,7 @@ import QuickReplies from './QuickReplies'
 import ChatInput from './ChatInput'
 import ElementFactory from './elements'
 import { shortDateTimeFormat } from '../common/util'
-import { Payload } from './elements/types'
+import Message, { As, Payload } from './elements/types'
 import { ChatHandler } from 'components'
 import { Channel } from 'phoenix'
 
@@ -31,13 +31,13 @@ interface ChatMessagesProps {
   host: any
   hideAvatars: boolean
   elementFactory: typeof ElementFactory
-  typingAs: any
+  typingAs: As
   botAvatar: any
   channel: Channel & { hasMoreHistory: () => boolean; getMoreHistory: () => any }
   upload: { type: any; progress: any; retry: any }
   typing: boolean
   userAvatar: any
-  events: any[]
+  events: Message<any>[]
   conversationMeta: any
   updater: (update: any) => void
   localePrefs: string[]
@@ -96,8 +96,8 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
 
     // convert all events into groups of messages
     const messageGroups: any[] = []
-    let lastMessage = false
-    let lastModalMessage = null
+    let lastMessage: boolean | Message<unknown> = false
+    let lastModalMessage: Message<unknown> | null = null
     let currentGroup: any = false
 
     this._connectFormEvents(events)
