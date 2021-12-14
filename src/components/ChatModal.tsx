@@ -1,4 +1,4 @@
-import React, { createRef, useRef } from 'react'
+import React, { createRef } from 'react'
 import ReactGesture from 'react-gesture'
 
 import { Close } from './icons'

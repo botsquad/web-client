@@ -167,7 +167,7 @@ export function fixedLabel(key: keyof typeof LABELS, prefList: string[]) {
   return resolveTranslations(LABELS[key], prefList.concat(['en']), null)
 }
 
-export function chatLabel(settings: { ui_labels: any }, localePrefs: string[], part: any) {
+export function chatLabel(settings: any, localePrefs: string[], part: any) {
   const { ui_labels } = settings
   return (ui_labels && resolveTranslationsLocales(ui_labels[part], localePrefs)) || fixedLabel(part, localePrefs)
 }

@@ -33,7 +33,7 @@ export default class InputMethodTemplate extends React.Component<Props> {
   render() {
     const { payload } = this.props
     return inputMethodFactory(
-      { type: payload.input_method, payload, time: null },
+      { type: payload.input_method, payload, time: 0 },
       { inline: true, inputModal: this, ...this.props },
       this,
     )
