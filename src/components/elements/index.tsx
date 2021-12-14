@@ -15,6 +15,8 @@ interface AttributesProp {
   onLoad: (() => void) | null
   toggleModalPreferHeight: ((condition: boolean) => void) | null
   modalParams?: { index?: number }
+  settings: Record<string, any>
+  localePrefs: string[]
 }
 
 type MessageProp = Message<Payload>

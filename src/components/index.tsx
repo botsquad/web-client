@@ -163,7 +163,7 @@ interface ChatProps {
   socket?: Socket
   params?: Record<string, any>
   onHideInput?: (flag: boolean) => void
-  settings?: Record<string, any>
+  settings: Record<string, any>
   localePrefs?: string[]
   closeConversation?: () => void
   mapsApiKey?: string
@@ -388,6 +388,8 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
       hiding: this.state.modalHiding,
       modalParams: this.state.modalParams,
       onLoad: null,
+      settings: this.props.settings,
+      localePrefs: this.state.localePrefs,
     }
     return (
       <ChatContext props={{ ...allProps }}>

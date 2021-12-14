@@ -40,6 +40,7 @@ interface ChatMessagesProps {
   events: any[]
   conversationMeta: any
   updater: (update: any) => void
+  localePrefs: string[]
 }
 
 interface ChatMessagesState {
@@ -208,6 +209,8 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
       layout: this.props.settings.layout,
       onLoad: () => this.scrollToBottom(),
       toggleModalPreferHeight: null,
+      settings: this.props.settings,
+      localePrefs: this.props.localePrefs,
     }
 
     return (

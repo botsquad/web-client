@@ -12,6 +12,8 @@ interface ChatModalProps {
   handler: ChatHandler
   modalParams: any
   onLoad: (() => void) | null
+  settings: Record<string, any>
+  localePrefs: string[]
 }
 
 const ChatModal: React.FC<ChatModalProps> = props => {
@@ -25,6 +27,8 @@ const ChatModal: React.FC<ChatModalProps> = props => {
       className: cls + (message.payload.class ? ' ' + message.payload.class : ''),
       modalParams,
       toggleModalPreferHeight,
+      settings: props.settings,
+      localePrefs: props.localePrefs,
     }
 
     return elementFactory(message, attrs)

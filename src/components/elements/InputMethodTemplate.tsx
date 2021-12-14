@@ -2,10 +2,14 @@ import { ChatHandler } from 'components'
 import React from 'react'
 
 import inputMethodFactory from '../input_method'
+import Message, { Payload } from './types'
 
 interface Props {
   payload: any
   handler: ChatHandler
+  settings: Record<string, any>
+  localePrefs: string[]
+  message: Message<Payload>
 }
 
 export default class InputMethodTemplate extends React.Component<Props> {

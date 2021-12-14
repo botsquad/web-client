@@ -16,6 +16,7 @@ import Message, {
   GalleryElement,
   ListElement,
   TemplateElementButton,
+  Payload,
 } from './types'
 import { ChatHandler } from 'components'
 //handler probably a function/ handlerEvent is a function
@@ -119,10 +120,12 @@ function renderGalleryElement(
 
 interface Props {
   handler: any //{ getClientDimensions(): { clientWidth: number }, component:{showModal:function} }
-  message: Message<TemplateType>
+  message: Message<Payload>
   toggleModalPreferHeight: ((condition: boolean) => void) | null
   modalParams?: { index?: number }
   className: string
+  settings: Record<string, any>
+  localePrefs: string[]
 }
 
 const Template: React.FC<Props> = props => {
