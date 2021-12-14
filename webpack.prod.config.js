@@ -2,7 +2,6 @@ const webpack = require('webpack')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const TerserPlugin = require('terser-webpack-plugin')
-
 const common = require('./webpack.config')
 const config = require('./package')
 
@@ -25,7 +24,6 @@ const plugins = [
 
 module.exports = {
   ...common,
-  plugins,
   externals: {
     'react': 'react',
     'react-dom': 'react-dom',
