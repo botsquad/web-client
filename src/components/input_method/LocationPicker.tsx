@@ -1,6 +1,5 @@
-import React, { ReactNode, useEffect, useState } from 'react'
-import { compose, withProps } from 'recompose'
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
+import React, { useEffect, useState } from 'react'
+import { GoogleMap, Marker, LoadScript } from '@react-google-maps/api'
 
 import { chatLabel } from '../../common/labels'
 import { MyLocation } from '../icons'
@@ -14,11 +13,11 @@ function transformLngLon(position: LocationType) {
 }
 
 interface MapProps {
-  center: LocationType
-  position: LocationType
+  center: LocationType | null
+  position: LocationType | null
   config: { zoom?: number }
   onChange: ([string]: any) => void
-  handler: ChatHandler
+  handler: ChatHandler | null
 }
 
 const Map: React.FC<MapProps> = props => {
@@ -26,53 +25,42 @@ const Map: React.FC<MapProps> = props => {
 
   const setMarkerPosition = ({ latLng }) => {
     if (map) {
-      const center = { lat: map.getCenter().lat(), lon: map!.getCenter().lng() }
+      const center = { lat: latLng.lat(), lon: latLng.lng() }
       const position = { lat: latLng.lat(), lon: latLng.lng() }
       props.onChange({ position, center })
     }
   }
 
   const { config, position } = props
-
+  if (!position || !props.center || !props.handler) {
+    return null
+  }
   const googleMapsPosition = transformLngLon(position)
   const center = transformLngLon(props.center)
 
   return (
-    <GoogleMap
-      ref={m => {
-        setMap(m)
-      }}
-      defaultZoom={config.zoom}
-      defaultCenter={center ? center : undefined}
-      center={center ? center : undefined}
-      onClick={setMarkerPosition}
-      options={{
-        disableDefaultUI: true,
-        zoomControl: true,
-        fullscreenControl: true,
-        clickableIcons: false,
-        mapTypeId: 'roadmap',
-      }}
-    >
-      {googleMapsPosition ? <Marker position={googleMapsPosition} draggable onDragEnd={setMarkerPosition} /> : null}
-    </GoogleMap>
+    <LoadScript googleMapsApiKey={props.handler.getMapsAPIKey()}>
+      <GoogleMap
+        onLoad={map => {
+          const bounds = new window.google.maps.LatLngBounds()
+          map.fitBounds(bounds)
+        }}
+        center={center ? center : undefined}
+        zoom={config.zoom}
+        onClick={setMarkerPosition}
+        options={{
+          disableDefaultUI: true,
+          zoomControl: true,
+          fullscreenControl: true,
+          clickableIcons: false,
+          mapTypeId: 'roadmap',
+        }}
+      >
+        {googleMapsPosition ? <Marker position={googleMapsPosition} draggable onDragEnd={setMarkerPosition} /> : null}
+      </GoogleMap>
+    </LoadScript>
   )
 }
-
-const ComposedMap = compose<MapProps, { children?: ReactNode }>(
-  withProps((props: MapProps) => {
-    const mapsApiKey = props.handler.getMapsAPIKey()
-
-    return {
-      googleMapURL: `https://maps.googleapis.com/maps/api/js?v=3.exp&key=${mapsApiKey}&libraries=geometry,drawing,places`,
-      loadingElement: <div style={{ height: '100%', width: '100%' }} />,
-      containerElement: <div style={{ height: '100%', width: '100%' }} />,
-      mapElement: <div style={{ height: '100%', width: '100%' }} />,
-    }
-  }),
-  withScriptjs,
-  withGoogleMap,
-)(Map)
 
 interface LocationPickerProps {
   settings: Record<string, any>
@@ -144,13 +132,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ settings }) => {
       <div className="btn my-location" onClick={setMyLocation}>
         {MyLocation}
       </div>
-      <ComposedMap
-        handler={handler}
-        onChange={setPositionAndCenter}
-        position={position}
-        center={center}
-        config={config}
-      />
+      <Map handler={handler} onChange={setPositionAndCenter} position={position} center={center} config={config} />
     </InputMethodContainer>
   )
 }

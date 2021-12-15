@@ -1,6 +1,5 @@
-import React, { ReactNode, useEffect, useState } from 'react'
-import { compose, withProps } from 'recompose'
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
+import React, { useState } from 'react'
+import { GoogleMap, Marker, LoadScript } from '@react-google-maps/api'
 import { MyLocation } from '../icons'
 import Message, { Location as LocationType } from './types'
 import { ChatHandler } from 'components'
@@ -22,57 +21,56 @@ const Map: React.FC<MapProps> = ({ message, handler }) => {
     window.open(url, '_blank')
     handler.sendLinkClick(url)
   }
-  useEffect(() => {
-    const geocoder = new google.maps.Geocoder()
-    const latlng = transformLngLon(message.payload)
-    geocoder.geocode({ location: latlng }, results => {
-      if (results && results[0]) {
-        const address = results[0].formatted_address
-        setAddress(address)
-      }
-    })
-  }, [])
+  // useEffect(() => {
+  //   const geocoder = new window.google.maps.Geocoder()
+  //   const latlng = transformLngLon(message.payload)
+  //   geocoder.geocode({ location: latlng }, results => {
+  //     if (results && results[0]) {
+  //       const address = results[0].formatted_address
+  //       setAddress(address)
+  //     }
+  //   })
+  // }, [])
 
   const { payload } = message
   const center = transformLngLon(payload)
-
+  if (!center) {
+    return null
+  }
   return (
     <div>
-      <GoogleMap
-        defaultZoom={14}
-        defaultCenter={center}
-        center={center}
-        onClick={click}
-        options={{
-          disableDefaultUI: true,
-          zoomControl: true,
-          clickableIcons: false,
-          mapTypeId: 'roadmap',
-        }}
-      >
-        <Marker position={center} onClick={click} />
-      </GoogleMap>
+      <LoadScript googleMapsApiKey={handler.getMapsAPIKey()}>
+        <GoogleMap
+          onLoad={map => {
+            const bounds = new window.google.maps.LatLngBounds()
+            map.fitBounds(bounds)
+            const geocoder = new window.google.maps.Geocoder()
+
+            const latlng = transformLngLon(message.payload)
+            geocoder.geocode({ location: latlng }, results => {
+              if (results && results[0]) {
+                const address = results[0].formatted_address
+                setAddress(address)
+              }
+            })
+          }}
+          zoom={14}
+          center={center}
+          onClick={click}
+          options={{
+            disableDefaultUI: true,
+            zoomControl: true,
+            clickableIcons: false,
+            mapTypeId: 'roadmap',
+          }}
+        >
+          <Marker position={center} onClick={click} />
+        </GoogleMap>
+      </LoadScript>
       <div className="address">{address}</div>
     </div>
   )
 }
-
-const ComposedMap = compose<MapProps, { children?: ReactNode }>(
-  withProps((r: MapProps) => {
-    const { clientHeight } = r.handler.getClientDimensions()
-    const height = Math.floor(clientHeight * 0.6) + 'px'
-    const mapsApiKey = r.handler.getMapsAPIKey()
-
-    return {
-      googleMapURL: `https://maps.googleapis.com/maps/api/js?v=3.exp&key=${mapsApiKey}&libraries=geometry,drawing,places`,
-      loadingElement: <div style={{ height, width: '100%' }} />,
-      containerElement: <div style={{ height: '100%', width: '100%' }} />,
-      mapElement: <div style={{ height, width: '100%' }} />,
-    }
-  }),
-  withScriptjs,
-  withGoogleMap,
-)(Map)
 
 interface StaticLocationProps {
   className: string
@@ -115,7 +113,7 @@ const Location: React.FC<LocationProps> = props => {
 
   if (toggleModalPreferHeight) {
     //TODO: toggleModalPreferHeight is to show that a modal exists!!! it should be changed to something else
-    return <ComposedMap {...props} />
+    return <Map {...props} />
   }
 
   return <StaticLocation {...props} />

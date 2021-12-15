@@ -1,5 +1,4 @@
 import React, { createRef } from 'react'
-import ReactGesture from 'react-gesture'
 
 import { Close } from './icons'
 import elementFactory from './elements'
@@ -52,9 +51,7 @@ const ChatModal: React.FC<ChatModalProps> = props => {
       className={`chat-modal ${hiding ? 'hiding' : ''} ${message.payload.class || ''}`}
       onTouchMove={e => e.preventDefault()}
     >
-      <ReactGesture onSwipeUp={hide} onClick={hide} onTap={hide}>
-        <div className="overlay" />
-      </ReactGesture>
+      <div className="overlay" onClick={hide} />
       <div className={`modal ${message.type}`} ref={div}>
         {renderMessage(message, modalParams)}
       </div>
