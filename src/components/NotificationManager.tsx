@@ -59,7 +59,7 @@ export default class NotificationManager extends React.Component<NotificationMan
       try {
         this.sound = document.getElementById('botsquad-notification-audio')
         if (!this.sound) {
-          let sound = document.createElement('audio')
+          const sound = document.createElement('audio')
           sound.setAttribute('id', 'botsquad-notification-audio')
           sound.onload = () => sound.play()
           sound.src = SOUND

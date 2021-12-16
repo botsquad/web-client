@@ -231,7 +231,7 @@ interface AudioMediaProps {
 
 export const AudioMedia: React.FC<AudioMediaProps> = React.memo(
   ({ message, className, handler }) => {
-    let audio = useRef<HTMLAudioElement>(null)
+    const audio = useRef<HTMLAudioElement>(null)
     const [hasAudio, setHasAudio] = useState(false)
 
     useEffect(() => {

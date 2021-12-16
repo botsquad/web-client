@@ -17,6 +17,7 @@
     "dev": "webpack-dev-server --hot --host 0.0.0.0 --config ./webpack.config.js",
     "test": "mocha --require ts-node/register test/**/*.js test/**/*.ts test/**/*.tsx",
     "lint": "eslint \"**/*.{ts,tsx}\"",
+    "lintfix": "eslint --fix \"**/*.{ts,tsx}\"",
     "prepare": "install-peers"
   },
   "author": "Arjan Scherpenisse <arjan@miraclethings.nl>",

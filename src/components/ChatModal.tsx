@@ -16,7 +16,7 @@ interface ChatModalProps {
 }
 
 const ChatModal: React.FC<ChatModalProps> = props => {
-  let div = createRef<HTMLDivElement>()
+  const div = createRef<HTMLDivElement>()
   const renderMessage = (message: Message<Payload>, modalParams: any) => {
     const cls = `content ${message.self ? 'self' : 'bot'} ` + message.type
 
