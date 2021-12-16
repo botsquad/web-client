@@ -12,7 +12,10 @@ const terserOptions = {
 }
 
 const plugins = [
-  new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+  new webpack.IgnorePlugin({
+    resourceRegExp: /^\.\/locale$/,
+    contextRegExp: /moment$/,
+  }),
   new webpack.DefinePlugin({
     'process.env.NODE_ENV': JSON.stringify('production'),
   }),

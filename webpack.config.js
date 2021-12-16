@@ -80,8 +80,11 @@ module.exports = {
     ],
   },
   plugins: [
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    new MiniCssExtractPlugin({}),
+    new webpack.IgnorePlugin({
+      resourceRegExp: /^\.\/locale$/,
+      contextRegExp: /moment$/,
+    }),
+    new MiniCssExtractPlugin(),
     new webpack.DefinePlugin({
       'process.env': JSON.stringify(process.env),
     }),
