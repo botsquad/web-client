@@ -1,4 +1,29 @@
 {
+  "name": "@botsquad/web-client",
+  "version": "0.10.10",
+  "sideEffects": [
+    "*.scss",
+    "*.css"
+  ],
+  "main": "dist/main.js",
+  "typings": "types/index.d.ts",
+  "engines": {
+    "node": ">=0.4.5"
+  },
+  "scripts": {
+    "types": "tsc",
+    "build": "NODE_ENV=production webpack --config webpack.prod.config.js --mode production && npm run types",
+    "stats": "NODE_ENV=development webpack --json | webpack-bundle-size-analyzer",
+    "dev": "webpack-dev-server --hot --host 0.0.0.0 --config ./webpack.config.js",
+    "test": "mocha --require ts-node/register test/**/*.js test/**/*.ts",
+    "lint": "eslint --ext .tsx",
+    "prepare": "install-peers"
+  },
+  "author": "Arjan Scherpenisse <arjan@miraclethings.nl>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/botsquad/web-client"
+  },
   "dependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
