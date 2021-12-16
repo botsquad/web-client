@@ -18,26 +18,26 @@ export function useChatPropsUpdate() {
 interface ChatProps {
   channel: Channel & { hasMoreHistory: () => boolean; getMoreHistory: () => any }
   conversationMeta: any
-  events: Message<unknown>[]
-  handler: ChatHandler
+  events: Message<any>[]
+  handler: ChatHandler | null
   hideAvatars: boolean
   inline: boolean
-  inputModal: InputMethodTemplate
+  inputModal: InputMethodTemplate | null
   localePrefs: string[]
-  message: Message<Payload>
+  message: Message<Payload> | null
   online: Argument
-  settings: Record<string, any>
+  settings: Record<string, any> | null
   typing: boolean
-  typingAs: As
+  typingAs: As | null
   upload: any
   inputMethodOverride: any
-  modal: Message<Payload>
+  modal: Message<Payload> | null
   modalParams: any
   host: any
-  elementFactory: typeof ElementFactory
+  elementFactory: typeof ElementFactory | null
   botAvatar: any
   userAvatar: any
-  scrollToBottom: () => void
+  scrollToBottom: (() => void) | null
 }
 
 const DEFAULT_INPUT_METHOD_PROPS: ChatProps = {

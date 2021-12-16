@@ -42,7 +42,7 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
   }
 
   const finish = (type, payload) => {
-    handler.send(type, payload)
+    handler?.send(type, payload)
     props.onFinish()
     // setTimeout(() => forceUpdate(), 0) Force Update somehow
   }
@@ -76,11 +76,11 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
   }
 
   const isDisabled = (item: any) => {
-    return settings.chat_config.disabled_inputs?.indexOf(item) >= 0
+    return settings?.chat_config.disabled_inputs?.indexOf(item) >= 0
   }
 
   const allDisabled = () => {
-    return settings.hide_input || (isDisabled('text') && isDisabled('location') && isDisabled('image'))
+    return settings?.hide_input || (isDisabled('text') && isDisabled('location') && isDisabled('image'))
   }
 
   const method = inputMethod || inputMethodOverride
@@ -93,7 +93,7 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     return null
   }
 
-  return props.children(operatorActive)
+  return props.children(operatorActive) // TODO: Ask what this is!!!!!
 }
 
 export default ChatInputModal

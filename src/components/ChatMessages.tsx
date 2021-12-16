@@ -26,12 +26,12 @@ function messageHasModal({ type, payload }: { type: string; payload: Payload }) 
 }
 
 interface ChatMessagesProps {
-  handler: ChatHandler
-  settings: Record<string, any>
+  handler: ChatHandler | null
+  settings: Record<string, any> | null
   host: any
   hideAvatars: boolean
-  elementFactory: typeof ElementFactory
-  typingAs: As
+  elementFactory: typeof ElementFactory | null
+  typingAs: As | null
   botAvatar: any
   channel: Channel & { hasMoreHistory: () => boolean; getMoreHistory: () => any }
   upload: { type: any; progress: any; retry: any }
@@ -151,7 +151,8 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
   }
 
   scrollToBottom = () => {
-    const { layout } = this.props.settings
+    let layout = ''
+    if (this.props.settings) layout = this.props.settings.layout
     if (layout === 'embedded' && this.props.host) {
       // scroll the document
       this.props.host.scrollToBottom()
@@ -198,6 +199,9 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
   }
 
   renderMessage(message) {
+    if (!this.props.settings) {
+      return null
+    }
     const cls = `bubble ${message.self ? 'self' : 'bot'} ` + message.type
 
     const attrs = {
@@ -219,13 +223,13 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
   }
 
   renderUpload({ progress, type, retry }) {
-    if (retry) {
+    if (retry && this.props.handler) {
       return (
         <div className="upload">
           <span className="label">Upload failed…</span>
           <div className="retry">
-            <button onClick={() => this.props.handler.sendFile(retry)}>Retry</button>
-            <button onClick={() => this.props.handler.cancelUpload()}>×</button>
+            <button onClick={() => this.props.handler?.sendFile(retry)}>Retry</button>
+            <button onClick={() => this.props.handler?.cancelUpload()}>×</button>
           </div>
         </div>
       )
@@ -275,7 +279,7 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
 
   checkLinkClick = e => {
     const url = e.target?.getAttribute('href')
-    if (url) {
+    if (url && this.props.handler) {
       this.props.handler.sendLinkClick(url)
     }
   }
@@ -317,7 +321,7 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
         onScroll={this.onScroll}
       >
         <div className="inner">
-          {this.props.settings.layout === 'embedded' ? (
+          {this.props.settings?.layout === 'embedded' ? (
             <div className="bubble-group self">
               {!hideAvatars && userAvatar ? (
                 <div
@@ -348,7 +352,7 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
   }
 
   componentDidUpdate() {
-    if (this.props.settings.layout === 'embedded') {
+    if (this.props.settings?.layout === 'embedded') {
       // do not autoload history, for now
       return
     }

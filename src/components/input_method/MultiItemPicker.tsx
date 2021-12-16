@@ -60,7 +60,7 @@ const MultiItemPicker: React.FC<MultiItemPickerProps> = ({ settings }) => {
       className="item-picker multiple confirm"
       below={
         <button disabled={selected.length === 0 || hasSubmitted} onClick={submit}>
-          {button_label || chatLabel(settings, localePrefs, 'form_submit_button')}
+          {button_label || chatLabel(settings as { ui_labels: any }, localePrefs, 'form_submit_button')}
         </button>
       }
     >

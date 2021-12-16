@@ -13,11 +13,11 @@ const ChatWindow: React.FC = () => {
     window.addEventListener('orientationchange', () => setForceUpdater(!forceUpdater))
   }, [])
   const allProps = useChatProps()
-  const layout = `layout-${settings.layout || 'docked'}`
+  const layout = `layout-${settings?.layout || 'docked'}`
   return (
     <div className={classNames('chat-window', { online }, layout, deviceClasses())}>
       <ChatMessages {...allProps} updater={useChatPropsUpdate()} />
-      {settings.layout !== 'embedded' ? <ChatInput /> : null}
+      {settings && settings.layout !== 'embedded' ? <ChatInput /> : null}
     </div>
   )
 }

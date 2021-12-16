@@ -124,7 +124,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ settings }) => {
       below={
         !hasSubmitted ? (
           <button disabled={position === null} onClick={submit}>
-            {button_label || chatLabel(settings, localePrefs, 'location_picker_select')}
+            {button_label || chatLabel(settings as { ui_labels: any }, localePrefs, 'location_picker_select')}
           </button>
         ) : null
       }

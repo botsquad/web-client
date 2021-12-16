@@ -33,7 +33,7 @@ const NumericKeyboard: React.FC<NumericKeyboardProps> = ({ settings }) => {
     if (settings) {
       return (
         <button disabled={!value.length} onClick={finish}>
-          {chatLabel(settings, localePrefs, 'form_submit_button')}
+          {chatLabel(settings as { ui_labels: any }, localePrefs, 'form_submit_button')}
         </button>
       )
     }

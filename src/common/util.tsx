@@ -22,15 +22,15 @@ export function isEdge(): boolean {
 }
 
 export function isiOS(): boolean {
-  return ua.match(/Mobile/) && ua.match(/AppleWebKit/)
+  return !!ua.match(/Mobile/) && !!ua.match(/AppleWebKit/)
 }
 
 export function isiPad(): boolean {
-  return ua.match(/iPad/)
+  return !!ua.match(/iPad/)
 }
 
 export function isiPhone(): boolean {
-  return ua.match(/iPhone/)
+  return !!ua.match(/iPhone/)
 }
 
 export function isLandscape(): boolean {
@@ -43,7 +43,7 @@ export function isIE(): boolean {
 
 export function isMobile(): boolean {
   if (isIE()) return false
-  return document.body.clientWidth <= 480 || (ua.match(/Mobile/) && ua.match(/AppleWebKit/))
+  return document.body.clientWidth <= 480 || !!(ua.match(/Mobile/) && ua.match(/AppleWebKit/))
 }
 
 export function deviceClasses() {

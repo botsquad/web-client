@@ -25,14 +25,16 @@ enum FILE_UPLOADS {
 function renderButton(
   { content_type, title, image_url }: { content_type: string; title: string; image_url: string },
   idx: number,
-  handler: ChatHandler,
+  handler: ChatHandler | null,
   settings: Record<string, any>,
   localePrefs: string[],
 ) {
   if (FILE_UPLOADS[content_type] !== undefined) {
     return (
       <div className="button" key={idx} onClick={() => fileUpload(FILE_UPLOADS[content_type], handler)}>
-        <span className="label">{chatLabel(settings, localePrefs, content_type + '_picker_select')}</span>
+        <span className="label">
+          {chatLabel(settings as { ui_labels: any }, localePrefs, content_type + '_picker_select')}
+        </span>
       </div>
     )
   }
@@ -47,7 +49,7 @@ function renderButton(
 
   if (content_type === 'text') {
     return (
-      <div className="button" key={idx} onClick={() => handler.send('message', { text: title, input_type: 'touch' })}>
+      <div className="button" key={idx} onClick={() => handler?.send('message', { text: title, input_type: 'touch' })}>
         {image_url && (
           <div className="icon">
             <img src={image_url} alt="icon" />
@@ -68,10 +70,14 @@ interface QuickRepliesProps {
 
 const QuickReplies: React.FC<QuickRepliesProps> = ({ buttons, className }) => {
   const { handler, settings, localePrefs } = useChatProps()
-  return (
-    <div className={`quick-replies ${className || ''}`}>
-      {buttons.map((b, idx) => renderButton(b, idx, handler, settings, localePrefs))}
-    </div>
-  )
+  if (settings)
+    return (
+      <div className={`quick-replies ${className || ''}`}>
+        {buttons.map((b, idx) => renderButton(b, idx, handler, settings, localePrefs))}
+      </div>
+    )
+  else {
+    return null
+  }
 }
 export default QuickReplies

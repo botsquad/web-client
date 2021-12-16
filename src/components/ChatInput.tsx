@@ -46,12 +46,12 @@ const ChatInput: React.FC = () => {
 
   const sendMessage = () => {
     const newMessage = message.trim()
-    if (newMessage.length > 0) {
+    if (newMessage.length > 0 && handler) {
       handler.send('message', { text: newMessage, input_type: 'keyboard' })
     }
     setMessage('')
     setHasMessage(false)
-    if (input.current) {
+    if (input.current && settings) {
       const { alwaysFocus } = settings
       if (alwaysFocus) {
         input.current.focus()
@@ -69,7 +69,9 @@ const ChatInput: React.FC = () => {
 
   const sendTypingFactory = payload => {
     return () => {
-      handler.send('typing', payload)
+      if (handler) {
+        handler.send('typing', payload)
+      }
     }
   }
 
@@ -83,7 +85,8 @@ const ChatInput: React.FC = () => {
   }
 
   const onKeyUp = e => {
-    const { layout } = settings
+    let layout = ''
+    if (settings) layout = settings.layout
     if (scrollToBottom) {
       scrollToBottom()
     }
@@ -98,7 +101,7 @@ const ChatInput: React.FC = () => {
     }
 
     if (e.keyCode === 27) {
-      if (layout !== 'embedded') {
+      if (layout !== 'embedded' && handler) {
         if (handler.component.props.onClose) {
           handler.component.props.onClose()
         }
@@ -128,21 +131,23 @@ const ChatInput: React.FC = () => {
   }
 
   const upload = accept => {
-    handler.component.uploader.trigger(accept, file => {
-      if (file.size > 10 * 1024 * 1024) {
-        alert('File is too large, please select a smaller file.')
-        return
-      }
-      handler.sendFile(file)
-      if (scrollToBottom) {
-        scrollToBottom()
-      }
-      setMenuOpen(false)
-    })
+    if (handler)
+      handler.component.uploader.trigger(accept, file => {
+        if (file.size > 10 * 1024 * 1024) {
+          alert('File is too large, please select a smaller file.')
+          return
+        }
+        handler.sendFile(file)
+        if (scrollToBottom) {
+          scrollToBottom()
+        }
+        setMenuOpen(false)
+      })
   }
 
   const isDisabled = item => {
-    return settings.chat_config.disabled_inputs?.indexOf(item) >= 0
+    if (settings) return settings.chat_config.disabled_inputs?.indexOf(item) >= 0
+    return false
   }
 
   const onInputFocus = () => {
@@ -168,7 +173,10 @@ const ChatInput: React.FC = () => {
 
   const renderDocked = () => {
     return (
-      <ChatInputModalWrapper handler={handler} cancelLabel={chatLabel(settings, localePrefs, 'cancel')}>
+      <ChatInputModalWrapper
+        handler={handler}
+        cancelLabel={chatLabel(settings as { ui_labels: any }, localePrefs, 'cancel')}
+      >
         {operatorActive => (
           <div className="chat-input docked" ref={inputDiv}>
             <div className="input">
@@ -177,7 +185,7 @@ const ChatInput: React.FC = () => {
                   type="text"
                   value={message}
                   readOnly={!online}
-                  placeholder={chatLabel(settings, localePrefs, 'text_input_placeholder')}
+                  placeholder={chatLabel(settings as { ui_labels: any }, localePrefs, 'text_input_placeholder')}
                   ref={input}
                   onFocus={() => onInputFocus()}
                   onBlur={() => onInputBlur()}
@@ -214,7 +222,10 @@ const ChatInput: React.FC = () => {
 
   const renderEmbedded = () => {
     return (
-      <ChatInputModalWrapper handler={handler} cancelLabel={chatLabel(settings, localePrefs, 'cancel')}>
+      <ChatInputModalWrapper
+        handler={handler}
+        cancelLabel={chatLabel(settings as { ui_labels: any }, localePrefs, 'cancel')}
+      >
         {operatorActive => (
           <div className={`chat-input embedded ${menuOpen ? 'menu-open' : ''} ${inputFocus ? 'input-focus' : ''}`}>
             <div className="input-menu">
@@ -246,7 +257,7 @@ const ChatInput: React.FC = () => {
                   type="text"
                   value={message}
                   readOnly={!online}
-                  placeholder={chatLabel(settings, localePrefs, 'text_input_placeholder')}
+                  placeholder={chatLabel(settings as { ui_labels: any }, localePrefs, 'text_input_placeholder')}
                   ref={input}
                   onKeyUp={e => onKeyUp(e)}
                   onFocus={() => onFocus()}
@@ -267,8 +278,11 @@ const ChatInput: React.FC = () => {
       </ChatInputModalWrapper>
     )
   }
-
-  const { layout } = settings
-  return layout === 'embedded' ? renderEmbedded() : renderDocked()
+  if (settings) {
+    const { layout } = settings
+    return layout === 'embedded' ? renderEmbedded() : renderDocked()
+  } else {
+    return null
+  }
 }
 export default ChatInput

@@ -167,9 +167,11 @@ export function fixedLabel(key: keyof typeof LABELS, prefList: string[]) {
   return resolveTranslations(LABELS[key], prefList.concat(['en']), null)
 }
 
-export function chatLabel(settings: { ui_labels: any }, localePrefs: string[], part: any) {
-  const { ui_labels } = settings
-  return (ui_labels && resolveTranslationsLocales(ui_labels[part], localePrefs)) || fixedLabel(part, localePrefs)
+export function chatLabel(settings: { ui_labels: any[] } | null, localePrefs: string[], part: any) {
+  if (settings) {
+    const { ui_labels } = settings
+    return (ui_labels && resolveTranslationsLocales(ui_labels[part], localePrefs)) || fixedLabel(part, localePrefs)
+  }
 }
 
 export function textDirectionClass(locale: string) {

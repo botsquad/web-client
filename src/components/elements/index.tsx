@@ -11,7 +11,7 @@ import { ChatHandler } from 'components'
 interface AttributesProp {
   className: string
   message: Message<Payload>
-  handler: ChatHandler
+  handler: ChatHandler | null
   onLoad: (() => void) | null
   toggleModalPreferHeight: ((condition: boolean) => void) | null
   modalParams?: { index?: number }

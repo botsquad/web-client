@@ -5,7 +5,7 @@ import { useChatProps, useChatPropsUpdate } from './ChatContext'
 import ChatInputModal from './ChatInputModal'
 
 interface ChatInputModalWrapperProps {
-  handler: ChatHandler
+  handler: ChatHandler | null
   cancelLabel: string
   children: React.ReactNode
 }
@@ -17,7 +17,7 @@ const ChatInputModalWrapper: React.FC<ChatInputModalWrapperProps> = props => {
     if (inputMethodOverride) {
       updater({ inputMethodOverride: null })
     } else {
-      handler.send('message', { type: 'cancel', text: cancelLabel })
+      if (handler) handler.send('message', { type: 'cancel', text: cancelLabel })
     }
   }
 

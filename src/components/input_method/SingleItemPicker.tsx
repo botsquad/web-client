@@ -51,7 +51,7 @@ const SingleItemPicker: React.FC<SingleItemPickerProps> = ({ settings }) => {
       below={
         confirm ? (
           <button disabled={!selectedItem || hasSubmitted} onClick={submit}>
-            {button_label || chatLabel(settings, localePrefs, 'form_submit_button')}
+            {button_label || chatLabel(settings as { ui_labels: any }, localePrefs, 'form_submit_button')}
           </button>
         ) : null
       }

@@ -11,7 +11,7 @@
     "checkJs": false,
     "esModuleInterop": true,
     "baseUrl": "./src",
-    "typeRoots": ["node_modules/@types", "custom_types"],
+    "typeRoots": ["node_modules/@types/*", "custom_types"],
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
     "noImplicitReturns": true,
@@ -27,5 +27,5 @@
     "outDir": "dist"
   },
   "include": ["src/index.tsx"],
-  "exclude": ["node_modules", "src/**/*.js", "src/**/*.jsx"]
+  "exclude": ["**/node_modules", "src/**/*.js", "src/**/*.jsx"]
 }

@@ -22,9 +22,9 @@ interface FactoryProps {
   handler: ChatHandler | null
   inline: boolean
   inputModal: InputMethodTemplate | null
-  settings: Record<string, any>
+  settings: Record<string, any> | null
   localePrefs: string[]
-  message: Message<Payload>
+  message: Message<Payload> | null
 }
 
 export default function elementFactory(
@@ -33,7 +33,9 @@ export default function elementFactory(
   inputModal: { finish: (type: any, payload: any, config: any) => void; cancel: () => void },
 ) {
   const { handler, inline, settings, localePrefs, message } = props
-
+  if (!settings) {
+    return null
+  }
   let element = (
     <div>
       Unsupported input method: <b>{type}</b>

@@ -1,8 +1,8 @@
 import React from 'react'
-import PhoneInput from 'react-phone-number-input'
+import PhoneInput, { Country } from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 
-function defaultCountry(localePrefs: string[]) {
+function defaultCountry(localePrefs: string[]): Country {
   const lang = (localePrefs[0] || 'en').substr(0, 2)
   switch (lang) {
     case 'en':
@@ -10,7 +10,7 @@ function defaultCountry(localePrefs: string[]) {
     case 'da':
       return 'DK'
   }
-  return lang.toUpperCase()
+  return lang.toUpperCase() as Country
 }
 
 interface MakeInputComponentProps {

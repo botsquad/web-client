@@ -209,8 +209,10 @@ const Template: React.FC<Props> = props => {
       return RenderListTemplate(payload as ListTemplate)
     case 'card': {
       // A card is a Gallery of one element!
-      const galleryPayloadFromCard: GalleryTemplate = { elements: [payload.card], template_type: 'gallery' }
-      return RenderGalleryTemplate(galleryPayloadFromCard)
+      if (payload.card) {
+        const galleryPayloadFromCard: GalleryTemplate = { elements: [payload.card], template_type: 'gallery' }
+        return RenderGalleryTemplate(galleryPayloadFromCard)
+      }
     }
     case 'generic':
     case 'gallery':

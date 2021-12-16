@@ -56,7 +56,7 @@ export class ChatHandler {
     this.leaveChannel()
     this.component.setState({ upload: null, typing: false, events: [] })
     params = { ...params, context: params.context || { user: getUserInfo() } }
-    botChannelJoin(this.component, socket, bot_id, params).then(channel => {
+    botChannelJoin(this.component, socket, bot_id, params)?.then(channel => {
       this.channel = channel
       this._eventQueue.forEach(({ type, payload }) => {
         this.send(type, payload)
@@ -198,12 +198,14 @@ interface ChatProps {
   onError?: (message: string) => void
   onDebug?: (info: DebugInfo) => void
   makeChannelTopic?: (botId: string, params: Record<string, any>) => string | null
+  onConversationMeta: any
+  onReady: any
 }
 
 interface ChatState {
-  events: Message<unknown>[]
+  events: Message<any>[]
   typing: boolean
-  typingAs: As
+  typingAs: As | null
   upload: any
   modal: Message<Payload> | null
   modalHiding: boolean
@@ -429,7 +431,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
 
   componentDidMount() {
     this.mounted = true
-    this.handler.joinChannel(this.props, this.state.socket)
+    this.handler.joinChannel(this.props, this.state.socket) //TODO: Ask Also this
     if (this.notificationManager) {
       this.notificationManager.componentDidMount()
     }

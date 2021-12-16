@@ -1,5 +1,5 @@
 import Chat from 'components'
-import { Socket } from 'phoenix'
+import { Channel, Socket } from 'phoenix'
 import { setCookieUserId } from '../common/util'
 import API from './api'
 
@@ -16,7 +16,7 @@ export default function botChatHandler(
   const defaultTopic = `bot:${bot_id}~${params.g || 'main'}`
   const topic = component.props.makeChannelTopic?.(bot_id, params) || defaultTopic
 
-  const channel = socket.channel(topic, params)
+  const channel: Channel & { hasMoreHistory: any; getMoreHistory: any } = socket.channel(topic, params)
 
   let joined = false
   setTimeout(() => {
@@ -49,7 +49,7 @@ export default function botChatHandler(
           channel.push('get_history', { next: historyNext }).receive('ok', ({ events, next }) => {
             historyNext = next
             const history = events.reverse().map(({ time, ...rest }) => ({ ...rest, time: Date.parse(time) }))
-            component.prependEvents(history)
+            component.prependEvents(history, null, null)
           })
         }
 
@@ -59,7 +59,7 @@ export default function botChatHandler(
 
         if (component.props.onChannel) {
           if (!component.mounted) return
-          component.props.onChannel(channel, joinResult, new API(component.handler, component.eventDispatcher))
+          component.props.onChannel(channel, joinResult, new API(component.handler, component.eventDispatcher)) //TODO: What is this?
         }
 
         channel.on('history', ({ events, next }) => {
@@ -127,7 +127,7 @@ export default function botChatHandler(
         channel.onClose(() => {
           if (!component.mounted) return
           if (component.props.onClose) {
-            component.props.onClose(channel)
+            component.props.onClose(channel) //TODO: Ask this!
           }
         })
 

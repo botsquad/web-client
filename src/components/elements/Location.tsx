@@ -9,17 +9,19 @@ function transformLngLon(position: LocationType) {
 
 interface MapProps {
   message: Message<LocationType>
-  handler: ChatHandler
+  handler: ChatHandler | null
 }
 
 const Map: React.FC<MapProps> = ({ message, handler }) => {
   const [address, setAddress] = useState<string | null>(null)
-
+  if (!handler) {
+    return null
+  }
   const click = () => {
     const { payload } = message
     const url = `http://maps.google.com/?q=${payload.lat},${payload.lon}`
     window.open(url, '_blank')
-    handler.sendLinkClick(url)
+    if (handler) handler.sendLinkClick(url)
   }
   // useEffect(() => {
   //   const geocoder = new window.google.maps.Geocoder()
@@ -74,13 +76,13 @@ const Map: React.FC<MapProps> = ({ message, handler }) => {
 
 interface StaticLocationProps {
   className: string
-  handler: ChatHandler
+  handler: ChatHandler | null
   message: Message<LocationType>
 }
 
 const StaticLocation: React.FC<StaticLocationProps> = ({ className, message, handler }) => {
   const { payload } = message
-  if (!payload || !payload.lat) {
+  if (!payload || !payload.lat || !handler) {
     return null
   }
 
@@ -100,7 +102,7 @@ const StaticLocation: React.FC<StaticLocationProps> = ({ className, message, han
 interface LocationProps {
   message: Message<LocationType>
   toggleModalPreferHeight: ((condition: boolean) => void) | null
-  handler: ChatHandler
+  handler: ChatHandler | null
   className: any
 }
 

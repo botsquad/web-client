@@ -8,7 +8,7 @@ import { ChatHandler } from 'components'
 export const mediaEvents = new EventEmitter()
 
 interface ModalProps {
-  handler: ChatHandler
+  handler: ChatHandler | null
   toggleModalPreferHeight: ((condition: boolean) => void) | null
   message: Message<Media>
   className: string
@@ -18,11 +18,12 @@ interface ModalProps {
 class ModalWrapper extends React.PureComponent<ModalProps> {
   _component: any = null
   onClick = () => {
-    if (this.props.toggleModalPreferHeight) {
-      this.props.handler.component.hideModal()
-    } else {
-      this.props.handler.component.showModal(this.props.message)
-    }
+    if (this.props.handler)
+      if (this.props.toggleModalPreferHeight) {
+        this.props.handler.component.hideModal()
+      } else {
+        this.props.handler.component.showModal(this.props.message)
+      }
   }
 
   triggerResize = (_: any, component: any, ratio: number) => {
@@ -34,7 +35,9 @@ class ModalWrapper extends React.PureComponent<ModalProps> {
     }
 
     component = component || this._component
-
+    if (!this.props.handler) {
+      return
+    }
     const { clientWidth, clientHeight, clientRatio } = this.props.handler.getClientDimensions()
 
     this.props.toggleModalPreferHeight(ratio > clientRatio)
@@ -73,7 +76,7 @@ interface ImageMediaProps {
   message: Message<Media>
   onLoad: (() => void) | null
   className: string
-  handler: ChatHandler
+  handler: ChatHandler | null
   toggleModalPreferHeight: ((condition: boolean) => void) | null
 }
 
@@ -159,7 +162,7 @@ interface WebMediaProps {
   toggleModalPreferHeight: ((condition: boolean) => void) | null
 
   className: string
-  handler: ChatHandler
+  handler: ChatHandler | null
 }
 
 const WebMediaNonMemoized: React.FC<WebMediaProps> = props => {
@@ -226,7 +229,7 @@ export const WebMedia = React.memo(
 interface AudioMediaProps {
   message: Message<Media>
   className: string
-  handler: ChatHandler
+  handler: ChatHandler | null
 }
 
 export const AudioMedia: React.FC<AudioMediaProps> = React.memo(
@@ -235,6 +238,9 @@ export const AudioMedia: React.FC<AudioMediaProps> = React.memo(
     const [hasAudio, setHasAudio] = useState(false)
 
     useEffect(() => {
+      if (!handler) {
+        return
+      }
       const audioTemp: HTMLAudioElement | null = audio.current
 
       handler.attachAudio(audio)

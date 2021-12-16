@@ -31,7 +31,7 @@ function removeEmpty(obj: object) {
 }
 
 interface ClientFormProps {
-  message: Message<Payload>
+  message: Message<Payload> | null
   settings: Record<string, any>
 }
 
@@ -40,7 +40,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
   const [formData, setFormData] = useState({})
   const [hasError, setHasError] = useState(false)
   const [disabled, setDisabled] = useState(false)
-  const [error] = useState<any>(null)
+  const [error, _] = useState<any>(null)
   const [form, setForm] = useState<any>()
 
   const { config, inputModal, localePrefs } = useInputMethodProps()
@@ -121,7 +121,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
       below={
         !disabled && (
           <button disabled={hasError || hasSubmitted} onClick={submit}>
-            {config.button_label || chatLabel(settings, localePrefs, 'form_submit_button')}
+            {config.button_label || chatLabel(settings as { ui_labels: any }, localePrefs, 'form_submit_button')}
           </button>
         )
       }
