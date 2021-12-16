@@ -1,5 +1,5 @@
 import locale2 from 'locale2'
-import BotResponse from '@botsquad/sdk'
+
 const LABELS = {
   image_picker_select: {
     $i18n: true,

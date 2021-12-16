@@ -1,5 +1,6 @@
 const webpack = require('webpack')
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+
 const TerserPlugin = require('terser-webpack-plugin')
 
 const common = require('./webpack.config')
@@ -19,7 +20,7 @@ const plugins = [
   new webpack.DefinePlugin({
     'process.env.NODE_ENV': JSON.stringify('production'),
   }),
-  new OptimizeCSSAssetsPlugin({}),
+  new MiniCssExtractPlugin({}),
 ]
 
 module.exports = {

@@ -15,7 +15,7 @@
     "build": "NODE_ENV=production webpack --config webpack.prod.config.js --mode production && npm run types",
     "stats": "NODE_ENV=development webpack --json | webpack-bundle-size-analyzer",
     "dev": "webpack-dev-server --hot --host 0.0.0.0 --config ./webpack.config.js",
-    "test": "mocha --require ts-node/register test/**/*.js test/**/*.ts",
+    "test": "mocha --require ts-node/register test/**/*.js test/**/*.ts test/**/*.tsx",
     "lint": "eslint \"**/*.{ts,tsx}\"",
     "prepare": "install-peers"
   },
