@@ -40,7 +40,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
   const [formData, setFormData] = useState({})
   const [hasError, setHasError] = useState(false)
   const [disabled, setDisabled] = useState(false)
-  const [error, _] = useState<any>(null)
+  const [error] = useState<any>(null)
   const [form, setForm] = useState<any>()
 
   const { config, inputModal, localePrefs } = useInputMethodProps()

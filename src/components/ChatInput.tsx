@@ -13,7 +13,6 @@ const ChatInput: React.FC = () => {
   const [message, setMessage] = useState('')
   const [inputFocus, setInputFocus] = useState(false)
   const [menuOpen, setMenuOpen] = useState<any>(null)
-  const [_input, set_Input] = useState<any>(null)
   const [_blurrer, set_Blurrer] = useState<ReturnType<typeof setTimeout> | null>(null)
 
   const updater = useChatPropsUpdate()

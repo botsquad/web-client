@@ -271,6 +271,8 @@ export const AudioMedia: React.FC<AudioMediaProps> = React.memo(
   },
 )
 
+AudioMedia.displayName = 'AudioMedia'
+
 interface VideoMediaProps {
   message: Message<Media>
   className: string
@@ -293,6 +295,8 @@ export const VideoMedia: React.FC<VideoMediaProps> = React.memo(
     return props.message.payload.url === nextProps.message.payload.url
   },
 )
+
+VideoMedia.displayName = 'VideoMedia'
 
 interface FileMediaProps {
   message: Message<Media>

@@ -56,7 +56,7 @@ export class ChatHandler {
     this.leaveChannel()
     this.component.setState({ upload: null, typing: false, events: [] })
     params = { ...params, context: params.context || { user: getUserInfo() } }
-    botChannelJoin(this.component, socket, bot_id, params)!.then(channel => {
+    botChannelJoin(this.component, socket, bot_id, params).then(channel => {
       this.channel = channel
       this._eventQueue.forEach(({ type, payload }) => {
         this.send(type, payload)

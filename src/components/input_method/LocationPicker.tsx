@@ -21,7 +21,7 @@ interface MapProps {
 }
 
 const Map: React.FC<MapProps> = props => {
-  const [map, setMap] = useState<GoogleMap | null>()
+  const [map] = useState<GoogleMap | null>()
 
   const setMarkerPosition = ({ latLng }) => {
     if (map) {
@@ -88,7 +88,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ settings }) => {
   const submit = () => {
     setHasSubmitted(true)
     if (inputModal) {
-      inputModal!.finish('location', position, config)
+      inputModal.finish('location', position, config)
     }
   }
 

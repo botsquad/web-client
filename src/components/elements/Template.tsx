@@ -1,6 +1,5 @@
 import React from 'react'
 import Slider from 'react-slick'
-import _ from 'lodash'
 
 import InputMethodTemplate from './InputMethodTemplate'
 import { OpenModal, ArrowLeft, ArrowRight } from '../icons'
@@ -208,10 +207,11 @@ const Template: React.FC<Props> = props => {
       return RenderButtonsTemplate(payload as ButtonsTemplate)
     case 'list':
       return RenderListTemplate(payload as ListTemplate)
-    case 'card':
+    case 'card': {
       // A card is a Gallery of one element!
       const galleryPayloadFromCard: GalleryTemplate = { elements: [payload.card], template_type: 'gallery' }
       return RenderGalleryTemplate(galleryPayloadFromCard)
+    }
     case 'generic':
     case 'gallery':
       return RenderGalleryTemplate(payload as GalleryTemplate)
