@@ -4,7 +4,7 @@ type Callback = ((file: any) => void) | null
 
 type State = { accept: string; uploadCount: number }
 
-export default class UploadTrigger extends React.Component<{}, State> {
+export default class UploadTrigger extends React.Component<Record<string, unknown>, State> {
   state: State = {
     accept: '',
     uploadCount: 0,
