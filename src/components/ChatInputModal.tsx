@@ -25,7 +25,7 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     inline,
   } = useChatProps()
 
-  const [inputMethod, setInputMethod] = useState<object | null>(null)
+  const [inputMethod, setInputMethod] = useState<any | null>(null)
   const [operatorActive, setOperatorActive] = useState(false)
 
   useEffect(() => {
