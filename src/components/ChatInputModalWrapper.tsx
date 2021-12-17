@@ -7,7 +7,7 @@ import ChatInputModal from './ChatInputModal'
 interface ChatInputModalWrapperProps {
   handler: ChatHandler | null
   cancelLabel: string
-  children: React.ReactNode
+  children: (operatorActive: boolean) => React.ReactElement | null
 }
 const ChatInputModalWrapper: React.FC<ChatInputModalWrapperProps> = props => {
   const { inputMethodOverride } = useChatProps()

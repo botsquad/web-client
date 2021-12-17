@@ -39,7 +39,7 @@ export interface ButtonsTemplate {
 
 export interface GalleryElement {
   buttons: TemplateElementButton[]
-  default_action?: TemplateElementButton
+  default_action: TemplateElementButton
   image_url: string
   subtitle: string
   title: string
@@ -51,7 +51,7 @@ export interface GalleryTemplate {
 }
 
 export interface ListElement {
-  default_action?: TemplateElementButton
+  default_action: TemplateElementButton
   image_url: string
   subtitle: string
   title: string
@@ -99,13 +99,13 @@ export interface DefaultMessageParams {
   type: string
   delay?: string | number
   id?: string
+  read_only_data?: any
 }
 
 export type Payload = Media & Text & Location & Template
 
 type Message<T extends Media | Text | Location | Template | unknown> = {
   payload: T
-  read_only_data: any
   as: As
 } & DefaultMessageParams
 

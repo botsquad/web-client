@@ -11,7 +11,7 @@
     "checkJs": false,
     "esModuleInterop": true,
     "baseUrl": "./src",
-    "typeRoots": ["node_modules/@types/*", "custom_types"],
+    "typeRoots": ["node_modules/@types/*", "custom_types", "node_modules/typescript/*"],
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
     "noImplicitReturns": true,

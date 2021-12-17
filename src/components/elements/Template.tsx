@@ -16,8 +16,10 @@ import Message, {
   ListElement,
   TemplateElementButton,
   Payload,
+  CardTemplate,
 } from './types'
 import { ChatHandler } from 'components'
+import { isUndefined } from 'lodash'
 //handler probably a function/ handlerEvent is a function
 export function buttonClick(button: TemplateElementButton, handler: any, handleEvent: any) {
   let payload
@@ -79,7 +81,7 @@ function renderGalleryElement(
   full: boolean,
 ) {
   const defaultAction = full
-    ? element && element.default_action
+    ? element && !isUndefined(element.default_action)
       ? () => buttonClick(element.default_action, handler, null)
       : null
     : () => handler.component.showModal(message, { index: idx })
@@ -164,7 +166,6 @@ const Template: React.FC<Props> = props => {
     // This is for the case that gallery is a card
     const singleClass = payload.elements.length === 1 ? ' single' : ''
     if (toggleModalPreferHeight) {
-      //TODO: toggleModalPreferHeight is to show that a modal exists!!! it should be changed to something else
       const settings = {
         className: 'center' + singleClass,
         centerMode: true,
@@ -209,10 +210,11 @@ const Template: React.FC<Props> = props => {
       return RenderListTemplate(payload as ListTemplate)
     case 'card': {
       // A card is a Gallery of one element!
-      if (payload.card) {
-        const galleryPayloadFromCard: GalleryTemplate = { elements: [payload.card], template_type: 'gallery' }
-        return RenderGalleryTemplate(galleryPayloadFromCard)
+      const galleryPayloadFromCard: GalleryTemplate = {
+        elements: [(payload as CardTemplate).card],
+        template_type: 'gallery',
       }
+      return RenderGalleryTemplate(galleryPayloadFromCard)
     }
     case 'generic':
     case 'gallery':

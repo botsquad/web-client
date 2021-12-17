@@ -52,11 +52,15 @@ export class ChatHandler {
     this._eventQueue = []
   }
 
-  joinChannel({ bot_id, params, onJoinError }, socket) {
+  joinChannel(props, socket) {
+    const { bot_id, params, onJoinError } = props
     this.leaveChannel()
     this.component.setState({ upload: null, typing: false, events: [] })
-    params = { ...params, context: params.context || { user: getUserInfo() } }
-    botChannelJoin(this.component, socket, bot_id, params)?.then(channel => {
+    if (!params) {
+      return
+    }
+    const params2 = { ...params, context: params.context || { user: getUserInfo() } }
+    botChannelJoin(this.component, socket, bot_id, params2)?.then(channel => {
       this.channel = channel
       this._eventQueue.forEach(({ type, payload }) => {
         this.send(type, payload)
@@ -365,24 +369,27 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
     this.setState({ events }, cb)
   }
 
-  normalizeEvent({ type, payload, time, as }) {
+  normalizeEvent(message: Message<any>) {
+    const { type, payload, time, as } = message
+    let type2 = type
+    let payload2 = payload
     const self = !!type.match(/^user_/)
     if (type === 'user_message') {
-      type = 'text'
-      payload = { message: payload.text }
+      type2 = 'text'
+      payload2 = { message: payload.text }
     }
     if (type === 'input_method' && typeof payload.json === 'string') {
-      payload = { type: payload.type, payload: JSON.parse(payload.json) }
+      payload2 = { type: payload.type, payload: JSON.parse(payload.json) }
     }
     if (type === 'user_location') {
-      type = 'location'
+      type2 = 'location'
     }
     if (type === 'user_attachment') {
-      type = 'media'
-      payload = { url: payload.url, kind: payload.type, caption: payload.caption }
+      type2 = 'media'
+      payload2 = { url: payload.url, kind: payload.type, caption: payload.caption }
     }
     const renderable = ['media', 'text', 'location', 'template'].indexOf(type) >= 0
-    return { type, self, payload, renderable, time, as }
+    return { type: type2, self, payload: payload2, renderable, time, as }
   }
 
   render() {
@@ -431,7 +438,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
 
   componentDidMount() {
     this.mounted = true
-    this.handler.joinChannel(this.props, this.state.socket) //TODO: Ask Also this
+    this.handler.joinChannel(this.props, this.state.socket)
     if (this.notificationManager) {
       this.notificationManager.componentDidMount()
     }
