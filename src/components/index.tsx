@@ -393,7 +393,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
       type2 = 'media'
       payload2 = { url: payload.url, kind: payload.type, caption: payload.caption }
     }
-    const renderable = ['media', 'text', 'location', 'template'].indexOf(type) >= 0
+    const renderable = ['media', 'text', 'location', 'template'].indexOf(type2) >= 0
     return { type: type2, self, payload: payload2, renderable, time, as }
   }
 

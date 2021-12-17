@@ -15,6 +15,11 @@ export function useChatPropsUpdate() {
   return useContext(ChatUpdateContext)
 }
 
+export type InputMethod = {
+  type: string
+  payload: any
+}
+
 interface ChatProps {
   channel: Channel & { hasMoreHistory: () => boolean; getMoreHistory: () => any }
   conversationMeta: any
@@ -30,7 +35,7 @@ interface ChatProps {
   typing: boolean
   typingAs: As | null
   upload: any
-  inputMethodOverride: any
+  inputMethodOverride: InputMethod | null
   modal: Message<Payload> | null
   modalParams: any
   host: any
@@ -65,7 +70,7 @@ const DEFAULT_INPUT_METHOD_PROPS: ChatProps = {
   scrollToBottom: null,
 }
 
-type ChatUpdateType = (update: any) => void
+type ChatUpdateType = (update: Partial<ChatProps>) => void
 
 const ChatPropsContext = createContext<ChatProps>(DEFAULT_INPUT_METHOD_PROPS)
 // {} as ChatUpdateType prevents showing that it could be null
@@ -81,7 +86,7 @@ const ChatContext = (props: any) => {
     setValues({ ...values, ...props.props })
   }, [props.props])
 
-  const updateValues = update => {
+  const updateValues = (update: Partial<ChatProps>) => {
     setValues(prevState => {
       const newValues = { ...prevState, ...update }
       return newValues

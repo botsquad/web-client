@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { CSSProperties, useEffect, useState } from 'react'
 import { Close } from '../icons'
 import { useInputMethodProps } from './InputMethodContext'
 
@@ -38,13 +38,9 @@ const InputMethodContainer: React.FC<InputMethodContainerProps> = ({ below, head
 
   const classList = `input-method--container ${height} ${className || ''} rest`.split(' ')
 
-  let inlineStyle: {
-    height?: string
-    maxHeight?: string
-  } = {}
+  const [inlineStyle, setInlineStyle] = useState<CSSProperties>({})
 
   useEffect(() => {
-    inlineStyle = {}
     const { required, caption } = config
     if (handler) {
       const { clientHeight } = handler.getClientDimensions()
@@ -58,7 +54,7 @@ const InputMethodContainer: React.FC<InputMethodContainerProps> = ({ below, head
       if (classList.includes('tall')) size = SizeMap.Tall
       if (classList.includes('full')) size = SizeMap.Full
       const attr = classList.includes('fixed-height') ? 'height' : 'maxHeight'
-      inlineStyle[attr] = `${Math.floor(size * maxHeight)}px`
+      setInlineStyle({[attr]: `${Math.floor(size * maxHeight)}px`})
     }
   }, [])
 

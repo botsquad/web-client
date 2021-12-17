@@ -8,7 +8,7 @@ import { Location as LocationType } from '../elements/types'
 import { useInputMethodProps } from './InputMethodContext'
 import { ChatHandler } from 'components'
 
-function transformLngLon(position: LocationType) {
+function transformLngLon(position: LocationType): google.maps.LatLngLiteral | null {
   return position ? { lat: position.lat, lng: position.lon } : null
 }
 
@@ -18,17 +18,14 @@ interface MapProps {
   config: { zoom?: number }
   onChange: ([string]: any) => void
   handler: ChatHandler | null
+  setMyLocation: () => void
 }
 
 const Map: React.FC<MapProps> = props => {
-  const [map] = useState<GoogleMap | null>()
-
   const setMarkerPosition = ({ latLng }) => {
-    if (map) {
-      const center = { lat: latLng.lat(), lon: latLng.lng() }
-      const position = { lat: latLng.lat(), lon: latLng.lng() }
-      props.onChange({ position, center })
-    }
+    const center = { lat: latLng.lat(), lon: latLng.lng() }
+    const position = { lat: latLng.lat(), lon: latLng.lng() }
+    props.onChange({ position, center })
   }
 
   const { config, position } = props
@@ -44,15 +41,13 @@ const Map: React.FC<MapProps> = props => {
         onLoad={map => {
           const bounds = new window.google.maps.LatLngBounds()
           map.fitBounds(bounds)
+          props.setMyLocation()
         }}
         center={center ? center : undefined}
         zoom={config.zoom}
         onClick={setMarkerPosition}
         options={{
-          disableDefaultUI: true,
-          zoomControl: true,
-          fullscreenControl: true,
-          clickableIcons: false,
+          fullscreenControl: false,
           mapTypeId: 'roadmap',
         }}
       >
@@ -80,16 +75,15 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ settings }) => {
       setPosition(default_value)
       setCenter(default_value)
     } else {
-      setCenter(center2)
-      setTimeout(() => setMyLocation(), 100)
+      const c = center2 || { lat: 0, lon: 0 }
+      setPosition(c)
+      setCenter(c)
     }
-  }, [])
+  }, [config])
 
   const submit = () => {
     setHasSubmitted(true)
-    if (inputModal) {
-      inputModal.finish('location', position, config)
-    }
+    inputModal?.finish('location', position, config)
   }
 
   const setMyLocation = () => {
@@ -132,7 +126,16 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ settings }) => {
       <div className="btn my-location" onClick={setMyLocation}>
         {MyLocation}
       </div>
-      <Map handler={handler} onChange={setPositionAndCenter} position={position} center={center} config={config} />
+      <div className="google-map-container">
+        <Map
+          handler={handler}
+          onChange={setPositionAndCenter}
+          position={position}
+          center={center}
+          config={config}
+          setMyLocation={setMyLocation}
+        />
+      </div>
     </InputMethodContainer>
   )
 }

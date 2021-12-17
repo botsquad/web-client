@@ -23,52 +23,48 @@ const Map: React.FC<MapProps> = ({ message, handler }) => {
     window.open(url, '_blank')
     if (handler) handler.sendLinkClick(url)
   }
-  // useEffect(() => {
-  //   const geocoder = new window.google.maps.Geocoder()
-  //   const latlng = transformLngLon(message.payload)
-  //   geocoder.geocode({ location: latlng }, results => {
-  //     if (results && results[0]) {
-  //       const address = results[0].formatted_address
-  //       setAddress(address)
-  //     }
-  //   })
-  // }, [])
 
   const { payload } = message
   const center = transformLngLon(payload)
   if (!center) {
     return null
   }
+
+  const { clientHeight } = handler.getClientDimensions()
+  const height = Math.min(clientHeight, Math.max(200, clientHeight * 0.6))
+
   return (
     <div>
-      <LoadScript googleMapsApiKey={handler.getMapsAPIKey()}>
-        <GoogleMap
-          onLoad={map => {
-            const bounds = new window.google.maps.LatLngBounds()
-            map.fitBounds(bounds)
-            const geocoder = new window.google.maps.Geocoder()
+      <div className="google-map-container in-modal" style={{ height: `${height}px` }}>
+        <LoadScript googleMapsApiKey={handler.getMapsAPIKey()}>
+          <GoogleMap
+            onLoad={map => {
+              const bounds = new window.google.maps.LatLngBounds()
+              map.fitBounds(bounds)
+              const geocoder = new window.google.maps.Geocoder()
 
-            const latlng = transformLngLon(message.payload)
-            geocoder.geocode({ location: latlng }, results => {
-              if (results && results[0]) {
-                const address = results[0].formatted_address
-                setAddress(address)
-              }
-            })
-          }}
-          zoom={14}
-          center={center}
-          onClick={click}
-          options={{
-            disableDefaultUI: true,
-            zoomControl: true,
-            clickableIcons: false,
-            mapTypeId: 'roadmap',
-          }}
-        >
-          <Marker position={center} onClick={click} />
-        </GoogleMap>
-      </LoadScript>
+              const latlng = transformLngLon(message.payload)
+              geocoder.geocode({ location: latlng }, results => {
+                if (results && results[0]) {
+                  const address = results[0].formatted_address
+                  setAddress(address)
+                }
+              })
+            }}
+            zoom={14}
+            center={center}
+            onClick={click}
+            options={{
+              disableDefaultUI: true,
+              zoomControl: true,
+              clickableIcons: false,
+              mapTypeId: 'roadmap',
+            }}
+          >
+            <Marker position={center} onClick={click} />
+          </GoogleMap>
+        </LoadScript>
+      </div>
       <div className="address">{address}</div>
     </div>
   )

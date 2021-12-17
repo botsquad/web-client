@@ -16,6 +16,8 @@ export default class InputMethodTemplate extends React.Component<Props> {
   cancel: () => void
 
   finish(type: string, payload: any, config: any) {
+    console.log('jooo', payload)
+
     if (type === 'location' && !config?.event) {
       // send raw
       this.props.handler.send(type, payload)
