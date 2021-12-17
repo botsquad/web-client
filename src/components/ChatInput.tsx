@@ -35,6 +35,7 @@ const ChatInput: React.FC = () => {
   useEffect(() => {
     if (
       menuOpen === false &&
+      inputMethodOverride &&
       inputMethodOverride.type === 'location' &&
       inputMethodOverride.payload.zoom === 12 &&
       inputMethodOverride.payload.height === 'compact' &&

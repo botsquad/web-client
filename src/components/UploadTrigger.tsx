@@ -1,39 +1,42 @@
 import React from 'react'
 
 type Callback = ((file: any) => void) | null
-type Event = React.FormEvent<HTMLInputElement>
 
-export default class UploadTrigger extends React.Component {
-  state = {
+type State = { accept: string; uploadCount: number }
+
+export default class UploadTrigger extends React.Component<{}, State> {
+  state: State = {
     accept: '',
+    uploadCount: 0,
   }
   callback: Callback = null
-  input: HTMLInputElement | null = null
+  input = React.createRef<HTMLInputElement>()
 
-  onChange = (e: Event) => {
-    if (this.callback && (e.target as HTMLInputElement).files && (e.target as HTMLInputElement).files.length > 0) {
-      this.callback((e.target as HTMLInputElement).files[0])
+  onChange = () => {
+    const file = this.input.current?.files?.[0]
+    if (!this.callback || !file) {
+      return
     }
+    this.callback(file)
     this.callback = null
+    this.setState({ uploadCount: this.state.uploadCount + 1 })
   }
 
   trigger(accept: string, callback: Callback) {
     this.callback = callback
-    // Since this function is called externally the input will always be non-null (the component will be rendered by then )
-    if (this.input && this.input.click) this.setState({ accept }, () => this.input?.click())
+    this.setState({ accept }, () => this.input.current?.click())
   }
 
   render() {
     return (
       <input
+        key={this.state.uploadCount}
         className="upload-trigger"
         onChange={this.onChange}
         type="file"
         multiple={false}
         accept={this.state.accept}
-        ref={input => {
-          this.input = input
-        }}
+        ref={this.input}
       />
     )
   }
