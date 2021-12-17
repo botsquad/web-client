@@ -11,17 +11,6 @@ const terserOptions = {
   },
 }
 
-const plugins = [
-  new webpack.IgnorePlugin({
-    resourceRegExp: /^\.\/locale$/,
-    contextRegExp: /moment$/,
-  }),
-  new webpack.DefinePlugin({
-    'process.env.NODE_ENV': JSON.stringify('production'),
-  }),
-  new MiniCssExtractPlugin({}),
-]
-
 module.exports = {
   ...common,
   externals: {
