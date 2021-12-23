@@ -17,6 +17,7 @@ import './index.scss'
 import ChatContext from './ChatContext'
 import { Argument } from 'classnames'
 import Message, { As, Payload } from './elements/types'
+import { API } from '@botsquad/sdk'
 
 export type Meta = {
   readonly dialog?: string | null
@@ -202,8 +203,8 @@ interface ChatProps {
   onError?: (message: string) => void
   onDebug?: (info: DebugInfo) => void
   makeChannelTopic?: (botId: string, params: Record<string, any>) => string | null
-  onConversationMeta: any
-  onReady: any
+  onConversationMeta?: (meta: API.Conversation) => void
+  onReady?: () => void
 }
 
 interface ChatState {
@@ -213,7 +214,7 @@ interface ChatState {
   upload: any
   modal: Message<Payload> | null
   modalHiding: boolean
-  conversationMeta: any
+  conversationMeta: API.Conversation | null
   online: Argument
   localePrefs: string[]
   joined: boolean
@@ -244,7 +245,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
       upload: null,
       modal: null,
       modalHiding: false,
-      conversationMeta: {},
+      conversationMeta: null,
       online: true,
       joined: false,
       localePrefs: props.localePrefs || [locale2.replace(/-.*$/, '')],
@@ -338,7 +339,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
     })
   }
 
-  prependEvents(history, cb, initial) {
+  prependEvents(history: Message<any>[], cb?: () => void, initial?: boolean) {
     if (initial) {
       const lastInputState = history
         .concat([])

@@ -48,7 +48,7 @@ export default function botChatHandler(
           channel.push('get_history', { next: historyNext }).receive('ok', ({ events, next }) => {
             historyNext = next
             const history = events.reverse().map(({ time, ...rest }) => ({ ...rest, time: Date.parse(time) }))
-            component.prependEvents(history, null, null)
+            component.prependEvents(history, undefined, false)
           })
         }
 
