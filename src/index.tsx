@@ -1,4 +1,5 @@
 import Chat from './components'
+export { Emit, DebugInfo, Meta } from './components'
 
 export * as Icons from './components/icons'
 export * as I18n from './common/labels'
