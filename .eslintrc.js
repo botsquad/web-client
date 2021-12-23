@@ -1,10 +1,40 @@
 module.exports = {
-  extends: ['eslint:recommended', 'plugin:react/recommended', 'prettier'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
+    'prettier',
+  ],
+  overrides: [
+    // general JS
+    {
+      files: ['*.js'],
+      rules: {
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
+        'no-unused-vars': ['error', { args: 'after-used', varsIgnorePattern: '_' }],
+      },
+    },
+    // unit tests
+    {
+      files: ['test/**/*.js'],
+      env: {
+        mocha: true,
+        node: true,
+      },
+    },
+    // build config files
+    {
+      files: ['*.config.js', '.eslintrc.js'],
+      env: {
+        node: true,
+      },
+    },
+  ],
   globals: {
-    document: true,
-    google: true,
+    ENV: 'readonly',
   },
-  parser: 'babel-eslint',
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2020, // Allows for the parsing of modern ECMAScript features
     sourceType: 'module', // Allows for the use of imports
@@ -12,12 +42,22 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
+    amd: true,
   },
   settings: {
-    react: {
+    'react': {
       version: '16.8',
     },
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx', '.gql'],
+    },
+    'import/resolver': {
+      node: {
+        paths: ['src'],
+      },
+    },
   },
+  plugins: ['@typescript-eslint'],
   rules: {
     'semi': 'off',
     'indent': 'off',
@@ -40,6 +80,7 @@ module.exports = {
     'no-plusplus': 'off',
     'no-underscore-dangle': 'off',
     'prefer-template': 'off',
+
     'react/forbit-prop-types': 'off',
     'react/jsx-filename-extension': 'off',
     'react/jsx-closing-bracket-location': 'off',
@@ -51,6 +92,10 @@ module.exports = {
     'react/prop-types': 'off',
     'react/sort-comp': 'off',
     'react/state-in-constructor': 'off',
-    'no-unused-vars': ['error', { ignoreRestSiblings: true }],
+    'react/no-find-dom-node': 'off',
+
+    '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],
+    '@typescript-eslint/no-var-requires': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
   },
 }

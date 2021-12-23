@@ -1,3 +1,4 @@
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const common = require('./webpack.config')
 const config = require('./package')
@@ -21,6 +22,6 @@ module.exports = {
   devtool: false,
   optimization: {
     minimize: true,
-    minimizer: [new TerserPlugin({ extractComments: false, terserOptions })],
+    minimizer: [new TerserPlugin({ extractComments: false, terserOptions }), new CssMinimizerPlugin()],
   },
 }

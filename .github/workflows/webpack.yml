@@ -1,10 +1,6 @@
 name: CI check/test/build
 
-on:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -24,7 +20,7 @@ jobs:
 
       - name: Prepare
         run: |
-          npm install --legacy-peer-deps
+          npm install
 
       - name: Check
         run: |
