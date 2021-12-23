@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom'
 import WebClient from '../src/index'
 import './example.scss'
 
-const user_id = 'u2'
+const user_id = 'u3'
 const bot_id = '5b9e0beb-3c3d-4567-a0f4-63fa02fd588b'
 const mapsApiKey = process.env.GOOGLE_MAPS_API_KEY
 //const socket = new Socket('ws://localhost:4000/socket')

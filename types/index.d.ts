@@ -2,9 +2,8 @@ import React from 'react'
 import { Socket, Channel } from 'phoenix'
 
 declare module '@botsquad/web-client' {
-
-  export const I18n = {
-    resolveTranslations: (input: any, locales: string[]) => any,
+  export type I18n = {
+    resolveTranslations: (input: any, locales: string[]) => any
     localePreflist: (locale: string, bot: any) => string[]
   }
 
@@ -81,5 +80,9 @@ declare module '@botsquad/web-client' {
     render: () => React.ReactNode
   }
 
-  export function inputMethodFactory(method: {type: any, payload: any, time?: any}, props: any, inputModal: any) => React.ReactNode
+  export type inputMethodFactory = (
+    method: { type: any; payload: any; time?: any },
+    props: any,
+    inputModal: any,
+  ) => React.ReactNode
 }
