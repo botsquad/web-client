@@ -8,42 +8,34 @@ import { Location as LocationType } from '../elements/types'
 import { useInputMethodProps } from './InputMethodContext'
 import { ChatHandler } from 'components'
 
-function transformLngLon(position: LocationType): google.maps.LatLngLiteral | null {
-  return position ? { lat: position.lat, lng: position.lon } : null
+function transformLngLon(position: LocationType): google.maps.LatLngLiteral {
+  return { lat: position.lat, lng: position.lon }
 }
 
 interface MapProps {
-  center: LocationType | null
+  center: LocationType
   position: LocationType | null
   config: { zoom?: number }
-  onChange: ([string]: any) => void
+  onChange: (position: LocationType) => void
   handler: ChatHandler | null
   setMyLocation: () => void
 }
 
 const Map: React.FC<MapProps> = props => {
   const setMarkerPosition = ({ latLng }) => {
-    const center = { lat: latLng.lat(), lon: latLng.lng() }
     const position = { lat: latLng.lat(), lon: latLng.lng() }
-    props.onChange({ position, center })
+    props.onChange(position)
   }
 
   const { config, position } = props
-  if (!position || !props.center || !props.handler) {
+  if (!props.handler) {
     return null
   }
-  const googleMapsPosition = transformLngLon(position)
-  const center = transformLngLon(props.center)
 
   return (
     <LoadScript googleMapsApiKey={props.handler.getMapsAPIKey()}>
       <GoogleMap
-        onLoad={map => {
-          const bounds = new window.google.maps.LatLngBounds()
-          map.fitBounds(bounds)
-          props.setMyLocation()
-        }}
-        center={center ? center : undefined}
+        center={transformLngLon(props.center)}
         zoom={config.zoom}
         onClick={setMarkerPosition}
         options={{
@@ -51,7 +43,7 @@ const Map: React.FC<MapProps> = props => {
           mapTypeId: 'roadmap',
         }}
       >
-        {googleMapsPosition ? <Marker position={googleMapsPosition} draggable onDragEnd={setMarkerPosition} /> : null}
+        {position && <Marker position={transformLngLon(position)} draggable onDragEnd={setMarkerPosition} />}
       </GoogleMap>
     </LoadScript>
   )
@@ -73,12 +65,9 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ settings }) => {
     const { default_value, center: center2 } = config
     if (default_value) {
       setPosition(default_value)
-      setCenter(default_value)
-    } else {
-      const c = center2 || { lat: 0, lon: 0 }
-      setPosition(c)
-      setCenter(c)
+      setCenter(center2 || default_value)
     }
+    setMyLocation()
   }, [config])
 
   const submit = () => {
@@ -100,14 +89,12 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ settings }) => {
       },
       () => {
         setFindingLocation(false)
+        const position2 = { lat: 0, lon: 0 }
+        setPosition(position2)
+        setCenter(position2)
         alert('Could not retrieve your current position, please check your location settings.')
       },
     )
-  }
-
-  const setPositionAndCenter = ({ position, center }) => {
-    setPosition(position)
-    setCenter(center)
   }
 
   const { button_label } = config
@@ -127,14 +114,16 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ settings }) => {
         {MyLocation}
       </div>
       <div className="google-map-container">
-        <Map
-          handler={handler}
-          onChange={setPositionAndCenter}
-          position={position}
-          center={center}
-          config={config}
-          setMyLocation={setMyLocation}
-        />
+        {center && position && (
+          <Map
+            handler={handler}
+            onChange={setPosition}
+            position={position}
+            center={center}
+            config={config}
+            setMyLocation={setMyLocation}
+          />
+        )}
       </div>
     </InputMethodContainer>
   )

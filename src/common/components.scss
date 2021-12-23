@@ -654,7 +654,7 @@
     }
   }
 
-  .bubble.template {
+  .bubble.template:not(.text) {
     display: inline-block;
     margin-bottom: 20px;
     min-width: 280px;

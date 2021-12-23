@@ -19,10 +19,10 @@ import Message, {
   CardTemplate,
 } from './types'
 import { ChatHandler } from 'components'
-import { isUndefined } from 'lodash'
+
 //handler probably a function/ handlerEvent is a function
 export function buttonClick(button: TemplateElementButton, handler: any, handleEvent: any) {
-  let payload
+  let payload: any
 
   if (button.hide_modal) {
     handler.component.hideModal()
@@ -33,7 +33,7 @@ export function buttonClick(button: TemplateElementButton, handler: any, handleE
       break
     case 'event':
       payload = { name: button.event, payload: button.json ? JSON.parse(button.json) : button.payload }
-      handleEvent = handleEvent || (p => handler.send('event', p))
+      handleEvent = handleEvent || ((p: any) => handler.send('event', p))
       handleEvent(payload)
       break
     case 'phone_number':
@@ -81,9 +81,7 @@ function renderGalleryElement(
   full: boolean,
 ) {
   const defaultAction = full
-    ? element && !isUndefined(element.default_action)
-      ? () => buttonClick(element.default_action, handler, null)
-      : null
+    ? () => element.default_action && buttonClick(element.default_action, handler, null)
     : () => handler.component.showModal(message, { index: idx })
 
   return (
@@ -120,7 +118,7 @@ function renderGalleryElement(
 }
 
 interface Props {
-  handler: any //{ getClientDimensions(): { clientWidth: number }, component:{showModal:function} }
+  handler: ChatHandler
   message: Message<Payload>
   toggleModalPreferHeight: ((condition: boolean) => void) | null
   modalParams?: { index?: number }
@@ -135,7 +133,7 @@ const Template: React.FC<Props> = props => {
   const { payload } = message
 
   //Adding the template type to the class names, except if it is a card then it becomes a gallery (cards are one element galleries)
-  const className = `${classes} + ${payload.template_type === 'card' ? 'gallery' : payload.template_type}`
+  const className = `${classes} ${payload.template_type === 'card' ? 'gallery' : payload.template_type}`
 
   const RenderTextTemplate = (payload: TextTemplate) => {
     if (typeof payload.text !== 'string') return null
