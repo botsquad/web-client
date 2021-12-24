@@ -1,6 +1,6 @@
 import React, { createRef } from 'react'
 import { Channel, Socket } from 'phoenix'
-import locale2 from 'locale2'
+const lang = navigator.language
 import { EventEmitter } from 'fbemitter'
 
 import { getUserInfo } from '../common/util'
@@ -250,7 +250,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
       conversationMeta: null,
       online: true,
       joined: false,
-      localePrefs: props.localePrefs || [locale2.replace(/-.*$/, '')],
+      localePrefs: props.localePrefs || [lang.replace(/-.*$/, '')],
       socket: props.socket || new Socket('wss://bsqd.me/socket'),
       toastHiding: true,
       toast: null,

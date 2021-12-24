@@ -1,4 +1,4 @@
-import locale2 from 'locale2'
+const lang = navigator.language
 
 const LABELS = {
   image_picker_select: {
@@ -103,7 +103,7 @@ let _uiLocale: string | null = null
 export function determineUILocale(initialLocale: string, bot: any) {
   const { locale } = bot
   const extra_locales = bot.extra_locales || bot.extraLocales
-  const user = initialLocale || locale2.replace(/-.*$/, '')
+  const user = initialLocale || lang.replace(/-.*$/, '')
   if (user === locale || extra_locales.indexOf(user) >= 0) {
     _uiLocale = user
   } else {
