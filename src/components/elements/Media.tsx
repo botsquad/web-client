@@ -148,8 +148,8 @@ enum ASPECTS {
   'three-by-two' = 0.666,
   'two-by-one' = 0.5,
 }
-function determineAspect(cls: string) {
-  return (cls || '').split(' ').reduce((acc: string, c: string) => acc || ASPECTS[c], false) || ASPECTS.default
+function determineAspect(cls: string): number {
+  return (cls || '').split(' ').reduce((acc: number, c: string) => acc || ASPECTS[c], 0) || ASPECTS.default
 }
 
 interface WebMediaProps {
