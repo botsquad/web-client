@@ -78,7 +78,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
     if (inputModal) inputModal.finish('message', { type: 'form', text, data }, config)
   }
 
-  const onChange = ({ formData }) => {
+  const onChange = ({ formData }: { formData: any }) => {
     setFormData(formData)
   }
 
@@ -86,9 +86,9 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
     setHasError(hasError)
   }, 400)
 
-  const validate = errors => {
+  const validate = (errors: any) => {
     setHasErrorDebounced(errors.length > 0)
-    return errors.map(e => ({ property: e.property }))
+    return errors.map((e: any) => ({ property: e.property }))
   }
 
   const getUiSchema = () => {

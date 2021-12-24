@@ -18,7 +18,7 @@ const MultiItemPicker: React.FC<MultiItemPickerProps> = ({ settings }) => {
   useEffect(() => {
     const { default_value, items } = config
     if (Array.isArray(default_value)) {
-      const selected = items.filter(({ value }) => default_value.find(v => v === value))
+      const selected = items.filter(({ value }: any) => default_value.find(v => v === value))
       setSelected(selected)
     }
   }, [])
@@ -37,7 +37,7 @@ const MultiItemPicker: React.FC<MultiItemPickerProps> = ({ settings }) => {
     }
   }
 
-  const itemClick = item => {
+  const itemClick = (item: any) => {
     let newSelected = [...selected]
     if (newSelected.find(i => i.value === item.value)) {
       // remove
@@ -64,7 +64,7 @@ const MultiItemPicker: React.FC<MultiItemPickerProps> = ({ settings }) => {
         </button>
       }
     >
-      {items.map((item, index: number) => {
+      {items.map((item: any, index: number) => {
         const newSelected = selected.find(i => i.value === item.value)
         return (
           <div

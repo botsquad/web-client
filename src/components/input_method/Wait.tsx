@@ -5,6 +5,8 @@ import { Closed } from '../icons'
 import { fixedLabel } from '../../common/labels'
 import { TextUtil } from '@botsquad/sdk'
 import { useInputMethodProps, useInputMethodPropsUpdate } from './InputMethodContext'
+import InputMethodTemplate from 'components/elements/InputMethodTemplate'
+import { ChatHandler } from 'components'
 
 interface renderImplicitCloseButtonProps {
   type: string
@@ -27,11 +29,18 @@ const renderImplicitCloseButton: React.FC<renderImplicitCloseButtonProps> = prop
   return <button onClick={closeConversation}>{fixedLabel('new_conversation', localePrefs)}</button>
 }
 
-function renderButton(button, props) {
+function renderButton(
+  button: any,
+  props: {
+    config: any
+    inputModal: InputMethodTemplate | null
+    handler: ChatHandler
+  },
+) {
   if (!button) return null
 
-  const onClick = payload =>
-    props.inputModal.finish('message', { type: 'wait', text: button.title, data: { event: payload } }, props.config)
+  const onClick = (payload: any) =>
+    props.inputModal?.finish('message', { type: 'wait', text: button.title, data: { event: payload } }, props.config)
 
   return <button onClick={() => buttonClick(button, props.handler, onClick)}>{button.title}</button>
 }

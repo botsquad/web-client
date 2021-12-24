@@ -57,7 +57,7 @@ export function deviceClasses() {
 
 const USER_COOKIE = '_botsqd_user'
 
-export function setCookieUserId(userId) {
+export function setCookieUserId(userId: string | undefined) {
   const old = Cookie.get(USER_COOKIE)
   if (old !== userId && userId !== undefined) {
     Cookie.set(USER_COOKIE, userId, { expires: 365 * 10 })

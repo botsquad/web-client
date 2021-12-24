@@ -1,4 +1,5 @@
 import React from 'react'
+import { Widget } from 'react-jsonschema-form'
 import PhoneInput, { Country } from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 
@@ -63,4 +64,4 @@ class PhoneNumberWidget extends React.Component<PhoneNumberWidgetProps> {
   }
 }
 
-export default { phone_number: PhoneNumberWidget }
+export default { phone_number: PhoneNumberWidget as unknown as Widget }

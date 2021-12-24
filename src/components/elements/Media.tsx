@@ -230,13 +230,13 @@ interface AudioMediaProps {
 
 export const AudioMedia: React.FC<AudioMediaProps> = React.memo(
   ({ message, className, handler }) => {
-    const audio = useRef<HTMLAudioElement>(null)
+    const audio = useRef<HTMLAudioElement | null>(null)
     const [hasAudio, setHasAudio] = useState(false)
 
     useEffect(() => {
       const audioTemp: HTMLAudioElement | null = audio.current
 
-      handler.attachAudio(audio)
+      handler.attachAudio(audio.current)
       if (audioTemp) {
         audioTemp.addEventListener('play', () => {
           mediaEvents.emit('audio.create', audio)

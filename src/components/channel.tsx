@@ -36,7 +36,7 @@ export default function botChatHandler(
         }
         joined = true
 
-        let historyNext = null
+        let historyNext: any = null
         let gotFirstHistory = false
 
         // retrieve more
@@ -47,7 +47,7 @@ export default function botChatHandler(
           }
           channel.push('get_history', { next: historyNext }).receive('ok', ({ events, next }) => {
             historyNext = next
-            const history = events.reverse().map(({ time, ...rest }) => ({ ...rest, time: Date.parse(time) }))
+            const history = events.reverse().map(({ time, ...rest }: any) => ({ ...rest, time: Date.parse(time) }))
             component.prependEvents(history, undefined, false)
           })
         }
@@ -65,7 +65,7 @@ export default function botChatHandler(
           component.setState({ joined: true })
           if (!component.mounted || gotFirstHistory) return
           historyNext = next || null
-          const history = events.reverse().map(({ time, ...rest }) => ({ ...rest, time: Date.parse(time) }))
+          const history = events.reverse().map(({ time, ...rest }: any) => ({ ...rest, time: Date.parse(time) }))
           gotFirstHistory = true
           component.prependEvents(history, component.props.onReady, true)
         })

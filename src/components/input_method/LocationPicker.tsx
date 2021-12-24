@@ -22,7 +22,7 @@ interface MapProps {
 }
 
 const Map: React.FC<MapProps> = props => {
-  const setMarkerPosition = ({ latLng }) => {
+  const setMarkerPosition = ({ latLng }: any) => {
     const position = { lat: latLng.lat(), lon: latLng.lng() }
     props.onChange(position)
   }
