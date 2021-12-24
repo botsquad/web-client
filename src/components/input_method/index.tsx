@@ -15,7 +15,7 @@ import Message, { Payload } from '../elements/types'
 interface MethodProps {
   type: string
   payload: any
-  time: number
+  time?: number
 }
 
 interface FactoryProps {
@@ -53,10 +53,10 @@ export default function elementFactory(
   if (type === 'form') {
     element = <Form {...{ message, settings }} />
   }
-  if (type === 'wait') {
+  if (type === 'wait' && time) {
     element = <Wait {...{ time, type }} />
   }
-  if (type === 'closed') {
+  if (type === 'closed' && time) {
     element = <Wait {...{ time, type }} />
   }
   if (type === 'numeric') {
