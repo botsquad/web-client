@@ -1,6 +1,6 @@
 import React, { createRef } from 'react'
 import { Channel, Socket } from 'phoenix'
-import locale2 from 'locale2'
+const lang = navigator.language
 import { EventEmitter } from 'fbemitter'
 
 import { getUserInfo } from '../common/util'
@@ -45,7 +45,7 @@ export class ChatHandler {
   _audioElements: any
   _eventQueue: any[]
   _lastModal: any
-  constructor(component) {
+  constructor(component: any) {
     this.component = component
     this.channel = null
     this._activeAudio = null
@@ -53,7 +53,7 @@ export class ChatHandler {
     this._eventQueue = []
   }
 
-  joinChannel(props, socket) {
+  joinChannel(props: any, socket: Socket) {
     const { bot_id, params, onJoinError } = props
     this.leaveChannel()
     this.component.setState({ upload: null, typing: false, events: [] })
@@ -80,7 +80,7 @@ export class ChatHandler {
     }
   }
 
-  send(type, payload) {
+  send(type: string, payload: any) {
     if (this.channel === null) {
       this._eventQueue.push({ type, payload })
       return
@@ -96,7 +96,7 @@ export class ChatHandler {
     })
   }
 
-  sendLinkClick(url) {
+  sendLinkClick(url: string) {
     if (url.match(/bsqd.me\/s\//) || url.match(/localhost:4000\/s\//)) {
       // ignore short URLs, these are tracked internally
       return
@@ -104,43 +104,45 @@ export class ChatHandler {
     this.send('event', { name: '$link_click', payload: { url, via: 'web' } })
   }
 
-  sendFile(file) {
+  sendFile(file: any) {
     const { name } = file
     let { type } = file
     this.component.setState({ upload: { name, type, progress: 0 } })
-    this.channel.push('get_upload_url', { type }).receive('ok', ({ upload_url, public_url }) => {
-      uploadFile(
-        file,
-        upload_url,
-        () => {
-          type = type.replace(/\/.*$/, '')
-          if (type !== 'video' && type !== 'audio' && type !== 'image') {
-            type = 'file'
-          }
-          this.send('attachment', { type, url: public_url, caption: name })
-          this.component.setState({ upload: null })
-        },
-        () => {
-          // error
-          this.component.setState({ upload: { name, type, retry: file } })
-        },
-        progress => {
-          this.component.setState({
-            upload: { ...this.component.state.upload, progress },
-          })
-        },
-        file.type,
-      )
-    })
+    this.channel
+      .push('get_upload_url', { type })
+      .receive('ok', ({ upload_url, public_url }: { upload_url: string; public_url: string }) => {
+        uploadFile(
+          file,
+          upload_url,
+          () => {
+            type = type.replace(/\/.*$/, '')
+            if (type !== 'video' && type !== 'audio' && type !== 'image') {
+              type = 'file'
+            }
+            this.send('attachment', { type, url: public_url, caption: name })
+            this.component.setState({ upload: null })
+          },
+          () => {
+            // error
+            this.component.setState({ upload: { name, type, retry: file } })
+          },
+          progress => {
+            this.component.setState({
+              upload: { ...this.component.state.upload, progress },
+            })
+          },
+          file.type,
+        )
+      })
   }
 
-  handleAudioEvent(payload) {
+  handleAudioEvent(payload: any) {
     if (!this._activeAudio) return
 
     switch (payload) {
       case 'play':
         // pause all others
-        this._audioElements.forEach(a => {
+        this._audioElements.forEach((a: any) => {
           if (a !== this._activeAudio) a.pause()
         })
         // perform command
@@ -154,7 +156,7 @@ export class ChatHandler {
     }
   }
 
-  attachAudio(audio) {
+  attachAudio(audio: HTMLAudioElement | null) {
     this._activeAudio = audio
     if (this._audioElements.indexOf(audio) === -1) {
       this._audioElements.push(audio)
@@ -226,15 +228,15 @@ interface ChatState {
 
 export default class Chat extends React.Component<ChatProps, ChatState> {
   handler: ChatHandler
-  notificationManager: NotificationManager
+  notificationManager: NotificationManager = null as unknown as NotificationManager
   eventDispatcher: EventEmitter
-  _onlineTimeout: ReturnType<typeof setTimeout>
-  mounted: boolean
-  _toastClearer: ReturnType<typeof setTimeout> | null
-  _toastClearer2: ReturnType<typeof setTimeout>
+  _onlineTimeout: ReturnType<typeof setTimeout> = null as unknown as ReturnType<typeof setTimeout>
+  mounted = false
+  _toastClearer: ReturnType<typeof setTimeout> | null = null
+  _toastClearer2: ReturnType<typeof setTimeout> = null as unknown as ReturnType<typeof setTimeout>
   windowElement: any
   root = createRef<HTMLDivElement>()
-  uploader: UploadTrigger | null
+  uploader: UploadTrigger | null = null
 
   constructor(props: ChatProps) {
     super(props)
@@ -248,7 +250,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
       conversationMeta: null,
       online: true,
       joined: false,
-      localePrefs: props.localePrefs || [locale2.replace(/-.*$/, '')],
+      localePrefs: props.localePrefs || [lang.replace(/-.*$/, '')],
       socket: props.socket || new Socket('wss://bsqd.me/socket'),
       toastHiding: true,
       toast: null,
@@ -290,7 +292,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
     this.handler.leaveChannel()
   }
 
-  showModal(message, modalParams) {
+  showModal(message: Message<any>, modalParams: any) {
     this.setState({ modal: message, modalParams })
   }
 
@@ -302,7 +304,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
     setTimeout(() => this.setState({ modal: null, modalHiding: false }), 300)
   }
 
-  showToast(toast) {
+  showToast(toast: any) {
     if (this._toastClearer) {
       clearTimeout(this._toastClearer)
     }
@@ -327,11 +329,11 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
     }
   }
 
-  triggerAudio(payload) {
+  triggerAudio(payload: any) {
     this.handler.handleAudioEvent(payload)
   }
 
-  addEvent(event) {
+  addEvent(event: any) {
     this.eventDispatcher.emit('chat_event', event)
     this.setState({
       typing: false,

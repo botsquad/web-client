@@ -41,7 +41,7 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     // forceUpdate()
   }
 
-  const finish = (type, payload) => {
+  const finish = (type: string, payload: any) => {
     handler?.send(type, payload)
     props.onFinish()
     // setTimeout(() => forceUpdate(), 0) Force Update somehow

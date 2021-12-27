@@ -13,7 +13,9 @@ interface Props {
 }
 
 export default class InputMethodTemplate extends React.Component<Props> {
-  cancel: () => void
+  cancel: () => void = () => {
+    return
+  }
 
   finish(type: string, payload: any, config: any) {
     console.log('jooo', payload)

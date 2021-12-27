@@ -1,7 +1,7 @@
 import moment from 'dayjs'
 import Cookie from 'js-cookie'
 import jstz from 'jstz'
-import locale2 from 'locale2'
+const lang = navigator.language
 
 const ua = navigator.userAgent
 
@@ -57,7 +57,7 @@ export function deviceClasses() {
 
 const USER_COOKIE = '_botsqd_user'
 
-export function setCookieUserId(userId) {
+export function setCookieUserId(userId: string | undefined) {
   const old = Cookie.get(USER_COOKIE)
   if (old !== userId && userId !== undefined) {
     Cookie.set(USER_COOKIE, userId, { expires: 365 * 10 })
@@ -86,7 +86,7 @@ export function getUserInfo() {
   return {
     timezone: timezone.name(),
     extra: {
-      browser_locale: locale2.replace('-', '_'),
+      browser_locale: lang.replace('-', '_'),
       user_agent: navigator.userAgent,
       web_push_capable: 'PushManager' in window,
     },

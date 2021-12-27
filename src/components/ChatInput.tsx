@@ -68,7 +68,7 @@ const ChatInput: React.FC = () => {
     }
   }, [message, hasMessage])
 
-  const sendTypingFactory = payload => {
+  const sendTypingFactory = (payload: any) => {
     return () => {
       if (handler) {
         handler.send('typing', payload)
@@ -79,13 +79,13 @@ const ChatInput: React.FC = () => {
   const sendTypingOn = debounce(sendTypingFactory(true), 1000, { leading: true, trailing: false })
   const sendTypingOff = debounce(sendTypingFactory(false), 1000, { leading: false, trailing: true })
 
-  const onChange = e => {
+  const onChange = (e: any) => {
     const message = e.target.value
     setMessage(message)
     setHasMessage(message.trim().length > 0)
   }
 
-  const onKeyUp = e => {
+  const onKeyUp = (e: any) => {
     let layout = ''
     if (settings) layout = settings.layout
     if (scrollToBottom) {
@@ -131,9 +131,9 @@ const ChatInput: React.FC = () => {
     )
   }
 
-  const upload = accept => {
+  const upload = (accept: string) => {
     if (handler)
-      handler.component.uploader.trigger(accept, file => {
+      handler.component.uploader.trigger(accept, (file: File) => {
         if (file.size > 10 * 1024 * 1024) {
           alert('File is too large, please select a smaller file.')
           return
@@ -146,7 +146,7 @@ const ChatInput: React.FC = () => {
       })
   }
 
-  const isDisabled = item => {
+  const isDisabled = (item: string | number) => {
     if (settings) return settings.chat_config.disabled_inputs?.indexOf(item) >= 0
     return false
   }

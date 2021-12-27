@@ -17,7 +17,7 @@ const SingleItemPicker: React.FC<SingleItemPickerProps> = ({ settings }) => {
   useEffect(() => {
     const { default_value, items } = config
     if (default_value) {
-      const item = items.find(({ value }) => value === default_value)
+      const item = items.find(({ value }: any) => value === default_value)
       if (item) {
         setSelectedItem(item)
       }
@@ -30,7 +30,7 @@ const SingleItemPicker: React.FC<SingleItemPickerProps> = ({ settings }) => {
     }
   }
 
-  const submitItem = ({ value, title }) => {
+  const submitItem = ({ value, title }: { value: any; title: string }) => {
     setHasSubmitted(true)
     if (inputModal) inputModal.finish('message', { type: 'item_picker', text: title, data: value }, config)
   }

@@ -10,7 +10,7 @@ function askForLocation(handler: any) {
 }
 
 function fileUpload(accept: any, handler: any) {
-  handler.component.uploader.trigger(accept, file => {
+  handler.component.uploader.trigger(accept, (file: File) => {
     handler.sendFile(file)
   })
 }

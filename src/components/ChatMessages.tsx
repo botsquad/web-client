@@ -159,7 +159,7 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
     }
   }
 
-  renderMessageGroup = group => {
+  renderMessageGroup = (group: any) => {
     if (group.hasReadUntil) {
       return (
         <div key="hasReadUntil" className="has-read-until">
@@ -189,14 +189,14 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
     )
   }
 
-  isRecent(message) {
+  isRecent(message: Message<any>) {
     if (!message) {
       return false
     }
     return new Date().getTime() - message.time < 1000
   }
 
-  renderMessage(message) {
+  renderMessage(message: Message<any>) {
     if (!this.props.settings) {
       return null
     }
@@ -220,7 +220,7 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
     )
   }
 
-  renderUpload({ progress, type, retry }) {
+  renderUpload({ progress, type, retry }: { progress: number; type: string; retry: string }) {
     if (retry) {
       return (
         <div className="upload">
@@ -248,7 +248,7 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
     )
   }
 
-  isGroupable(a, b) {
+  isGroupable(a: any, b: any) {
     return (
       a.self === b.self &&
       a.type === b.type &&
@@ -275,7 +275,7 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
     )
   }
 
-  checkLinkClick = e => {
+  checkLinkClick = (e: any) => {
     const url = e.target?.getAttribute('href')
     if (url && this.props.handler) {
       this.props.handler.sendLinkClick(url)

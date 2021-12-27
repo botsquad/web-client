@@ -13,12 +13,12 @@ export default class NotificationManager extends React.Component<NotificationMan
   component: any //React.Component & { handler?: { channel?: Channel },props:{host:any,externalInterface:any} }
   hasCordovaFocus: boolean | null
   _onFocusHandlers: (() => void)[]
-  channel: Channel
-  documentTitle: string
-  sound: HTMLElement | HTMLAudioElement | null
-  _hidden: boolean
-  clearer: ReturnType<typeof setTimeout> | null
-  hasFocus: boolean
+  channel: Channel = null as unknown as Channel
+  documentTitle = ''
+  sound: HTMLElement | HTMLAudioElement | null = null as unknown as HTMLElement | HTMLAudioElement | null
+  _hidden = false
+  clearer: ReturnType<typeof setTimeout> | null = null
+  hasFocus = false
 
   constructor(component: React.Component) {
     super({ component })
