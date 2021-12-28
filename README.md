@@ -16,11 +16,9 @@ React component for the web.
 
 ## Development
 
-    Install dependencies with yarn install
-
-Create a .devenv in the root folder and add the contents of template.devenv and replace the variables with the keys you have.
-
-    Run in development with yarn run dev
+1. Install dependencies with `npm install`
+1. Create a .devenv in the root folder and add the contents of template.devenv and replace the variables with the keys you have.
+1. Run in development with `npm run dev`
 
 ## Example code
 
@@ -37,7 +35,7 @@ const bot_id = '1adc3f20-32e9-4376-a147-d9ef23ac8a4c'
 function App() {
   return (
     <div className="botsquad-components layout-docked">
-      <WebClient bot_id={bot_id} params={{ user_id }} hideAvatars />
+      <WebClient bot_id={bot_id} params={{ user_id }} />
     </div>
   )
 }
