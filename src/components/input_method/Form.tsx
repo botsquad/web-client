@@ -31,7 +31,7 @@ function removeEmpty(obj: object) {
 }
 
 interface ClientFormProps {
-  message: Message<Payload> | null
+  message?: Message<Payload> | null
   settings: Record<string, any>
 }
 

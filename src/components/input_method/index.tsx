@@ -20,11 +20,11 @@ interface MethodProps {
 
 interface FactoryProps {
   handler: ChatHandler
-  inline: boolean
-  inputModal: InputMethodTemplate | null
+  inline?: boolean
+  inputModal?: InputMethodTemplate | null
   settings: Record<string, any> | null
   localePrefs: string[]
-  message: Message<Payload> | null
+  message?: Message<Payload> | null
 }
 
 export default function elementFactory(
