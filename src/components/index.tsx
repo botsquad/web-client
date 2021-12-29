@@ -183,7 +183,7 @@ export class ChatHandler {
   }
 }
 
-interface ChatProps {
+export interface ChatProps {
   bot_id: string
   socket?: Socket
   params?: Record<string, any>
