@@ -53,10 +53,10 @@ export default function elementFactory(
   if (type === 'form') {
     element = <Form {...{ message, settings }} />
   }
-  if (type === 'wait' && time) {
+  if (type === 'wait') {
     element = <Wait {...{ time, type }} />
   }
-  if (type === 'closed' && time) {
+  if (type === 'closed') {
     element = <Wait {...{ time, type }} />
   }
   if (type === 'numeric') {

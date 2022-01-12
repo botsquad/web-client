@@ -60,7 +60,7 @@ function formatTime(waitTime: number, total: number) {
 
 interface WaitProps {
   type: string
-  time: number
+  time?: number
 }
 
 const Wait: React.FC<WaitProps> = props => {
@@ -73,7 +73,7 @@ const Wait: React.FC<WaitProps> = props => {
   const [waitTime, setWaitTime] = useState(0)
 
   const tick = () => {
-    if (!wait_time || waitTime < 0) return
+    if (!time || !wait_time || waitTime < 0) return
 
     const delta = Math.floor((new Date().getTime() - time) / 1000)
 
