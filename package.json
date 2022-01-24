@@ -30,7 +30,7 @@
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
     "@babel/polyfill": "^7.4.3",
-    "@botsquad/sdk": "^0.14.3",
+    "@botsquad/sdk": "^0.14.11",
     "@react-google-maps/api": "^2.7.0",
     "babel-loader": "^8.0.0",
     "classnames": "^2.2.6",

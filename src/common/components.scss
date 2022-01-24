@@ -409,11 +409,18 @@
       font-style: italic;
     }
 
-    a {
+    a[href] {
       color: var(--botsquad-main-color);
     }
-    &.self a {
+    &.self a[href] {
       color: white;
+    }
+
+    a.tooltip {
+      border-bottom: 2px dotted;
+    }
+    &.self a.tooltip {
+      border-bottom-color: white;
     }
 
     span {
@@ -878,6 +885,12 @@
 
       span {
         color: var(--botsquad-main-color);
+        p {
+          margin: 0;
+        }
+        .tooltip {
+          border-bottom: 2px dotted;
+        }
       }
 
       &:active {
