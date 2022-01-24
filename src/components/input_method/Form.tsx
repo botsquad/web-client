@@ -39,6 +39,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const [formData, setFormData] = useState({})
   const [hasError, setHasError] = useState(false)
+  const [widgetErrors, setWidgetErrors] = useState<{ id: string; error: boolean }[]>([])
   const [disabled, setDisabled] = useState(false)
   const [error] = useState<any>(null)
   const [form, setForm] = useState<any>()
@@ -95,6 +96,21 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
     return config.ui_schema || {}
   }
 
+  const widgetErrorsPlace = (id: string, error: boolean) => {
+    if (widgetErrors.find(error => error.id === id)) {
+      setWidgetErrors(oldErrors =>
+        oldErrors.map(widgetError => {
+          if (widgetError.id === id) {
+            return { id, error }
+          }
+          return widgetError
+        }),
+      )
+    } else {
+      setWidgetErrors(errors => [...errors, { id, error }])
+    }
+  }
+
   let headerControl: ReactNode = null
   if (disabled) {
     headerControl = (
@@ -112,7 +128,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
   if (!config || !config.schema) {
     return <span>Missing &#39;config.schema&#39; in form</span>
   }
-  const formContext = { localePrefs }
+  const formContext = { localePrefs, widgetErrorsPlace }
 
   return (
     <InputMethodContainer
