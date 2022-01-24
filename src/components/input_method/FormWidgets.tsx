@@ -74,7 +74,7 @@ const IbanFormWidget: React.FC<WidgetProps> = ({ value, onChange, disabled, auto
   }
 
   useEffect(() => {
-    formContext.widgetErrorsPlace(id, error)
+    setTimeout(() => formContext.setWidgetError(id, error), 0)
   }, [error])
 
   useEffect(() => {

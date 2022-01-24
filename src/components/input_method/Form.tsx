@@ -39,7 +39,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const [formData, setFormData] = useState({})
   const [hasError, setHasError] = useState(false)
-  const [widgetErrors, setWidgetErrors] = useState<{ id: string; error: boolean }[]>([])
+  const [widgetErrors, setWidgetErrors] = useState<Map<string, boolean>>(new Map<string, boolean>())
   const [disabled, setDisabled] = useState(false)
   const [error] = useState<any>(null)
   const [form, setForm] = useState<any>()
@@ -88,7 +88,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
   }, 400)
 
   const validate = (errors: any) => {
-    setHasErrorDebounced(errors.length > 0)
+    setHasErrorDebounced(errors.length > 0 || widgetErrors.size > 0)
     return errors.map((e: any) => ({ property: e.property }))
   }
 
@@ -96,18 +96,12 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
     return config.ui_schema || {}
   }
 
-  const widgetErrorsPlace = (id: string, error: boolean) => {
-    if (widgetErrors.find(error => error.id === id)) {
-      setWidgetErrors(oldErrors =>
-        oldErrors.map(widgetError => {
-          if (widgetError.id === id) {
-            return { id, error }
-          }
-          return widgetError
-        }),
-      )
+  const setWidgetError = (id: string, error: boolean) => {
+    if (error) {
+      setWidgetErrors(new Map(widgetErrors?.set(id, error)))
     } else {
-      setWidgetErrors(errors => [...errors, { id, error }])
+      widgetErrors.delete(id)
+      setWidgetErrors(new Map(widgetErrors))
     }
   }
 
@@ -128,7 +122,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
   if (!config || !config.schema) {
     return <span>Missing &#39;config.schema&#39; in form</span>
   }
-  const formContext = { localePrefs, widgetErrorsPlace }
+  const formContext = { localePrefs, setWidgetError }
 
   return (
     <InputMethodContainer
