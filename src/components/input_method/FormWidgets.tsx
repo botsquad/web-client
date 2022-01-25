@@ -1,5 +1,7 @@
-import React from 'react'
-import { Widget } from 'react-jsonschema-form'
+import { chatLabel } from '../../common/labels'
+import { electronicFormat, isValid, printFormat } from 'iban'
+import React, { useEffect, useState } from 'react'
+import { Widget, WidgetProps } from 'react-jsonschema-form'
 import PhoneInput, { Country } from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 
@@ -64,4 +66,48 @@ class PhoneNumberWidget extends React.Component<PhoneNumberWidgetProps> {
   }
 }
 
-export default { phone_number: PhoneNumberWidget as unknown as Widget }
+const IbanFormWidget: React.FC<WidgetProps> = ({ value, onChange, disabled, autofocus, formContext, id }) => {
+  const [error, setError] = useState(true)
+
+  const onIBANChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = electronicFormat(e.target.value)
+    onChange(value)
+  }
+
+  useEffect(() => {
+    setTimeout(() => formContext.setWidgetError(id, error), 0)
+  }, [error])
+
+  useEffect(() => {
+    if (!isValid(value)) {
+      setError(true)
+    } else {
+      setError(false)
+    }
+  }, [value])
+
+  const validate = () => {
+    if (error) {
+      return <div style={{ color: 'red' }}>{chatLabel({ ui_labels: [] }, formContext.localePrefs, 'invalid_iban')}</div>
+    }
+    return null
+  }
+
+  return (
+    <div key={id}>
+      <input
+        type="text"
+        className="form-control"
+        onChange={onIBANChange}
+        value={printFormat(value || '')}
+        disabled={disabled}
+        autoFocus={autofocus}
+      ></input>
+      {validate()}
+    </div>
+  )
+}
+export default {
+  phone_number: PhoneNumberWidget as unknown as Widget,
+  iban_number: IbanFormWidget as unknown as Widget,
+}
