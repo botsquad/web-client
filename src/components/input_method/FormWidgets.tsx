@@ -1,3 +1,4 @@
+import { chatLabel } from '../../common/labels'
 import { electronicFormat, isValid, printFormat } from 'iban'
 import React, { useEffect, useState } from 'react'
 import { Widget, WidgetProps } from 'react-jsonschema-form'
@@ -87,7 +88,7 @@ const IbanFormWidget: React.FC<WidgetProps> = ({ value, onChange, disabled, auto
 
   const validate = () => {
     if (error) {
-      return <div style={{ color: 'red' }}>IBAN is invalid</div>
+      return <div style={{ color: 'red' }}>{chatLabel({ ui_labels: [] }, formContext.localePrefs, 'invalid_iban')}</div>
     }
     return null
   }
@@ -101,8 +102,8 @@ const IbanFormWidget: React.FC<WidgetProps> = ({ value, onChange, disabled, auto
         value={printFormat(value || '')}
         disabled={disabled}
         autoFocus={autofocus}
-        placeholder="IBAN"
-      ></input>{' '}
+        placeholder="NL91 ABNA 0417 1643 00"
+      ></input>
       {validate()}
     </div>
   )
