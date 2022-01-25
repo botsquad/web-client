@@ -1,3 +1,4 @@
+import { Moment } from 'moment'
 import React from 'react'
 import Datetime from 'react-datetime'
 import 'react-datetime/css/react-datetime.css'
@@ -66,8 +67,15 @@ class PhoneNumberWidget extends React.Component<PhoneNumberWidgetProps> {
   }
 }
 
-const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange }) => {
-  const valid = (current: any) => {
+const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options }) => {
+  console.log(options)
+  const valid = (current: Moment) => {
+    let ranges: string[] = []
+
+    if (typeof options.range === 'string') {
+      ranges = [options.range]
+    }
+
     return true
   }
 
