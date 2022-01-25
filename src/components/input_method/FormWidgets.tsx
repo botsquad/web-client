@@ -67,7 +67,7 @@ class PhoneNumberWidget extends React.Component<PhoneNumberWidgetProps> {
 }
 
 const IbanFormWidget: React.FC<WidgetProps> = ({ value, onChange, disabled, autofocus, formContext, id }) => {
-  const [error, setError] = useState(false)
+  const [error, setError] = useState(true)
 
   const onIBANChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = electronicFormat(e.target.value)
