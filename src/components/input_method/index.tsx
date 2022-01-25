@@ -51,6 +51,8 @@ export default function elementFactory(
     element = <LocationPicker {...{ settings }} />
   }
   if (type === 'form') {
+    console.log(type)
+
     element = <Form {...{ message, settings }} />
   }
   if (type === 'wait') {

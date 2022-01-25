@@ -113,7 +113,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
     return <span>Missing &#39;config.schema&#39; in form</span>
   }
   const formContext = { localePrefs }
-
+  console.log(config)
   return (
     <InputMethodContainer
       className="form"

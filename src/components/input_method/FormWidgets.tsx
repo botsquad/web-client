@@ -1,5 +1,6 @@
 import React from 'react'
 import Datetime from 'react-datetime'
+import 'react-datetime/css/react-datetime.css'
 import { Widget, WidgetProps } from 'react-jsonschema-form'
 import PhoneInput, { Country } from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
@@ -66,10 +67,25 @@ class PhoneNumberWidget extends React.Component<PhoneNumberWidgetProps> {
 }
 
 const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange }) => {
-  return <Datetime />
+  const valid = (current: any) => {
+    return true
+  }
+
+  return (
+    <div style={{ height: 200 }}>
+      <Datetime
+        isValidDate={valid}
+        input={false}
+        initialValue={new Date()}
+        value={value}
+        onChange={onChange}
+        timeFormat={false}
+      />
+    </div>
+  )
 }
 
 export default {
   phone_number: PhoneNumberWidget as unknown as Widget,
-  iban_number: DateTimeWidget as unknown as Widget,
+  date_picker: DateTimeWidget as unknown as Widget,
 }
