@@ -43,6 +43,7 @@
     "lodash": "^4.17.21",
     "phoenix": "1.4",
     "prop-types": "^15.6.1",
+    "react-datetime": "^3.1.1",
     "react-jsonschema-form": "^1.0.3",
     "react-phone-number-input": "^3.1.18",
     "react-slick": "^0.28.1",

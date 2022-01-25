@@ -1,5 +1,6 @@
 import React from 'react'
-import { Widget } from 'react-jsonschema-form'
+import Datetime from 'react-datetime'
+import { Widget, WidgetProps } from 'react-jsonschema-form'
 import PhoneInput, { Country } from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 
@@ -64,4 +65,11 @@ class PhoneNumberWidget extends React.Component<PhoneNumberWidgetProps> {
   }
 }
 
-export default { phone_number: PhoneNumberWidget as unknown as Widget }
+const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange }) => {
+  return <Datetime />
+}
+
+export default {
+  phone_number: PhoneNumberWidget as unknown as Widget,
+  iban_number: DateTimeWidget as unknown as Widget,
+}
