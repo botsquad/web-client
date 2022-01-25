@@ -67,7 +67,7 @@ class PhoneNumberWidget extends React.Component<PhoneNumberWidgetProps> {
 }
 
 const IbanFormWidget: React.FC<WidgetProps> = ({ value, onChange, disabled, autofocus, formContext, id }) => {
-  const [error, setError] = useState(true)
+  const [error, setError] = useState(false)
 
   const onIBANChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = electronicFormat(e.target.value)
@@ -87,7 +87,7 @@ const IbanFormWidget: React.FC<WidgetProps> = ({ value, onChange, disabled, auto
   }, [value])
 
   const validate = () => {
-    if (error) {
+    if (!isValid(value) && value !== '' && value) {
       return <div style={{ color: 'red' }}>{chatLabel({ ui_labels: [] }, formContext.localePrefs, 'invalid_iban')}</div>
     }
     return null
