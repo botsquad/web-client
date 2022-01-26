@@ -1,5 +1,5 @@
 import moment, { Moment } from 'moment'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Datetime from 'react-datetime'
 import 'react-datetime/css/react-datetime.css'
 import { Widget, WidgetProps } from 'react-jsonschema-form'
@@ -68,6 +68,8 @@ class PhoneNumberWidget extends React.Component<PhoneNumberWidgetProps> {
 }
 
 const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options }) => {
+  const [open, setOpen] = useState(false)
+
   const validate = (currentDate: string) => {
     if (options.range === 'only_past') {
       return moment(currentDate).isBefore(moment())
@@ -76,16 +78,33 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options }) => 
     }
   }
 
+  const renderInput = (_: any, openCalendar: any, closeCalendar: any) => {
+    return (
+      <div className="below">
+        <button
+          style={{ border: '1px solid black', borderRadius: '25px' }}
+          onClick={() => {
+            open ? closeCalendar() : openCalendar()
+            setOpen(open => !open)
+          }}
+          className="label"
+        >
+          {open ? 'Close Calendar' : 'Open Calendar'}
+        </button>
+      </div>
+    )
+  }
+
   return (
     <div style={{ height: 200 }}>
       <input style={{ display: 'none' }} value={value || moment().format('DD.MM.YYYY')} readOnly type="text"></input>
       <Datetime
-        input={false}
         initialValue={moment()}
         value={moment(value, 'DD.MM.YYYY') || moment()}
         onChange={value => {
           onChange((value as Moment).format('DD.MM.YYYY'))
         }}
+        renderInput={renderInput}
         isValidDate={validate}
         timeFormat={false}
       />
