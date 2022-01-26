@@ -66,9 +66,9 @@ class PhoneNumberWidget extends React.Component<PhoneNumberWidgetProps> {
   }
 }
 
-const IbanFormWidget: React.FC<WidgetProps> = ({ value, onChange, disabled, autofocus, formContext, id }) => {
-  const [error, setError] = useState(true)
-
+const IbanFormWidget: React.FC<WidgetProps> = ({ value, onChange, disabled, autofocus, formContext, id, required }) => {
+  const [error, setError] = useState(false)
+  console.log(id, required)
   const onIBANChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = electronicFormat(e.target.value)
     onChange(value)
@@ -79,7 +79,9 @@ const IbanFormWidget: React.FC<WidgetProps> = ({ value, onChange, disabled, auto
   }, [error])
 
   useEffect(() => {
-    if (!isValid(value)) {
+    // if the value is not a valid iban and the value is not empty then there is an error
+    // if the value is required and the value is empty then there is an error
+    if ((!isValid(value) && value !== '' && value) || (required && value === '' && !value)) {
       setError(true)
     } else {
       setError(false)
@@ -87,7 +89,7 @@ const IbanFormWidget: React.FC<WidgetProps> = ({ value, onChange, disabled, auto
   }, [value])
 
   const validate = () => {
-    if (!isValid(value) && value !== '' && value) {
+    if (error && value !== '' && value) {
       return <div style={{ color: 'red' }}>{chatLabel({ ui_labels: [] }, formContext.localePrefs, 'invalid_iban')}</div>
     }
     return null
