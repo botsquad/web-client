@@ -1,5 +1,5 @@
 import moment, { Moment } from 'moment'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import Datetime from 'react-datetime'
 import 'react-datetime/css/react-datetime.css'
@@ -119,7 +119,11 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options }) => 
         {ReactDOM.createPortal(
           <div
             ref={setPopperRef}
-            style={{ ...styles.popper, display: visible ? 'initial' : 'none' }}
+            style={{
+              ...styles.popper,
+              display: visible ? 'initial' : 'none',
+              boxShadow: '0 0 4px 1px black',
+            }}
             {...attributes.popper}
           >
             <Datetime
