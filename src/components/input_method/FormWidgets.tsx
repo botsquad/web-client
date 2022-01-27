@@ -90,7 +90,7 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options }) => 
         name: 'offset',
         enabled: true,
         options: {
-          offset: [0, 0],
+          offset: [0, 10],
         },
       },
     ],
