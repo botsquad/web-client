@@ -1,10 +1,12 @@
 import moment, { Moment } from 'moment'
 import React, { useEffect, useState } from 'react'
+import ReactDOM from 'react-dom'
 import Datetime from 'react-datetime'
 import 'react-datetime/css/react-datetime.css'
 import { Widget, WidgetProps } from 'react-jsonschema-form'
 import PhoneInput, { Country } from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
+import { usePopper } from 'react-popper'
 
 function defaultCountry(localePrefs: string[]): Country {
   const lang = (localePrefs[0] || 'en').substr(0, 2)
@@ -68,7 +70,10 @@ class PhoneNumberWidget extends React.Component<PhoneNumberWidgetProps> {
 }
 
 const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options }) => {
-  const [open, setOpen] = useState(false)
+  const [visible, setVisibility] = useState(false)
+
+  const [referenceRef, setReferenceRef] = useState<any>(null)
+  const [popperRef, setPopperRef] = useState<any>(null)
 
   const validate = (currentDate: string) => {
     if (options.range === 'only_past') {
@@ -78,38 +83,55 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options }) => 
     }
   }
 
-  const renderInput = (_: any, openCalendar: any, closeCalendar: any) => {
-    return (
-      <div className="below">
-        <button
-          style={{ border: '1px solid black', borderRadius: '25px' }}
-          onClick={() => {
-            open ? closeCalendar() : openCalendar()
-            setOpen(open => !open)
-          }}
-          className="label"
-        >
-          {open ? 'Close Calendar' : 'Open Calendar'}
-        </button>
-      </div>
-    )
+  const { styles, attributes } = usePopper(referenceRef, popperRef, {
+    placement: 'top',
+    modifiers: [
+      {
+        name: 'offset',
+        enabled: true,
+        options: {
+          offset: [0, 0],
+        },
+      },
+    ],
+  })
+
+  function handleDropdownClick() {
+    setVisibility(!visible)
   }
 
-  return (
-    <div style={{ height: 200 }}>
-      <input style={{ display: 'none' }} value={value || moment().format('DD.MM.YYYY')} readOnly type="text"></input>
-      <Datetime
-        initialValue={moment()}
-        value={moment(value, 'DD.MM.YYYY') || moment()}
-        onChange={value => {
-          onChange((value as Moment).format('DD.MM.YYYY'))
-        }}
-        renderInput={renderInput}
-        isValidDate={validate}
-        timeFormat={false}
-      />
-    </div>
-  )
+  const inputMethodContainer: any = document.querySelector('.botsi-web-client')
+  console.log(inputMethodContainer)
+
+  if (inputMethodContainer)
+    return (
+      <>
+        <button ref={setReferenceRef} onClick={handleDropdownClick}>
+          Date
+        </button>
+        <input style={{ display: 'none' }} value={value || moment().format('DD.MM.YYYY')} readOnly type="text"></input>
+        {ReactDOM.createPortal(
+          <div
+            ref={setPopperRef}
+            style={{ ...styles.popper, display: visible ? 'initial' : 'none' }}
+            {...attributes.popper}
+          >
+            <Datetime
+              initialValue={moment()}
+              input={false}
+              value={moment(value, 'DD.MM.YYYY') || moment()}
+              onChange={value => {
+                onChange((value as Moment).format('DD.MM.YYYY'))
+              }}
+              isValidDate={validate}
+              timeFormat={false}
+            />
+          </div>,
+          inputMethodContainer,
+        )}
+      </>
+    )
+  else return null
 }
 
 export default {
