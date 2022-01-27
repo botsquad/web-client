@@ -106,9 +106,15 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options }) => 
   if (inputMethodContainer)
     return (
       <>
-        <button ref={setReferenceRef} onClick={handleDropdownClick}>
-          Date
-        </button>
+        <div className="below">
+          <button
+            ref={setReferenceRef}
+            onClick={handleDropdownClick}
+            style={{ borderRadius: 50, border: '1px solid black' }}
+          >
+            Date
+          </button>
+        </div>
         <input style={{ display: 'none' }} value={value || moment().format('DD.MM.YYYY')} readOnly type="text"></input>
         {ReactDOM.createPortal(
           <div
