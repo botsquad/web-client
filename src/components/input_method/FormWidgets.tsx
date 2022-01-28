@@ -7,6 +7,7 @@ import { Widget, WidgetProps } from 'react-jsonschema-form'
 import PhoneInput, { Country } from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import { usePopper } from 'react-popper'
+import { chatLabel } from '../../common/labels'
 
 function defaultCountry(localePrefs: string[]): Country {
   const lang = (localePrefs[0] || 'en').substr(0, 2)
@@ -69,7 +70,7 @@ class PhoneNumberWidget extends React.Component<PhoneNumberWidgetProps> {
   }
 }
 
-const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options }) => {
+const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formContext }) => {
   const [visible, setVisibility] = useState(false)
 
   const [referenceRef, setReferenceRef] = useState<any>(null)
@@ -99,9 +100,9 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options }) => 
   function handleDropdownClick() {
     setVisibility(!visible)
   }
-
+  const selectDateText = value || chatLabel({ ui_labels: [] }, formContext.localePrefs, 'select_date')
   const inputMethodContainer: any = document.querySelector('.botsi-web-client')
-  console.log(inputMethodContainer)
+  console.log(formContext.localePrefs)
 
   if (inputMethodContainer)
     return (
@@ -112,7 +113,7 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options }) => 
             onClick={handleDropdownClick}
             style={{ borderRadius: 'var(--botsquad-bubble-radius)', border: '1px solid var(--botsquad-ui-color)' }}
           >
-            Date
+            {selectDateText}
           </button>
         </div>
         <input style={{ display: 'none' }} value={value || moment().format('DD-MM-YYYY')} readOnly type="text"></input>
@@ -132,7 +133,9 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options }) => 
               value={moment(value, 'DD-MM-YYYY') || moment()}
               onChange={value => {
                 onChange((value as Moment).format('DD-MM-YYYY'))
+                setVisibility(false)
               }}
+              locale="es"
               isValidDate={validate}
               timeFormat={false}
             />

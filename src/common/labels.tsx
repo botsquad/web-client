@@ -96,6 +96,17 @@ const LABELS = {
     fi: 'Uusi keskustelu',
     ar: 'محادثة جديدة',
   },
+  select_date: {
+    $i18n: true,
+    en: 'Select Date',
+    nl: 'Selecteer een datum',
+    de: 'Datum auswählen',
+    fr: 'Sélectionner une date',
+    es: 'Seleccione fecha',
+    da: 'Vælg dato',
+    fi: 'Valitse Päivämäärä',
+    ar: 'حدد تاريخ',
+  },
 }
 
 let _uiLocale: string | null = null

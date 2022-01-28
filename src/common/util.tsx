@@ -1,4 +1,4 @@
-import moment from 'dayjs'
+import moment from 'moment'
 import Cookie from 'js-cookie'
 import jstz from 'jstz'
 const lang = navigator.language

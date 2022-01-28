@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react'
 import Form from 'react-jsonschema-form'
 import debounce from 'lodash/debounce'
-import moment from 'dayjs'
+import moment from 'moment'
 
 import { chatLabel } from '../../common/labels'
 import { Edit } from '../icons'
