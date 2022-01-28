@@ -110,7 +110,7 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options }) => 
           <button
             ref={setReferenceRef}
             onClick={handleDropdownClick}
-            style={{ borderRadius: 50, border: '1px solid black' }}
+            style={{ borderRadius: 'var(--botsquad-bubble-radius)', border: '1px solid var(--botsquad-ui-color)' }}
           >
             Date
           </button>
