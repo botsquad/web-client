@@ -1,4 +1,12 @@
 import moment, { Moment } from 'moment'
+import 'moment/locale/nl'
+import 'moment/locale/de'
+import 'moment/locale/fr'
+import 'moment/locale/es'
+import 'moment/locale/da'
+import 'moment/locale/fi'
+import 'moment/locale/ar'
+
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import Datetime from 'react-datetime'
@@ -135,7 +143,7 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formC
                 onChange((value as Moment).format('DD-MM-YYYY'))
                 setVisibility(false)
               }}
-              locale="es"
+              locale={formContext.localePrefs[0]}
               isValidDate={validate}
               timeFormat={false}
             />
