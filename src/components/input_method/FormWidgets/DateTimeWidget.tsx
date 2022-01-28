@@ -48,7 +48,6 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formC
   }
   const selectDateText = value || chatLabel({ ui_labels: [] }, formContext.localePrefs, 'select_date')
   const inputMethodContainer: any = document.querySelector('.botsi-web-client')
-  console.log(formContext.localePrefs)
 
   if (inputMethodContainer)
     return (
@@ -76,7 +75,7 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formC
             <Datetime
               initialValue={moment()}
               input={false}
-              value={moment(value, 'DD-MM-YYYY') || moment()}
+              value={moment(value) || moment()}
               onChange={value => {
                 onChange((value as Moment).format('DD-MM-YYYY'))
                 setVisibility(false)
