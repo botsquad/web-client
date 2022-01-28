@@ -115,7 +115,7 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options }) => 
             Date
           </button>
         </div>
-        <input style={{ display: 'none' }} value={value || moment().format('DD.MM.YYYY')} readOnly type="text"></input>
+        <input style={{ display: 'none' }} value={value || moment().format('DD-MM-YYYY')} readOnly type="text"></input>
         {ReactDOM.createPortal(
           <div
             ref={setPopperRef}
@@ -129,9 +129,9 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options }) => 
             <Datetime
               initialValue={moment()}
               input={false}
-              value={moment(value, 'DD.MM.YYYY') || moment()}
+              value={moment(value, 'DD-MM-YYYY') || moment()}
               onChange={value => {
-                onChange((value as Moment).format('DD.MM.YYYY'))
+                onChange((value as Moment).format('DD-MM-YYYY'))
               }}
               isValidDate={validate}
               timeFormat={false}
