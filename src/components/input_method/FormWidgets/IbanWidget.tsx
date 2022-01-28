@@ -1,9 +1,7 @@
-import 'react-datetime/css/react-datetime.css'
 import { chatLabel } from '../../../common/labels'
 import { electronicFormat, isValid, printFormat } from 'iban'
 import React, { useEffect, useState } from 'react'
 import { WidgetProps } from 'react-jsonschema-form'
-import 'react-phone-number-input/style.css'
 
 const IbanWidget: React.FC<WidgetProps> = ({ value, onChange, disabled, autofocus, formContext, id, required }) => {
   const [error, setError] = useState(false)

@@ -1,6 +1,6 @@
-import 'react-datetime/css/react-datetime.css'
 import React from 'react'
 import PhoneInput, { Country } from 'react-phone-number-input'
+
 import 'react-phone-number-input/style.css'
 
 function defaultCountry(localePrefs: string[]): Country {

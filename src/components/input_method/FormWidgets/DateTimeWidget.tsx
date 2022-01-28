@@ -10,11 +10,11 @@ import 'moment/locale/ar'
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import Datetime from 'react-datetime'
-import 'react-datetime/css/react-datetime.css'
 import { WidgetProps } from 'react-jsonschema-form'
-import 'react-phone-number-input/style.css'
 import { usePopper } from 'react-popper'
 import { chatLabel } from '../../../common/labels'
+
+import 'react-datetime/css/react-datetime.css'
 
 const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formContext }) => {
   const [visible, setVisibility] = useState(false)
