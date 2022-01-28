@@ -14,6 +14,9 @@ function elementValue(e: any) {
   if (e.classList.contains('PhoneInputCountrySelect')) {
     return ''
   }
+  if (e.tagName === 'BUTTON') {
+    return e.innerText
+  }
   if (e.type === 'checkbox') {
     return e.checked ? '✓' : ''
   }
@@ -65,7 +68,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
     // create a readable text for the form submit
     let text = [
       ...form.querySelectorAll(
-        'input[type=text],input[type=email],input[type=number],input[type=range],input[type=date],input[type=tel],textarea,select,input[type=checkbox]',
+        'input[type=text],input[type=email],input[type=number],input[type=range],input[type=date],input[type=tel],textarea,select,input[type=checkbox],button[data-date-value]',
       ),
     ]
       .map(elementValue)

@@ -46,7 +46,11 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formC
   function handleDropdownClick() {
     setVisibility(!visible)
   }
-  const selectDateText = value || chatLabel({ ui_labels: [] }, formContext.localePrefs, 'select_date')
+
+  const selectDateText = value?.length
+    ? moment(value).locale('en').format('D-M-Y')
+    : chatLabel({ ui_labels: [] }, formContext.localePrefs, 'select_date')
+
   const inputMethodContainer: any = document.querySelector('.botsi-web-client')
 
   if (inputMethodContainer)
@@ -54,6 +58,7 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formC
       <>
         <div className="below">
           <button
+            data-date-value={value}
             ref={setReferenceRef}
             onClick={handleDropdownClick}
             style={{ borderRadius: 'var(--botsquad-bubble-radius)', border: '1px solid var(--botsquad-ui-color)' }}
@@ -61,7 +66,6 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formC
             {selectDateText}
           </button>
         </div>
-        <input style={{ display: 'none' }} value={value || moment().format('DD-MM-YYYY')} readOnly type="text"></input>
         {ReactDOM.createPortal(
           <div
             ref={setPopperRef}
@@ -77,12 +81,13 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formC
               input={false}
               value={moment(value) || moment()}
               onChange={value => {
-                onChange((value as Moment).format('DD-MM-YYYY'))
+                onChange((value as Moment).format('YYYY-MM-DD'))
                 setVisibility(false)
               }}
               locale={formContext.localePrefs[0]}
               isValidDate={validate}
               timeFormat={false}
+              dateFormat={'D-M-Y'}
             />
           </div>,
           inputMethodContainer,

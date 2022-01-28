@@ -6,7 +6,7 @@ import IbanWidget from './FormWidgets/IbanWidget'
 import PhoneNumberWidget from './FormWidgets/PhoneNumberWidget'
 
 export default {
-  phone_number: PhoneNumberWidget as unknown as Widget,
-  iban_number: IbanWidget as unknown as Widget,
-  date_picker: DateTimeWidget as unknown as Widget,
-}
+  phone_number: PhoneNumberWidget,
+  iban_number: IbanWidget,
+  date_picker: DateTimeWidget,
+} as Record<string, Widget>
