@@ -39,6 +39,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const [formData, setFormData] = useState({})
   const [hasError, setHasError] = useState(false)
+  const [widgetErrors, setWidgetErrors] = useState<Map<string, boolean>>(new Map<string, boolean>())
   const [disabled, setDisabled] = useState(false)
   const [error] = useState<any>(null)
   const [form, setForm] = useState<any>()
@@ -87,12 +88,21 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
   }, 400)
 
   const validate = (errors: any) => {
-    setHasErrorDebounced(errors.length > 0)
+    setHasErrorDebounced(errors.length > 0 || widgetErrors.size > 0)
     return errors.map((e: any) => ({ property: e.property }))
   }
 
   const getUiSchema = () => {
     return config.ui_schema || {}
+  }
+
+  const setWidgetError = (id: string, error: boolean) => {
+    if (error) {
+      setWidgetErrors(new Map(widgetErrors?.set(id, error)))
+    } else {
+      widgetErrors.delete(id)
+      setWidgetErrors(new Map(widgetErrors))
+    }
   }
 
   let headerControl: ReactNode = null
@@ -112,7 +122,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
   if (!config || !config.schema) {
     return <span>Missing &#39;config.schema&#39; in form</span>
   }
-  const formContext = { localePrefs }
+  const formContext = { localePrefs, setWidgetError }
+
   return (
     <InputMethodContainer
       className="form"

@@ -107,6 +107,17 @@ const LABELS = {
     fi: 'Valitse Päivämäärä',
     ar: 'حدد تاريخ',
   },
+  invalid_iban: {
+    $i18n: true,
+    en: 'IBAN is invalid',
+    nl: 'IBAN is ongeldig',
+    de: 'IBAN ist ungültig',
+    fr: "L'IBAN est invalide",
+    es: 'IBAN no es válido',
+    da: 'IBAN er ugyldigt',
+    fi: 'IBAN on virheellinen',
+    ar: 'رقم الحساب المصرفي الدولي (IBAN) غير صالح',
+  },
 }
 
 let _uiLocale: string | null = null

@@ -1,3 +1,4 @@
+import { TextUtil } from '@botsquad/sdk'
 import { ChatHandler } from 'components'
 import React from 'react'
 import { chatLabel } from '../common/labels'
@@ -48,14 +49,23 @@ function renderButton(
   }
 
   if (content_type === 'text') {
+    const innerHTML = TextUtil.processText(title)
     return (
-      <div className="button" key={idx} onClick={() => handler.send('message', { text: title, input_type: 'touch' })}>
+      <div
+        className="button"
+        key={idx}
+        onClick={() => {
+          const span = document.createElement('span')
+          span.innerHTML = innerHTML.__html
+          handler.send('message', { text: span.innerText.trim(), input_type: 'touch' })
+        }}
+      >
         {image_url && (
           <div className="icon">
             <img src={image_url} alt="icon" />
           </div>
         )}
-        <span className="label">{title}</span>
+        <span className="label" dangerouslySetInnerHTML={innerHTML} />
       </div>
     )
   }
