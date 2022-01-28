@@ -2,8 +2,8 @@ import React from 'react'
 
 import SingleItemPicker from './SingleItemPicker'
 import MultiItemPicker from './MultiItemPicker'
-
 import Form from './Form'
+import DatePicker from './DatePicker'
 import LocationPicker from './LocationPicker'
 import Wait from './Wait'
 import NumericKeyboard from './NumericKeyboard'
@@ -42,25 +42,28 @@ export default function elementFactory(
     </div>
   )
   if (type === 'item_picker' && payload.mode === 'single') {
-    element = <SingleItemPicker {...{ settings }} />
+    element = <SingleItemPicker settings={settings} />
   }
   if (type === 'item_picker' && payload.mode === 'multiple') {
-    element = <MultiItemPicker {...{ settings }} />
+    element = <MultiItemPicker settings={settings} />
+  }
+  if (type === 'date_picker') {
+    element = <DatePicker settings={settings} />
   }
   if (type === 'location') {
-    element = <LocationPicker {...{ settings }} />
+    element = <LocationPicker settings={settings} />
   }
   if (type === 'form') {
-    element = <Form {...{ message, settings }} />
+    element = <Form message={message} settings={settings} />
   }
   if (type === 'wait') {
-    element = <Wait {...{ time, type }} />
+    element = <Wait time={time} type={type} />
   }
   if (type === 'closed') {
-    element = <Wait {...{ time, type }} />
+    element = <Wait time={time} type={type} />
   }
   if (type === 'numeric') {
-    element = <NumericKeyboard {...{ settings }} />
+    element = <NumericKeyboard settings={settings} />
   }
   /*
      if (type === 'barcode') {
