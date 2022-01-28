@@ -9,4 +9,4 @@ export default {
   phone_number: PhoneNumberWidget,
   iban_number: IbanWidget,
   date_picker: DateTimeWidget,
-} as Record<string, Widget>
+} as unknown as Record<string, Widget>
