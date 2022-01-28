@@ -22,7 +22,7 @@ export const checkDateConstraints = (currentDate: string, constraints: string[] 
   const now = moment()
   const value = moment(currentDate)
 
-  for (let constraint of constraints) {
+  for (const constraint of constraints) {
     if (constraint === 'only_past') {
       if (!value.isBefore(now)) return false
     }

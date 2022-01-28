@@ -1,4 +1,4 @@
-import moment, { Moment } from 'moment'
+import moment from 'moment'
 import * as React from 'react'
 import { useState } from 'react'
 import { chatLabel } from '../../common/labels'
