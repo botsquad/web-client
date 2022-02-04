@@ -416,6 +416,17 @@
   padding-bottom: 0;
 }
 
+.input-method--container.date-picker {
+  .rdtPicker td,
+  .rdtPicker th {
+    height: 34px;
+  }
+  td.rdtMonth,
+  td.rdtYear {
+    height: 50px;
+  }
+}
+
 .input-method--container.numeric {
   .content {
     display: flex;
