@@ -16,19 +16,36 @@ import { chatLabel } from '../../../common/labels'
 
 import 'react-datetime/css/react-datetime.css'
 
+export const checkDateConstraints = (currentDate: string, constraints: string[] | string) => {
+  if (typeof constraints === 'string') constraints = [constraints]
+
+  const now = moment()
+  const value = moment(currentDate)
+
+  for (const constraint of constraints) {
+    if (constraint === 'only_past') {
+      if (!value.isBefore(now)) return false
+    }
+    if (constraint === 'only_future') {
+      if (!value.isAfter(now)) return false
+    }
+    if (constraint === 'workdays') {
+      // 1 = monday, 7 = sunday
+      if (value.isoWeekday() > 5) return false
+    }
+    if (constraint === 'weekends') {
+      // 1 = monday, 7 = sunday
+      if (value.isoWeekday() <= 5) return false
+    }
+  }
+  return true
+}
+
 const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formContext }) => {
   const [visible, setVisibility] = useState(false)
 
   const [referenceRef, setReferenceRef] = useState<any>(null)
   const [popperRef, setPopperRef] = useState<any>(null)
-
-  const validate = (currentDate: string) => {
-    if (options.range === 'only_past') {
-      return moment(currentDate).isBefore(moment())
-    } else {
-      return moment(currentDate).isAfter(moment())
-    }
-  }
 
   const { styles, attributes } = usePopper(referenceRef, popperRef, {
     placement: 'top',
@@ -85,7 +102,7 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formC
                 setVisibility(false)
               }}
               locale={formContext.localePrefs[0]}
-              isValidDate={validate}
+              isValidDate={value => checkDateConstraints(value, (options.constraints || []) as string[])}
               timeFormat={false}
               dateFormat={'D-M-Y'}
             />
