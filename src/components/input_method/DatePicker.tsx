@@ -4,8 +4,25 @@ import { useState } from 'react'
 import { chatLabel } from '../../common/labels'
 import InputMethodContainer from './InputMethodContainer'
 import { useInputMethodProps } from './InputMethodContext'
-import Datetime from 'react-datetime'
 import { checkDateConstraints } from './FormWidgets/DateTimeWidget'
+import 'react-datepicker/dist/react-datepicker.css'
+import DatePicker2 from 'react-datepicker'
+import { registerLocale } from 'react-datepicker'
+import './Datepicker.scss'
+import nl from 'date-fns/locale/nl'
+import de from 'date-fns/locale/de'
+import fr from 'date-fns/locale/fr'
+import es from 'date-fns/locale/es'
+import da from 'date-fns/locale/da'
+import fi from 'date-fns/locale/fi'
+import ar from 'date-fns/locale/ar'
+registerLocale('nl', nl)
+registerLocale('de', de)
+registerLocale('fr', fr)
+registerLocale('es', es)
+registerLocale('da', da)
+registerLocale('fi', fi)
+registerLocale('ar', ar)
 
 interface Props {
   settings: Record<string, any>
@@ -18,40 +35,39 @@ const DatePicker: React.FC<Props> = ({ settings }) => {
 
   const submit = (value: string, label: string) =>
     inputModal?.finish('message', { type: 'date_picker', text: label, data: value }, config)
-  const { confirm, button_label, default_value, constraints } = config
+  const { confirm, button_label, constraints } = config
 
   return (
-    <InputMethodContainer
-      className={`date-picker single ${confirm ? 'confirm' : ''}`}
-      below={
-        confirm ? (
-          <button onClick={() => submit(value, label)} disabled={value === ''}>
-            {button_label || chatLabel(settings as { ui_labels: any }, localePrefs, 'form_submit_button')}
-          </button>
-        ) : null
-      }
-    >
-      <Datetime
-        initialValue={moment(default_value || '')}
-        input={false}
-        value={moment(value) || moment()}
-        onChange={date => {
-          const value = moment(date).format('YYYY-MM-DD')
-          const label = moment(date).format('D-M-Y')
+    <>
+      <InputMethodContainer
+        className={`date-picker single ${confirm ? 'confirm' : ''} `}
+        below={
+          confirm ? (
+            <button onClick={() => submit(value, label)} disabled={value === ''}>
+              {button_label || chatLabel(settings as { ui_labels: any }, localePrefs, 'form_submit_button')}
+            </button>
+          ) : null
+        }
+      >
+        <DatePicker2
+          selected={value ? new Date(value) : new Date()}
+          onChange={date => {
+            const value = moment(date).format('YYYY-MM-DD')
+            const label = moment(date).format('D-M-Y')
 
-          if (confirm) {
-            setValue(value)
-            setLabel(label)
-          } else {
-            submit(value, label)
-          }
-        }}
-        locale={localePrefs[0]}
-        isValidDate={value => checkDateConstraints(value, (constraints || []) as string[])}
-        timeFormat={false}
-        dateFormat={'D-M-Y'}
-      />
-    </InputMethodContainer>
+            if (confirm) {
+              setValue(value)
+              setLabel(label)
+            } else {
+              submit(value, label)
+            }
+          }}
+          inline
+          locale={localePrefs[0]}
+          filterDate={value => checkDateConstraints(value, (constraints || []) as string[])}
+        />
+      </InputMethodContainer>
+    </>
   )
 }
 

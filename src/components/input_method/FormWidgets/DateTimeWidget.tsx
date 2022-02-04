@@ -1,41 +1,53 @@
-import moment, { Moment } from 'moment'
-import 'moment/locale/nl'
-import 'moment/locale/de'
-import 'moment/locale/fr'
-import 'moment/locale/es'
-import 'moment/locale/da'
-import 'moment/locale/fi'
-import 'moment/locale/ar'
+import { registerLocale } from 'react-datepicker'
+import isWeekend from 'date-fns/isWeekend'
+import isAfter from 'date-fns/isAfter'
+
+import nl from 'date-fns/locale/nl'
+import de from 'date-fns/locale/de'
+import fr from 'date-fns/locale/fr'
+import es from 'date-fns/locale/es'
+import da from 'date-fns/locale/da'
+import fi from 'date-fns/locale/fi'
+import ar from 'date-fns/locale/ar'
+registerLocale('nl', nl)
+registerLocale('de', de)
+registerLocale('fr', fr)
+registerLocale('es', es)
+registerLocale('da', da)
+registerLocale('fi', fi)
+registerLocale('ar', ar)
+
+import { format } from 'date-fns'
 
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import Datetime from 'react-datetime'
 import { WidgetProps } from 'react-jsonschema-form'
 import { usePopper } from 'react-popper'
 import { chatLabel } from '../../../common/labels'
+import 'react-datepicker/dist/react-datepicker.css'
 
-import 'react-datetime/css/react-datetime.css'
+import DatePicker from 'react-datepicker'
 
-export const checkDateConstraints = (currentDate: string, constraints: string[] | string) => {
+export const checkDateConstraints = (currentDate: Date, constraints: string[] | string) => {
   if (typeof constraints === 'string') constraints = [constraints]
 
-  const now = moment()
-  const value = moment(currentDate)
-
+  const now = new Date()
+  const value = new Date(currentDate)
+  // console.log(currentDate, constraints)
   for (const constraint of constraints) {
     if (constraint === 'only_past') {
-      if (!value.isBefore(now)) return false
+      if (!isAfter(value, now)) return false
     }
     if (constraint === 'only_future') {
-      if (!value.isAfter(now)) return false
+      if (isAfter(value, now)) return false
     }
     if (constraint === 'workdays') {
       // 1 = monday, 7 = sunday
-      if (value.isoWeekday() > 5) return false
+      if (!isWeekend(value)) return false
     }
     if (constraint === 'weekends') {
       // 1 = monday, 7 = sunday
-      if (value.isoWeekday() <= 5) return false
+      if (isWeekend(value)) return false
     }
   }
   return true
@@ -63,13 +75,11 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formC
   function handleDropdownClick() {
     setVisibility(!visible)
   }
-
-  const selectDateText = value?.length
-    ? moment(value).locale('en').format('D-M-Y')
-    : chatLabel({ ui_labels: [] }, formContext.localePrefs, 'select_date')
+  console.log(value)
+  const selectDateText = value?.length ? value : chatLabel({ ui_labels: [] }, formContext.localePrefs, 'select_date')
 
   const inputMethodContainer: any = document.querySelector('.botsi-web-client')
-
+  console.log(options)
   if (inputMethodContainer)
     return (
       <>
@@ -89,22 +99,17 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formC
             style={{
               ...styles.popper,
               display: visible ? 'initial' : 'none',
-              boxShadow: '0 0 4px 1px black',
             }}
             {...attributes.popper}
           >
-            <Datetime
-              initialValue={moment()}
-              input={false}
-              value={moment(value) || moment()}
+            <DatePicker
+              selected={value ? new Date(value) : new Date()}
               onChange={value => {
-                onChange((value as Moment).format('YYYY-MM-DD'))
-                setVisibility(false)
+                onChange(format(value || new Date(), 'yyyy-MM-dd'))
               }}
+              inline
               locale={formContext.localePrefs[0]}
-              isValidDate={value => checkDateConstraints(value, (options.constraints || []) as string[])}
-              timeFormat={false}
-              dateFormat={'D-M-Y'}
+              filterDate={value => checkDateConstraints(value, (options.range || []) as string[])}
             />
           </div>,
           inputMethodContainer,
