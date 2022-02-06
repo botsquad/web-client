@@ -1,4 +1,3 @@
-import moment from 'moment'
 import * as React from 'react'
 import { useState } from 'react'
 import { chatLabel } from '../../common/labels'
@@ -23,6 +22,7 @@ registerLocale('es', es)
 registerLocale('da', da)
 registerLocale('fi', fi)
 registerLocale('ar', ar)
+import format from 'date-fns/format'
 
 interface Props {
   settings: Record<string, any>
@@ -52,8 +52,8 @@ const DatePicker: React.FC<Props> = ({ settings }) => {
         <DatePicker2
           selected={value ? new Date(value) : new Date()}
           onChange={date => {
-            const value = moment(date).format('YYYY-MM-DD')
-            const label = moment(date).format('D-M-Y')
+            const value = format(date || new Date(), 'yyyy-mm-dd')
+            const label = format(date || new Date(), 'd-m-y')
 
             if (confirm) {
               setValue(value)

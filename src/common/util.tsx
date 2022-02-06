@@ -1,20 +1,18 @@
-import moment from 'moment'
 import Cookie from 'js-cookie'
 import jstz from 'jstz'
+import isSameYear from 'date-fns/isSameYear'
+import format from 'date-fns/format'
 const lang = navigator.language
 
 const ua = navigator.userAgent
 
 export function shortDateTimeFormat(dt: string): string {
-  const m = moment(dt)
-  const now = moment()
-  if (m.year() !== now.year()) {
-    return m.format('D/M/YYYY')
-  }
-  if (m.format('D MMM') !== now.format('D MMM')) {
-    return m.format('D MMM')
-  }
-  return m.format('H:mm')
+  const m = new Date(dt)
+  const now = new Date()
+
+  if (isSameYear(m, now)) return format(m, 'd/m/yyyy')
+  if (format(m, 'd mmm') !== format(now, 'd mmm')) return format(m, 'd mmm')
+  return format(m, 'h:mm')
 }
 
 export function isEdge(): boolean {

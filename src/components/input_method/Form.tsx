@@ -1,7 +1,7 @@
+import format from 'date-fns/format'
 import React, { ReactNode, useEffect, useState } from 'react'
 import Form from 'react-jsonschema-form'
 import debounce from 'lodash/debounce'
-import moment from 'moment'
 
 import { chatLabel } from '../../common/labels'
 import { Edit } from '../icons'
@@ -21,7 +21,7 @@ function elementValue(e: any) {
     return e.checked ? '✓' : ''
   }
   if (e.type === 'date') {
-    return moment(e.value).format('D/M/YYYY')
+    return format(new Date(e.value), 'd/m/yyyy')
   }
   return e.value.trim()
 }
