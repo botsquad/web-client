@@ -21,7 +21,7 @@ function elementValue(e: any) {
     return e.checked ? '✓' : ''
   }
   if (e.type === 'date') {
-    return format(new Date(e.value), 'd/m/yyyy')
+    return format(new Date(e.value), 'd/M/yyyy')
   }
   return e.value.trim()
 }

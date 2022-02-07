@@ -52,8 +52,8 @@ const DatePicker: React.FC<Props> = ({ settings }) => {
         <DatePicker2
           selected={value ? new Date(value) : new Date()}
           onChange={date => {
-            const value = format(date || new Date(), 'yyyy-mm-dd')
-            const label = format(date || new Date(), 'd-m-y')
+            const value = format(date || new Date(), 'yyyy-MM-dd')
+            const label = format(date || new Date(), 'd-M-y')
 
             if (confirm) {
               setValue(value)

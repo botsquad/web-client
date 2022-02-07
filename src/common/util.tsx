@@ -10,9 +10,9 @@ export function shortDateTimeFormat(dt: string): string {
   const m = new Date(dt)
   const now = new Date()
 
-  if (isSameYear(m, now)) return format(m, 'd/m/yyyy')
-  if (format(m, 'd mmm') !== format(now, 'd mmm')) return format(m, 'd mmm')
-  return format(m, 'h:mm')
+  if (isSameYear(m, now)) return format(m, 'd/M/yyyy')
+  if (format(m, 'd MMM') !== format(now, 'd MMM')) return format(m, 'd MMM')
+  return format(m, 'h:MM')
 }
 
 export function isEdge(): boolean {
