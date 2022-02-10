@@ -1,6 +1,18 @@
 .react-datepicker {
   width: 100% !important;
+  border-radius: 0;
   * {
     float: none;
+    box-sizing: content-box;
+  }
+  .react-datepicker__day-names {
+    margin-left: 0.35rem;
+  }
+  .react-datepicker__day-name {
+    box-sizing: border-box;
+    margin: 0 1.86rem;
+  }
+  .react-datepicker__day {
+    padding: 0.195rem 1.7rem;
   }
 }
