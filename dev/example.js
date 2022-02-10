@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-//import { Socket } from 'phoenix'
+import { Socket } from 'phoenix'
 
 import WebClient from '../src/index'
 import './example.scss'
 
 const user_id = 'YCP'
-const bot_id = '5b9e0beb-3c3d-4567-a0f4-63fa02fd588b'
+const bot_id = '4b63a542-2c27-480e-8797-b6ecb0eee4db'
 const mapsApiKey = process.env.GOOGLE_MAPS_API_KEY
-//const socket = new Socket('ws://localhost:4000/socket')
-//socket.connect()
+const socket = new Socket('wss://staging.bsqd.me/socket')
+socket.connect()
 
 function App() {
   const [hide_input, setHideinput] = useState(false)
@@ -21,6 +21,7 @@ function App() {
           bot_id={bot_id}
           params={{ user_id }}
           mapsApiKey={mapsApiKey}
+          socket={socket}
           onHideInput={setHideinput}
           hideAvatars
           settings={{ alwaysFocus: true, chat_config: { disabled_inputs: [] }, hide_input }}
