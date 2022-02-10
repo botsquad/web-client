@@ -43,11 +43,11 @@ export const checkDateConstraints = (currentDate: Date, constraints: string[] | 
     }
     if (constraint === 'workdays') {
       // 1 = monday, 7 = sunday
-      if (!isWeekend(value)) return false
+      if (isWeekend(value)) return false
     }
     if (constraint === 'weekends') {
       // 1 = monday, 7 = sunday
-      if (isWeekend(value)) return false
+      if (!isWeekend(value)) return false
     }
   }
   return true
