@@ -8,7 +8,7 @@ React component for the web.
 
 ## Demo
 
-- http://web-client-demo.apps.botsqd.com/
+- https://web-client-demo.bsqd.me/
 
 ## Installation
 
