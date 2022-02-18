@@ -19,6 +19,16 @@ import { Argument } from 'classnames'
 import Message, { As, Payload } from './elements/types'
 import { API } from '@botsquad/sdk'
 
+import 'moment/locale/nl'
+import 'moment/locale/de'
+import 'moment/locale/fr'
+import 'moment/locale/es'
+import 'moment/locale/da'
+import 'moment/locale/fi'
+
+import moment from 'moment'
+moment.locale('en')
+
 export type Meta = {
   readonly dialog?: string | null
   readonly file?: string | null
