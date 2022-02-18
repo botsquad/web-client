@@ -12,7 +12,9 @@ import botChannelJoin from './channel'
 import { uploadFile } from './upload'
 import { Offline } from './icons'
 import UploadTrigger from './UploadTrigger'
+import moment from 'moment'
 
+moment.locale('en')
 import './index.scss'
 import ChatContext from './ChatContext'
 import { Argument } from 'classnames'
