@@ -8,7 +8,8 @@ React component for the web.
 
 ## Demo
 
-- http://web-client-demo.apps.botsqd.com/
+A Botsquad chatbot has a lot of UI controls, like input widgets and chat bubble types. To try them all out, visit the
+[Web Client demonstration page](https://web-client-demo.bsqd.me/).
 
 ## Installation
 
