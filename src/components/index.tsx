@@ -412,14 +412,15 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
   }
 
   render() {
-    const localePrefs = this.state.conversationMeta?.locale
-      ? [this.state.conversationMeta?.locale]
-      : this.state.localePrefs
-    const props = { ...this.props, localePrefs }
+    const localePrefs = (
+      this.state.conversationMeta?.locale ? [this.state.conversationMeta.locale] : this.state.localePrefs
+    ).map(l => l.replace(/[^a-z].*$/, ''))
+
     const { modal, ...state } = this.state
     const allProps = {
-      ...props,
+      ...this.props,
       ...state,
+      localePrefs,
       conversationMeta: this.state.conversationMeta,
       online: this.state.online,
       channel: this.handler.channel,
@@ -435,7 +436,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
       modalParams: this.state.modalParams,
       onLoad: null,
       settings: this.props.settings,
-      localePrefs: this.state.localePrefs,
+      localePrefs,
     }
     return (
       <ChatContext props={{ ...allProps }}>
