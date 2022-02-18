@@ -1,11 +1,4 @@
 import moment, { Moment } from 'moment'
-import 'moment/locale/nl'
-import 'moment/locale/de'
-import 'moment/locale/fr'
-import 'moment/locale/es'
-import 'moment/locale/da'
-import 'moment/locale/fi'
-import 'moment/locale/ar'
 
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
@@ -65,7 +58,7 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formC
   }
 
   const selectDateText = value?.length
-    ? moment(value).locale('en').format('D-M-Y')
+    ? moment(value).format('D-M-Y')
     : chatLabel({ ui_labels: [] }, formContext.localePrefs, 'select_date')
 
   const inputMethodContainer: any = document.querySelector('.botsi-web-client')
