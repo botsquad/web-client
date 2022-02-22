@@ -23,6 +23,7 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     localePrefs,
     message,
     inline,
+    hideInput,
   } = useChatProps()
 
   const [inputMethod, setInputMethod] = useState<any | null>(null)
@@ -80,7 +81,7 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
   }
 
   const allDisabled = () => {
-    return settings?.hide_input || (isDisabled('text') && isDisabled('location') && isDisabled('image'))
+    return hideInput || (isDisabled('text') && isDisabled('location') && isDisabled('image'))
   }
 
   const method = inputMethod || inputMethodOverride

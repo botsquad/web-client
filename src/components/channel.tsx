@@ -1,19 +1,22 @@
 import Chat from 'components'
 import { Channel, Socket } from 'phoenix'
 import { setCookieUserId } from '../common/util'
+import { AugmentedChannel } from './ChatContext'
 
 export default function botChatHandler(
   component: Chat,
   socket: Socket,
-  bot_id: string,
   params: Record<string, string>,
-) {
+): Promise<AugmentedChannel | undefined> {
   if (!socket) {
-    return null
+    return Promise.resolve(undefined)
   }
 
-  const defaultTopic = `bot:${bot_id}~${params.g || 'main'}`
-  const topic = component.props.makeChannelTopic?.(bot_id, params) || defaultTopic
+  const { bot_id, operatorConversationId, onEmit, onReady, onChannel, onConversationMeta, onError, onDebug, onClose } =
+    component.props
+
+  const botTopic = `bot:${bot_id}~${params.g || 'main'}`
+  const topic = operatorConversationId ? `conversation:${operatorConversationId}` : botTopic
 
   const channel: Channel & { hasMoreHistory?: any; getMoreHistory?: any } = socket.channel(topic, params)
 
@@ -56,9 +59,9 @@ export default function botChatHandler(
           setCookieUserId(joinResult.user_id)
         }
 
-        if (component.props.onChannel) {
+        if (onChannel) {
           if (!component.mounted) return
-          component.props.onChannel(channel)
+          onChannel(channel as AugmentedChannel)
         }
 
         channel.on('history', ({ events, next }) => {
@@ -67,7 +70,7 @@ export default function botChatHandler(
           historyNext = next || null
           const history = events.reverse().map(({ time, ...rest }: any) => ({ ...rest, time: Date.parse(time) }))
           gotFirstHistory = true
-          component.prependEvents(history, component.props.onReady, true)
+          component.prependEvents(history, onReady, true)
         })
         channel.on('typing', ({ payload, as }) => {
           if (!component.mounted) return
@@ -75,8 +78,8 @@ export default function botChatHandler(
         })
         channel.on('message', event => {
           if (!component.mounted) return
-          if (event.payload?.input_method === 'closed' && component.props.onHideInput) {
-            component.props.onHideInput(event.payload)
+          if (event.payload?.input_method === 'closed') {
+            component.setState({ hideInput: true })
           }
           component.setState({ online: true })
           component.addEvent({ ...event, time: new Date().getTime() })
@@ -101,39 +104,29 @@ export default function botChatHandler(
           if (event.event === 'trigger_audio') {
             component.triggerAudio(event.payload)
           }
-          if (event.event === 'hide_input' && component.props.onHideInput) {
-            component.props.onHideInput(event.payload)
+          if (event.event === 'hide_input') {
+            component.setState({ hideInput: event.payload })
           }
-          if (component.props.onEmit) {
-            component.props.onEmit(event)
-          }
+          onEmit?.(event)
         })
         channel.on('conversation_meta', conversationMeta => {
           component.setState({ conversationMeta })
-          if (component.props.onConversationMeta) {
-            component.props.onConversationMeta(conversationMeta)
-          }
+          onConversationMeta?.(conversationMeta)
         })
         channel.on('error', error => {
           if (!component.mounted) return
-          if (component.props.onError) {
-            component.props.onError(error)
-          }
+          onError?.(error)
         })
         channel.on('debug_info', info => {
           if (!component.mounted) return
-          if (component.props.onDebug) {
-            component.props.onDebug(info)
-          }
+          onDebug?.(info)
         })
         channel.onClose(() => {
           if (!component.mounted) return
-          if (component.props.onClose) {
-            component.props.onClose()
-          }
+          onClose?.()
         })
 
-        resolve(channel)
+        resolve(channel as AugmentedChannel)
       })
   })
 }

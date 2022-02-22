@@ -1,29 +1,26 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-//import { Socket } from 'phoenix'
+import { Socket } from 'phoenix'
 
 import WebClient from '../src/index'
 import './example.scss'
 
-const user_id = 'YCP'
-const bot_id = '5b9e0beb-3c3d-4567-a0f4-63fa02fd588b'
 const mapsApiKey = process.env.GOOGLE_MAPS_API_KEY
-//const socket = new Socket('ws://localhost:4000/socket')
-//socket.connect()
+const token =
+  'SFMyNTY.g2gDbQAAACQwNjhiNmI0MS1jYzNhLTRlM2EtODUyMy0xZTg4MDk1ZTMzMmZuBgD3oOMgfwFiAAFRgA.3oxf7K8cPE65eTylLnuNhktg5cDLNJFDx_TvuMEnQhI'
+const socket = new Socket('ws://localhost:4001/socket', { params: { token } })
+socket.connect()
 
 function App() {
-  const [hide_input, setHideinput] = useState(false)
-
   return (
     <div className="app">
       <div className="botsquad-components layout-docked">
         <WebClient
-          bot_id={bot_id}
-          params={{ user_id }}
+          socket={socket}
           mapsApiKey={mapsApiKey}
-          onHideInput={setHideinput}
           hideAvatars
-          settings={{ alwaysFocus: true, chat_config: { disabled_inputs: [] }, hide_input }}
+          settings={{ alwaysFocus: true, chat_config: { disabled_inputs: [] } }}
+          operatorConversationId="33d58cd3-919b-40ff-b72b-fa45ff6286c1"
         />
       </div>
     </div>
