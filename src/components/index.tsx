@@ -1,5 +1,5 @@
 import React, { createRef } from 'react'
-import { Channel, Socket } from 'phoenix'
+import { Socket } from 'phoenix'
 const lang = navigator.language
 import { EventEmitter } from 'fbemitter'
 

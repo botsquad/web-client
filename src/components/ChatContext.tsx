@@ -46,6 +46,7 @@ export interface ChatContextProps {
   userAvatar: any
   scrollToBottom: (() => void) | null
   showToast: (toast: any) => void
+  operatorConversationId?: string
   hideInput: boolean
 }
 
