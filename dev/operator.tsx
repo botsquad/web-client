@@ -16,8 +16,6 @@ const socket = new Socket('ws://localhost:4001/socket', { params: { token } })
 socket.connect()
 
 function App() {
-  const [channel, setChannel] = useState<Channel | null>(null)
-  const [meta, setMeta] = useState<API.Conversation | null>(null)
   return (
     <div className="app">
       <div className="botsquad-components layout-docked">
@@ -27,11 +25,8 @@ function App() {
           hideAvatars
           settings={{ alwaysFocus: true, chat_config: { disabled_inputs: [] } }}
           operatorConversationId={conversationId}
-          onChannel={setChannel}
-          onConversationMeta={setMeta}
         />
       </div>
-      {meta && channel ? <ChatInput channel={channel} meta={meta} /> : null}
     </div>
   )
 }

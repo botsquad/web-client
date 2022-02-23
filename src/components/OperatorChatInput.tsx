@@ -1,6 +1,6 @@
 import React from 'react'
 import { useChatProps } from './ChatContext'
-
+import './OperatorChatInput.scss'
 const OperatorChatInput = () => {
   const { channel, conversationMeta } = useChatProps()
   const join = () => {
@@ -13,11 +13,15 @@ const OperatorChatInput = () => {
 
   if (!conversationMeta.operator_present) {
     console.log('Operator Not Present')
-    return <button onClick={join}>Join</button>
+    return (
+      <button className="Operator-button" onClick={join}>
+        Join
+      </button>
+    )
   }
   return (
     <form
-      style={{ display: 'flex' }}
+      className="Operator-form"
       onSubmit={e => {
         e.preventDefault()
         const input = (e.target as any).text as HTMLInputElement
@@ -27,15 +31,19 @@ const OperatorChatInput = () => {
       }}
     >
       <input
+        className="Operator-input"
         autoFocus
         name="text"
         type="text"
         defaultValue=""
+        autoComplete="off"
         placeholder="Type operator message.."
         style={{ fontSize: 20, padding: '4px 8px' }}
       />
-      <button>send</button>
-      <button onClick={leave}>Leave</button>
+      <button className="Operator-button Send-button">send</button>
+      <button className="Operator-button Leave-button" onClick={leave}>
+        Leave
+      </button>
     </form>
   )
 }

@@ -12,8 +12,7 @@ export default function botChatHandler(
     return Promise.resolve(undefined)
   }
 
-  const { bot_id, operatorConversationId, onEmit, onReady, onChannel, onConversationMeta, onError, onDebug, onClose } =
-    component.props
+  const { bot_id, operatorConversationId, onEmit, onReady, onError, onDebug, onClose } = component.props
 
   const botTopic = `bot:${bot_id}~${params.g || 'main'}`
   const topic = operatorConversationId ? `conversation:${operatorConversationId}` : botTopic
@@ -57,11 +56,6 @@ export default function botChatHandler(
 
         if (params.user_id && joinResult.user_id && params.user_id !== joinResult.user_id) {
           setCookieUserId(joinResult.user_id)
-        }
-
-        if (onChannel) {
-          if (!component.mounted) return
-          onChannel(channel as AugmentedChannel)
         }
 
         channel.on('history', ({ events, next }) => {
@@ -115,7 +109,6 @@ export default function botChatHandler(
         })
         channel.on('conversation_meta', conversationMeta => {
           component.setState({ conversationMeta })
-          onConversationMeta?.(conversationMeta)
         })
         channel.on('error', error => {
           if (!component.mounted) return

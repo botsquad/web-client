@@ -202,7 +202,6 @@ export interface ChatProps {
   mapsApiKey?: string
   botAvatar?: string
   userAvatar?: string
-  onChannel?: (channel: AugmentedChannel) => void
   onChannelLeave?: () => void
   onClose?: () => void
   onEmit?: (event: Emit) => void
@@ -212,7 +211,6 @@ export interface ChatProps {
   onJoinError?: (payload: { reason: string }) => void
   onError?: (message: string) => void
   onDebug?: (info: DebugInfo) => void
-  onConversationMeta?: (meta: API.Conversation) => void
   onReady?: () => void
 }
 
