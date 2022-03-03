@@ -133,7 +133,7 @@ const ChatInput: React.FC = () => {
 
   const upload = (accept: string) => {
     if (handler)
-      handler.component.uploader.trigger(accept, (file: File) => {
+      handler.component.uploader?.trigger(accept, (file: File) => {
         if (file.size > 10 * 1024 * 1024) {
           alert('File is too large, please select a smaller file.')
           return
