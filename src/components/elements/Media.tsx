@@ -21,7 +21,7 @@ class ModalWrapper extends React.PureComponent<ModalProps> {
     if (this.props.toggleModalPreferHeight) {
       this.props.handler.component.hideModal()
     } else {
-      this.props.handler.component.showModal(this.props.message)
+      this.props.handler.component.showModal(this.props.message,null)
     }
   }
 
