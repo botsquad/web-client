@@ -89,7 +89,7 @@ const StaticLocation: React.FC<StaticLocationProps> = ({ className, message, han
   const url = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&zoom=${zoom}&scale=2&size=150x150&maptype=${maptype}&format=png&visual_refresh=true&markers=size:mid%7Ccolor:0xff0000%7Clabel:%7C${lat},${lon}&key=${mapsApiKey}`
 
   return (
-    <div className={className} onClick={() => handler.component.showModal(message)}>
+    <div className={className} onClick={() => handler.component.showModal(message,null)}>
       {mapsApiKey ? <img src={url} alt="Location" /> : MyLocation}
     </div>
   )

@@ -6,7 +6,6 @@ import { ChatHandler } from '.'
 import InputMethodTemplate from './elements/InputMethodTemplate'
 import Message, { As, Payload } from './elements/types'
 import ElementFactory from './elements'
-import { API } from '@botsquad/sdk'
 
 export function useChatProps() {
   return useContext(ChatPropsContext)
