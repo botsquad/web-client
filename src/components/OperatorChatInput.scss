@@ -12,12 +12,10 @@ $button-text-color: #fff;
   border: none;
   cursor: pointer;
   transition: transform ease-in 0.1s, box-shadow ease-in 0.25s;
-  box-shadow: 0 2px 25px rgba(255, 0, 128, 0.5);
   outline: none;
 
   &:active {
     background-color: darken($button-bg, 5%);
-    box-shadow: 0 2px 25px rgba(255, 0, 128, 0.2);
   }
 }
 
@@ -32,7 +30,8 @@ $button-text-color: #fff;
   grid-column: 1 / span 6;
   grid-row: 1;
   border: none;
-  background: rgba(220, 220, 220, 0.6);
+  border-top: 1px solid rgba(0, 0, 0, 0.2) !important;
+  background: white;
   padding: 0.5rem 1rem;
   &:focus {
     outline: none;
