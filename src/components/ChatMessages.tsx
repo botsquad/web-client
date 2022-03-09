@@ -101,9 +101,8 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
     let currentGroup: any = false
 
     this._connectFormEvents(events)
-
     for (const message of events) {
-      if (!message.renderable) {
+      if (!message.renderable && message.type !== 'annotation') {
         continue
       }
       if (currentGroup === false || !this.isGroupable(message, lastMessage)) {

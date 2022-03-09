@@ -7,6 +7,7 @@ import Location from './Location'
 import { Payload } from './types'
 import Message from './types'
 import { ChatHandler } from 'components'
+import Annotation from './Annotation'
 
 interface AttributesProp {
   className: string
@@ -23,7 +24,9 @@ type MessageProp = Message<Payload>
 
 export default function elementFactory({ type, payload }: MessageProp, attrs: AttributesProp): React.FC {
   let element: any = null
+
   if (type === 'text') {
+    // console.log('Text:', attrs)
     element = <Text {...attrs} />
   }
 
@@ -53,6 +56,11 @@ export default function elementFactory({ type, payload }: MessageProp, attrs: At
 
   if (type === 'location') {
     element = <Location {...attrs} />
+  }
+
+  if (type === 'annotation') {
+    console.log('annotation', payload)
+    element = <Annotation attributes={attrs} payload={payload} />
   }
 
   return element
