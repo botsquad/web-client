@@ -16,7 +16,6 @@ const ChatWindow: React.FC = () => {
   const layout = `layout-${settings?.layout || 'docked'}`
   return (
     <div className={classNames('chat-window', { online }, layout, deviceClasses())}>
-      {/* @ts-ignore */}
       <ChatMessages {...allProps} updater={useChatPropsUpdate()} />
       {settings && settings.layout !== 'embedded' ? <ChatInput /> : null}
     </div>
