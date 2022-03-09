@@ -23,7 +23,6 @@
     "noUnusedParameters": true,
     "resolveJsonModule": true,
     "declaration": true,
-    "emitDeclarationOnly": true,
     "outDir": "dist"
   },
   "include": ["src/index.tsx"],
