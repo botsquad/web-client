@@ -15,6 +15,7 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
   const {
     handler,
     events,
+    operatorConversationId,
     conversationMeta,
     scrollToBottom: chatMessagesScrollToBottom,
     settings,
@@ -23,6 +24,7 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     localePrefs,
     message,
     inline,
+    hideInput,
   } = useChatProps()
 
   const [inputMethod, setInputMethod] = useState<any | null>(null)
@@ -80,7 +82,7 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
   }
 
   const allDisabled = () => {
-    return settings?.hide_input || (isDisabled('text') && isDisabled('location') && isDisabled('image'))
+    return hideInput || (isDisabled('text') && isDisabled('location') && isDisabled('image'))
   }
 
   const method = inputMethod || inputMethodOverride
@@ -89,11 +91,13 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     return inputMethodFactory(method, FactoryProps, { finish, cancel })
   }
 
+  if (operatorConversationId) return null
+
   if (allDisabled() && !operatorActive) {
     return null
   }
 
-  return props.children(operatorActive) // TODO: Ask what this is!!!!!
+  return props.children(operatorActive)
 }
 
 export default ChatInputModal

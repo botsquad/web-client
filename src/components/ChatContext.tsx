@@ -20,8 +20,10 @@ export type InputMethod = {
   payload: any
 }
 
-interface ChatProps {
-  channel: Channel & { hasMoreHistory: () => boolean; getMoreHistory: () => any }
+export type AugmentedChannel = Channel & { hasMoreHistory: () => boolean; getMoreHistory: () => any }
+
+export interface ChatContextProps {
+  channel?: AugmentedChannel
   conversationMeta: any
   events: Message<any>[]
   handler: ChatHandler
@@ -43,9 +45,12 @@ interface ChatProps {
   botAvatar: any
   userAvatar: any
   scrollToBottom: (() => void) | null
+  showToast: (toast: any) => void
+  operatorConversationId?: string
+  hideInput: boolean
 }
 
-const DEFAULT_INPUT_METHOD_PROPS: ChatProps = {
+const DEFAULT_INPUT_METHOD_PROPS: ChatContextProps = {
   channel: {} as Channel & { hasMoreHistory: () => boolean; getMoreHistory: () => any },
   conversationMeta: null,
   events: [],
@@ -68,25 +73,27 @@ const DEFAULT_INPUT_METHOD_PROPS: ChatProps = {
   botAvatar: null,
   userAvatar: null,
   scrollToBottom: null,
+  showToast: toast => console.log(toast),
+  hideInput: false,
 }
 
-type ChatUpdateType = (update: Partial<ChatProps>) => void
+type ChatUpdateType = (update: Partial<ChatContextProps>) => void
 
-const ChatPropsContext = createContext<ChatProps>(DEFAULT_INPUT_METHOD_PROPS)
+const ChatPropsContext = createContext<ChatContextProps>(DEFAULT_INPUT_METHOD_PROPS)
 // {} as ChatUpdateType prevents showing that it could be null
 const ChatUpdateContext = createContext<ChatUpdateType>({} as ChatUpdateType)
 
-const ChatContext = (props: any) => {
-  const [values, setValues] = useState<ChatProps>({
+const ChatContext: React.FC<{ initial: Partial<ChatContextProps> }> = props => {
+  const [values, setValues] = useState<ChatContextProps>({
     ...DEFAULT_INPUT_METHOD_PROPS,
-    ...props.props,
+    ...props.initial,
   })
 
   useEffect(() => {
-    setValues({ ...values, ...props.props })
-  }, [props.props])
+    setValues({ ...values, ...props.initial })
+  }, [props.initial])
 
-  const updateValues = (update: Partial<ChatProps>) => {
+  const updateValues = (update: Partial<ChatContextProps>) => {
     setValues(prevState => {
       const newValues = { ...prevState, ...update }
       return newValues
