@@ -18,6 +18,7 @@ module.exports = {
   entry: {
     main: './src/index',
     example: './dev/example',
+    operator: './dev/operator',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

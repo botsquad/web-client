@@ -1,5 +1,5 @@
 import React, { createRef } from 'react'
-import { Channel, Socket } from 'phoenix'
+import { Socket } from 'phoenix'
 const lang = navigator.language
 import { EventEmitter } from 'fbemitter'
 
@@ -14,7 +14,7 @@ import { Offline } from './icons'
 import UploadTrigger from './UploadTrigger'
 
 import './index.scss'
-import ChatContext from './ChatContext'
+import ChatContext, { AugmentedChannel, ChatContextProps } from './ChatContext'
 import { Argument } from 'classnames'
 import Message, { As, Payload } from './elements/types'
 import { API } from '@botsquad/sdk'
@@ -49,29 +49,27 @@ export type DebugInfo = {
 export type Emit = { event: string; payload?: any }
 
 export class ChatHandler {
-  component: any //typeof Chat
-  channel: any
+  component: Chat
+  channel?: AugmentedChannel
   _activeAudio: any
   _audioElements: any
   _eventQueue: any[]
   _lastModal: any
   constructor(component: any) {
     this.component = component
-    this.channel = null
+    this.channel = undefined
     this._activeAudio = null
     this._audioElements = []
     this._eventQueue = []
   }
 
   joinChannel(props: any, socket: Socket) {
-    const { bot_id, params, onJoinError } = props
+    const { params, onJoinError } = props
     this.leaveChannel()
     this.component.setState({ upload: null, typing: false, events: [] })
-    if (!params) {
-      return
-    }
-    const params2 = { ...params, context: params.context || { user: getUserInfo() } }
-    botChannelJoin(this.component, socket, bot_id, params2)?.then(channel => {
+    const params2 = { ...params, context: params?.context || { user: getUserInfo() } }
+
+    botChannelJoin(this.component, socket, params2)?.then(channel => {
       this.channel = channel
       this._eventQueue.forEach(({ type, payload }) => {
         this.send(type, payload)
@@ -83,7 +81,7 @@ export class ChatHandler {
 
   leaveChannel() {
     if (this.channel !== null) {
-      this.channel.leave()
+      this.channel?.leave()
       if (this.component.props.onChannelLeave) {
         this.component.props.onChannelLeave()
       }
@@ -95,7 +93,7 @@ export class ChatHandler {
       this._eventQueue.push({ type, payload })
       return
     }
-    this.channel.push('user_action', { type, payload })
+    this.channel?.push('user_action', { type, payload })
     if (type === 'message' && typeof payload === 'string') {
       payload = { text: payload, type: 'text' }
     }
@@ -119,7 +117,7 @@ export class ChatHandler {
     let { type } = file
     this.component.setState({ upload: { name, type, progress: 0 } })
     this.channel
-      .push('get_upload_url', { type })
+      ?.push('get_upload_url', { type })
       .receive('ok', ({ upload_url, public_url }: { upload_url: string; public_url: string }) => {
         uploadFile(
           file,
@@ -194,17 +192,17 @@ export class ChatHandler {
 }
 
 export interface ChatProps {
-  bot_id: string
+  bot_id?: string
+  operatorConversationId?: string
   socket?: Socket
   params?: Record<string, any>
-  onHideInput?: (flag: boolean) => void
   settings: Record<string, any>
   localePrefs?: string[]
   closeConversation?: () => void
   mapsApiKey?: string
   botAvatar?: string
   userAvatar?: string
-  onChannel?: (channel: Channel) => void
+  onChannel?: (channel: AugmentedChannel) => void
   onChannelLeave?: () => void
   onClose?: () => void
   onEmit?: (event: Emit) => void
@@ -214,12 +212,12 @@ export interface ChatProps {
   onJoinError?: (payload: { reason: string }) => void
   onError?: (message: string) => void
   onDebug?: (info: DebugInfo) => void
-  makeChannelTopic?: (botId: string, params: Record<string, any>) => string | null
   onConversationMeta?: (meta: API.Conversation) => void
   onReady?: () => void
 }
 
 interface ChatState {
+  hideInput: boolean
   events: Message<any>[]
   typing: boolean
   typingAs: As | null
@@ -251,6 +249,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
   constructor(props: ChatProps) {
     super(props)
     this.state = {
+      hideInput: false,
       events: [],
       typing: false,
       typingAs: null,
@@ -363,10 +362,8 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
           )
         })
       if (lastInputState) {
-        const hide_input = JSON.parse(lastInputState.payload.json)
-        if (this.props.onHideInput) {
-          this.props.onHideInput(hide_input)
-        }
+        const hideInput = JSON.parse(lastInputState.payload.json)
+        this.setState({ hideInput })
       }
 
       // determine modal state
@@ -417,12 +414,11 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
     ).map(l => l.replace(/[^a-z].*$/, ''))
 
     const { modal, ...state } = this.state
-    const allProps = {
+    const contextProps: Partial<ChatContextProps> = {
       ...this.props,
       ...state,
       localePrefs,
       conversationMeta: this.state.conversationMeta,
-      online: this.state.online,
       channel: this.handler.channel,
       handler: this.handler,
       showToast: this.showToast,
@@ -439,7 +435,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
       localePrefs,
     }
     return (
-      <ChatContext props={{ ...allProps }}>
+      <ChatContext initial={{ ...contextProps }}>
         <div className="botsi-web-client" ref={this.root}>
           <ChatWindow />
           {this.state.toast ? <ChatToast toast={this.state.toast} hiding={this.state.toastHiding} /> : null}
@@ -459,6 +455,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
   componentDidMount() {
     this.mounted = true
     this.handler.joinChannel(this.props, this.state.socket)
+
     if (this.notificationManager) {
       this.notificationManager.componentDidMount()
     }
