@@ -10,7 +10,7 @@ const mapsApiKey = process.env.GOOGLE_MAPS_API_KEY
 const token =
   'SFMyNTY.g2gDbQAAACRjNjk3NTJmZC01NmMxLTQyNDgtYmRiYi1iODMyYzkxZmU2ZmRuBgBDBBBLfwFiAAFRgA.ytj5Dd4UEjOybHCyCJZQ3920C4oduFFTZ7ILIZmE9mg'
 
-const conversationId = 'a575d323-37c0-4b63-aee2-51eadbfeced5'
+const conversationId = 'f1507d8f-f1ad-43dc-9f6e-faf589738cbd'
 
 const socket = new Socket('ws://localhost:4001/socket', { params: { token } })
 socket.connect()
