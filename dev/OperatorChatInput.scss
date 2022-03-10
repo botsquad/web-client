@@ -22,21 +22,22 @@ $button-text-color: #fff;
 .Operator-form {
   display: inline-grid;
   gap: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.2) !important;
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: 1fr;
 }
 
 .Operator-input {
-  grid-column: 1 / span 6;
+  grid-column: 1 / span 4;
   grid-row: 1;
   border: none;
-  border-top: 1px solid rgba(0, 0, 0, 0.2) !important;
   background: white;
   padding: 0.5rem 1rem;
   &:focus {
     outline: none;
     border: none;
   }
+  padding-right: 33%;
 }
 
 .Send-button {
