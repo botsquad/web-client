@@ -5,6 +5,7 @@ import { Socket, Channel } from 'phoenix'
 import WebClient from '../src/index'
 import './example.scss'
 import { API } from '@botsquad/sdk'
+import OperatorChatInput from './OperatorChatInput'
 
 const mapsApiKey = process.env.GOOGLE_MAPS_API_KEY
 const token =
@@ -25,6 +26,7 @@ function App() {
           hideAvatars
           settings={{ alwaysFocus: true, chat_config: { disabled_inputs: [] } }}
           operatorConversationId={conversationId}
+          OperatorChatInput={OperatorChatInput}
         />
       </div>
     </div>

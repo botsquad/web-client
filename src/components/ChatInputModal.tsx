@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import findLastIndex from 'lodash/findLastIndex'
 import isEqual from 'lodash/isEqual'
-import OperatorChatInput from './OperatorChatInput'
 import inputMethodFactory from './input_method'
 import { useChatProps } from './ChatContext'
 
@@ -16,6 +15,7 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     handler,
     events,
     operatorConversationId,
+    OperatorChatInput,
     conversationMeta,
     scrollToBottom: chatMessagesScrollToBottom,
     settings,
@@ -92,7 +92,10 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     return inputMethodFactory(method, FactoryProps, { finish, cancel })
   }
 
-  if (operatorConversationId) return channel && conversationMeta ? <OperatorChatInput /> : null
+  if (operatorConversationId)
+    return channel && conversationMeta && OperatorChatInput ? (
+      <OperatorChatInput channel={channel} conversationMeta={conversationMeta} />
+    ) : null
 
   if (allDisabled() && !operatorActive) {
     return null

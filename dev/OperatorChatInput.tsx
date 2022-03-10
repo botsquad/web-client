@@ -1,8 +1,12 @@
 import React from 'react'
-import { useChatProps } from './ChatContext'
 import './OperatorChatInput.scss'
-const OperatorChatInput = () => {
-  const { channel, conversationMeta } = useChatProps()
+
+interface Props {
+  channel: any
+  conversationMeta: any
+}
+
+const OperatorChatInput: React.FC<Props> = ({ channel, conversationMeta }) => {
   const join = () => {
     channel?.push('operator_join', {})
   }

@@ -14,7 +14,7 @@ import { Offline } from './icons'
 import UploadTrigger from './UploadTrigger'
 
 import './index.scss'
-import ChatContext, { AugmentedChannel, ChatContextProps } from './ChatContext'
+import ChatContext, { AugmentedChannel, ChatContextProps, OperatorChatInputProps } from './ChatContext'
 import { Argument } from 'classnames'
 import Message, { As, Payload } from './elements/types'
 import { API } from '@botsquad/sdk'
@@ -194,6 +194,7 @@ export class ChatHandler {
 export interface ChatProps {
   bot_id?: string
   operatorConversationId?: string
+  OperatorChatInput?: React.FC<OperatorChatInputProps>
   socket?: Socket
   params?: Record<string, any>
   settings: Record<string, any>

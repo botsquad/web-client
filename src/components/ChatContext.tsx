@@ -22,6 +22,11 @@ export type InputMethod = {
 
 export type AugmentedChannel = Channel & { hasMoreHistory: () => boolean; getMoreHistory: () => any }
 
+export interface OperatorChatInputProps {
+  channel: any
+  conversationMeta: any
+}
+
 export interface ChatContextProps {
   channel?: AugmentedChannel
   conversationMeta: any
@@ -47,6 +52,7 @@ export interface ChatContextProps {
   scrollToBottom: (() => void) | null
   showToast: (toast: any) => void
   operatorConversationId?: string
+  OperatorChatInput?: React.FC<OperatorChatInputProps>
   hideInput: boolean
 }
 
