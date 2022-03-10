@@ -1,3 +1,16 @@
+export type AnnotationPayloadType =
+  | 'authentication'
+  | 'create_note'
+  | 'error'
+  | 'escalation'
+  | 'intent-match'
+  | 'mail'
+  | 'note'
+  | 'notification'
+  | 'redirect'
+  | 'sms_notify'
+  | 'call_transcript'
+
 export interface Text {
   message: string
   quick_replies?: { content_type: string; title: string }[]
@@ -102,7 +115,13 @@ export interface DefaultMessageParams {
   read_only_data?: any
 }
 
-export type Payload = Media & Text & Location & Template
+export interface Annotation {
+  payload: any
+  type: AnnotationPayloadType
+  message: string
+}
+
+export type Payload = Media & Text & Location & Template & Annotation
 
 type Message<T extends Media | Text | Location | Template | unknown> = {
   payload: T

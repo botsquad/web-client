@@ -13,6 +13,7 @@ interface AttributesProp {
   className: string
   message: Message<Payload>
   handler: ChatHandler
+  operatorConversationId?: string
   onLoad: (() => void) | null
   toggleModalPreferHeight: ((condition: boolean) => void) | null
   modalParams?: { index?: number }
@@ -24,7 +25,7 @@ type MessageProp = Message<Payload>
 
 export default function elementFactory({ type, payload }: MessageProp, attrs: AttributesProp): React.FC {
   let element: any = null
-
+  console.log('attrs', attrs)
   if (type === 'text') {
     // console.log('Text:', attrs)
     element = <Text {...attrs} />
@@ -57,10 +58,10 @@ export default function elementFactory({ type, payload }: MessageProp, attrs: At
   if (type === 'location') {
     element = <Location {...attrs} />
   }
-
-  if (type === 'annotation') {
+  // Payload is different for this one
+  if (type === 'annotation' && attrs.operatorConversationId) {
     console.log('annotation', payload)
-    element = <Annotation attributes={attrs} payload={payload} />
+    element = <Annotation payload={payload} />
   }
 
   return element
