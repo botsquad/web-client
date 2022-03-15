@@ -77,6 +77,8 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     }
   }
 
+  if (operatorConversationId) return null
+
   const isDisabled = (item: any) => {
     return settings?.chat_config.disabled_inputs?.indexOf(item) >= 0
   }
@@ -90,8 +92,6 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     const FactoryProps = { handler, inline, inputModal, settings, localePrefs, message }
     return inputMethodFactory(method, FactoryProps, { finish, cancel })
   }
-
-  if (operatorConversationId) return null
 
   if (allDisabled() && !operatorActive) {
     return null
