@@ -1,0 +1,57 @@
+$button-bg: dodgerBlue;
+$button-text-color: #fff;
+
+.Operator-button {
+  display: inline-block;
+  font-size: 1em;
+  padding: 1em 2em;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: $button-bg;
+  color: $button-text-color;
+  border: none;
+  cursor: pointer;
+  transition: transform ease-in 0.1s, box-shadow ease-in 0.25s;
+  outline: none;
+
+  &:active {
+    background-color: darken($button-bg, 5%);
+  }
+}
+
+.Operator-form {
+  display: inline-grid;
+  gap: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.2) !important;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: 1fr;
+}
+
+.Operator-input {
+  grid-column: 1 / span 4;
+  grid-row: 1;
+  border: none;
+  background: white;
+  padding: 0.5rem 1rem;
+  &:focus {
+    outline: none;
+    border: none;
+  }
+}
+
+.Send-button {
+  grid-column: 5 / span 1;
+  grid-row: 1;
+  border-radius: 8px;
+  margin: 0.5em 0;
+  padding: 0.6rem 0rem;
+}
+
+.Leave-button {
+  grid-column: 6 / span 1;
+  grid-row: 1;
+  border-radius: 8px;
+  margin: 0.5em 0;
+  margin-right: 0.5em;
+  padding: 0.6rem 0rem;
+}
