@@ -14,7 +14,7 @@ import { Offline } from './icons'
 import UploadTrigger from './UploadTrigger'
 
 import './index.scss'
-import ChatContext, { AugmentedChannel, ChatContextProps, OperatorChatInputProps } from './ChatContext'
+import ChatContext, { AugmentedChannel, ChatContextProps } from './ChatContext'
 import { Argument } from 'classnames'
 import Message, { As, Payload } from './elements/types'
 import { API } from '@botsquad/sdk'
@@ -194,7 +194,6 @@ export class ChatHandler {
 export interface ChatProps {
   bot_id?: string
   operatorConversationId?: string
-  OperatorChatInput?: React.FC<OperatorChatInputProps>
   socket?: Socket
   params?: Record<string, any>
   settings: Record<string, any>
@@ -203,6 +202,7 @@ export interface ChatProps {
   mapsApiKey?: string
   botAvatar?: string
   userAvatar?: string
+  onChannel?: (channel: AugmentedChannel) => void
   onChannelLeave?: () => void
   onClose?: () => void
   onEmit?: (event: Emit) => void
@@ -212,6 +212,7 @@ export interface ChatProps {
   onJoinError?: (payload: { reason: string }) => void
   onError?: (message: string) => void
   onDebug?: (info: DebugInfo) => void
+  onConversationMeta?: (meta: API.Conversation) => void
   onReady?: () => void
 }
 

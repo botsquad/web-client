@@ -1,24 +1,23 @@
 {
   "name": "@botsquad/web-client",
-  "version": "1.3.1",
-  "sideEffects": [
-    "*.scss",
-    "*.css"
-  ],
+  "version": "1.4.1",
+  "sideEffects": ["*.scss", "*.css"],
   "main": "dist/main.js",
   "typings": "dist/index.d.ts",
   "engines": {
     "node": ">=0.4.5"
   },
   "scripts": {
-    "types": "tsc",
+    "build": "npm-run-all --parallel build:*",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:js": "NODE_ENV=production webpack --config webpack.prod.config.js --mode production",
+    "lint": "npm-run-all --parallel lint:*",
+    "lint:eslint": "eslint src/**/*.{ts,tsx}",
     "lint:types": "tsc --noEmit",
-    "build": "NODE_ENV=production webpack --config webpack.prod.config.js --mode production && npm run types",
+    "lintfix": "eslint --fix src/**/*.{ts,tsx}",
     "stats": "NODE_ENV=development webpack --json | webpack-bundle-size-analyzer",
     "dev": "webpack-dev-server --hot --host 0.0.0.0 --config ./webpack.config.js",
     "test": "mocha --require ts-node/register test/**/*.js test/**/*.ts test/**/*.tsx",
-    "lint": "eslint src/**/*.{ts,tsx}",
-    "lintfix": "eslint --fix src/**/*.{ts,tsx}",
     "prepare": "install-peers"
   },
   "author": "Arjan Scherpenisse <arjan@miraclethings.nl>",
@@ -112,7 +111,7 @@
     "jsdom": "^16.5.3",
     "mini-css-extract-plugin": "^2.3.0",
     "mocha": "^9.1.3",
-    "npm-run-all": "^4.1.2",
+    "npm-run-all": "^4.1.5",
     "patch-package": "^6.4.7",
     "postcss-css-variables": "^0.8.0",
     "postcss-loader": "^2.1.6",

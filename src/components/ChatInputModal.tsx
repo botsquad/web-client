@@ -15,7 +15,6 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     handler,
     events,
     operatorConversationId,
-    OperatorChatInput,
     conversationMeta,
     scrollToBottom: chatMessagesScrollToBottom,
     settings,
@@ -25,7 +24,6 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     message,
     inline,
     hideInput,
-    channel,
   } = useChatProps()
 
   const [inputMethod, setInputMethod] = useState<any | null>(null)
@@ -82,6 +80,8 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     return settings?.chat_config.disabled_inputs?.indexOf(item) >= 0
   }
 
+  if (operatorConversationId) return null
+
   const allDisabled = () => {
     return hideInput || (isDisabled('text') && isDisabled('location') && isDisabled('image'))
   }
@@ -91,11 +91,6 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     const FactoryProps = { handler, inline, inputModal, settings, localePrefs, message }
     return inputMethodFactory(method, FactoryProps, { finish, cancel })
   }
-
-  if (operatorConversationId)
-    return channel && conversationMeta && OperatorChatInput ? (
-      <OperatorChatInput channel={channel} conversationMeta={conversationMeta} />
-    ) : null
 
   if (allDisabled() && !operatorActive) {
     return null
