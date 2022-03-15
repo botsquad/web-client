@@ -160,3 +160,16 @@ export const FileDownload = (
     <path d="M18,15v3H6v-3H4v3c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2v-3H18z M17,11l-1.41-1.41L13,12.17V4h-2v8.17L8.41,9.59L7,11l5,5 L17,11z" />
   </svg>
 )
+
+export const BxErrorCircle = (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+    <path d="M11.953 2C6.465 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.493 2 11.953 2zM12 20c-4.411 0-8-3.589-8-8s3.567-8 7.953-8C16.391 4 20 7.589 20 12s-3.589 8-8 8z" />
+    <path d="M11 7h2v7h-2zm0 8h2v2h-2z" />
+  </svg>
+)
+
+export const BxEmail = (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+    <path d="M20 4H4c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zm0 2v.511l-8 6.223-8-6.222V6h16zM4 18V9.044l7.386 5.745a.994.994 0 0 0 1.228 0L20 9.044 20.002 18H4z" />
+  </svg>
+)

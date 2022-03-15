@@ -28,6 +28,7 @@ function messageHasModal({ type, payload }: { type: string; payload: Payload }) 
 interface ChatMessagesProps {
   handler: ChatHandler
   settings: Record<string, any> | null
+  operatorConversationId?: string
   host: any
   hideAvatars: boolean
   elementFactory: typeof ElementFactory | null
@@ -50,8 +51,6 @@ interface ChatMessagesState {
 }
 
 export default class ChatMessages extends React.Component<ChatMessagesProps> {
-  // const {handler, settings, host, hideAvatars, elementFactory, typingAs, botAvatar, channel, upload, typing, userAvatar, events, conversationMeta} = useChatProps()
-
   state: ChatMessagesState = {
     messageGroups: [],
     lastMessage: null,
@@ -60,8 +59,6 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
   scrollToBottomListener: any
 
   componentDidMount() {
-    // const chatPropsUpdate = useChatPropsUpdate() Preparing to use Context
-    // chatPropsUpdate('scrollToBottom', this.scrollToBottom)
     this.groupMessages(this.props)
     this.scrollToBottomListener = chatMessagesEvents.addListener('scrollToBottom', this.scrollToBottom)
     this.props.updater({ scrollToBottom: this.scrollToBottom })
@@ -101,9 +98,8 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
     let currentGroup: any = false
 
     this._connectFormEvents(events)
-
     for (const message of events) {
-      if (!message.renderable) {
+      if (!message.renderable && message.type !== 'annotation') {
         continue
       }
       if (currentGroup === false || !this.isGroupable(message, lastMessage)) {

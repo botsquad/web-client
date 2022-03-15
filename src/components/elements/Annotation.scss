@@ -1,0 +1,16 @@
+.annotation {
+  text-align: center;
+  font-size: 0.7em;
+
+  color: var(--botsquad-ui-color);
+  svg path {
+    fill: var(--botsquad-ui-color);
+  }
+
+  &.error {
+    color: red;
+    svg path {
+      fill: red;
+    }
+  }
+}
