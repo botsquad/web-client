@@ -92,10 +92,10 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     return inputMethodFactory(method, FactoryProps, { finish, cancel })
   }
 
-  if (operatorConversationId)
-    return channel && conversationMeta && OperatorChatInput ? (
-      <OperatorChatInput channel={channel} conversationMeta={conversationMeta} />
-    ) : null
+  if (operatorConversationId) console.log('channel:', channel, 'conversationMeta', conversationMeta)
+  return channel && OperatorChatInput ? (
+    <OperatorChatInput channel={channel} conversationMeta={conversationMeta} handler={handler} />
+  ) : null
 
   if (allDisabled() && !operatorActive) {
     return null
