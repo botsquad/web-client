@@ -15,7 +15,6 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     handler,
     events,
     operatorConversationId,
-    OperatorChatInput,
     conversationMeta,
     scrollToBottom: chatMessagesScrollToBottom,
     settings,
@@ -26,6 +25,7 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     inline,
     hideInput,
     channel,
+    OperatorChatInput,
   } = useChatProps()
 
   const [inputMethod, setInputMethod] = useState<any | null>(null)

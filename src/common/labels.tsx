@@ -10,6 +10,7 @@ const LABELS = {
     es: 'Elegir imagen',
     da: 'Vælg billede',
     fi: 'Valitse kuva',
+    sv: 'Välj bild',
   },
   audio_picker_select: {
     $i18n: true,
@@ -20,6 +21,7 @@ const LABELS = {
     es: 'Elige el sonido',
     da: 'Vælg lydfil',
     fi: 'Valitse äänitiedosto',
+    sv: 'Välj ljudfil',
   },
   video_picker_select: {
     $i18n: true,
@@ -30,6 +32,7 @@ const LABELS = {
     es: 'Elige video',
     da: 'Vælg video',
     fi: 'Valitse video',
+    sv: 'Välj video',
   },
   file_picker_select: {
     $i18n: true,
@@ -40,6 +43,7 @@ const LABELS = {
     es: 'Elija el archivo',
     da: 'Vælg fil',
     fi: 'Valitse tiedosto',
+    sv: 'Välj fil',
   },
   location_picker_select: {
     $i18n: true,
@@ -51,6 +55,7 @@ const LABELS = {
     da: 'Vælg placering',
     fi: 'Valitse sijainti',
     ar: 'اختيار موقع',
+    sv: 'Välj plats',
   },
   form_submit_button: {
     $i18n: true,
@@ -62,6 +67,7 @@ const LABELS = {
     da: 'Indsend',
     fi: 'Lähetä',
     ar: 'إرسال',
+    sv: 'Skicka in',
   },
   cancel: {
     $i18n: true,
@@ -73,6 +79,7 @@ const LABELS = {
     da: 'Afbestille',
     fi: 'Peruuttaa',
     ar: 'إلغاء',
+    sv: 'Annullera',
   },
   text_input_placeholder: {
     $i18n: true,
@@ -84,6 +91,7 @@ const LABELS = {
     da: 'Skriv en besked…',
     fi: 'Kirjoita viesti…',
     ar: 'اكتب رسالة ...',
+    sv: 'Skriv ett meddelande…',
   },
   new_conversation: {
     $i18n: true,
@@ -95,6 +103,7 @@ const LABELS = {
     da: 'Ny samtale',
     fi: 'Uusi keskustelu',
     ar: 'محادثة جديدة',
+    sv: 'Ny konversation',
   },
   select_date: {
     $i18n: true,
@@ -106,6 +115,7 @@ const LABELS = {
     da: 'Vælg dato',
     fi: 'Valitse Päivämäärä',
     ar: 'حدد تاريخ',
+    sv: 'Välj datum',
   },
   invalid_iban: {
     $i18n: true,
@@ -117,6 +127,7 @@ const LABELS = {
     da: 'IBAN er ugyldigt',
     fi: 'IBAN on virheellinen',
     ar: 'رقم الحساب المصرفي الدولي (IBAN) غير صالح',
+    sv: 'IBAN är ogiltig',
   },
 }
 

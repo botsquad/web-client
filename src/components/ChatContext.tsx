@@ -53,8 +53,8 @@ export interface ChatContextProps {
   scrollToBottom: (() => void) | null
   showToast: (toast: any) => void
   operatorConversationId?: string
-  OperatorChatInput?: React.FC<OperatorChatInputProps>
   hideInput: boolean
+  OperatorChatInput: React.FC<OperatorChatInputProps>
 }
 
 const DEFAULT_INPUT_METHOD_PROPS: ChatContextProps = {
@@ -80,8 +80,9 @@ const DEFAULT_INPUT_METHOD_PROPS: ChatContextProps = {
   botAvatar: null,
   userAvatar: null,
   scrollToBottom: null,
-  showToast: (_toast: any) => {},
+  showToast: toast => console.log(toast),
   hideInput: false,
+  OperatorChatInput: () => null,
 }
 
 type ChatUpdateType = (update: Partial<ChatContextProps>) => void

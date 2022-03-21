@@ -34,7 +34,7 @@ interface ChatMessagesProps {
   elementFactory: typeof ElementFactory | null
   typingAs: As | null
   botAvatar: any
-  channel: Channel & { hasMoreHistory: () => boolean; getMoreHistory: () => any }
+  channel?: Channel & { hasMoreHistory: () => boolean; getMoreHistory: () => any }
   upload: { type: any; progress: any; retry: any }
   typing: boolean
   userAvatar: any
@@ -280,7 +280,7 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
 
   loadHistory() {
     this.setState({ loading: true }, () => {
-      this.props.channel.getMoreHistory()
+      this.props.channel?.getMoreHistory()
     })
   }
 
