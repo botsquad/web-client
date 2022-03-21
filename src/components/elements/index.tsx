@@ -25,9 +25,7 @@ type MessageProp = Message<Payload>
 
 export default function elementFactory({ type, payload }: MessageProp, attrs: AttributesProp): React.FC {
   let element: any = null
-  console.log('attrs', attrs)
   if (type === 'text') {
-    // console.log('Text:', attrs)
     element = <Text {...attrs} />
   }
 
@@ -60,7 +58,6 @@ export default function elementFactory({ type, payload }: MessageProp, attrs: At
   }
   // Payload is different for this one
   if (type === 'annotation' && attrs.operatorConversationId) {
-    console.log('annotation', payload)
     element = <Annotation payload={payload} />
   }
 

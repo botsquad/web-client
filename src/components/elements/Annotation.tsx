@@ -17,7 +17,6 @@ interface Props {
 // This annotation component does not use create_note, redirect and transcript!
 
 const Annotation: React.FC<Props> = ({ payload }) => {
-  console.log('payload', payload.payload)
   const p = typeof payload.payload === 'string' ? JSON.parse(payload.payload) : {}
 
   if (payload.type === 'error') {
