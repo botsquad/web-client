@@ -389,7 +389,7 @@
 
   .bubble {
     margin-bottom: 1px;
-
+    overflow-wrap: anywhere;
     &:first-of-type {
       span {
         border-top-right-radius: var(--botsquad-bubble-radius);

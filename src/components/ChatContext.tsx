@@ -25,7 +25,7 @@ export type AugmentedChannel = Channel & { hasMoreHistory: () => boolean; getMor
 
 export interface OperatorChatInputProps {
   channel: AugmentedChannel
-  conversationMeta?: API.Conversation
+  conversationMeta?: API.Conversation | null
   handler?: ChatHandler
 }
 

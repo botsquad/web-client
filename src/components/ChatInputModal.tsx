@@ -14,7 +14,6 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
   const {
     handler,
     events,
-    operatorConversationId,
     conversationMeta,
     scrollToBottom: chatMessagesScrollToBottom,
     settings,
@@ -55,7 +54,7 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     const renderableIndex = findLastIndex(events, { renderable: true })
 
     const operatorActive = conversationMeta?.operator_present
-    setOperatorActive(operatorActive)
+    setOperatorActive(!!operatorActive)
 
     if (inputIndex === -1 || inputIndex < renderableIndex || operatorActive) {
       if (inputMethod !== null) {
@@ -92,9 +91,9 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     return inputMethodFactory(method, FactoryProps, { finish, cancel })
   }
 
-  return channel && OperatorChatInput ? (
-    <OperatorChatInput channel={channel} conversationMeta={conversationMeta} handler={handler} />
-  ) : null
+  if (channel && OperatorChatInput) {
+    ;<OperatorChatInput channel={channel} conversationMeta={conversationMeta} handler={handler} />
+  }
 
   if (allDisabled() && !operatorActive) {
     return null

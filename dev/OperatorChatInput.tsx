@@ -2,6 +2,7 @@ import { API } from '@botsquad/sdk'
 import React from 'react'
 import './OperatorChatInput.scss'
 import { AugmentedChannel } from '../src/components/ChatContext'
+
 interface Props {
   channel: AugmentedChannel
   conversationMeta: API.Conversation
