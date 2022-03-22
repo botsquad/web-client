@@ -6,6 +6,7 @@ import { ChatHandler } from '.'
 import InputMethodTemplate from './elements/InputMethodTemplate'
 import Message, { As, Payload } from './elements/types'
 import ElementFactory from './elements'
+import { API } from '@botsquad/sdk'
 
 export function useChatProps() {
   return useContext(ChatPropsContext)
@@ -23,14 +24,14 @@ export type InputMethod = {
 export type AugmentedChannel = Channel & { hasMoreHistory: () => boolean; getMoreHistory: () => any }
 
 export interface OperatorChatInputProps {
-  channel: any
-  conversationMeta?: any
-  handler?: any
+  channel: AugmentedChannel
+  conversationMeta?: API.Conversation
+  handler?: ChatHandler
 }
 
 export interface ChatContextProps {
   channel?: AugmentedChannel
-  conversationMeta: any
+  conversationMeta?: API.Conversation | null
   events: Message<any>[]
   handler: ChatHandler
   hideAvatars: boolean
@@ -58,8 +59,8 @@ export interface ChatContextProps {
 }
 
 const DEFAULT_INPUT_METHOD_PROPS: ChatContextProps = {
-  channel: {} as Channel & { hasMoreHistory: () => boolean; getMoreHistory: () => any },
-  conversationMeta: null,
+  channel: {} as AugmentedChannel,
+  conversationMeta: {} as API.Conversation,
   events: [],
   handler: null as never,
   hideAvatars: false,

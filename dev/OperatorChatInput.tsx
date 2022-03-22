@@ -1,9 +1,10 @@
+import { API } from '@botsquad/sdk'
 import React from 'react'
 import './OperatorChatInput.scss'
-
+import { AugmentedChannel } from '../src/components/ChatContext'
 interface Props {
-  channel: any
-  conversationMeta: any
+  channel: AugmentedChannel
+  conversationMeta: API.Conversation
 }
 
 const OperatorChatInput: React.FC<Props> = ({ channel, conversationMeta }) => {
