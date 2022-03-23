@@ -25,7 +25,6 @@ type MessageProp = Message<Payload>
 
 export default function elementFactory({ type, payload }: MessageProp, attrs: AttributesProp): React.FC {
   let element: any = null
-  console.log(attrs)
   if (type === 'text') {
     element = <Text {...attrs} />
   }
