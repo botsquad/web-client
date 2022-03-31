@@ -78,8 +78,6 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     }
   }
 
-  if (operatorConversationId) return null
-
   const isDisabled = (item: any) => {
     return settings?.chat_config.disabled_inputs?.indexOf(item) >= 0
   }
