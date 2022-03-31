@@ -8,7 +8,8 @@ import ElementFactory from './elements'
 import { shortDateTimeFormat } from '../common/util'
 import Message, { As, Payload } from './elements/types'
 import { ChatHandler } from 'components'
-import { Channel } from 'phoenix'
+import { API } from '@botsquad/sdk'
+import { AugmentedChannel } from './ChatContext'
 
 export const chatMessagesEvents = new EventEmitter()
 
@@ -34,12 +35,12 @@ interface ChatMessagesProps {
   elementFactory: typeof ElementFactory | null
   typingAs: As | null
   botAvatar: any
-  channel?: Channel & { hasMoreHistory: () => boolean; getMoreHistory: () => any }
+  channel?: AugmentedChannel
   upload: { type: any; progress: any; retry: any }
   typing: boolean
   userAvatar: any
   events: Message<any>[]
-  conversationMeta: any
+  conversationMeta?: API.Conversation
   updater: (update: any) => void
   localePrefs: string[]
 }

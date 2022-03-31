@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import findLastIndex from 'lodash/findLastIndex'
 import isEqual from 'lodash/isEqual'
-
 import inputMethodFactory from './input_method'
 import { useChatProps } from './ChatContext'
 
@@ -15,7 +14,6 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
   const {
     handler,
     events,
-    operatorConversationId,
     conversationMeta,
     scrollToBottom: chatMessagesScrollToBottom,
     settings,
@@ -25,6 +23,9 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     message,
     inline,
     hideInput,
+    channel,
+    operatorConversationId,
+    operatorChatInputComponent: OperatorChatInputComponent,
   } = useChatProps()
 
   const [inputMethod, setInputMethod] = useState<any | null>(null)
@@ -54,7 +55,7 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     const renderableIndex = findLastIndex(events, { renderable: true })
 
     const operatorActive = conversationMeta?.operator_present
-    setOperatorActive(operatorActive)
+    setOperatorActive(!!operatorActive)
 
     if (inputIndex === -1 || inputIndex < renderableIndex || operatorActive) {
       if (inputMethod !== null) {
@@ -87,6 +88,12 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     return hideInput || (isDisabled('text') && isDisabled('location') && isDisabled('image'))
   }
 
+  if (operatorConversationId) {
+    if (channel && OperatorChatInputComponent) {
+      return <OperatorChatInputComponent channel={channel} conversationMeta={conversationMeta} handler={handler} />
+    }
+    return null
+  }
   const method = inputMethod || inputMethodOverride
   if (method) {
     const FactoryProps = { handler, inline, inputModal, settings, localePrefs, message }

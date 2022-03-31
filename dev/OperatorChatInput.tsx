@@ -1,14 +1,8 @@
-import { API } from '@botsquad/sdk'
-import { Channel } from 'phoenix'
 import React from 'react'
 import './OperatorChatInput.scss'
+import { OperatorChatInputComponentProps } from '../src/components/ChatContext'
 
-interface Props {
-  channel: Channel
-  conversationMeta: API.Conversation | null
-}
-
-const OperatorChatInput: React.FC<Props> = ({ channel, conversationMeta }) => {
+const OperatorChatInput: React.FC<OperatorChatInputComponentProps> = ({ channel, conversationMeta }) => {
   const join = () => {
     channel?.push('operator_join', {})
   }

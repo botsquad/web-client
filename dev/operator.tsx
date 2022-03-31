@@ -9,10 +9,9 @@ import OperatorChatInput from './OperatorChatInput'
 
 const mapsApiKey = process.env.GOOGLE_MAPS_API_KEY
 const token =
-  'SFMyNTY.g2gDbQAAACQ1MGU4MTkxNS02Nzg4LTQ3YjAtYjNiOS1kYzAwYmNmYWRiZWNuBgChJmqNfwFiAAFRgA.lZHR_tCdFfbTruevCEngixslg5f0QtWUW9LQsyluXSc'
+  'SFMyNTY.g2gDbQAAACQwNjhiNmI0MS1jYzNhLTRlM2EtODUyMy0xZTg4MDk1ZTMzMmZuBgD3oOMgfwFiAAFRgA.3oxf7K8cPE65eTylLnuNhktg5cDLNJFDx_TvuMEnQhI'
 
-const conversationId = '8434ff30-461b-49e9-83ee-14520ffaf05d'
-console.log('conversationId', conversationId)
+const conversationId = '33d58cd3-919b-40ff-b72b-fa45ff6286c1'
 
 const socket = new Socket('ws://localhost:4001/socket', { params: { token } })
 socket.connect()
@@ -31,8 +30,8 @@ function App() {
           operatorConversationId={conversationId}
           onChannel={setChannel}
           onConversationMeta={setMeta}
+          operatorChatInputComponent={OperatorChatInput}
         />
-        {channel ? <OperatorChatInput channel={channel} conversationMeta={meta} /> : null}
       </div>
     </div>
   )

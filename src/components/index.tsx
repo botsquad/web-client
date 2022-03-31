@@ -14,7 +14,7 @@ import { Offline } from './icons'
 import UploadTrigger from './UploadTrigger'
 
 import './index.scss'
-import ChatContext, { AugmentedChannel, ChatContextProps } from './ChatContext'
+import ChatContext, { AugmentedChannel, ChatContextProps, OperatorChatInputComponentProps } from './ChatContext'
 import { Argument } from 'classnames'
 import Message, { As, Payload } from './elements/types'
 import { API } from '@botsquad/sdk'
@@ -194,6 +194,7 @@ export class ChatHandler {
 export interface ChatProps {
   bot_id?: string
   operatorConversationId?: string
+  operatorChatInputComponent?: React.FC<OperatorChatInputComponentProps>
   socket?: Socket
   params?: Record<string, any>
   settings: Record<string, any>
@@ -224,7 +225,7 @@ interface ChatState {
   upload: any
   modal: Message<Payload> | null
   modalHiding: boolean
-  conversationMeta: API.Conversation | null
+  conversationMeta?: API.Conversation
   online: Argument
   localePrefs: string[]
   joined: boolean
@@ -256,7 +257,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
       upload: null,
       modal: null,
       modalHiding: false,
-      conversationMeta: null,
+      conversationMeta: undefined,
       online: true,
       joined: false,
       localePrefs: props.localePrefs || [lang.replace(/-.*$/, '')],
