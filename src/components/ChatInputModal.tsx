@@ -24,7 +24,8 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     inline,
     hideInput,
     channel,
-    OperatorChatInput,
+    operatorConversationId,
+    operatorChatInputComponent: OperatorChatInputComponent,
   } = useChatProps()
 
   const [inputMethod, setInputMethod] = useState<any | null>(null)
@@ -85,14 +86,17 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     return hideInput || (isDisabled('text') && isDisabled('location') && isDisabled('image'))
   }
 
+  if (operatorConversationId) {
+    if (channel && OperatorChatInputComponent) {
+      return <OperatorChatInputComponent channel={channel} conversationMeta={conversationMeta} handler={handler} />
+    }
+    return null
+  }
   const method = inputMethod || inputMethodOverride
   if (method) {
     const FactoryProps = { handler, inline, inputModal, settings, localePrefs, message }
     return inputMethodFactory(method, FactoryProps, { finish, cancel })
   }
-
-  if (channel && OperatorChatInput)
-    return <OperatorChatInput channel={channel} conversationMeta={conversationMeta} handler={handler} />
 
   if (allDisabled() && !operatorActive) {
     return null

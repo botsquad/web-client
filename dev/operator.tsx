@@ -16,43 +16,6 @@ const conversationId = '33d58cd3-919b-40ff-b72b-fa45ff6286c1'
 const socket = new Socket('ws://localhost:4001/socket', { params: { token } })
 socket.connect()
 
-// function ChatInput(props: { channel: Channel; meta: API.Conversation }) {
-//   const join = () => {
-//     props.channel.push('operator_join', {})
-//   }
-//   const leave = (e: React.MouseEvent) => {
-//     e.preventDefault()
-//     props.channel.push('operator_leave', {})
-//   }
-
-//   if (!props.meta.operator_present) {
-//     return <button onClick={join}>Join</button>
-//   }
-//   return (
-//     <form
-//       style={{ display: 'flex' }}
-//       onSubmit={e => {
-//         e.preventDefault()
-//         const input = (e.target as any).text as HTMLInputElement
-//         const action = { type: 'text', payload: { message: input.value } }
-//         props.channel.push('operator_action', { action })
-//         input.value = ''
-//       }}
-//     >
-//       <input
-//         autoFocus
-//         name="text"
-//         type="text"
-//         defaultValue=""
-//         placeholder="Type operator message.."
-//         style={{ fontSize: 20, padding: '4px 8px' }}
-//       />
-//       <button>send</button>
-//       <button onClick={leave}>Leave</button>
-//     </form>
-//   )
-// }
-
 function App() {
   const [channel, setChannel] = useState<Channel | null>(null)
   const [meta, setMeta] = useState<API.Conversation | null>(null)
@@ -67,7 +30,7 @@ function App() {
           operatorConversationId={conversationId}
           onChannel={setChannel}
           onConversationMeta={setMeta}
-          OperatorChatInput={OperatorChatInput as any}
+          operatorChatInputComponent={OperatorChatInput}
         />
       </div>
     </div>
