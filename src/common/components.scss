@@ -390,6 +390,7 @@
   .bubble {
     margin-bottom: 1px;
     overflow-wrap: anywhere;
+    white-space: break-spaces;
     &:first-of-type {
       span {
         border-top-right-radius: var(--botsquad-bubble-radius);
