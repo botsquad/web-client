@@ -11,4 +11,6 @@ export { default as UploadTrigger } from './components/UploadTrigger'
 export { mediaEvents } from './components/elements/Media'
 export { default as NotificationManager } from './components/NotificationManager'
 
+export * as ActionTypes from './action_types'
+
 export default Chat
