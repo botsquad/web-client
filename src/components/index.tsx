@@ -46,6 +46,11 @@ export type DebugInfo = {
   processes: BotProcesses
 }
 
+export type ErrorInfo = {
+  meta: Meta | null
+  message: string
+}
+
 export type Emit = { event: string; payload?: any }
 
 export class ChatHandler {
@@ -211,7 +216,7 @@ export interface ChatProps {
   online?: boolean
   hideAvatars?: boolean
   onJoinError?: (payload: { reason: string }) => void
-  onError?: (message: string) => void
+  onError?: (error: ErrorInfo) => void
   onDebug?: (info: DebugInfo) => void
   onConversationMeta?: (meta: API.Conversation) => void
   onReady?: () => void
