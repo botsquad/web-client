@@ -20,8 +20,7 @@
     "lintfix": "eslint --fix src/**/*.{ts,tsx}",
     "stats": "NODE_ENV=development webpack --json | webpack-bundle-size-analyzer",
     "dev": "webpack-dev-server --hot --host 0.0.0.0 --config ./webpack.config.js",
-    "test": "mocha --require ts-node/register test/**/*.js test/**/*.ts test/**/*.tsx",
-    "prepare": "install-peers"
+    "test": "mocha --require ts-node/register test/**/*.js test/**/*.ts test/**/*.tsx"
   },
   "author": "Arjan Scherpenisse <arjan@miraclethings.nl>",
   "repository": {
