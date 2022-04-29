@@ -42,6 +42,15 @@ function renderButton(
   const onClick = (payload: any) =>
     props.inputModal?.finish('message', { type: 'wait', text: button.title, data: { event: payload } }, props.config)
 
+  if (button.type === 'web_url' && button.url && props.config.show_qr) {
+    const qrCodeUrl = 'https://bsqd.me/api/qr/?size=200x200&data=' + encodeURIComponent(button.url)
+
+    return <>
+      <button className="only-phone" onClick={() => buttonClick(button, props.handler, onClick)}>{button.title}</button>
+      <img className="hide-phone" src={qrCodeUrl} />
+    </>
+  }
+
   return <button onClick={() => buttonClick(button, props.handler, onClick)}>{button.title}</button>
 }
 

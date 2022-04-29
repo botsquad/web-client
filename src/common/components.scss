@@ -957,6 +957,17 @@
     }
   }
 
+  @include phone {
+    .hide-phone {
+      display: none !important;
+    }
+  }
+  @include from-phone {
+    .only-phone {
+      display: none !important;
+    }
+  }
+
   @import '../common/components/loader';
   @import '../common/components/input';
   @import '../common/components/modal';
