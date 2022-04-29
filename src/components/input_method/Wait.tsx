@@ -47,7 +47,7 @@ function renderButton(
 
     return <>
       <button className="only-phone" onClick={() => buttonClick(button, props.handler, onClick)}>{button.title}</button>
-      <img className="hide-phone" src={qrCodeUrl} />
+      <img title={button.title} className="hide-phone" src={qrCodeUrl} />
     </>
   }
 
