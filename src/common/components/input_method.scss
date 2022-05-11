@@ -364,7 +364,9 @@
   div.content {
     background-color: #f0f0f0;
     padding: 24px;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     .loader {
       position: relative;
@@ -375,10 +377,14 @@
 
     .closed {
       display: inline-block;
-      height: 4em;
-      width: 4em;
       position: relative;
       svg {
+        height: 4em;
+        width: 4em;
+      }
+      img.qr {
+        height: 14em;
+        width: 14em;
       }
     }
 
