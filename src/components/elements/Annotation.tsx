@@ -1,6 +1,5 @@
 import React from 'react'
 import { BxEmail, BxErrorCircle } from '../icons'
-import './Annotation.scss'
 import { AnnotationPayloadType } from './types'
 
 function annotationIcon(type: AnnotationPayloadType) {
