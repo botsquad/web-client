@@ -103,7 +103,7 @@ const Wait: React.FC<WaitProps> = props => {
 
   let closedElement: any = Closed
 
-  if (button.type === 'web_url' && button.url && config.show_qr && !isMobile()) {
+  if (button && button.type === 'web_url' && button.url && config.show_qr && !isMobile()) {
     const qrCodeUrl = 'https://bsqd.me/api/qr/?size=200x200&data=' + encodeURIComponent(button.url)
     closedElement = <img className="qr" title={button.title} src={qrCodeUrl} />
   }
