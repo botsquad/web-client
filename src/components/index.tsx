@@ -387,9 +387,9 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
         setTimeout(() => this.triggerModal(), 0)
       }
     }
-    if (!this.props.showInternalMessage) {
-      history = history.filter(message => message.visibility !== 'internal')
-    }
+    // if (!this.props.showInternalMessage) {
+    history = history.filter(message => message.visibility !== 'internal')
+    // }
     const events = history.map(e => this.normalizeEvent(e)).concat(this.state.events)
     this.setState({ events }, cb)
   }

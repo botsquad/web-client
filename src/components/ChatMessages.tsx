@@ -159,13 +159,13 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
   renderMessageGroup = (group: any) => {
     if (group.hasReadUntil) {
       return (
-        <div key="hasReadUntil" className="has-read-until">
+        <div key={group.hasReadUntil} className="has-read-until">
           <span>{shortDateTimeFormat(group.hasReadUntil)}</span>
         </div>
       )
     }
-
-    const key = group.messages[0].time
+    console.log('Group', group)
+    const key = `${group.messages[0].time}${group.messages[0].payload.message}`
 
     const name = group.as ? (group.as.first_name + ' ' + (group.as.last_name || '')).trim() : null
 
