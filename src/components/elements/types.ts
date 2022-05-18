@@ -113,6 +113,7 @@ export interface DefaultMessageParams {
   delay?: string | number
   id?: string
   read_only_data?: any
+  visibility?: 'internal' | 'external'
 }
 
 export interface Annotation {

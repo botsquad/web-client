@@ -220,6 +220,7 @@ export interface ChatProps {
   onDebug?: (info: DebugInfo) => void
   onConversationMeta?: (meta: API.Conversation) => void
   onReady?: () => void
+  showInternalMessage?: boolean
 }
 
 interface ChatState {
@@ -386,7 +387,9 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
         setTimeout(() => this.triggerModal(), 0)
       }
     }
-
+    if (!this.props.showInternalMessage) {
+      history = history.filter(message => message.visibility !== 'internal')
+    }
     const events = history.map(e => this.normalizeEvent(e)).concat(this.state.events)
     this.setState({ events }, cb)
   }
@@ -394,8 +397,9 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
   normalizeEvent(message: Message<any>) {
     const { type, payload, time, as } = message
     let type2 = type
-    let payload2 = payload
+    let payload2 = { ...payload, visibility: message.visibility }
     const self = !!type.match(/^user_/)
+    console.log('Unormalized Message:', message)
     if (type === 'user_message') {
       type2 = 'text'
       payload2 = { message: payload.text }
@@ -440,6 +444,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
       settings: this.props.settings,
       localePrefs,
     }
+
     return (
       <ChatContext initial={{ ...contextProps }}>
         <div className="botsi-web-client" ref={this.root}>
