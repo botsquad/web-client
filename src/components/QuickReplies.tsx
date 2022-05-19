@@ -30,9 +30,14 @@ function renderButton(
   settings: Record<string, any>,
   localePrefs: string[],
 ) {
+  const { operatorConversationId } = useChatProps()
   if (FILE_UPLOADS[content_type] !== undefined) {
     return (
-      <div className="button" key={idx} onClick={() => fileUpload(FILE_UPLOADS[content_type], handler)}>
+      <div
+        className={`button ${operatorConversationId ? 'disabled' : ''}`}
+        key={idx}
+        onClick={() => fileUpload(FILE_UPLOADS[content_type], handler)}
+      >
         <span className="label">
           {chatLabel(settings as { ui_labels: any }, localePrefs, content_type + '_picker_select')}
         </span>
@@ -42,7 +47,11 @@ function renderButton(
 
   if (content_type === 'location') {
     return (
-      <div className="button" key={idx} onClick={() => askForLocation(handler)}>
+      <div
+        className={`button ${operatorConversationId ? 'disabled' : null}`}
+        key={idx}
+        onClick={() => askForLocation(handler)}
+      >
         <span className="label">Share your location</span>
       </div>
     )
@@ -52,7 +61,7 @@ function renderButton(
     const innerHTML = TextUtil.processText(title)
     return (
       <div
-        className="button"
+        className={`button ${operatorConversationId ? 'disabled' : null}`}
         key={idx}
         onClick={() => {
           const span = document.createElement('span')
@@ -80,6 +89,7 @@ interface QuickRepliesProps {
 
 const QuickReplies: React.FC<QuickRepliesProps> = ({ buttons, className }) => {
   const { handler, settings, localePrefs } = useChatProps()
+
   if (settings)
     return (
       <div className={`quick-replies ${className || ''}`}>

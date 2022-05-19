@@ -6,6 +6,7 @@ import InputMethodContainer from './InputMethodContainer'
 import { useInputMethodProps } from './InputMethodContext'
 import Datetime from 'react-datetime'
 import { checkDateConstraints } from './FormWidgets/DateTimeWidget'
+import { useChatProps } from '../ChatContext'
 
 interface Props {
   settings: Record<string, any>
@@ -19,13 +20,14 @@ const DatePicker: React.FC<Props> = ({ settings }) => {
   const submit = (value: string, label: string) =>
     inputModal?.finish('message', { type: 'date_picker', text: label, data: value }, config)
   const { confirm, button_label, default_value, constraints } = config
+  const { operatorConversationId } = useChatProps()
 
   return (
     <InputMethodContainer
       className={`date-picker single ${confirm ? 'confirm' : ''}`}
       below={
         confirm ? (
-          <button onClick={() => submit(value, label)} disabled={value === ''}>
+          <button onClick={() => submit(value, label)} disabled={value === '' || !!operatorConversationId}>
             {button_label || chatLabel(settings as { ui_labels: any }, localePrefs, 'form_submit_button')}
           </button>
         ) : null
@@ -47,7 +49,7 @@ const DatePicker: React.FC<Props> = ({ settings }) => {
           }
         }}
         locale={localePrefs[0]}
-        isValidDate={value => checkDateConstraints(value, (constraints || []) as string[])}
+        isValidDate={value => checkDateConstraints(value, (constraints || []) as string[]) && !operatorConversationId}
         timeFormat={false}
         dateFormat={'D-M-Y'}
       />

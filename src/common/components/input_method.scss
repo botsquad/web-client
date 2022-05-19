@@ -111,7 +111,10 @@
   div.content {
     border: var(--botsquad-border-style);
     background: white;
-
+    .disabled {
+      pointer-events: none !important;
+      cursor: not-allowed !important;
+    }
     > div {
       position: relative;
       padding: 10px;

@@ -9,6 +9,7 @@ import InputMethodContainer from './InputMethodContainer'
 import Widgets from './FormWidgets'
 import { useInputMethodProps } from './InputMethodContext'
 import Message, { Payload } from 'components/elements/types'
+import { useChatProps } from '../ChatContext'
 
 function elementValue(e: any) {
   if (e.classList.contains('PhoneInputCountrySelect')) {
@@ -126,6 +127,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
     return <span>Missing &#39;config.schema&#39; in form</span>
   }
   const formContext = { localePrefs, setWidgetError }
+  const { operatorConversationId } = useChatProps()
 
   return (
     <InputMethodContainer
@@ -133,7 +135,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
       headerControl={headerControl}
       below={
         !disabled && (
-          <button disabled={hasError || hasSubmitted} onClick={submit}>
+          <button disabled={hasError || hasSubmitted || !!operatorConversationId} onClick={submit}>
             {config.button_label || chatLabel(settings as { ui_labels: any }, localePrefs, 'form_submit_button')}
           </button>
         )
@@ -151,7 +153,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
           schema={config.schema}
           uiSchema={getUiSchema()}
           formData={formData}
-          disabled={disabled}
+          disabled={disabled || !!true}
           onChange={onChange}
           transformErrors={validate}
           widgets={Widgets}

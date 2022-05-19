@@ -4,6 +4,7 @@ import InputMethodContainer from './InputMethodContainer'
 import { CheckboxOn, CheckboxOff } from '../icons'
 import { chatLabel } from '../../common/labels'
 import { useInputMethodProps } from './InputMethodContext'
+import { useChatProps } from '../ChatContext'
 
 interface MultiItemPickerProps {
   settings: Record<string, any>
@@ -54,12 +55,13 @@ const MultiItemPicker: React.FC<MultiItemPickerProps> = ({ settings }) => {
   }
 
   const { items, button_label } = config
+  const { operatorConversationId } = useChatProps()
 
   return (
     <InputMethodContainer
       className="item-picker multiple confirm"
       below={
-        <button disabled={selected.length === 0 || hasSubmitted} onClick={submit}>
+        <button disabled={selected.length === 0 || hasSubmitted || !!operatorConversationId} onClick={submit}>
           {button_label || chatLabel(settings as { ui_labels: any }, localePrefs, 'form_submit_button')}
         </button>
       }
@@ -68,7 +70,9 @@ const MultiItemPicker: React.FC<MultiItemPickerProps> = ({ settings }) => {
         const newSelected = selected.find(i => i.value === item.value)
         return (
           <div
-            className={`${newSelected ? 'selected' : ''} ${item.image_url ? 'with-image' : ''}`}
+            className={`${newSelected ? 'selected' : ''} ${item.image_url ? 'with-image' : ''} ${
+              operatorConversationId ? 'disabled' : ''
+            }`}
             onClick={() => itemClick(item)}
             key={index}
           >

@@ -4,6 +4,7 @@ import InputMethodContainer from './InputMethodContainer'
 import { RadioOn, RadioOff } from '../icons'
 import { chatLabel } from '../../common/labels'
 import { useInputMethodProps } from './InputMethodContext'
+import { useChatProps } from '../ChatContext'
 
 interface SingleItemPickerProps {
   settings: Record<string, any>
@@ -44,13 +45,14 @@ const SingleItemPicker: React.FC<SingleItemPickerProps> = ({ settings }) => {
   }
 
   const { items, confirm, button_label } = config
+  const { operatorConversationId } = useChatProps()
 
   return (
     <InputMethodContainer
       className={`item-picker single ${confirm ? 'confirm' : ''}`}
       below={
         confirm ? (
-          <button disabled={!selectedItem || hasSubmitted} onClick={submit}>
+          <button disabled={!selectedItem || hasSubmitted || !!operatorConversationId} onClick={submit}>
             {button_label || chatLabel(settings as { ui_labels: any }, localePrefs, 'form_submit_button')}
           </button>
         ) : null
@@ -60,12 +62,14 @@ const SingleItemPicker: React.FC<SingleItemPickerProps> = ({ settings }) => {
         const selected = selectedItem && selectedItem.value === item.value
         return (
           <div
-            className={`${selected ? 'selected' : ''} ${item.image_url ? 'with-image' : ''}`}
+            className={`${selected ? 'selected' : ''} ${item.image_url ? 'with-image' : ''} ${
+              operatorConversationId ? 'disabled' : ''
+            }`}
             onClick={() => itemClick(item)}
             key={index}
           >
             {confirm ? (selected ? RadioOn : RadioOff) : null}
-            <div className="c">
+            <div className="c ">
               <div className="title">{item.title}</div>
               {item.subtitle ? <div className="subtitle">{item.subtitle}</div> : null}
             </div>

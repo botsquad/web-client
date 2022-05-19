@@ -3,6 +3,7 @@ import InputMethodContainer from './InputMethodContainer'
 import { ArrowBack } from '../icons'
 import { chatLabel } from '../../common/labels'
 import { useInputMethodProps } from './InputMethodContext'
+import { useChatProps } from '../ChatContext'
 
 const KEYS = [
   ['1', '2', '3'],
@@ -57,6 +58,7 @@ const NumericKeyboard: React.FC<NumericKeyboardProps> = ({ settings }) => {
       setValue(value.substr(0, value.length - 1))
     }
   }
+  const { operatorConversationId } = useChatProps()
 
   return (
     <InputMethodContainer className="numeric" below={button()}>
@@ -66,7 +68,12 @@ const NumericKeyboard: React.FC<NumericKeyboardProps> = ({ settings }) => {
       </div>
       <div className="keys">
         {KEYS.flat().map(k => (
-          <button key={k} onClick={() => add(k)} className="key">
+          <button
+            key={k}
+            onClick={() => add(k)}
+            className="key"
+            style={operatorConversationId ? { cursor: 'none', pointerEvents: 'none' } : {}}
+          >
             {k}
           </button>
         ))}

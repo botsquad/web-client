@@ -870,6 +870,10 @@
   .quick-replies {
     margin-top: 10px;
     text-align: center;
+    > .disabled {
+      cursor: not-allowed;
+      pointer-events: none;
+    }
     > .button {
       transition: opacity 0.3s ease-out, transform 0.3s ease-out;
       @include bubble;

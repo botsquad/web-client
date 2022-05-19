@@ -7,6 +7,7 @@ import InputMethodContainer from './InputMethodContainer'
 import { Location as LocationType } from '../elements/types'
 import { useInputMethodProps } from './InputMethodContext'
 import { ChatHandler } from 'components'
+import { useChatProps } from '../ChatContext'
 
 function transformLngLon(position: LocationType): google.maps.LatLngLiteral {
   return { lat: position.lat, lng: position.lon }
@@ -95,13 +96,14 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ settings }) => {
   }
 
   const { button_label } = config
+  const { operatorConversationId } = useChatProps()
 
   return (
     <InputMethodContainer
       className={`fixed-height location-picker ${findingLocation ? 'finding' : ''}`}
       below={
         !hasSubmitted ? (
-          <button disabled={position === null} onClick={submit}>
+          <button disabled={position === null || !!operatorConversationId} onClick={submit}>
             {button_label || chatLabel(settings as { ui_labels: any }, localePrefs, 'location_picker_select')}
           </button>
         ) : null
