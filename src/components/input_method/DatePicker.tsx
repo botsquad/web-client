@@ -27,7 +27,7 @@ const DatePicker: React.FC<Props> = ({ settings }) => {
       className={`date-picker single ${confirm ? 'confirm' : ''}`}
       below={
         confirm ? (
-          <button onClick={() => submit(value, label)} disabled={value === '' || !!operatorConversationId}>
+          <button onClick={() => submit(value, label)} disabled={value === ''}>
             {button_label || chatLabel(settings as { ui_labels: any }, localePrefs, 'form_submit_button')}
           </button>
         ) : null

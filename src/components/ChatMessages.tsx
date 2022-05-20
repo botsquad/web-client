@@ -164,7 +164,7 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
         </div>
       )
     }
-    console.log('Group', group)
+
     const key = `${group.messages[0].time}${group.messages[0].payload.message}`
 
     const name = group.as ? (group.as.first_name + ' ' + (group.as.last_name || '')).trim() : null

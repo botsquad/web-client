@@ -14,7 +14,12 @@ import { Offline } from './icons'
 import UploadTrigger from './UploadTrigger'
 
 import './index.scss'
-import ChatContext, { AugmentedChannel, ChatContextProps, OperatorChatInputComponentProps } from './ChatContext'
+import ChatContext, {
+  AugmentedChannel,
+  ChatContextProps,
+  OperatorChatInputComponentProps,
+  useChatProps,
+} from './ChatContext'
 import { Argument } from 'classnames'
 import Message, { As, Payload } from './elements/types'
 import { API } from '@botsquad/sdk'
@@ -220,7 +225,6 @@ export interface ChatProps {
   onDebug?: (info: DebugInfo) => void
   onConversationMeta?: (meta: API.Conversation) => void
   onReady?: () => void
-  showInternalMessage?: boolean
 }
 
 interface ChatState {
@@ -387,9 +391,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
         setTimeout(() => this.triggerModal(), 0)
       }
     }
-    // if (!this.props.showInternalMessage) {
     history = history.filter(message => message.visibility !== 'internal')
-    // }
     const events = history.map(e => this.normalizeEvent(e)).concat(this.state.events)
     this.setState({ events }, cb)
   }
@@ -399,7 +401,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
     let type2 = type
     let payload2 = { ...payload, visibility: message.visibility }
     const self = !!type.match(/^user_/)
-    console.log('Unormalized Message:', message)
+
     if (type === 'user_message') {
       type2 = 'text'
       payload2 = { message: payload.text }
@@ -447,7 +449,10 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
 
     return (
       <ChatContext initial={{ ...contextProps }}>
-        <div className="botsi-web-client" ref={this.root}>
+        <div
+          className={`botsi-web-client ${this.props.operatorConversationId || false ? 'block-input' : ''}`}
+          ref={this.root}
+        >
           <ChatWindow />
           {this.state.toast ? <ChatToast toast={this.state.toast} hiding={this.state.toastHiding} /> : null}
           {this.state.modal ? <ChatModal {...chatModalProps} /> : null}

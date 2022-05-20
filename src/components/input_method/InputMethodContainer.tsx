@@ -23,14 +23,13 @@ const InputMethodContainer: React.FC<InputMethodContainerProps> = ({ below, head
   const cancel = () => {
     if (inputModal && inputModal.cancel) inputModal.cancel()
   }
-  const { operatorConversationId } = useChatProps()
 
   const renderHeader = (caption: string, required: boolean) => {
     return (
       <div className={`input-method-header ${caption ? 'captioned' : ''}`}>
         {caption ? <span>{caption}</span> : null}
         {!required && !inline ? (
-          <span className="controls" style={operatorConversationId ? { cursor: 'none', pointerEvents: 'none' } : {}}>
+          <span className="controls">
             <span onClick={cancel}>{Close}</span>
           </span>
         ) : null}

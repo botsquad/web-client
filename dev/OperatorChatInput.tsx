@@ -12,7 +12,6 @@ const OperatorChatInput: React.FC<OperatorChatInputComponentProps> = ({ channel,
   }
 
   if (!conversationMeta?.operator_present) {
-    console.log('Operator Not Present')
     return (
       <button className="Operator-button" onClick={join}>
         Join

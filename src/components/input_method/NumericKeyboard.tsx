@@ -58,7 +58,6 @@ const NumericKeyboard: React.FC<NumericKeyboardProps> = ({ settings }) => {
       setValue(value.substr(0, value.length - 1))
     }
   }
-  const { operatorConversationId } = useChatProps()
 
   return (
     <InputMethodContainer className="numeric" below={button()}>
@@ -68,12 +67,7 @@ const NumericKeyboard: React.FC<NumericKeyboardProps> = ({ settings }) => {
       </div>
       <div className="keys">
         {KEYS.flat().map(k => (
-          <button
-            key={k}
-            onClick={() => add(k)}
-            className="key"
-            style={operatorConversationId ? { cursor: 'none', pointerEvents: 'none' } : {}}
-          >
+          <button key={k} onClick={() => add(k)} className="key">
             {k}
           </button>
         ))}

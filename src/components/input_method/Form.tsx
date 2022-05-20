@@ -127,7 +127,6 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
     return <span>Missing &#39;config.schema&#39; in form</span>
   }
   const formContext = { localePrefs, setWidgetError }
-  const { operatorConversationId } = useChatProps()
 
   return (
     <InputMethodContainer
@@ -135,7 +134,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
       headerControl={headerControl}
       below={
         !disabled && (
-          <button disabled={hasError || hasSubmitted || !!operatorConversationId} onClick={submit}>
+          <button disabled={hasError || hasSubmitted} onClick={submit}>
             {config.button_label || chatLabel(settings as { ui_labels: any }, localePrefs, 'form_submit_button')}
           </button>
         )

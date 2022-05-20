@@ -45,14 +45,13 @@ const SingleItemPicker: React.FC<SingleItemPickerProps> = ({ settings }) => {
   }
 
   const { items, confirm, button_label } = config
-  const { operatorConversationId } = useChatProps()
 
   return (
     <InputMethodContainer
       className={`item-picker single ${confirm ? 'confirm' : ''}`}
       below={
         confirm ? (
-          <button disabled={!selectedItem || hasSubmitted || !!operatorConversationId} onClick={submit}>
+          <button disabled={!selectedItem || hasSubmitted} onClick={submit}>
             {button_label || chatLabel(settings as { ui_labels: any }, localePrefs, 'form_submit_button')}
           </button>
         ) : null
@@ -62,9 +61,7 @@ const SingleItemPicker: React.FC<SingleItemPickerProps> = ({ settings }) => {
         const selected = selectedItem && selectedItem.value === item.value
         return (
           <div
-            className={`${selected ? 'selected' : ''} ${item.image_url ? 'with-image' : ''} ${
-              operatorConversationId ? 'disabled' : ''
-            }`}
+            className={`${selected ? 'selected' : ''} ${item.image_url ? 'with-image' : ''}`}
             onClick={() => itemClick(item)}
             key={index}
           >
