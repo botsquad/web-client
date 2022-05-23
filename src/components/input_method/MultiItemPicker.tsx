@@ -4,7 +4,6 @@ import InputMethodContainer from './InputMethodContainer'
 import { CheckboxOn, CheckboxOff } from '../icons'
 import { chatLabel } from '../../common/labels'
 import { useInputMethodProps } from './InputMethodContext'
-import { useChatProps } from '../ChatContext'
 
 interface MultiItemPickerProps {
   settings: Record<string, any>

@@ -1,4 +1,3 @@
-import { useChatProps } from '../ChatContext'
 import React, { CSSProperties, useEffect, useState } from 'react'
 import { Close } from '../icons'
 import { useInputMethodProps } from './InputMethodContext'

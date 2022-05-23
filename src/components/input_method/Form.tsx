@@ -9,7 +9,6 @@ import InputMethodContainer from './InputMethodContainer'
 import Widgets from './FormWidgets'
 import { useInputMethodProps } from './InputMethodContext'
 import Message, { Payload } from 'components/elements/types'
-import { useChatProps } from '../ChatContext'
 
 function elementValue(e: any) {
   if (e.classList.contains('PhoneInputCountrySelect')) {

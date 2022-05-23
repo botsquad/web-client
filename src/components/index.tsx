@@ -14,12 +14,7 @@ import { Offline } from './icons'
 import UploadTrigger from './UploadTrigger'
 
 import './index.scss'
-import ChatContext, {
-  AugmentedChannel,
-  ChatContextProps,
-  OperatorChatInputComponentProps,
-  useChatProps,
-} from './ChatContext'
+import ChatContext, { AugmentedChannel, ChatContextProps, OperatorChatInputComponentProps } from './ChatContext'
 import { Argument } from 'classnames'
 import Message, { As, Payload } from './elements/types'
 import { API } from '@botsquad/sdk'

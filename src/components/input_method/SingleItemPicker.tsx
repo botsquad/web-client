@@ -4,7 +4,6 @@ import InputMethodContainer from './InputMethodContainer'
 import { RadioOn, RadioOff } from '../icons'
 import { chatLabel } from '../../common/labels'
 import { useInputMethodProps } from './InputMethodContext'
-import { useChatProps } from '../ChatContext'
 
 interface SingleItemPickerProps {
   settings: Record<string, any>

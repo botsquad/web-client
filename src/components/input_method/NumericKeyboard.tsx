@@ -3,7 +3,6 @@ import InputMethodContainer from './InputMethodContainer'
 import { ArrowBack } from '../icons'
 import { chatLabel } from '../../common/labels'
 import { useInputMethodProps } from './InputMethodContext'
-import { useChatProps } from '../ChatContext'
 
 const KEYS = [
   ['1', '2', '3'],
