@@ -109,13 +109,6 @@
     }
   }
   .botsi-web-client.block-input {
-    input-method-header {
-      .controls {
-        cursor: none;
-        pointer-events: none;
-      }
-    }
-
     .quick-replies {
       .button {
         cursor: none;
@@ -123,12 +116,7 @@
       }
     }
     .item-picker {
-      button {
-        cursor: pointer;
-        pointer-events: auto;
-      }
-    }
-    .item-picker {
+      button,
       div {
         cursor: pointer;
         pointer-events: auto;
