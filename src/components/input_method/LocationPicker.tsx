@@ -22,6 +22,7 @@ interface MapProps {
 }
 
 const Map: React.FC<MapProps> = props => {
+  const [map, setMap] = useState<google.maps.Map>()
   const setMarkerPosition = ({ latLng }: any) => {
     const position = { lat: latLng.lat(), lon: latLng.lng() }
     props.onChange(position)
@@ -32,9 +33,15 @@ const Map: React.FC<MapProps> = props => {
   return (
     <LoadScript googleMapsApiKey={props.handler.getMapsAPIKey()}>
       <GoogleMap
+        onLoad={map => setMap(map)}
         center={transformLngLon(props.center)}
         zoom={config.zoom}
-        onClick={setMarkerPosition}
+        onClick={pos => {
+          if (pos.latLng) {
+            setMarkerPosition(pos)
+            map?.setCenter(pos.latLng)
+          }
+        }}
         options={{
           fullscreenControl: false,
           mapTypeId: 'roadmap',
