@@ -9,6 +9,7 @@ import InputMethodContainer from './InputMethodContainer'
 import Widgets from './FormWidgets'
 import { useInputMethodProps } from './InputMethodContext'
 import Message, { Payload } from 'components/elements/types'
+import { InputMethodForm } from 'show_types'
 
 function elementValue(e: any) {
   if (e.classList.contains('PhoneInputCountrySelect')) {
@@ -47,7 +48,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
   const [error] = useState<any>(null)
   const [form, setForm] = useState<any>()
 
-  const { config, inputModal, localePrefs } = useInputMethodProps()
+  const { config, inputModal, localePrefs } = useInputMethodProps<InputMethodForm>()
 
   useEffect(() => {
     const { default_value } = config

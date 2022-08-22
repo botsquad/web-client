@@ -4,20 +4,21 @@ import InputMethodContainer from './InputMethodContainer'
 import { RadioOn, RadioOff } from '../icons'
 import { chatLabel } from '../../common/labels'
 import { useInputMethodProps } from './InputMethodContext'
+import { InputMethodItemPicker } from 'show_types'
 
 interface SingleItemPickerProps {
   settings: Record<string, any>
 }
 
 const SingleItemPicker: React.FC<SingleItemPickerProps> = ({ settings }) => {
-  const { config, inputModal, localePrefs } = useInputMethodProps()
+  const { config, inputModal, localePrefs } = useInputMethodProps<InputMethodItemPicker>()
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const [selectedItem, setSelectedItem] = useState<any>(null)
 
   useEffect(() => {
     const { default_value, items } = config
     if (default_value) {
-      const item = items.find(({ value }: any) => value === default_value)
+      const item = (items as any).find(({ value }: any) => value === default_value)
       if (item) {
         setSelectedItem(item)
       }
@@ -56,7 +57,7 @@ const SingleItemPicker: React.FC<SingleItemPickerProps> = ({ settings }) => {
         ) : null
       }
     >
-      {items.map((item: any, index: number) => {
+      {(items || []).map((item: any, index: number) => {
         const selected = selectedItem && selectedItem.value === item.value
         return (
           <div

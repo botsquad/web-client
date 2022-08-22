@@ -8,13 +8,14 @@ import { useInputMethodProps, useInputMethodPropsUpdate } from './InputMethodCon
 import InputMethodTemplate from 'components/elements/InputMethodTemplate'
 import { ChatHandler } from 'components'
 import { isMobile } from '../../common/util'
+import { InputMethodClosed, InputMethodWait } from 'show_types'
 
 interface renderImplicitCloseButtonProps {
   type: string
 }
 
 const renderImplicitCloseButton: React.FC<renderImplicitCloseButtonProps> = props => {
-  const { handler, localePrefs } = useInputMethodProps()
+  const { handler, localePrefs } = useInputMethodProps<InputMethodWait>()
 
   if (props.type !== 'closed') {
     return null
@@ -69,7 +70,7 @@ interface WaitProps {
 }
 
 const Wait: React.FC<WaitProps> = props => {
-  const { config, inputModal, handler } = useInputMethodProps()
+  const { config, inputModal, handler } = useInputMethodProps<InputMethodWait>()
   const updateValues = useInputMethodPropsUpdate()
 
   const { type, time } = props
@@ -103,7 +104,13 @@ const Wait: React.FC<WaitProps> = props => {
 
   let closedElement: any = Closed
 
-  if (button && button.type === 'web_url' && button.url && config.show_qr && !isMobile()) {
+  if (
+    props.type === 'closed' &&
+    button?.type === 'web_url' &&
+    button.url &&
+    (config as InputMethodClosed).show_qr &&
+    !isMobile()
+  ) {
     const qrCodeUrl = 'https://bsqd.me/api/qr/?size=200x200&data=' + encodeURIComponent(button.url)
     closedElement = <img className="qr" title={button.title} src={qrCodeUrl} />
   }

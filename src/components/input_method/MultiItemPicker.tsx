@@ -11,8 +11,7 @@ interface MultiItemPickerProps {
 }
 
 const MultiItemPicker: React.FC<MultiItemPickerProps> = ({ settings }) => {
-  const { config: cfg, inputModal, localePrefs } = useInputMethodProps()
-  const config: InputMethodItemPicker = cfg
+  const { config, inputModal, localePrefs } = useInputMethodProps<InputMethodItemPicker>()
 
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const [selected, setSelected] = useState<any[]>([])

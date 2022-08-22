@@ -7,6 +7,7 @@ import InputMethodContainer from './InputMethodContainer'
 import { Location as LocationType } from '../elements/types'
 import { useInputMethodProps } from './InputMethodContext'
 import { ChatHandler } from 'components'
+import { InputMethodLocation } from 'show_types'
 
 function transformLngLon(position: LocationType): google.maps.LatLngLiteral {
   return { lat: position.lat, lng: position.lon }
@@ -63,7 +64,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ settings }) => {
   const [center, setCenter] = useState<LocationType | null>(null)
   const [findingLocation, setFindingLocation] = useState(false)
 
-  const { config, inputModal, handler, localePrefs } = useInputMethodProps()
+  const { config, inputModal, handler, localePrefs } = useInputMethodProps<InputMethodLocation>()
 
   useEffect(() => {
     const { default_value, center: center2 } = config

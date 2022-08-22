@@ -6,13 +6,14 @@ import InputMethodContainer from './InputMethodContainer'
 import { useInputMethodProps } from './InputMethodContext'
 import Datetime from 'react-datetime'
 import { checkDateConstraints } from './FormWidgets/DateTimeWidget'
+import { InputMethodDatePicker } from 'show_types'
 
 interface Props {
   settings: Record<string, any>
 }
 
 const DatePicker: React.FC<Props> = ({ settings }) => {
-  const { config, inputModal, localePrefs } = useInputMethodProps()
+  const { config, inputModal, localePrefs } = useInputMethodProps<InputMethodDatePicker>()
   const [label, setLabel] = useState<string>('')
   const [value, setValue] = useState<string>('')
 
