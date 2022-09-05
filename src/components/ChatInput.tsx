@@ -68,16 +68,14 @@ const ChatInput: React.FC = () => {
     }
   }, [message, hasMessage])
 
-  const sendTypingFactory = (payload: any) => {
-    return () => {
-      if (handler) {
-        handler.send('typing', payload)
-      }
-    }
-  }
+  const [sendTypingOn, sendTypingOff] = React.useMemo(() => {
+    const sendTypingFactory = (payload: boolean) => () => handler?.send('typing', payload)
 
-  const sendTypingOn = debounce(sendTypingFactory(true), 1000, { leading: true, trailing: false })
-  const sendTypingOff = debounce(sendTypingFactory(false), 1000, { leading: false, trailing: true })
+    return [
+      debounce(sendTypingFactory(true), 1000, { leading: true, trailing: false }),
+      debounce(sendTypingFactory(false), 1000, { leading: false, trailing: true }),
+    ]
+  }, [handler])
 
   const onChange = (e: any) => {
     const message = e.target.value
@@ -92,13 +90,14 @@ const ChatInput: React.FC = () => {
       scrollToBottom()
     }
 
-    if (e.keyCode === 13) {
+    if (e.key.length == 1) {
+      sendTypingOn()
+      sendTypingOff()
+    }
+    if (e.key === 'Enter') {
       sendTypingOn.cancel()
       sendTypingOff.flush()
       sendMessage()
-    } else {
-      sendTypingOn()
-      sendTypingOff()
     }
 
     if (e.keyCode === 27) {
