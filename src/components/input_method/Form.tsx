@@ -27,10 +27,15 @@ function elementValue(e: any) {
   return e.value.trim()
 }
 
-function removeEmpty(obj: object) {
-  Object.keys(obj).forEach(function (key) {
-    ;(obj[key] && typeof obj[key] === 'object' && removeEmpty(obj[key])) || (obj[key] === null && delete obj[key])
-  })
+function removeEmpty(obj: any) {
+  if (obj === null) {
+    return null
+  }
+  if (typeof obj === 'object') {
+    Object.keys(obj).forEach(function (key) {
+      ;(obj[key] && typeof obj[key] === 'object' && removeEmpty(obj[key])) || (obj[key] === null && delete obj[key])
+    })
+  }
   return obj
 }
 
@@ -52,7 +57,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
 
   useEffect(() => {
     const { default_value } = config
-    if (default_value) {
+    if (typeof default_value !== 'undefined') {
       setFormData(removeEmpty(default_value))
     }
 
