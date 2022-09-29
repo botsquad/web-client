@@ -46,7 +46,7 @@ interface ClientFormProps {
 
 const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
   const [hasSubmitted, setHasSubmitted] = useState(false)
-  const [formData, setFormData] = useState({})
+  const [formData, setFormData] = useState(undefined)
   const [hasError, setHasError] = useState(false)
   const [widgetErrors, setWidgetErrors] = useState<Map<string, boolean>>(new Map<string, boolean>())
   const [disabled, setDisabled] = useState(false)
@@ -57,6 +57,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
 
   useEffect(() => {
     const { default_value } = config
+
     if (typeof default_value !== 'undefined') {
       setFormData(removeEmpty(default_value))
     }
@@ -66,7 +67,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
       setFormData(read_only_data)
       setDisabled(true)
     }
-  }, [])
+  }, [config, message])
 
   const submit = () => {
     setHasSubmitted(true)
