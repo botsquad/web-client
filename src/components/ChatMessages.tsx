@@ -81,7 +81,7 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
         formLookup[m.payload.template_id] = m
       }
       if (m.type === 'user_event' && m.payload.name === '$form') {
-        const { _template_id, ...data } = m.payload.payload || JSON.parse(m.payload.json)
+        const { _template_id, ...data } = m.payload.payload
         if (_template_id && formLookup[_template_id]) {
           formLookup[_template_id].read_only_data = data
         }

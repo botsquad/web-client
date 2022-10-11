@@ -368,7 +368,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
           )
         })
       if (lastInputState) {
-        const hideInput = JSON.parse(lastInputState.payload.json)
+        const hideInput = lastInputState.payload.payload
         this.setState({ hideInput })
       }
 
@@ -399,9 +399,6 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
     if (type === 'user_message') {
       type2 = 'text'
       payload2 = { message: payload.text }
-    }
-    if (type === 'input_method' && typeof payload.json === 'string') {
-      payload2 = { type: payload.type, payload: JSON.parse(payload.json) }
     }
     if (type === 'user_location') {
       type2 = 'location'
