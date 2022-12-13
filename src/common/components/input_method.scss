@@ -97,6 +97,7 @@
   }
   &.full {
     max-height: 87vh;
+    overflow-y: auto;
   }
   &.tall .content {
     max-height: 65vh;
