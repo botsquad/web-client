@@ -31,7 +31,7 @@
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
     "@babel/polyfill": "^7.4.3",
-    "@botsquad/sdk": "^0.15.1",
+    "@botsquad/sdk": "^0.15.2",
     "@popperjs/core": "^2.11.2",
     "@react-google-maps/api": "^2.7.0",
     "@types/iban": "^0.0.32",
