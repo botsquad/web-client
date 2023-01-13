@@ -9,6 +9,7 @@ import InputMethodContainer from './InputMethodContainer'
 import Widgets from './FormWidgets'
 import { useInputMethodProps } from './InputMethodContext'
 import Message, { Payload } from 'components/elements/types'
+import { InputMethodForm } from 'show_types'
 
 function elementValue(e: any) {
   if (e.classList.contains('PhoneInputCountrySelect')) {
@@ -26,10 +27,15 @@ function elementValue(e: any) {
   return e.value.trim()
 }
 
-function removeEmpty(obj: object) {
-  Object.keys(obj).forEach(function (key) {
-    ;(obj[key] && typeof obj[key] === 'object' && removeEmpty(obj[key])) || (obj[key] === null && delete obj[key])
-  })
+function removeEmpty(obj: any) {
+  if (obj === null) {
+    return null
+  }
+  if (typeof obj === 'object') {
+    Object.keys(obj).forEach(function (key) {
+      ;(obj[key] && typeof obj[key] === 'object' && removeEmpty(obj[key])) || (obj[key] === null && delete obj[key])
+    })
+  }
   return obj
 }
 
@@ -40,18 +46,19 @@ interface ClientFormProps {
 
 const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
   const [hasSubmitted, setHasSubmitted] = useState(false)
-  const [formData, setFormData] = useState({})
+  const [formData, setFormData] = useState(undefined)
   const [hasError, setHasError] = useState(false)
   const [widgetErrors, setWidgetErrors] = useState<Map<string, boolean>>(new Map<string, boolean>())
   const [disabled, setDisabled] = useState(false)
   const [error] = useState<any>(null)
   const [form, setForm] = useState<any>()
 
-  const { config, inputModal, localePrefs } = useInputMethodProps()
+  const { config, inputModal, localePrefs } = useInputMethodProps<InputMethodForm>()
 
   useEffect(() => {
     const { default_value } = config
-    if (default_value) {
+
+    if (typeof default_value !== 'undefined') {
       setFormData(removeEmpty(default_value))
     }
 
@@ -60,7 +67,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
       setFormData(read_only_data)
       setDisabled(true)
     }
-  }, [])
+  }, [config, message])
 
   const submit = () => {
     setHasSubmitted(true)

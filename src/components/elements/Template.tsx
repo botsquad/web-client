@@ -32,7 +32,7 @@ export function buttonClick(button: TemplateElementButton, handler: any, handleE
       handler.send('event', { name: button.payload, payload: {} })
       break
     case 'event':
-      payload = { name: button.event, payload: button.json ? JSON.parse(button.json) : button.payload }
+      payload = { name: button.event, payload: button.payload }
       handleEvent = handleEvent || ((p: any) => handler.send('event', p))
       handleEvent(payload)
       break

@@ -7,13 +7,15 @@ import { TextUtil } from '@botsquad/sdk'
 import { useInputMethodProps, useInputMethodPropsUpdate } from './InputMethodContext'
 import InputMethodTemplate from 'components/elements/InputMethodTemplate'
 import { ChatHandler } from 'components'
+import { isMobile } from '../../common/util'
+import { InputMethodClosed, InputMethodWait } from 'show_types'
 
 interface renderImplicitCloseButtonProps {
   type: string
 }
 
 const renderImplicitCloseButton: React.FC<renderImplicitCloseButtonProps> = props => {
-  const { handler, localePrefs } = useInputMethodProps()
+  const { handler, localePrefs } = useInputMethodProps<InputMethodWait>()
 
   if (props.type !== 'closed') {
     return null
@@ -42,6 +44,10 @@ function renderButton(
   const onClick = (payload: any) =>
     props.inputModal?.finish('message', { type: 'wait', text: button.title, data: { event: payload } }, props.config)
 
+  if (button.type === 'web_url' && button.url && props.config.show_qr && !isMobile()) {
+    return null
+  }
+
   return <button onClick={() => buttonClick(button, props.handler, onClick)}>{button.title}</button>
 }
 
@@ -64,7 +70,7 @@ interface WaitProps {
 }
 
 const Wait: React.FC<WaitProps> = props => {
-  const { config, inputModal, handler } = useInputMethodProps()
+  const { config, inputModal, handler } = useInputMethodProps<InputMethodWait>()
   const updateValues = useInputMethodPropsUpdate()
 
   const { type, time } = props
@@ -95,6 +101,20 @@ const Wait: React.FC<WaitProps> = props => {
     updateValues('inline', type === 'closed')
   }, [type])
   const renderButtonProps = { config, inputModal, handler }
+
+  let closedElement: any = Closed
+
+  if (
+    props.type === 'closed' &&
+    button?.type === 'web_url' &&
+    button.url &&
+    (config as InputMethodClosed).show_qr &&
+    !isMobile()
+  ) {
+    const qrCodeUrl = 'https://bsqd.me/api/qr/?size=200x200&data=' + encodeURIComponent(button.url)
+    closedElement = <img className="qr" title={button.title} src={qrCodeUrl} />
+  }
+
   return (
     <InputMethodContainer
       {...props}
@@ -103,7 +123,7 @@ const Wait: React.FC<WaitProps> = props => {
     >
       {type === 'wait' && typeof wait_time !== 'undefined' && <div className="loader" />}
 
-      {props.type === 'closed' ? <span className="closed">{Closed}</span> : null}
+      {props.type === 'closed' ? <span className="closed">{closedElement}</span> : null}
 
       {description ? <div className="description" dangerouslySetInnerHTML={TextUtil.processText(description)} /> : null}
 

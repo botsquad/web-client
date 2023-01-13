@@ -1,4 +1,6 @@
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+const ESLintPlugin = require('eslint-webpack-plugin')
 
 const path = require('path')
 const webpack = require('webpack')
@@ -87,6 +89,8 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': JSON.stringify(process.env),
     }),
+    new ForkTsCheckerWebpackPlugin(),
+    new ESLintPlugin({ extensions: ['js', 'ts', 'tsx'], threads: true, lintDirtyModulesOnly: true }),
   ],
 }
 

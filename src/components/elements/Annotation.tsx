@@ -1,6 +1,5 @@
 import React from 'react'
 import { BxEmail, BxErrorCircle } from '../icons'
-import './Annotation.scss'
 import { AnnotationPayloadType } from './types'
 
 function annotationIcon(type: AnnotationPayloadType) {
@@ -17,7 +16,7 @@ interface Props {
 // This annotation component does not use create_note, redirect and transcript!
 
 const Annotation: React.FC<Props> = ({ payload }) => {
-  const p = typeof payload.payload === 'string' ? JSON.parse(payload.payload) : {}
+  const p = payload.payload
 
   if (payload.type === 'intent-match') {
     return null

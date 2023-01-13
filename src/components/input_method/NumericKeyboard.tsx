@@ -3,6 +3,7 @@ import InputMethodContainer from './InputMethodContainer'
 import { ArrowBack } from '../icons'
 import { chatLabel } from '../../common/labels'
 import { useInputMethodProps } from './InputMethodContext'
+import { InputMethodNumeric } from 'show_types'
 
 const KEYS = [
   ['1', '2', '3'],
@@ -16,7 +17,7 @@ interface NumericKeyboardProps {
 }
 
 const NumericKeyboard: React.FC<NumericKeyboardProps> = ({ settings }) => {
-  const { config, inputModal, localePrefs } = useInputMethodProps()
+  const { config, inputModal, localePrefs } = useInputMethodProps<InputMethodNumeric>()
 
   const [value, setValue] = useState('')
 
@@ -58,7 +59,7 @@ const NumericKeyboard: React.FC<NumericKeyboardProps> = ({ settings }) => {
 
   const backspace = () => {
     if (value.length > 0) {
-      setValue(value.substr(0, value.length - 1))
+      setValue(value.substring(0, value.length - 1))
     }
   }
 
