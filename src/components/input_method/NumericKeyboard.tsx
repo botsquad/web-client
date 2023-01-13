@@ -22,7 +22,11 @@ const NumericKeyboard: React.FC<NumericKeyboardProps> = ({ settings }) => {
 
   const finish = () => {
     if (inputModal) {
-      inputModal.finish('message', { type: 'numeric', text: value, data: value }, null)
+      const payload = { type: 'numeric', text: value, data: value }
+      if (config.input_type) {
+        payload.input_type = config.input_type
+      }
+      inputModal.finish('message', payload, null)
     }
   }
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import debounce from 'lodash/debounce'
 
-import { ImageUpload, AudioUpload, FileUpload, LocationShare, Arrow, More, Close } from './icons'
+import { ImageUpload, AudioUpload, FileUpload, LocationShare, Arrow, More, Close, Dialpad } from './icons'
 import { isiOS } from '../common/util'
 import ChatInputModalWrapper from './ChatInputModalWrapper'
 import { chatMessagesEvents } from './ChatMessages'
@@ -20,12 +20,26 @@ const ChatInput: React.FC = () => {
   const inputDiv = React.createRef<HTMLDivElement>()
   const input = React.createRef<HTMLInputElement>()
 
-  const { scrollToBottom, handler, settings, online, localePrefs, inputMethodOverride } = useChatProps()
+  const { scrollToBottom, handler, settings, online, localePrefs, inputMethodOverride, params } = useChatProps()
   const showLocationInput = () => {
     updater({
       inputMethodOverride: {
         type: 'location',
         payload: { zoom: 12, height: 'compact' },
+      },
+    })
+
+    setMenuOpen(false)
+  }
+
+  const showDialpad = () => {
+    updater({
+      inputMethodOverride: {
+        type: 'numeric',
+        payload: {
+          num_digits: 1,
+          input_type: 'dtmf',
+        },
       },
     })
 
@@ -173,6 +187,8 @@ const ChatInput: React.FC = () => {
   }
 
   const renderDocked = () => {
+    const frontend = params?.preview_frontend
+
     return (
       <ChatInputModalWrapper
         handler={handler}
@@ -195,14 +211,20 @@ const ChatInput: React.FC = () => {
                 />
               ) : null}
             </div>
-            {!hasMessage && (operatorActive || !isDisabled('location')) ? (
+            {!hasMessage && (operatorActive || !isDisabled('location')) && frontend !== 'phone' ? (
               <button disabled={!online} onClick={() => showLocationInput()}>
                 {LocationShare}
               </button>
             ) : null}
-            {!hasMessage && !isDisabled('image') ? (
+            {!hasMessage && !isDisabled('image') && frontend !== 'phone' ? (
               <button disabled={!online} onClick={() => upload('image/*,video/*')}>
                 {ImageUpload}
+              </button>
+            ) : null}
+
+            {!hasMessage && !isDisabled('dialpad') && frontend === 'phone' ? (
+              <button disabled={!online} onClick={() => showDialpad()}>
+                {Dialpad}
               </button>
             ) : null}
 
