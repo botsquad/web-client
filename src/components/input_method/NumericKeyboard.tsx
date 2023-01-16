@@ -23,10 +23,13 @@ const NumericKeyboard: React.FC<NumericKeyboardProps> = ({ settings }) => {
 
   const finish = () => {
     if (inputModal) {
-      const payload = { type: 'numeric', text: value, data: value, input_type: undefined }
-      if (config.input_type) {
-        payload.input_type = config.input_type
+      const payload = {
+        type: 'numeric',
+        text: value,
+        data: value,
+        ...(config.input_type ? { input_type: config.input_type } : {}),
       }
+
       inputModal.finish('message', payload, null)
     }
   }
