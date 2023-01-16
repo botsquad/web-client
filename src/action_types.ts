@@ -43,7 +43,7 @@ export type Any =
   | unknown[]
   | boolean
   | null;
-export type Visibility = "external" | "internal";
+export type Visibility = "external" | "internal" | "embedded";
 export type MediaAction = BaseAction & Media;
 export type QuickReplies = {
   content_type: "text" | "location";
@@ -69,7 +69,12 @@ export interface BaseAction {
   id: string | null;
   payload: Any;
   sender: string | null;
-  time: string | null;
+  time:
+    | string
+    | {
+        [k: string]: unknown;
+      }
+    | null;
   type: string;
   visibility?: Visibility;
 }
@@ -175,7 +180,7 @@ export interface UserAttachment {
 }
 export interface UserEvent {
   payload: {
-    __struct__: "Elixir.Bubble.Event";
+    __struct__?: "Elixir.Bubble.Event";
     name: string;
     payload: Any;
     sender: null | string;
@@ -214,7 +219,11 @@ export interface UserMessage {
         raw: string;
         start: number;
         type: string;
-        value: string;
+        value:
+          | string
+          | {
+              [k: string]: unknown;
+            };
       }[][];
     }[];
     stats?: Any;

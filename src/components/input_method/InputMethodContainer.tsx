@@ -1,4 +1,5 @@
 import React, { CSSProperties, useEffect, useState } from 'react'
+import { InputMethodForm } from 'show_types'
 import { Close } from '../icons'
 import { useInputMethodProps } from './InputMethodContext'
 
@@ -16,14 +17,14 @@ enum SizeMap {
 }
 
 const InputMethodContainer: React.FC<InputMethodContainerProps> = ({ below, headerControl, className, children }) => {
-  const { config, handler, inputModal, inline } = useInputMethodProps()
+  const { config, handler, inputModal, inline } = useInputMethodProps<InputMethodForm>()
   const { required, caption, height } = config
 
   const cancel = () => {
     if (inputModal && inputModal.cancel) inputModal.cancel()
   }
 
-  const renderHeader = (caption: string, required: boolean) => {
+  const renderHeader = (caption: string | undefined, required: boolean | undefined) => {
     return (
       <div className={`input-method-header ${caption ? 'captioned' : ''}`}>
         {caption ? <span>{caption}</span> : null}

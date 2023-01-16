@@ -7,6 +7,7 @@ import InputMethodContainer from './InputMethodContainer'
 import { Location as LocationType } from '../elements/types'
 import { useInputMethodProps } from './InputMethodContext'
 import { ChatHandler } from 'components'
+import { InputMethodLocation } from 'show_types'
 
 function transformLngLon(position: LocationType): google.maps.LatLngLiteral {
   return { lat: position.lat, lng: position.lon }
@@ -22,6 +23,7 @@ interface MapProps {
 }
 
 const Map: React.FC<MapProps> = props => {
+  const [map, setMap] = useState<google.maps.Map>()
   const setMarkerPosition = ({ latLng }: any) => {
     const position = { lat: latLng.lat(), lon: latLng.lng() }
     props.onChange(position)
@@ -32,9 +34,15 @@ const Map: React.FC<MapProps> = props => {
   return (
     <LoadScript googleMapsApiKey={props.handler.getMapsAPIKey()}>
       <GoogleMap
+        onLoad={map => setMap(map)}
         center={transformLngLon(props.center)}
         zoom={config.zoom}
-        onClick={setMarkerPosition}
+        onClick={pos => {
+          if (pos.latLng) {
+            setMarkerPosition(pos)
+            map?.setCenter(pos.latLng)
+          }
+        }}
         options={{
           fullscreenControl: false,
           mapTypeId: 'roadmap',
@@ -56,7 +64,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ settings }) => {
   const [center, setCenter] = useState<LocationType | null>(null)
   const [findingLocation, setFindingLocation] = useState(false)
 
-  const { config, inputModal, handler, localePrefs } = useInputMethodProps()
+  const { config, inputModal, handler, localePrefs } = useInputMethodProps<InputMethodLocation>()
 
   useEffect(() => {
     const { default_value, center: center2 } = config

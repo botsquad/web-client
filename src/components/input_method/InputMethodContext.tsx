@@ -3,16 +3,16 @@ import { createContext, useContext, useState } from 'react'
 import InputMethodTemplate from '../elements/InputMethodTemplate'
 import { ChatHandler } from '../index'
 
-export function useInputMethodProps() {
-  return useContext(InputMethodPropsContext)
+export function useInputMethodProps<T>() {
+  return useContext<InputMethodProps<T>>(InputMethodPropsContext)
 }
 
 export function useInputMethodPropsUpdate() {
   return useContext(InputMethodUpdateContext)
 }
 
-interface InputMethodProps {
-  config: any
+interface InputMethodProps<T = any> {
+  config: T
   handler: ChatHandler
   inline: boolean
   inputModal: InputMethodTemplate | null

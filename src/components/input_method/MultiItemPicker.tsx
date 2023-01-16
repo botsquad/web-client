@@ -4,13 +4,14 @@ import InputMethodContainer from './InputMethodContainer'
 import { CheckboxOn, CheckboxOff } from '../icons'
 import { chatLabel } from '../../common/labels'
 import { useInputMethodProps } from './InputMethodContext'
+import { InputMethodItemPicker } from '../../show_types'
 
 interface MultiItemPickerProps {
   settings: Record<string, any>
 }
 
 const MultiItemPicker: React.FC<MultiItemPickerProps> = ({ settings }) => {
-  const { config, inputModal, localePrefs } = useInputMethodProps()
+  const { config, inputModal, localePrefs } = useInputMethodProps<InputMethodItemPicker>()
 
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const [selected, setSelected] = useState<any[]>([])
@@ -18,7 +19,7 @@ const MultiItemPicker: React.FC<MultiItemPickerProps> = ({ settings }) => {
   useEffect(() => {
     const { default_value, items } = config
     if (Array.isArray(default_value)) {
-      const selected = items.filter(({ value }: any) => default_value.find(v => v === value))
+      const selected = (items as any).filter(({ value }: any) => default_value.find(v => v === value))
       setSelected(selected)
     }
   }, [])
@@ -50,6 +51,17 @@ const MultiItemPicker: React.FC<MultiItemPickerProps> = ({ settings }) => {
       if (a.value > b.value) return 1
       return 0
     })
+
+    if (items && config.last_item === 'exclusive') {
+      const lastItem = items[items.length - 1]
+      if (items.indexOf(item) === items.length - 1) {
+        // uncheck all others
+        newSelected = [lastItem]
+      } else {
+        // uncheck last
+        newSelected = newSelected.filter(v => typeof lastItem === 'object' && v.value !== lastItem.value)
+      }
+    }
     setSelected(newSelected)
   }
 
@@ -64,7 +76,7 @@ const MultiItemPicker: React.FC<MultiItemPickerProps> = ({ settings }) => {
         </button>
       }
     >
-      {items.map((item: any, index: number) => {
+      {(items || []).map((item: any, index: number) => {
         const newSelected = selected.find(i => i.value === item.value)
         return (
           <div
