@@ -94,6 +94,7 @@ export interface Media {
     kind: "web" | "audio" | "video" | "image" | "file";
     preview_image?: string;
     quick_replies?: QuickReplies;
+    size?: number;
     url: string;
   };
   type: "media";
@@ -228,6 +229,7 @@ export interface UserMessage {
     }[];
     stats?: Any;
     text?: string;
+    training_label?: null | string;
     type?: string;
   };
   type: "user_message";
