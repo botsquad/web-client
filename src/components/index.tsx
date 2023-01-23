@@ -398,7 +398,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
     const self = !!type.match(/^user_/)
     if (type === 'user_message') {
       type2 = 'text'
-      payload2 = { message: payload.text }
+      payload2 = { message: payload.text, input_type: payload.input_type }
     }
     if (type === 'user_location') {
       type2 = 'location'

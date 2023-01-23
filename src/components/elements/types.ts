@@ -13,6 +13,7 @@ export type AnnotationPayloadType =
 
 export interface Text {
   message: string
+  input_type?: string
   quick_replies?: { content_type: string; title: string }[]
 }
 

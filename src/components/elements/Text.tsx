@@ -15,11 +15,15 @@ const Text: React.FC<Props> = ({ className, message }) => {
 
   const emoji = /^\p{Emoji}$/u.test(message.payload.message.trim())
 
-  return (
-    <div className={classNames(className, { 'large-emoji': emoji })}>
-      <span dangerouslySetInnerHTML={TextUtil.processText(message.payload.message)} />
-    </div>
+  let textNode = (
+    <span>
+      <p>{message.payload.message}</p>
+    </span>
   )
+  if (message.payload.input_type !== 'dtmf') {
+    textNode = <span dangerouslySetInnerHTML={TextUtil.processText(message.payload.message)} />
+  }
+  return <div className={classNames(className, { 'large-emoji': emoji })}>{textNode}</div>
 }
 
 export default Text
