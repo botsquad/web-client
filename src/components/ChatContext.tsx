@@ -56,6 +56,7 @@ export interface ChatContextProps {
   operatorConversationId?: string
   hideInput: boolean
   operatorChatInputComponent?: React.FC<OperatorChatInputComponentProps>
+  params?: Record<string, any>
 }
 
 const DEFAULT_INPUT_METHOD_PROPS: ChatContextProps = {

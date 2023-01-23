@@ -5,6 +5,18 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
+export type _WhatsappMedia =
+  | {
+      caption?: string;
+      filename?: string;
+      id: string;
+    }
+  | {
+      caption?: string;
+      filename?: string;
+      link: string;
+      provider?: string;
+    };
 export type _EmailRecipients =
   | string
   | (
@@ -16,30 +28,55 @@ export type _EmailRecipients =
         }
     )[];
 
-export interface InputMethodBarcode {
-  button_label?: string;
-  caption?: string;
-  class?: string;
-  confirm?: boolean;
-  default_value?: null | {
-    [k: string]: unknown;
-  };
-  event?: string;
-  input_method?: "barcode";
-  readers?: (
-    | "code_128"
-    | "ean"
-    | "ean_8"
-    | "code_39"
-    | "code_39_vin"
-    | "codabar"
-    | "upc"
-    | "upc_e"
-    | "i2of5"
-    | "2of5"
-    | "code_93"
+export interface TemplateWhatsapp {
+  components: (
+    | {
+        parameters: (_WhatsappHeaderText | _WhatsappHeaderVideo | _WhatsappHeaderDocument | _WhatsappHeaderImage)[];
+        type: "header";
+      }
+    | {
+        parameters: {
+          text: string;
+          type: "text";
+        }[];
+        type: "body";
+      }
   )[];
-  required?: boolean;
+  language_code?: string;
+  namespace?: string;
+  template_id?: string;
+  template_type: "whatsapp";
+}
+export interface _WhatsappHeaderText {
+  text: string;
+  type: "text";
+}
+export interface _WhatsappHeaderVideo {
+  type: "video";
+  video: _WhatsappMedia;
+}
+export interface _WhatsappHeaderDocument {
+  document: _WhatsappMedia;
+  type: "document";
+}
+export interface _WhatsappHeaderImage {
+  image: _WhatsappMedia;
+  type: "image";
+}
+export interface TemplateWhatsappProduct {
+  action: {
+    catalog_id: string;
+    product_retailer_id: string;
+  };
+  body?: _WhatsappBody;
+  footer?: _WhatsappFooter;
+  template_type?: "whatsapp_product";
+}
+export interface _WhatsappBody {
+  text: string;
+}
+export interface _WhatsappFooter {
+  text: string;
 }
 export interface InputMethodClosed {
   button?: _Button;
@@ -61,41 +98,17 @@ export interface _Button {
   webview_height_ratio?: string;
   webview_share_button?: string;
 }
-export interface InputMethodDatePicker {
+export interface InputMethodQr {
   button_label?: string;
   caption?: string;
   class?: string;
   confirm?: boolean;
-  constraints?: string[];
-  default_value?: null | string;
-  event?: string;
-  height?: "compact" | "tall" | "full";
-  input_method?: "date_picker";
-  required?: boolean;
-  timezone?: string;
-}
-export interface InputMethodForm {
-  button_label?: string;
-  caption?: string;
-  class?: string;
   default_value?: null | {
     [k: string]: unknown;
   };
   event?: string;
-  height?: "compact" | "tall" | "full";
-  input_method?: "form";
+  input_method?: "qr";
   required?: boolean;
-  schema?: {
-    [k: string]: unknown;
-  };
-  ui_schema?: {
-    [k: string]: unknown;
-  };
-}
-export interface InputMethodGoogleAssistantIntent {
-  input_method?: "google_assistant_intent";
-  intent: string;
-  permissions?: string[];
 }
 export interface InputMethodItemPicker {
   button_label?: string;
@@ -121,17 +134,15 @@ export interface InputMethodItemPicker {
   mode?: "single" | "multiple";
   required?: boolean;
 }
-export interface InputMethodLocation {
-  button_label?: string;
+export interface InputMethodNumeric {
   caption?: string;
-  center?: Location;
   class?: string;
-  default_value?: null | Location;
-  event?: string;
-  height?: "compact" | "tall" | "full";
-  input_method?: "location";
+  description?: string;
+  finish_on_key?: string;
+  input_method?: "numeric";
+  input_type?: string;
+  num_digits?: number;
   required?: boolean;
-  zoom?: number;
 }
 export interface Location {
   lat: number;
@@ -139,26 +150,77 @@ export interface Location {
   maptype?: "roadmap" | "terrain" | "satellite" | "hybrid";
   zoom?: number;
 }
-export interface InputMethodNumeric {
-  caption?: string;
-  class?: string;
-  description?: string;
-  finish_on_key?: string;
-  input_method?: "numeric";
-  num_digits?: number;
-  required?: boolean;
+export interface TemplateList {
+  button?: _Button;
+  elements: _Element[];
+  template_type: string;
+  text?: string;
+  top_element_style?: "compact" | "large";
 }
-export interface InputMethodQr {
+export interface _Element {
+  buttons?: _Button[];
+  default_action?: _Button;
+  image_url?: string;
+  section?: string;
+  subtitle?: string;
+  text?: string;
+  title: string;
+}
+export interface TemplateGallery {
+  elements: _Element[];
+  modal?: boolean;
+  template_type: string;
+}
+export interface InputMethodDatePicker {
   button_label?: string;
   caption?: string;
   class?: string;
   confirm?: boolean;
-  default_value?: null | {
-    [k: string]: unknown;
-  };
+  constraints?: string[];
+  default_value?: null | string;
   event?: string;
-  input_method?: "qr";
+  height?: "compact" | "tall" | "full";
+  input_method?: "date_picker";
   required?: boolean;
+  timezone?: string;
+}
+export interface InputMethodLocation {
+  button_label?: string;
+  caption?: string;
+  center?: Location1;
+  class?: string;
+  default_value?: null | Location1;
+  event?: string;
+  height?: "compact" | "tall" | "full";
+  input_method?: "location";
+  required?: boolean;
+  zoom?: number;
+}
+export interface Location1 {
+  lat: number;
+  lon: number;
+  maptype?: "roadmap" | "terrain" | "satellite" | "hybrid";
+  zoom?: number;
+}
+export interface TemplateWhatsappProductList {
+  action: {
+    catalog_id: string;
+    sections: {
+      product_items?: {
+        product_retailer_id: string;
+      }[];
+      title?: string;
+    }[];
+  };
+  body?: _WhatsappBody;
+  footer?: _WhatsappFooter;
+  header: _WhatsappHeaderText | _WhatsappHeaderVideo | _WhatsappHeaderDocument | _WhatsappHeaderImage;
+  template_type?: "whatsapp_product_list";
+}
+export interface TemplateButtons {
+  buttons: _Button[];
+  template_type: string;
+  text: string;
 }
 export interface InputMethodWait {
   button?: _Button;
@@ -169,30 +231,10 @@ export interface InputMethodWait {
   required?: boolean;
   wait_time?: number;
 }
-export interface Location1 {
-  lat: number;
-  lon: number;
-  maptype?: "roadmap" | "terrain" | "satellite" | "hybrid";
-  zoom?: number;
-}
-export interface TemplateButtons {
-  buttons: _Button[];
-  template_type: string;
-  text: string;
-}
 export interface TemplateCard {
   card: _Element;
   modal?: boolean;
   template_type: "card";
-}
-export interface _Element {
-  buttons?: _Button[];
-  default_action?: _Button;
-  image_url?: string;
-  section?: string;
-  subtitle?: string;
-  text?: string;
-  title: string;
 }
 export interface TemplateEmail {
   attachments?: {
@@ -213,18 +255,6 @@ export interface TemplateEmail {
   template_type: string;
   to?: _EmailRecipients;
 }
-export interface TemplateGallery {
-  elements: _Element[];
-  modal?: boolean;
-  template_type: string;
-}
-export interface TemplateList {
-  button?: _Button;
-  elements: _Element[];
-  template_type: string;
-  text?: string;
-  top_element_style?: "compact" | "large";
-}
 export interface TemplateText {
   locale_override?: string;
   parameters?: {
@@ -233,4 +263,50 @@ export interface TemplateText {
   template_id?: string;
   template_type: string;
   text?: string;
+}
+export interface InputMethodForm {
+  button_label?: string;
+  caption?: string;
+  class?: string;
+  default_value?: unknown;
+  event?: string;
+  height?: "compact" | "tall" | "full";
+  input_method?: "form";
+  required?: boolean;
+  schema?: {
+    [k: string]: unknown;
+  };
+  ui_schema?: {
+    [k: string]: unknown;
+  };
+}
+export interface InputMethodGoogleAssistantIntent {
+  input_method?: "google_assistant_intent";
+  intent: string;
+  permissions?: string[];
+}
+export interface InputMethodBarcode {
+  button_label?: string;
+  caption?: string;
+  class?: string;
+  confirm?: boolean;
+  default_value?: null | {
+    [k: string]: unknown;
+  };
+  event?: string;
+  input_method?: "barcode";
+  readers?: (
+    | "code_128"
+    | "ean"
+    | "ean_8"
+    | "code_39"
+    | "code_39_vin"
+    | "codabar"
+    | "upc"
+    | "upc_e"
+    | "i2of5"
+    | "2of5"
+    | "code_93"
+  )[];
+  required?: boolean;
 }
