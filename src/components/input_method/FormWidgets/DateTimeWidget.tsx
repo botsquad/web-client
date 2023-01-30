@@ -7,8 +7,6 @@ import { WidgetProps } from 'react-jsonschema-form'
 import { usePopper } from 'react-popper'
 import { chatLabel } from '../../../common/labels'
 
-import 'react-datetime/css/react-datetime.css'
-
 export const checkDateConstraints = (currentDate: string, constraints: string[] | string) => {
   if (typeof constraints === 'string') constraints = [constraints]
 
