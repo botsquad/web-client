@@ -11,6 +11,11 @@ const devServer = {
   headers: { 'Access-Control-Allow-Origin': '*' },
   static: { directory: path.join(__dirname, 'dev') },
 }
+const styleLoader = {
+  loader: 'style-loader',
+  options: { injectType: 'singletonStyleTag', attributes: { v: '@botsquad/web-client' } },
+}
+
 require('dotenv').config({ path: './.devenv' })
 module.exports = {
   mode: 'development',
@@ -65,15 +70,15 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+        use: [styleLoader, 'css-loader', 'postcss-loader', 'sass-loader'],
       },
       {
         test: /[^min]\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: [styleLoader, 'css-loader'],
       },
       {
         test: /\.min\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: [styleLoader, 'css-loader'],
       },
       {
         test: /\.(eot|svg|ttf|gif|png|jpg|woff|woff2)$/,
