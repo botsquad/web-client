@@ -4,7 +4,7 @@ import Slider from 'react-slick'
 import InputMethodTemplate from './InputMethodTemplate'
 import { OpenModal, ArrowLeft, ArrowRight } from '../icons'
 import { TextUtil } from '@botsquad/sdk'
-import './css/slick.min.css'
+
 import Message, {
   ButtonsTemplate,
   GalleryTemplate,

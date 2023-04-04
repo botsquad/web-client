@@ -21,12 +21,12 @@ const NumericKeyboard: React.FC<NumericKeyboardProps> = ({ settings }) => {
 
   const [value, setValue] = useState('')
 
-  const finish = () => {
+  const finish = (overrideValue?: string) => {
     if (inputModal) {
       const payload = {
         type: 'numeric',
-        text: value,
-        data: value,
+        text: overrideValue || value,
+        data: overrideValue || value,
         ...(config.input_type ? { input_type: config.input_type } : {}),
       }
 
@@ -35,12 +35,12 @@ const NumericKeyboard: React.FC<NumericKeyboardProps> = ({ settings }) => {
   }
 
   const button = () => {
-    if (config.finish_on_key) {
+    if (config.finish_on_key || config.num_digits === 1) {
       return null
     }
     if (settings) {
       return (
-        <button disabled={!value.length} onClick={finish}>
+        <button disabled={!value.length} onClick={() => finish()}>
           {chatLabel(settings as { ui_labels: any }, localePrefs, 'form_submit_button')}
         </button>
       )
@@ -49,6 +49,11 @@ const NumericKeyboard: React.FC<NumericKeyboardProps> = ({ settings }) => {
   }
 
   const add = (key: string) => {
+    if (config.num_digits === 1 && !value.length) {
+      finish(key)
+      return
+    }
+
     if (config.finish_on_key === key) {
       finish()
       return
@@ -68,10 +73,12 @@ const NumericKeyboard: React.FC<NumericKeyboardProps> = ({ settings }) => {
 
   return (
     <InputMethodContainer className="numeric" below={button()}>
-      <div className="display">
-        <span>{value}</span>
-        <button onClick={backspace}>{ArrowBack}</button>
-      </div>
+      {(config.num_digits || 1) > 1 ? (
+        <div className="display">
+          <span>{value}</span>
+          <button onClick={backspace}>{ArrowBack}</button>
+        </div>
+      ) : null}
       <div className="keys">
         {KEYS.flat().map(k => (
           <button key={k} onClick={() => add(k)} className="key">
