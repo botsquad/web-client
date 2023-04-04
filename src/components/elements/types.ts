@@ -113,6 +113,7 @@ export interface DefaultMessageParams {
   delay?: string | number
   id?: string
   read_only_data?: any
+  metadata?: any
 }
 
 export interface Annotation {
@@ -123,10 +124,10 @@ export interface Annotation {
 
 export type Payload = Media & Text & Location & Template & Annotation
 
-type Message<T extends Media | Text | Location | Template | unknown> = {
+interface Message<T extends Media | Text | Location | Template | unknown> extends DefaultMessageParams {
   payload: T
   as: As
-} & DefaultMessageParams
+}
 
 export default Message
 

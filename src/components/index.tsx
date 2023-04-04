@@ -391,8 +391,8 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
     this.setState({ events }, cb)
   }
 
-  normalizeEvent(message: Message<any>) {
-    const { type, payload, time, as } = message
+  normalizeEvent(message: Message<any>): Message<any> {
+    const { type, payload, time, as, metadata } = message
     let type2 = type
     let payload2 = payload
     const self = !!type.match(/^user_/)
@@ -407,8 +407,11 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
       type2 = 'media'
       payload2 = { url: payload.url, kind: payload.type, caption: payload.caption }
     }
-    const renderable = ['media', 'text', 'location', 'template'].indexOf(type2) >= 0
-    return { type: type2, self, payload: payload2, renderable, time, as }
+    if (type === 'contact') {
+      type2 = 'contact'
+    }
+    const renderable = ['media', 'text', 'location', 'template', 'contact'].indexOf(type2) >= 0
+    return { type: type2, self, payload: payload2, renderable, time, as, metadata }
   }
 
   render() {

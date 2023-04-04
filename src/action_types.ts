@@ -9,6 +9,7 @@
  * A single Bubble action
  */
 export type Action =
+  | ContactAction
   | LocationAction
   | MediaAction
   | SideEffectAction
@@ -20,7 +21,7 @@ export type Action =
   | UserEventAction
   | UserLocationAction
   | UserMessageAction;
-export type LocationAction = BaseAction & Location;
+export type ContactAction = BaseAction & Contact;
 export type As =
   | null
   | {
@@ -44,6 +45,7 @@ export type Any =
   | boolean
   | null;
 export type Visibility = "external" | "internal" | "embedded";
+export type LocationAction = BaseAction & Location;
 export type MediaAction = BaseAction & Media;
 export type QuickReplies = {
   content_type: "text" | "location";
@@ -67,6 +69,9 @@ export interface BaseAction {
   as: As;
   delay: null | "infinity" | number;
   id: string | null;
+  metadata?: {
+    [k: string]: unknown;
+  } | null;
   payload: Any;
   sender: string | null;
   time:
@@ -77,6 +82,59 @@ export interface BaseAction {
     | null;
   type: string;
   visibility?: Visibility;
+}
+export interface Contact {
+  payload: {
+    addresses?: {
+      city?: null | string;
+      country?: null | string;
+      country_code?: null | string;
+      state?: null | string;
+      street?: null | string;
+      type?: null | string;
+      zip?: null | string;
+      [k: string]: unknown;
+    }[];
+    birthday?: string;
+    emails?: {
+      email?: string;
+      type?: string;
+      [k: string]: unknown;
+    }[];
+    metadata?: {
+      [k: string]: unknown;
+    };
+    name?: {
+      first_name?: null | string;
+      formatted_name?: null | string;
+      last_name?: null | string;
+      middle_name?: null | string;
+      prefix?: null | string;
+      suffix?: null | string;
+      [k: string]: unknown;
+    };
+    org?: {
+      company?: null | string;
+      department?: null | string;
+      title?: null | string;
+      [k: string]: unknown;
+    };
+    phones?: {
+      metadata?: {
+        [k: string]: unknown;
+      };
+      phone?: string;
+      type?: string;
+      [k: string]: unknown;
+    }[];
+    urls?: {
+      type?: string;
+      url?: string;
+      [k: string]: unknown;
+    }[];
+  };
+  type: "contact";
+  [k: string]: unknown;
 }
 export interface Location {
   payload: {
@@ -209,6 +267,7 @@ export interface UserMessage {
     input_type?: string;
     intent?: Any;
     locale?: null | string;
+    metadata?: Any;
     sentiment?: Any;
     sents?: {
       __struct__: "Elixir.BubbleMatch.Sentence";

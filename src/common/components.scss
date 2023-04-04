@@ -676,6 +676,25 @@
         padding-bottom: 50%;
       }
     }
+
+    &.contact {
+      h1 {
+        font-size: 1.1rem !important;
+        margin-top: 0;
+      }
+      .download-vcard {
+        margin-top: 1rem;
+        padding: 4px 8px;
+        display: inline-flex;
+        flex-direction: row;
+        align-items: center;
+        svg {
+          width: 24px;
+          height: 24px;
+          margin-right: 8px;
+        }
+      }
+    }
   }
 
   .bubble.template:not(.text) {

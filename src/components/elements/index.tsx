@@ -8,6 +8,8 @@ import { Payload } from './types'
 import Message from './types'
 import { ChatHandler } from 'components'
 import Annotation from './Annotation'
+import Contact from './Contact'
+import type { Contact as ContactType } from 'action_types'
 
 interface AttributesProp {
   className: string
@@ -23,7 +25,7 @@ interface AttributesProp {
 
 type MessageProp = Message<Payload>
 
-export default function elementFactory({ type, payload }: MessageProp, attrs: AttributesProp): React.FC {
+export default function elementFactory({ type, payload, metadata }: MessageProp, attrs: AttributesProp): React.FC {
   let element: any = null
 
   if (type === 'text') {
@@ -60,6 +62,10 @@ export default function elementFactory({ type, payload }: MessageProp, attrs: At
   // Payload is different for this one
   if (type === 'annotation' && attrs.operatorConversationId) {
     element = <Annotation payload={payload} />
+  }
+
+  if (type === 'contact') {
+    element = <Contact payload={payload as ContactType['payload']} metadata={metadata} {...attrs} />
   }
 
   return element
