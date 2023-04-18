@@ -678,16 +678,24 @@
     }
 
     &.contact {
+      span {
+        position: relative;
+        padding: 15px 20px;
+      }
+      p {
+        line-height: 1.4;
+      }
       h1 {
         font-size: 1.1rem !important;
         margin-top: 0;
       }
       .download-vcard {
-        margin-top: 1rem;
-        padding: 4px 8px;
-        display: inline-flex;
-        flex-direction: row;
-        align-items: center;
+        position: absolute;
+        top: 8px;
+        right: 0;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
         svg {
           width: 24px;
           height: 24px;

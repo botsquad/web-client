@@ -30,7 +30,6 @@ const Contact: React.FC<Props> = ({ payload, metadata, className }) => {
             }}
           >
             {FileDownload}
-            Download vCard (.vcf)
           </button>
         )}
       </span>
