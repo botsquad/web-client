@@ -20,7 +20,7 @@ export default class InputMethodTemplate extends React.Component<Props> {
   finish(type: string, payload: any, config: any) {
     if (type === 'location' && !config?.event) {
       // send raw
-      this.props.handler.send(type, payload)
+      this.props.handler.send('user_location', payload)
       return
     }
 
