@@ -18,7 +18,7 @@ export default class InputMethodTemplate extends React.Component<Props> {
   }
 
   finish(type: string, payload: any, config: any) {
-    if (type === 'location' && !config?.event) {
+    if (type === 'user_location' && !config?.event) {
       // send raw
       this.props.handler.send('user_location', payload)
       return
@@ -29,11 +29,11 @@ export default class InputMethodTemplate extends React.Component<Props> {
 
     if (payload.type === 'form') {
       payload = { _template_id: this.props.payload.template_id, ...payload.data }
-    } else if (type !== 'location') {
+    } else if (type !== 'user_location') {
       payload = payload.data
     }
 
-    this.props.handler.send('event', { name, payload })
+    this.props.handler.send('user_event', { name, payload })
   }
 
   render() {

@@ -77,7 +77,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ settings }) => {
 
   const submit = () => {
     setHasSubmitted(true)
-    inputModal?.finish('location', position, config)
+    inputModal?.finish('user_location', position, config)
   }
 
   const setMyLocation = () => {

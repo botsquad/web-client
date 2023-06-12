@@ -29,11 +29,11 @@ export function buttonClick(button: TemplateElementButton, handler: any, handleE
   }
   switch (button.type) {
     case 'postback':
-      handler.send('event', { name: button.payload, payload: {} })
+      handler.send('user_event', { name: button.payload, payload: {} })
       break
     case 'event':
       payload = { name: button.event, payload: button.payload }
-      handleEvent = handleEvent || ((p: any) => handler.send('event', p))
+      handleEvent = handleEvent || ((p: any) => handler.send('user_event', p))
       handleEvent(payload)
       break
     case 'phone_number':

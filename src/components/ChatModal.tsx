@@ -36,7 +36,7 @@ const ChatModal: React.FC<ChatModalProps> = props => {
   const hide = () => {
     if (props.hiding) return
     props.handler.component.hideModal()
-    props.handler.send('event', { name: '$modal_close', payload: {} })
+    props.handler.send('user_event', { name: '$modal_close', payload: {} })
   }
 
   const toggleModalPreferHeight = (condition: boolean) => {

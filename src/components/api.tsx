@@ -10,7 +10,7 @@ export default class API {
   }
 
   sendMessage(message: Message<Payload>) {
-    return this._handler.send('message', message)
+    return this._handler.send('user_message', message)
   }
 
   eventDispatcher() {

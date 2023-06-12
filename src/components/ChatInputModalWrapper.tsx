@@ -17,7 +17,7 @@ const ChatInputModalWrapper: React.FC<ChatInputModalWrapperProps> = props => {
     if (inputMethodOverride) {
       updater({ inputMethodOverride: null })
     } else {
-      if (handler) handler.send('message', { type: 'cancel', text: cancelLabel })
+      if (handler) handler.send('user_message', { type: 'cancel', text: cancelLabel })
     }
   }
 

@@ -62,7 +62,7 @@ const ChatInput: React.FC = () => {
   const sendMessage = () => {
     const newMessage = message.trim()
     if (newMessage.length > 0 && handler) {
-      handler.send('message', { text: newMessage, input_type: 'keyboard' })
+      handler.send('user_message', { text: newMessage, input_type: 'keyboard' })
     }
     setMessage('')
     setHasMessage(false)

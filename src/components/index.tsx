@@ -99,11 +99,11 @@ export class ChatHandler {
       return
     }
     this.channel?.push('user_action', { type, payload })
-    if (type === 'message' && typeof payload === 'string') {
+    if (type === 'user_message' && typeof payload === 'string') {
       payload = { text: payload, type: 'text' }
     }
     this.component.addEvent({
-      type: `user_${type}`,
+      type,
       payload,
       time: new Date().getTime(),
     })
@@ -132,7 +132,7 @@ export class ChatHandler {
             if (type !== 'video' && type !== 'audio' && type !== 'image') {
               type = 'file'
             }
-            this.send('attachment', { type, url: public_url, caption: name })
+            this.send('user_attachment', { type, url: public_url, caption: name })
             this.component.setState({ upload: null })
           },
           () => {

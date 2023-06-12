@@ -6,7 +6,7 @@ import { useChatProps } from './ChatContext'
 
 function askForLocation(handler: any) {
   navigator.geolocation.getCurrentPosition(({ coords }) => {
-    handler.send('location', { lat: coords.latitude, lon: coords.longitude })
+    handler.send('user_location', { lat: coords.latitude, lon: coords.longitude })
   })
 }
 
@@ -57,7 +57,7 @@ function renderButton(
         onClick={() => {
           const span = document.createElement('span')
           span.innerHTML = innerHTML.__html
-          handler.send('message', { text: span.innerText.trim(), input_type: 'touch' })
+          handler.send('user_message', { text: span.innerText.trim(), input_type: 'touch' })
         }}
       >
         {image_url && (
