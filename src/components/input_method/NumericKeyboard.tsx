@@ -30,7 +30,7 @@ const NumericKeyboard: React.FC<NumericKeyboardProps> = ({ settings }) => {
         ...(config.input_type ? { input_type: config.input_type } : {}),
       }
 
-      inputModal.finish('message', payload, null)
+      inputModal.finish('user_message', payload, null)
     }
   }
 

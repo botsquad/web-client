@@ -18,7 +18,7 @@ const DatePicker: React.FC<Props> = ({ settings }) => {
   const [value, setValue] = useState<string>('')
 
   const submit = (value: string, label: string) =>
-    inputModal?.finish('message', { type: 'date_picker', text: label, data: value }, config)
+    inputModal?.finish('user_message', { type: 'date_picker', text: label, data: value }, config)
   const { confirm, button_label, default_value, constraints } = config
 
   return (
