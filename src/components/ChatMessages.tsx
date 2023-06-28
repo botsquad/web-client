@@ -165,8 +165,10 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
       )
     }
 
-    const key = group.messages[0].time
+    const rendered = group.messages.map(this.renderMessage.bind(this)).filter((el: any) => el !== null)
+    if (rendered.length === 0) return null
 
+    const key = group.messages[0].time
     const name = group.as ? (group.as.first_name + ' ' + (group.as.last_name || '')).trim() : null
 
     return (
@@ -181,7 +183,7 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
             {name?.length ? <div className="name">{name}</div> : null}
           </div>
         ) : null}
-        <div className="bubble-container">{group.messages.map(this.renderMessage.bind(this))}</div>
+        <div className="bubble-container">{rendered}</div>
       </div>
     )
   }
