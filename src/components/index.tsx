@@ -364,7 +364,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
         .find(c => {
           return (
             (c.type === 'emit' && c.payload.event === 'hide_input') ||
-            (c.type === 'message' && c.payload.input_method === 'closed')
+            (c.type === 'user_message' && c.payload.input_method === 'closed')
           )
         })
       if (lastInputState) {

@@ -86,7 +86,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
       text = '…'
     }
     const data = formData
-    if (inputModal) inputModal.finish('message', { type: 'form', text, data }, config)
+    if (inputModal) inputModal.finish('user_message', { type: 'form', text, data }, config)
   }
 
   const onChange = ({ formData }: { formData: any }) => {

@@ -42,7 +42,11 @@ function renderButton(
   if (!button) return null
 
   const onClick = (payload: any) =>
-    props.inputModal?.finish('message', { type: 'wait', text: button.title, data: { event: payload } }, props.config)
+    props.inputModal?.finish(
+      'user_message',
+      { type: 'wait', text: button.title, data: { event: payload } },
+      props.config,
+    )
 
   if (button.type === 'web_url' && button.url && props.config.show_qr && !isMobile()) {
     return null
@@ -85,7 +89,8 @@ const Wait: React.FC<WaitProps> = props => {
 
     if (delta > wait_time) {
       setWaitTime(-1)
-      if (inputModal) inputModal.finish('message', { type: 'wait', text: 'Timeout', data: { timeout: true } }, config)
+      if (inputModal)
+        inputModal.finish('user_message', { type: 'wait', text: 'Timeout', data: { timeout: true } }, config)
     } else {
       setWaitTime(delta)
     }
