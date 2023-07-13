@@ -199,6 +199,7 @@ const ChatInput: React.FC = () => {
               {!isDisabled('text') || operatorActive ? (
                 <input
                   type="text"
+                  autoComplete="off"
                   value={message}
                   readOnly={!online}
                   placeholder={chatLabel(settings as { ui_labels: any }, localePrefs, 'text_input_placeholder')}
@@ -277,6 +278,7 @@ const ChatInput: React.FC = () => {
               <div className="input">
                 <input
                   type="text"
+                  autoComplete="off"
                   value={message}
                   readOnly={!online}
                   placeholder={chatLabel(settings as { ui_labels: any }, localePrefs, 'text_input_placeholder')}
