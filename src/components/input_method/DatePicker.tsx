@@ -39,7 +39,7 @@ const DatePicker: React.FC<Props> = ({ settings }) => {
     >
       <Datetime
         input={false}
-        value={moment(value) || moment()}
+        value={moment(value).isValid() ? moment(value) : moment()}
         onChange={date => {
           const value = moment(date).format('YYYY-MM-DD')
           const label = moment(date).format('D-M-Y')
