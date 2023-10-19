@@ -14,12 +14,17 @@ interface Props {
 
 const DatePicker: React.FC<Props> = ({ settings }) => {
   const { config, inputModal, localePrefs } = useInputMethodProps<InputMethodDatePicker>()
-  const [label, setLabel] = useState<string>('')
-  const [value, setValue] = useState<string>('')
+  const { confirm, button_label, default_value, constraints } = config
+
+  const [value, setValue] = useState<string>(() => {
+    const defaultValueDate = moment(default_value)
+
+    return defaultValueDate.isValid() ? defaultValueDate.format('YYYY-MM-DD') : ''
+  })
+  const [label, setLabel] = useState<string>(value ? moment(value).format('D-M-Y') : '')
 
   const submit = (value: string, label: string) =>
     inputModal?.finish('message', { type: 'date_picker', text: label, data: value }, config)
-  const { confirm, button_label, default_value, constraints } = config
 
   return (
     <InputMethodContainer
@@ -33,7 +38,6 @@ const DatePicker: React.FC<Props> = ({ settings }) => {
       }
     >
       <Datetime
-        initialValue={moment(default_value || '')}
         input={false}
         value={moment(value) || moment()}
         onChange={date => {
