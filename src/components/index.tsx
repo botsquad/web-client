@@ -32,7 +32,8 @@ moment.locale('en')
 export type Meta = {
   readonly dialog?: string | null
   readonly file?: string | null
-  readonly line?: string | number
+  readonly line?: number
+  readonly column?: number
 }
 
 type BotProcesses = {

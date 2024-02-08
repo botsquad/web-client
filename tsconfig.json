@@ -13,7 +13,6 @@
     "baseUrl": "./src",
     "typeRoots": ["node_modules/@types/*", "custom_types", "node_modules/typescript/*", "src/types"],
     "forceConsistentCasingInFileNames": true,
-    "experimentalDecorators": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noImplicitAny": true,
