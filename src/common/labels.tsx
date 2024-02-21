@@ -15,6 +15,7 @@ const LABELS = {
     pl: 'Wybierz obraz',
     sv: 'Välj bild',
     tr: 'Resmi Seçin',
+    uk: 'Виберіть зображення',
   },
   audio_picker_select: {
     $i18n: true,
@@ -30,6 +31,7 @@ const LABELS = {
     pl: 'Wybierz plik dźwiękowy',
     sv: 'Välj ljudfil',
     tr: 'Ses Dosyasını Seçin',
+    uk: 'Виберіть аудіофайл',
   },
   video_picker_select: {
     $i18n: true,
@@ -45,6 +47,7 @@ const LABELS = {
     pl: 'Wybierz wideo',
     sv: 'Välj video',
     tr: 'Video seçin',
+    uk: 'Виберіть відео',
   },
   file_picker_select: {
     $i18n: true,
@@ -60,6 +63,7 @@ const LABELS = {
     pl: 'Wybierz plik',
     sv: 'Välj fil',
     tr: 'Dosya seçin',
+    uk: 'Виберіть файл',
   },
   location_picker_select: {
     $i18n: true,
@@ -75,6 +79,7 @@ const LABELS = {
     pl: 'Wybierz lokacje',
     sv: 'Välj plats',
     tr: 'Konum seç',
+    uk: 'Виберіть місце розташування',
   },
   form_submit_button: {
     $i18n: true,
@@ -90,6 +95,7 @@ const LABELS = {
     pl: 'Składać',
     sv: 'Skicka in',
     tr: 'Göndermek',
+    uk: 'Подавати',
   },
   cancel: {
     $i18n: true,
@@ -105,6 +111,7 @@ const LABELS = {
     pl: 'Anulować',
     sv: 'Annullera',
     tr: 'İptal etmek',
+    uk: 'Скасувати',
   },
   text_input_placeholder: {
     $i18n: true,
@@ -120,6 +127,7 @@ const LABELS = {
     pl: 'Wpisz wiadomość…',
     sv: 'Skriv ett meddelande…',
     tr: 'Bir mesaj yazın…',
+    uk: 'Введіть повідомлення…',
   },
   new_conversation: {
     $i18n: true,
@@ -135,6 +143,7 @@ const LABELS = {
     pl: 'Nowa rozmowa',
     sv: 'Ny konversation',
     tr: 'Yeni Sohbet',
+    uk: 'Нова розмова',
   },
   select_date: {
     $i18n: true,
@@ -150,6 +159,7 @@ const LABELS = {
     pl: 'Wybierz datę',
     sv: 'Välj datum',
     tr: 'Tarih seç',
+    uk: 'Виберіть дату',
   },
   invalid_iban: {
     $i18n: true,
@@ -165,6 +175,7 @@ const LABELS = {
     pl: 'IBAN jest nieprawidłowy',
     sv: 'IBAN är ogiltig',
     tr: 'IBAN geçersiz',
+    uk: 'Ібан недійсний',
   },
 }
 
