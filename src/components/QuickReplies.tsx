@@ -98,7 +98,7 @@ const QuickReplies: React.FC<QuickRepliesProps> = ({ buttons, className }) => {
   if (settings)
     return (
       <div className={`quick-replies ${className || ''}`}>
-        {buttons.map((b, idx) => renderButton(b, idx, handler, settings, localePrefs))}
+        {buttons.map((b, idx) => renderButton(b as any, idx, handler, settings, localePrefs))}
       </div>
     )
   else {
