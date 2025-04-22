@@ -21,12 +21,14 @@ function fileUpload(accept: string, handler: any, capture?: Capture) {
   )
 }
 
-enum FILE_UPLOADS {
-  file = '',
-  image = 'image/*',
-  audio = 'audio/*',
-  video = 'video/*',
+const FILE_UPLOADS = {
+  file: '',
+  image: 'image/*',
+  audio: 'audio/*',
+  video: 'video/*',
 }
+
+type ContentType = keyof typeof FILE_UPLOADS | 'location' | 'text'
 
 function renderButton(
   {
@@ -34,16 +36,20 @@ function renderButton(
     title,
     image_url,
     capture,
-  }: { content_type: string; title: string; image_url: string; capture?: string },
+  }: { content_type: ContentType; title: string; image_url: string; capture?: string },
   idx: number,
   handler: ChatHandler,
   settings: Record<string, any>,
   localePrefs: string[],
 ) {
-  if (FILE_UPLOADS[content_type] !== undefined) {
+  if (FILE_UPLOADS.hasOwnProperty(content_type)) {
     const label = capture ? content_type + '_' + capture + '_picker_select' : content_type + '_picker_select'
     return (
-      <div className="button" key={idx} onClick={() => fileUpload(FILE_UPLOADS[content_type], handler, capture)}>
+      <div
+        className="button"
+        key={idx}
+        onClick={() => fileUpload(FILE_UPLOADS[content_type as keyof typeof FILE_UPLOADS], handler, capture as Capture)}
+      >
         <span className="label">{chatLabel(settings as { ui_labels: any }, localePrefs, label)}</span>
       </div>
     )
