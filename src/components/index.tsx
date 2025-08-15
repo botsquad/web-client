@@ -282,6 +282,19 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
     this.eventDispatcher = new EventEmitter()
   }
 
+  getSpan(): { newest: string | null, oldest: string | null } {
+    function getCursor(event: Message<any> | undefined) {
+      if (!event) return null
+
+      return `${event.time}#${event.id}`
+    }
+
+    return {
+      newest: getCursor(this.state.events[this.state.events.length - 1]),
+      oldest: getCursor(this.state.events[0]),
+    }
+  }
+
   componentWillReceiveProps(newProps: ChatProps) {
     if (newProps.bot_id !== this.props.bot_id) {
       this.handler.joinChannel(newProps, this.state.socket)
@@ -393,7 +406,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
   }
 
   normalizeEvent(message: Message<any>): Message<any> {
-    const { type, payload, time, as, metadata } = message
+    const { type, payload, time, as, metadata, id } = message
     let type2 = type
     let payload2 = payload
     const self = !!type.match(/^user_/)
@@ -412,7 +425,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
       type2 = 'contact'
     }
     const renderable = ['media', 'text', 'location', 'template', 'contact'].indexOf(type2) >= 0
-    return { type: type2, self, payload: payload2, renderable, time, as, metadata }
+    return { type: type2, self, payload: payload2, renderable, time, as, metadata, id }
   }
 
   render() {
