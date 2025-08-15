@@ -10,6 +10,7 @@ const devServer = {
   hot: true,
   headers: { 'Access-Control-Allow-Origin': '*' },
   static: { directory: path.join(__dirname, 'dev') },
+  allowedHosts: 'all',
 }
 const styleLoader = {
   loader: 'style-loader',

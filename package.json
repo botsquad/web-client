@@ -1,6 +1,6 @@
 {
   "name": "@botsquad/web-client",
-  "version": "1.12.3",
+  "version": "1.14.0",
   "sideEffects": [
     "*.scss",
     "*.css"
@@ -31,7 +31,7 @@
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
     "@babel/polyfill": "^7.4.3",
-    "@botsquad/sdk": "^0.15.2",
+    "@botsquad/sdk": "^0.16.7",
     "@popperjs/core": "^2.11.2",
     "@react-google-maps/api": "^2.7.0",
     "@types/iban": "^0.0.32",
@@ -136,7 +136,7 @@
     "webpack-dev-server": "^4.2.1"
   },
   "peerDependencies": {
-    "react": "^16.0.0 || ^17.0.0",
-    "react-dom": "^16.0.0 || ^17.0.0"
+    "react": "^16.0.0 || ^17.0.0 || ^18.0.0",
+    "react-dom": "^16.0.0 || ^17.0.0 || ^18.0.0"
   }
 }
