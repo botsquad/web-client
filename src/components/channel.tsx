@@ -76,7 +76,7 @@ export default function botChatHandler(
           component.setState({ joined: true })
           if (!component.mounted) return
           for (let event of events) {
-            component.addEvent({ ...event, time: Date.parse(time) })
+            component.addEvent({ ...event, time: Date.parse(event.time) })
           }
         })
         channel.on('typing', ({ payload, as }) => {
