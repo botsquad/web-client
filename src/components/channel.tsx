@@ -7,6 +7,7 @@ export default function botChatHandler(
   component: Chat,
   socket: Socket,
   params: Record<string, string>,
+  span: () => object
 ): Promise<AugmentedChannel | undefined> {
   if (!socket) {
     return Promise.resolve(undefined)
@@ -18,7 +19,12 @@ export default function botChatHandler(
   const botTopic = `bot:${bot_id}~${params.g || 'main'}`
   const topic = operatorConversationId ? `conversation:${operatorConversationId}` : botTopic
 
-  const channel: Channel & { hasMoreHistory?: any; getMoreHistory?: any } = socket.channel(topic, params)
+  const channel: Channel & { hasMoreHistory?: any; getMoreHistory?: any } = socket.channel(topic, () => {
+    return {
+      ...params,
+      span: span(),
+    }
+  })
 
   let joined = false
   setTimeout(() => {
