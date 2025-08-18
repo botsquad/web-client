@@ -72,6 +72,13 @@ export default function botChatHandler(
           gotFirstHistory = true
           component.prependEvents(history, onReady, true)
         })
+        channel.on('future', ({ events }) => {
+          component.setState({ joined: true })
+          if (!component.mounted) return
+          for (let event of events) {
+            component.addEvent({ ...event, time: Date.parse(time) })
+          }
+        })
         channel.on('typing', ({ payload, as }) => {
           if (!component.mounted) return
           component.setState({ typing: payload, typingAs: as })

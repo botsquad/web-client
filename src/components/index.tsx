@@ -285,8 +285,8 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
   getSpan(): { newest: string | null, oldest: string | null } {
     function getCursor(event: Message<any> | undefined) {
       if (!event) return null
-
-      return `${event.time}#${event.id}`
+      const iso = new Date(event.time).toISOString()
+      return `${iso}#${event.id}`
     }
 
     return {
