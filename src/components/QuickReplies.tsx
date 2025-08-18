@@ -42,7 +42,7 @@ function renderButton(
   settings: Record<string, any>,
   localePrefs: string[],
 ) {
-  if (FILE_UPLOADS.hasOwnProperty(content_type)) {
+  if (Object.prototype.hasOwnProperty.call(FILE_UPLOADS, content_type)) {
     const label = capture ? content_type + '_' + capture + '_picker_select' : content_type + '_picker_select'
     return (
       <div
