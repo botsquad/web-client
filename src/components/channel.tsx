@@ -81,7 +81,7 @@ export default function botChatHandler(
         channel.on('future', ({ events }) => {
           component.setState({ joined: true })
           if (!component.mounted) return
-          for (let event of events) {
+          for (const event of events) {
             component.addEvent({ ...event, time: Date.parse(event.time) })
           }
         })
