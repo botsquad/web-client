@@ -54,6 +54,11 @@ export type ErrorInfo = {
 
 export type Emit = { event: string; payload?: any }
 
+export interface ChatSpan {
+  newest: string | null
+  oldest: string | null
+}
+
 export class ChatHandler {
   component: Chat
   channel?: AugmentedChannel
@@ -69,13 +74,13 @@ export class ChatHandler {
     this._eventQueue = []
   }
 
-  joinChannel(props: any, socket: Socket) {
+  joinChannel(props: any, socket: Socket, span: () => ChatSpan) {
     const { params, onJoinError } = props
     this.leaveChannel()
     this.component.setState({ upload: null, typing: false, events: [] })
-    const params2 = { ...params, context: params?.context || { user: getUserInfo() } }
+    const staticParams = { ...params, context: params?.context || { user: getUserInfo() } }
 
-    botChannelJoin(this.component, socket, params2)?.then(channel => {
+    botChannelJoin(this.component, socket, staticParams, span)?.then(channel => {
       this.channel = channel
       this._eventQueue.forEach(({ type, payload }) => {
         this.send(type, payload)
@@ -282,9 +287,22 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
     this.eventDispatcher = new EventEmitter()
   }
 
+  getSpan(): ChatSpan {
+    function getCursor(event: Message<any> | undefined) {
+      if (!event || !event.id) return null
+      const iso = new Date(event.time).toISOString()
+      return `${iso}#${event.id}`
+    }
+
+    return {
+      newest: getCursor(this.state.events[this.state.events.length - 1]),
+      oldest: getCursor(this.state.events[0]),
+    }
+  }
+
   componentWillReceiveProps(newProps: ChatProps) {
     if (newProps.bot_id !== this.props.bot_id) {
-      this.handler.joinChannel(newProps, this.state.socket)
+      this.handler.joinChannel(newProps, this.state.socket, () => this.getSpan())
     }
     if (this.notificationManager) {
       this.notificationManager.windowFocusChange()
@@ -393,7 +411,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
   }
 
   normalizeEvent(message: Message<any>): Message<any> {
-    const { type, payload, time, as, metadata } = message
+    const { type, payload, time, as, metadata, id } = message
     let type2 = type
     let payload2 = payload
     const self = !!type.match(/^user_/)
@@ -412,7 +430,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
       type2 = 'contact'
     }
     const renderable = ['media', 'text', 'location', 'template', 'contact'].indexOf(type2) >= 0
-    return { type: type2, self, payload: payload2, renderable, time, as, metadata }
+    return { type: type2, self, payload: payload2, renderable, time, as, metadata, id }
   }
 
   render() {
@@ -461,7 +479,7 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
 
   componentDidMount() {
     this.mounted = true
-    this.handler.joinChannel(this.props, this.state.socket)
+    this.handler.joinChannel(this.props, this.state.socket, () => this.getSpan())
 
     if (this.notificationManager) {
       this.notificationManager.componentDidMount()
