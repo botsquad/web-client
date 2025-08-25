@@ -370,6 +370,8 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
 
   addEvent(event: any) {
     this.eventDispatcher.emit('chat_event', event)
+    if (this.state.events.find(e => !!e.id && e.id === event.id)) return
+
     this.setState(
       {
         typing: false,
