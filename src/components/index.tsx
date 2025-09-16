@@ -12,6 +12,7 @@ import botChannelJoin from './channel'
 import { uploadFile } from './upload'
 import { Offline } from './icons'
 import UploadTrigger from './UploadTrigger'
+import { chatMessagesEvents } from './ChatMessages'
 
 import './index.scss'
 import ChatContext, { AugmentedChannel, ChatContextProps, OperatorChatInputComponentProps } from './ChatContext'
@@ -369,10 +370,17 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
 
   addEvent(event: any) {
     this.eventDispatcher.emit('chat_event', event)
-    this.setState({
-      typing: false,
-      events: this.state.events.concat([this.normalizeEvent(event)]),
-    })
+    if (this.state.events.find(e => !!e.id && e.id === event.id)) return
+
+    this.setState(
+      {
+        typing: false,
+        events: this.state.events.concat([this.normalizeEvent(event)]),
+      },
+      () => {
+        chatMessagesEvents.emit('scrollToBottom')
+      },
+    )
   }
 
   prependEvents(history: Message<any>[], cb?: () => void, initial?: boolean) {
