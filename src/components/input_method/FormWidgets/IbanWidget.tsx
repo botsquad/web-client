@@ -1,7 +1,7 @@
 import { chatLabel } from '../../../common/labels'
 import { electronicFormat, isValid, printFormat } from 'iban'
 import React, { useEffect, useState } from 'react'
-import { WidgetProps } from 'react-jsonschema-form'
+import { WidgetProps } from '@rjsf/utils'
 
 const IbanWidget: React.FC<WidgetProps> = ({ value, onChange, disabled, autofocus, formContext, id, required }) => {
   const [error, setError] = useState(false)

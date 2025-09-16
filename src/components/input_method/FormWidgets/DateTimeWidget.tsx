@@ -3,7 +3,7 @@ import moment, { Moment } from 'moment'
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import Datetime from 'react-datetime'
-import { WidgetProps } from 'react-jsonschema-form'
+import { WidgetProps } from '@rjsf/utils'
 import { usePopper } from 'react-popper'
 import { chatLabel } from '../../../common/labels'
 
