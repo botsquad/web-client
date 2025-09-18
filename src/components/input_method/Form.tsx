@@ -8,6 +8,7 @@ import { chatLabel } from '../../common/labels'
 import { Edit } from '../icons'
 import InputMethodContainer from './InputMethodContainer'
 import Widgets from './FormWidgets'
+import Templates from './FormTemplates'
 import { useInputMethodProps } from './InputMethodContext'
 import Message, { Payload } from 'components/elements/types'
 import { InputMethodForm } from 'show_types'
@@ -166,6 +167,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
           onChange={onChange}
           transformErrors={validate}
           widgets={Widgets}
+          templates={Templates}
         >
           <span
             ref={r => {
