@@ -1,4 +1,4 @@
-import { Widget } from 'react-jsonschema-form'
+import { Widget } from '@rjsf/utils'
 import DateTimeWidget from './FormWidgets/DateTimeWidget'
 import IbanWidget from './FormWidgets/IbanWidget'
 import PhoneNumberWidget from './FormWidgets/PhoneNumberWidget'

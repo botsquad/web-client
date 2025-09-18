@@ -1,6 +1,6 @@
 {
   "name": "@botsquad/web-client",
-  "version": "1.14.3",
+  "version": "1.15.0",
   "sideEffects": [
     "*.scss",
     "*.css"
@@ -34,6 +34,9 @@
     "@botsquad/sdk": "^0.16.7",
     "@popperjs/core": "^2.11.2",
     "@react-google-maps/api": "^2.7.0",
+    "@rjsf/core": "5.21.2",
+    "@rjsf/utils": "5.21.2",
+    "@rjsf/validator-ajv8": "5.21.2",
     "@types/iban": "^0.0.32",
     "babel-loader": "^8.0.0",
     "classnames": "^2.2.6",
@@ -48,7 +51,6 @@
     "phoenix": "1.4",
     "prop-types": "^15.6.1",
     "react-datetime": "^3.1.1",
-    "react-jsonschema-form": "^1.8.1",
     "react-phone-number-input": "^3.1.18",
     "react-popper": "^2.2.5",
     "react-slick": "^0.28.1",
@@ -89,7 +91,6 @@
     "@types/phoenix": "^1.5.3",
     "@types/react": "^17.0.35",
     "@types/react-dom": "^17.0.11",
-    "@types/react-jsonschema-form": "^1.7.8",
     "@types/react-phone-number-input": "^3.0.13",
     "@types/react-slick": "^0.23.7",
     "@types/recompose": "^0.30.9",

@@ -1,5 +1,6 @@
 import React, { ReactNode, useEffect, useState } from 'react'
-import Form from 'react-jsonschema-form'
+import Form, { FormProps } from '@rjsf/core'
+import validator from '@rjsf/validator-ajv8';
 import debounce from 'lodash/debounce'
 import moment from 'moment'
 
@@ -7,6 +8,7 @@ import { chatLabel } from '../../common/labels'
 import { Edit } from '../icons'
 import InputMethodContainer from './InputMethodContainer'
 import Widgets from './FormWidgets'
+import Templates from './FormTemplates'
 import { useInputMethodProps } from './InputMethodContext'
 import Message, { Payload } from 'components/elements/types'
 import { InputMethodForm } from 'show_types'
@@ -89,9 +91,11 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
     if (inputModal) inputModal.finish('user_message', { type: 'form', text, data }, config)
   }
 
-  const onChange = ({ formData }: { formData: any }) => {
-    setFormData(formData)
-  }
+  type OnChange = Exclude<FormProps['onChange'], undefined>
+
+  const onChange = React.useCallback<OnChange>((data) => {
+    setFormData(data.formData)
+  }, [])
 
   const setHasErrorDebounced = debounce(hasError => {
     setHasError(hasError)
@@ -152,6 +156,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
         <Form
           liveValidate
           noHtml5Validate
+          validator={validator}
           idPrefix={'bsqd-form'}
           formContext={formContext}
           showErrorList={false}
@@ -162,6 +167,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
           onChange={onChange}
           transformErrors={validate}
           widgets={Widgets}
+          templates={Templates}
         >
           <span
             ref={r => {

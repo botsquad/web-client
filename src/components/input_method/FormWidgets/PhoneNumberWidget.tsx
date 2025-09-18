@@ -35,7 +35,7 @@ function makeInputComponent({ disabled, autofocus, placeholder }: MakeInputCompo
 
 interface PhoneNumberWidgetProps {
   value: string
-  onChange: (value: string) => void
+  onChange: (value: string | undefined) => void
   formContext: { localePrefs: string[] }
   disabled: boolean
   autofocus: boolean
