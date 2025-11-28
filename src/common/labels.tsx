@@ -4,6 +4,8 @@ const LABELS = {
   image_picker_select: {
     $i18n: true,
     ar: 'اختر صورة',
+    az: 'Şəkil seç',
+    ca: 'Escull una imatge',
     da: 'Vælg billede',
     de: 'Bild auswählen',
     en: 'Choose image',
@@ -20,6 +22,8 @@ const LABELS = {
   image_user_picker_select: {
     $i18n: true,
     ar: 'التقط صورة ذاتية',
+    az: 'Əlləşdiyinizi seç',
+    ca: 'Selecciona una foto tú',
     da: 'Tag en selfie',
     de: 'Mach ein Selfie',
     en: 'Make a selfie',
@@ -36,6 +40,8 @@ const LABELS = {
   image_environment_picker_select: {
     $i18n: true,
     ar: 'التقط صورة',
+    az: 'Şəkil seç',
+    ca: 'Escull una imatge',
     da: 'Tag et billede',
     de: 'Mach ein Foto',
     en: 'Make a photo',
@@ -52,6 +58,8 @@ const LABELS = {
   audio_picker_select: {
     $i18n: true,
     ar: 'اختر ملف الصوت',
+    az: 'Səs faylını seç',
+    ca: "Escull un fitxer d'àudio",
     da: 'Vælg lydfil',
     de: 'Ton auswählen',
     en: 'Choose audio file',
@@ -68,6 +76,8 @@ const LABELS = {
   video_picker_select: {
     $i18n: true,
     ar: 'اختر الفيديو',
+    az: 'Video seç',
+    ca: 'Escull un vídeo',
     da: 'Vælg video',
     de: 'Video auswählen',
     en: 'Choose video',
@@ -84,6 +94,8 @@ const LABELS = {
   file_picker_select: {
     $i18n: true,
     ar: 'اختر ملف',
+    az: 'Fayl seç',
+    ca: 'Escull un fitxer',
     da: 'Vælg fil',
     de: 'Datei wählen',
     en: 'Choose file',
@@ -100,6 +112,8 @@ const LABELS = {
   location_picker_select: {
     $i18n: true,
     ar: 'اختيار موقع',
+    az: 'Məkan seç',
+    ca: 'Escull un lloc',
     da: 'Vælg placering',
     de: 'Wählen Sie einen Ort',
     en: 'Choose location',
@@ -116,6 +130,8 @@ const LABELS = {
   form_submit_button: {
     $i18n: true,
     ar: 'إرسال',
+    az: 'Göndər',
+    ca: 'Enviar',
     da: 'Indsend',
     de: 'Senden',
     en: 'Submit',
@@ -132,6 +148,8 @@ const LABELS = {
   cancel: {
     $i18n: true,
     ar: 'إلغاء',
+    az: 'Ləğv et',
+    ca: 'Cancel·lar',
     da: 'Afbestille',
     de: 'Abbrechen',
     en: 'Cancel',
@@ -148,6 +166,8 @@ const LABELS = {
   text_input_placeholder: {
     $i18n: true,
     ar: 'اكتب رسالة ...',
+    az: 'Mesaj yaz…',
+    ca: 'Escriu un missatge…',
     da: 'Skriv en besked…',
     de: 'Nachricht schreiben…',
     en: 'Type a message…',
@@ -164,6 +184,8 @@ const LABELS = {
   new_conversation: {
     $i18n: true,
     ar: 'محادثة جديدة',
+    az: 'Yeni söhbət',
+    ca: 'Nova conversació',
     da: 'Ny samtale',
     de: 'Neues Gespräch',
     en: 'New conversation',
@@ -180,6 +202,8 @@ const LABELS = {
   select_date: {
     $i18n: true,
     ar: 'حدد تاريخ',
+    az: 'Tarix seç',
+    ca: 'Selecciona una data',
     da: 'Vælg dato',
     de: 'Datum auswählen',
     en: 'Select Date',
@@ -196,6 +220,8 @@ const LABELS = {
   invalid_iban: {
     $i18n: true,
     ar: 'رقم الحساب المصرفي الدولي (IBAN) غير صالح',
+    az: 'IBAN səhvdir',
+    ca: 'IBAN no és vàlid',
     da: 'IBAN er ugyldigt',
     de: 'IBAN ist ungültig',
     en: 'IBAN is invalid',
