@@ -159,11 +159,6 @@ const ChatInput: React.FC = () => {
       })
   }
 
-  const isDisabled = (item: string | number) => {
-    if (settings) return settings.chat_config.disabled_inputs?.indexOf(item) >= 0
-    return false
-  }
-
   const onInputFocus = () => {
     chatMessagesEvents.emit('scrollToBottom')
     setTimeout(() => chatMessagesEvents.emit('scrollToBottom'), 200)
@@ -193,10 +188,10 @@ const ChatInput: React.FC = () => {
         handler={handler}
         cancelLabel={chatLabel(settings as { ui_labels: any }, localePrefs, 'cancel')}
       >
-        {operatorActive => (
+        {inputProps => (
           <div className="chat-input docked" ref={inputDiv}>
             <div className="input">
-              {!isDisabled('text') || operatorActive ? (
+              {!inputProps.isDisabled('text') || inputProps.operatorActive ? (
                 <input
                   type="text"
                   autoComplete="off"
@@ -211,24 +206,28 @@ const ChatInput: React.FC = () => {
                 />
               ) : null}
             </div>
-            {!hasMessage && (operatorActive || !isDisabled('location')) && frontend !== 'phone' ? (
+            {!hasMessage && (inputProps.operatorActive || !inputProps.isDisabled('location')) && frontend !== 'phone' ? (
               <button disabled={!online} onClick={() => showLocationInput()}>
                 {LocationShare}
               </button>
             ) : null}
-            {!hasMessage && !isDisabled('image') && frontend !== 'phone' ? (
+            {!hasMessage && !inputProps.isDisabled('image') && frontend !== 'phone' ? (
               <button disabled={!online} onClick={() => upload('image/*,video/*')}>
                 {ImageUpload}
               </button>
             ) : null}
-
-            {!hasMessage && !isDisabled('dialpad') && frontend === 'phone' ? (
+            {!hasMessage && !inputProps.isDisabled('dialpad') && frontend === 'phone' ? (
               <button disabled={!online} onClick={() => showDialpad()}>
                 {Dialpad}
               </button>
             ) : null}
+            {!hasMessage && (inputProps.operatorActive || !inputProps.isDisabled('file')) && frontend !== 'phone' ? (
+              <button disabled={!online} onClick={() => upload('*/*')}>
+                {FileUpload}
+              </button>
+            ) : null}
 
-            {hasMessage || (isDisabled('image') && isDisabled('location')) ? (
+            {hasMessage || (inputProps.isDisabled('image') && inputProps.isDisabled('location') && inputProps.isDisabled('file')) ? (
               <button
                 className={`send ${hasMessage ? 'has-message' : ''}`}
                 disabled={!online || !hasMessage}
@@ -249,7 +248,7 @@ const ChatInput: React.FC = () => {
         handler={handler}
         cancelLabel={chatLabel(settings as { ui_labels: any }, localePrefs, 'cancel')}
       >
-        {operatorActive => (
+        {inputProps => (
           <div className={`chat-input embedded ${menuOpen ? 'menu-open' : ''} ${inputFocus ? 'input-focus' : ''}`}>
             <div className="input-menu">
               <span className="menu">
@@ -274,7 +273,7 @@ const ChatInput: React.FC = () => {
               ) : null}
             </div>
 
-            {!isDisabled('text') || operatorActive ? (
+            {!inputProps.isDisabled('text') || inputProps.operatorActive ? (
               <div className="input">
                 <input
                   type="text"
