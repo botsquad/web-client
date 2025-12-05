@@ -4,11 +4,18 @@ import isEqual from 'lodash/isEqual'
 import inputMethodFactory from './input_method'
 import { useChatProps } from './ChatContext'
 
+export interface ChatProps {
+  operatorActive: boolean
+  isDisabled: (input: string) => boolean
+}
+
 interface ChatInputModalProps {
   onCancel: () => void
   onFinish: () => void
-  children: (operatorActive: boolean) => React.ReactElement | null
+  children: (props: ChatProps) => React.ReactElement | null
 }
+
+type InputType = 'file' | 'text' | 'location' | 'image'
 
 const ChatInputModal: React.FC<ChatInputModalProps> = props => {
   const {
@@ -30,6 +37,29 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
 
   const [inputMethod, setInputMethod] = useState<any | null>(null)
   const [operatorActive, setOperatorActive] = useState(false)
+
+  const inputs = React.useMemo(() => {
+    const inputs: Record<InputType, boolean> = {
+      file: settings?.layout === 'embedded' ? true : false,
+      text: true,
+      location: true,
+      image: true
+    }
+
+    if (Array.isArray(settings?.chat_config?.disabled_inputs)) {
+      for (const input of settings?.chat_config?.disabled_inputs) {
+        inputs[input as InputType] = false
+      }
+    }
+
+    if (Array.isArray(settings?.chat_config?.enabled_inputs)) {
+      for (const input of settings?.chat_config?.enabled_inputs) {
+        inputs[input as InputType] = true
+      }
+    }
+
+    return inputs
+  }, [settings])
 
   useEffect(() => {
     _checkShowInputModal()
@@ -78,13 +108,15 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     }
   }
 
-  const isDisabled = (item: any) => {
-    return settings?.chat_config.disabled_inputs?.indexOf(item) >= 0
-  }
+  const isDisabled = React.useCallback((item: any) => {
+    return inputs[item] === false
+  }, [inputs])
 
   const allDisabled = () => {
-    return hideInput || (isDisabled('text') && isDisabled('location') && isDisabled('image'))
+    return hideInput || (isDisabled('text') && isDisabled('location') && isDisabled('image') && isDisabled('file'))
   }
+
+  const inputProps = React.useMemo(() => ({ isDisabled, operatorActive }), [isDisabled, operatorActive])
 
   if (operatorConversationId) {
     if (channel && OperatorChatInputComponent) {
@@ -102,7 +134,7 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     return null
   }
 
-  return props.children(operatorActive)
+  return props.children(inputProps)
 }
 
 export default ChatInputModal
