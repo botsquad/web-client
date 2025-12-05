@@ -206,7 +206,7 @@ const ChatInput: React.FC = () => {
                 />
               ) : null}
             </div>
-            {!hasMessage && (inputProps.operatorActive || !inputProps.isDisabled('location')) && frontend !== 'phone' ? (
+            {!hasMessage && !inputProps.isDisabled('location') && frontend !== 'phone' ? (
               <button disabled={!online} onClick={() => showLocationInput()}>
                 {LocationShare}
               </button>
@@ -221,7 +221,7 @@ const ChatInput: React.FC = () => {
                 {Dialpad}
               </button>
             ) : null}
-            {!hasMessage && (inputProps.operatorActive || !inputProps.isDisabled('file')) && frontend !== 'phone' ? (
+            {!hasMessage && !inputProps.isDisabled('file') && frontend !== 'phone' ? (
               <button disabled={!online} onClick={() => upload('*/*')}>
                 {FileUpload}
               </button>
