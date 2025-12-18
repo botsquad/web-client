@@ -29,6 +29,14 @@ function elementValue(e: any) {
   return e.value.trim()
 }
 
+function elementLabel(e: any) {
+  if ('labels' in e) {
+    return [...e.labels].map(label => label.textContent).join(', ') + ': '
+  }
+
+  return ''
+}
+
 function removeEmpty(obj: any) {
   if (obj === null) {
     return null
@@ -80,7 +88,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
         'input[type=text],input[type=email],input[type=number],input[type=range],input[type=date],input[type=tel],textarea,select,input[type=checkbox],button[data-date-value]',
       ),
     ]
-      .map(elementValue)
+      .map(e => elementLabel(e) + elementValue(e))
       .filter(f => f.length > 0)
       .slice(0, 3)
       .join(', ')
