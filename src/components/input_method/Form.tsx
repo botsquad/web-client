@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 import Form, { FormProps } from '@rjsf/core'
 import validator from '@rjsf/validator-ajv8';
 import debounce from 'lodash/debounce'
@@ -35,7 +35,11 @@ function removeEmpty(obj: any) {
   }
   if (typeof obj === 'object') {
     Object.keys(obj).forEach(function (key) {
-      ;(obj[key] && typeof obj[key] === 'object' && removeEmpty(obj[key])) || (obj[key] === null && delete obj[key])
+      if (obj[key] && typeof obj[key] === 'object') {
+        removeEmpty(obj[key])
+      } else if (obj[key] === null) {
+        delete obj[key]
+      }
     })
   }
   return obj
@@ -47,29 +51,34 @@ interface ClientFormProps {
 }
 
 const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
-  const [hasSubmitted, setHasSubmitted] = useState(false)
-  const [formData, setFormData] = useState(undefined)
-  const [hasError, setHasError] = useState(false)
-  const [widgetErrors, setWidgetErrors] = useState<Map<string, boolean>>(new Map<string, boolean>())
-  const [disabled, setDisabled] = useState(false)
-  const [error] = useState<any>(null)
-  const [form, setForm] = useState<any>()
-
   const { config, inputModal, localePrefs } = useInputMethodProps<InputMethodForm>()
 
-  useEffect(() => {
+  // Initialize form data from config or message  
+  const getInitialFormData = () => {
     const { default_value } = config
-
-    if (typeof default_value !== 'undefined') {
-      setFormData(removeEmpty(default_value))
-    }
-
     const { read_only_data } = message || {}
+
     if (read_only_data) {
-      setFormData(read_only_data)
-      setDisabled(true)
+      return read_only_data
     }
-  }, [config, message])
+    if (typeof default_value !== 'undefined') {
+      return removeEmpty(default_value)
+    }
+    return undefined
+  }
+
+  const getInitialDisabled = () => {
+    const { read_only_data } = message || {}
+    return !!read_only_data
+  }
+
+  const [hasSubmitted, setHasSubmitted] = useState(false)
+  const [formData, setFormData] = useState(getInitialFormData)
+  const [hasError, setHasError] = useState(false)
+  const [widgetErrors, setWidgetErrors] = useState<Map<string, boolean>>(new Map<string, boolean>())
+  const [disabled, setDisabled] = useState(getInitialDisabled)
+  const [error] = useState<any>(null)
+  const [form, setForm] = useState<any>()
 
   const submit = () => {
     setHasSubmitted(true)

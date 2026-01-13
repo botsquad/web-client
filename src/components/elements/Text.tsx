@@ -1,11 +1,11 @@
 import React from 'react'
 import classNames from 'classnames'
 import { TextUtil } from '@botsquad/sdk'
-import Message, { Text } from './types'
+import Message, { Text as TextPayload } from './types'
 
 interface Props {
   className: string
-  message: Message<Text>
+  message: Message<TextPayload>
 }
 
 const Text: React.FC<Props> = ({ className, message }) => {

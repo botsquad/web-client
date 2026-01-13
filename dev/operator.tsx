@@ -1,12 +1,11 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { Socket } from 'phoenix'
 
 import WebClient from '../src/index'
 import './example.scss'
 import OperatorChatInput from './OperatorChatInput'
 
-const mapsApiKey = process.env.GOOGLE_MAPS_API_KEY
+const mapsApiKey = import.meta.env.GOOGLE_MAPS_API_KEY
 const token =
   'SFMyNTY.g2gDbQAAACQwNjhiNmI0MS1jYzNhLTRlM2EtODUyMy0xZTg4MDk1ZTMzMmZuBgCrJ5S8gAFiAAFRgA.MCk57gysgFEvhvVSoZ4tmHia6qxEYKFOcOBkMooGft4'
 
@@ -33,5 +32,6 @@ function App() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(<App />, document.getElementById('root'))
+  const root = createRoot(document.getElementById('root')!)
+  root.render(<App />)
 })

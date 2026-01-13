@@ -1,10 +1,23 @@
-import Chat from 'components'
 import { Channel, Socket } from 'phoenix'
 import { setCookieUserId } from '../common/util'
 import { AugmentedChannel } from './ChatContext'
 
+interface ChatComponent {
+  props: any
+  state: { joined: boolean | null }
+  setState: (updates: any) => void
+  prependEvents: (history: any[], cb?: () => void, initial?: boolean) => void
+  addEvent: (event: any) => void
+  triggerModal: () => void
+  hideModal: () => void
+  showToast: (toast: any) => void
+  triggerAudio: (payload: any) => void
+  mounted: boolean
+  forceUpdate: () => void
+}
+
 export default function botChatHandler(
-  component: Chat,
+  component: ChatComponent,
   socket: Socket,
   params: Record<string, string>,
   span: () => object

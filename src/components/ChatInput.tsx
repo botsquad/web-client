@@ -57,7 +57,7 @@ const ChatInput: React.FC = () => {
     ) {
       scrollToBottom()
     }
-  }, [inputMethodOverride, menuOpen])
+  }, [inputMethodOverride, menuOpen, scrollToBottom])
 
   const sendMessage = () => {
     const newMessage = message.trim()
@@ -80,7 +80,7 @@ const ChatInput: React.FC = () => {
     if (message === '' && !hasMessage && scrollToBottom) {
       scrollToBottom()
     }
-  }, [message, hasMessage])
+  }, [message, hasMessage, scrollToBottom])
 
   const [sendTypingOn, sendTypingOff] = React.useMemo(() => {
     const sendTypingFactory = (payload: boolean) => () => handler?.send('typing', payload)

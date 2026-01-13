@@ -4,6 +4,7 @@ module.exports = {
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
     'prettier',
   ],
   overrides: [
@@ -25,7 +26,7 @@ module.exports = {
     },
     // build config files
     {
-      files: ['*.config.js', '.eslintrc.js'],
+      files: ['*.config.js', '*.config.cjs', '.eslintrc.cjs'],
       env: {
         node: true,
       },
@@ -36,8 +37,11 @@ module.exports = {
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 2020, // Allows for the parsing of modern ECMAScript features
-    sourceType: 'module', // Allows for the use of imports
+    ecmaVersion: 2022,
+    sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true,
+    },
   },
   env: {
     browser: true,
@@ -46,7 +50,7 @@ module.exports = {
   },
   settings: {
     'react': {
-      version: '16.8',
+      version: 'detect',
     },
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts', '.tsx', '.gql'],
@@ -57,7 +61,7 @@ module.exports = {
       },
     },
   },
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'react-hooks'],
   rules: {
     'semi': 'off',
     'indent': 'off',
@@ -93,6 +97,7 @@ module.exports = {
     'react/sort-comp': 'off',
     'react/state-in-constructor': 'off',
     'react/no-find-dom-node': 'off',
+    'react/react-in-jsx-scope': 'off', // Not needed with new JSX transform
 
     '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],
     '@typescript-eslint/no-var-requires': 'off',

@@ -1,12 +1,16 @@
 import { Argument } from 'classnames'
 import { Channel } from 'phoenix'
-import React, { useEffect } from 'react'
+import React, { useMemo, ReactNode } from 'react'
 import { createContext, useContext, useState } from 'react'
 import { ChatHandler } from '.'
-import InputMethodTemplate from './elements/InputMethodTemplate'
 import Message, { As, Payload } from './elements/types'
 import ElementFactory from './elements'
 import { API } from '@botsquad/sdk'
+
+export interface InputModalInterface {
+  cancel: () => void
+  finish: (type: string, payload: any, config: any) => void
+}
 
 export function useChatProps() {
   return useContext(ChatPropsContext)
@@ -36,7 +40,7 @@ export interface ChatContextProps {
   handler: ChatHandler
   hideAvatars: boolean
   inline: boolean
-  inputModal: InputMethodTemplate | null
+  inputModal: InputModalInterface | null
   localePrefs: string[]
   message: Message<Payload> | null
   online: Argument
@@ -92,21 +96,21 @@ const ChatPropsContext = createContext<ChatContextProps>(DEFAULT_INPUT_METHOD_PR
 // {} as ChatUpdateType prevents showing that it could be null
 const ChatUpdateContext = createContext<ChatUpdateType>({} as ChatUpdateType)
 
-const ChatContext: React.FC<{ initial: Partial<ChatContextProps> }> = props => {
-  const [values, setValues] = useState<ChatContextProps>({
-    ...DEFAULT_INPUT_METHOD_PROPS,
-    ...props.initial,
-  })
-
-  useEffect(() => {
-    setValues({ ...values, ...props.initial })
-  }, [props.initial])
+const ChatContext: React.FC<{ initial: Partial<ChatContextProps>; children: ReactNode }> = props => {
+  // Directly use props.initial merged with defaults - no need to sync to state
+  const [localUpdates, setLocalUpdates] = useState<Partial<ChatContextProps>>({})
+  
+  const values = useMemo(
+    () => ({
+      ...DEFAULT_INPUT_METHOD_PROPS,
+      ...props.initial,
+      ...localUpdates,
+    }),
+    [props.initial, localUpdates],
+  )
 
   const updateValues = (update: Partial<ChatContextProps>) => {
-    setValues(prevState => {
-      const newValues = { ...prevState, ...update }
-      return newValues
-    })
+    setLocalUpdates(prevState => ({ ...prevState, ...update }))
   }
 
   return (

@@ -1,16 +1,20 @@
 import { Channel } from 'phoenix'
-import React from 'react'
 
 const NUMBERS = ['❶', '❷', '❸', '❹', '❺', '❻', '❼', '❽', '❾', '❿']
 const SOUND = 'https://s3.eu-central-1.amazonaws.com/bsqd/audio/df56cb16-124c-4975-8a86-bbdd0dd20102.dat'
 const NOTIFICATION_CLEAR_TIME = 5000
 
-interface NotificationManagerProps {
-  component: any
+interface NotificationManagerComponent {
+  handler?: { channel?: Channel }
+  props: { host?: any; externalInterface?: any }
+  hideModal?: () => void
+  showModal?: (message: any, params: any) => void
+  host?: any
+  externalInterface?: any
 }
 
-export default class NotificationManager extends React.Component<NotificationManagerProps> {
-  component: any //React.Component & { handler?: { channel?: Channel },props:{host:any,externalInterface:any} }
+export default class NotificationManager {
+  component: NotificationManagerComponent
   hasCordovaFocus: boolean | null
   _onFocusHandlers: (() => void)[]
   channel: Channel = null as unknown as Channel
@@ -20,8 +24,7 @@ export default class NotificationManager extends React.Component<NotificationMan
   clearer: ReturnType<typeof setTimeout> | null = null
   hasFocus = false
 
-  constructor(component: React.Component) {
-    super({ component })
+  constructor(component: NotificationManagerComponent) {
     this.component = component
     this.hasCordovaFocus = null
     this._onFocusHandlers = []
@@ -67,7 +70,7 @@ export default class NotificationManager extends React.Component<NotificationMan
         } else {
           ;(this.sound as HTMLAudioElement).play()
         }
-      } catch (e) {
+      } catch {
         // autoplay audio is disabled
       }
     }
@@ -144,6 +147,8 @@ export default class NotificationManager extends React.Component<NotificationMan
   mayPlaySound() {
     return (
       (this.component.props.host && this.component.props.host.mayPlaySound()) ||
+      (this.component.host && this.component.host.mayPlaySound()) ||
+      (this.component.props.externalInterface && this.component.props.externalInterface.mayPlaySound()) ||
       (this.component.externalInterface && this.component.externalInterface.mayPlaySound())
     )
   }

@@ -23,6 +23,7 @@ const SingleItemPicker: React.FC<SingleItemPickerProps> = ({ settings }) => {
         setSelectedItem(item)
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const submit = () => {

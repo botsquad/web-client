@@ -2,12 +2,12 @@ import { ChatHandler } from 'components'
 import React from 'react'
 import { useChatProps, useChatPropsUpdate } from './ChatContext'
 
-import ChatInputModal, { ChatProps } from './ChatInputModal'
+import ChatInputModal, { ChatInputProps } from './ChatInputModal'
 
 interface ChatInputModalWrapperProps {
   handler: ChatHandler
   cancelLabel: string
-  children: (props: ChatProps) => React.ReactElement | null
+  children: (props: ChatInputProps) => React.ReactElement | null
 }
 
 const ChatInputModalWrapper: React.FC<ChatInputModalWrapperProps> = props => {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import isEqual from 'lodash/isEqual'
 import { EventEmitter } from 'fbemitter'
 
@@ -45,37 +45,57 @@ interface ChatMessagesProps {
   localePrefs: string[]
 }
 
-interface ChatMessagesState {
-  messageGroups: any[]
-  lastMessage: any
-  loading: boolean
-}
+function ChatMessages(props: ChatMessagesProps) {
+  const {
+    handler,
+    settings,
+    host,
+    hideAvatars,
+    elementFactory,
+    typingAs,
+    botAvatar,
+    channel,
+    upload,
+    typing,
+    userAvatar,
+    updater,
+    localePrefs,
+  } = props
 
-export default class ChatMessages extends React.Component<ChatMessagesProps> {
-  state: ChatMessagesState = {
-    messageGroups: [],
-    lastMessage: null,
-    loading: false,
-  }
-  scrollToBottomListener: any
+  const [messageGroups, setMessageGroups] = useState<any[]>([])
+  const [lastMessage, setLastMessage] = useState<any>(null)
+  const [loading, setLoading] = useState<boolean>(false)
+  const wrapperElementRef = useRef<HTMLDivElement>(null)
 
-  componentDidMount() {
-    this.groupMessages(this.props)
-    this.scrollToBottomListener = chatMessagesEvents.addListener('scrollToBottom', this.scrollToBottom)
-    this.props.updater({ scrollToBottom: this.scrollToBottom })
-  }
+  const isGroupable = useCallback((a: any, b: any) => {
+    return (
+      a.self === b.self &&
+      a.type === b.type &&
+      a.payload.class === b.payload.class &&
+      isEqual(a.as, b.as) &&
+      Math.abs(a.time - b.time) < 15000
+    )
+  }, [])
 
-  componentWillUnmount() {
-    this.scrollToBottomListener.remove()
-  }
+  const isRecent = useCallback((message: Message<any>) => {
+    if (!message) {
+      return false
+    }
+    return new Date().getTime() - message.time < 1000
+  }, [])
 
-  componentWillReceiveProps(newProps: ChatMessagesProps) {
-    this.setState({ loading: false })
-    this.groupMessages(newProps)
-  }
+  const scrollToBottom = useCallback(() => {
+    const layout = settings?.layout || ''
+    if (layout === 'embedded' && host) {
+      // scroll the document
+      host.scrollToBottom()
+    } else if (wrapperElementRef.current) {
+      wrapperElementRef.current.scrollTop = wrapperElementRef.current.scrollHeight
+    }
+  }, [settings, host])
 
-  _connectFormEvents(events: any) {
-    const formLookup = {}
+  const _connectFormEvents = useCallback((events: any) => {
+    const formLookup: any = {}
     for (const m of events) {
       if (m.type === 'template' && m.payload.template_type === 'input_method') {
         formLookup[m.payload.template_id] = m
@@ -87,184 +107,206 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
         }
       }
     }
-  }
+  }, [])
 
-  groupMessages(props: ChatMessagesProps) {
-    const { events, userAvatar, botAvatar, conversationMeta } = props
+  const groupMessages = useCallback(
+    (props: ChatMessagesProps) => {
+      const { events, userAvatar, botAvatar, conversationMeta } = props
 
-    // convert all events into groups of messages
-    const messageGroups: any[] = []
-    let lastMessage: boolean | Message<unknown> = false
-    let lastModalMessage: Message<unknown> | null = null
-    let currentGroup: any = false
+      // convert all events into groups of messages
+      const newMessageGroups: any[] = []
+      let lastMsg: boolean | Message<unknown> = false
+      let lastModalMessage: Message<unknown> | null = null
+      let currentGroup: any = false
 
-    this._connectFormEvents(events)
-    for (const message of events) {
-      if (!message.renderable && message.type !== 'annotation') {
-        continue
-      }
-      if (currentGroup === false || !this.isGroupable(message, lastMessage)) {
-        if (currentGroup !== false) {
-          messageGroups.unshift(currentGroup)
+      _connectFormEvents(events)
+      for (const message of events) {
+        if (!message.renderable && message.type !== 'annotation') {
+          continue
         }
-        currentGroup = {
-          avatar: message.self ? userAvatar : message.as ? message.as.profile_picture || botAvatar : botAvatar,
-          messages: [message],
-          class: message.payload.class || null,
-          as: message.as,
+        if (currentGroup === false || !isGroupable(message, lastMsg)) {
+          if (currentGroup !== false) {
+            newMessageGroups.unshift(currentGroup)
+          }
+          currentGroup = {
+            avatar: message.self ? userAvatar : message.as ? message.as.profile_picture || botAvatar : botAvatar,
+            messages: [message],
+            class: message.payload.class || null,
+            as: message.as,
+          }
+        } else {
+          currentGroup.messages.push(message)
         }
-      } else {
-        currentGroup.messages.push(message)
+        if (messageHasModal(message)) {
+          lastModalMessage = message
+        }
+        lastMsg = message
       }
-      if (messageHasModal(message)) {
-        lastModalMessage = message
+      if (currentGroup !== false) {
+        newMessageGroups.unshift(currentGroup)
       }
-      lastMessage = message
-    }
-    if (currentGroup !== false) {
-      messageGroups.unshift(currentGroup)
-    }
-    if (this.state.lastMessage === null) {
-      setTimeout(() => this.scrollToBottom(), 50)
-      setTimeout(() => this.scrollToBottom(), 500)
-    }
 
-    const hasReadUntil =
-      conversationMeta && conversationMeta.unread_message_count > 0 ? conversationMeta.read_until : null
-    if (hasReadUntil) {
-      let insertIdx = messageGroups.length
-      const hasReadTime = Date.parse(hasReadUntil)
-      while (insertIdx > 1 && messageGroups[insertIdx - 1].messages[0].time >= hasReadTime) insertIdx--
-      if (insertIdx > 0 && insertIdx < messageGroups.length) {
-        messageGroups.splice(insertIdx, 0, { hasReadUntil })
+      const hasReadUntil =
+        conversationMeta && conversationMeta.unread_message_count > 0 ? conversationMeta.read_until : null
+      if (hasReadUntil) {
+        let insertIdx = newMessageGroups.length
+        const hasReadTime = Date.parse(hasReadUntil)
+        while (insertIdx > 1 && newMessageGroups[insertIdx - 1].messages[0].time >= hasReadTime) insertIdx--
+        if (insertIdx > 0 && insertIdx < newMessageGroups.length) {
+          newMessageGroups.splice(insertIdx, 0, { hasReadUntil })
+        }
       }
+
+      handler._lastModal = lastModalMessage
+
+      setMessageGroups(newMessageGroups)
+      setLastMessage(lastMsg)
+    },
+    [handler, _connectFormEvents, isGroupable],
+  )
+
+  useEffect(() => {
+    groupMessages(props)
+    const scrollToBottomListener = chatMessagesEvents.addListener('scrollToBottom', scrollToBottom)
+    updater({ scrollToBottom })
+
+    return () => {
+      scrollToBottomListener.remove()
     }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    this.props.handler._lastModal = lastModalMessage
+  useEffect(() => {
+    setLoading(false)
+    groupMessages(props)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.events, props.userAvatar, props.botAvatar, props.conversationMeta])
 
-    this.setState({ messageGroups, lastMessage })
-  }
-
-  scrollToBottom = () => {
-    let layout = ''
-    if (this.props.settings) layout = this.props.settings.layout
-    if (layout === 'embedded' && this.props.host) {
-      // scroll the document
-      this.props.host.scrollToBottom()
-    } else if (this.wrapperElement.current) {
-      this.wrapperElement.current.scrollTop = this.wrapperElement.current.scrollHeight
+  useEffect(() => {
+    if (lastMessage === null && messageGroups.length > 0) {
+      setTimeout(() => scrollToBottom(), 50)
+      setTimeout(() => scrollToBottom(), 500)
     }
-  }
+  }, [lastMessage, messageGroups.length, scrollToBottom])
 
-  renderMessageGroup = (group: any) => {
-    if (group.hasReadUntil) {
+  useEffect(() => {
+    if (isRecent(lastMessage) || typing || upload) {
+      setTimeout(() => scrollToBottom(), 0)
+    }
+  }, [lastMessage, typing, upload, isRecent, scrollToBottom])
+
+  useEffect(() => {
+    if (settings?.layout === 'embedded') {
+      // do not autoload history, for now
+      return
+    }
+    const wrapper = wrapperElementRef.current
+    if (wrapper && wrapper.scrollHeight <= wrapper.offsetHeight && channel && channel.hasMoreHistory() && !loading) {
+      setLoading(true)
+      channel.getMoreHistory()
+    }
+  }, [settings, channel, loading, messageGroups])
+
+  const renderMessage = useCallback(
+    (message: Message<any>) => {
+      if (!settings) {
+        return null
+      }
+      const cls = `bubble ${message.self ? 'self' : 'bot'} ` + message.type
+
+      const key = message.time
+
+      const attrs = {
+        ...props,
+        message,
+        className:
+          cls + (message.payload.class ? ' ' + message.payload.class : '') + (isRecent(message) ? ' recent' : ''),
+        layout: settings.layout,
+        onLoad: () => scrollToBottom(),
+        toggleModalPreferHeight: null,
+        settings: settings,
+        localePrefs: localePrefs,
+      }
+
+      const element = (elementFactory ? elementFactory(message, attrs) : null) || ElementFactory(message, attrs)
+
+      // Add key to the element, not to attrs
+      return element ? React.cloneElement(element, { key }) : null
+    },
+    [settings, props, isRecent, scrollToBottom, elementFactory, localePrefs],
+  )
+
+  const renderMessageGroup = useCallback(
+    (group: any) => {
+      if (group.hasReadUntil) {
+        return (
+          <div key="hasReadUntil" className="has-read-until">
+            <span>{shortDateTimeFormat(group.hasReadUntil)}</span>
+          </div>
+        )
+      }
+
+      const rendered = group.messages.map(renderMessage).filter((el: any) => el !== null)
+      if (rendered.length === 0) return null
+
+      const key = group.messages[0].time
+      const name = group.as ? (group.as.first_name + ' ' + (group.as.last_name || '')).trim() : null
+
       return (
-        <div key="hasReadUntil" className="has-read-until">
-          <span>{shortDateTimeFormat(group.hasReadUntil)}</span>
+        <div key={key} className={`bubble-group ${group.messages[0].self ? 'self' : 'bot'} ${group.class || ''}`}>
+          {!hideAvatars && group.avatar ? (
+            <div className="as">
+              <div
+                className="avatar"
+                style={{ backgroundImage: group.avatar ? `url(${group.avatar})` : '' }}
+                title={name ? name : ''}
+              />
+              {name?.length ? <div className="name">{name}</div> : null}
+            </div>
+          ) : null}
+          <div className="bubble-container">{rendered}</div>
         </div>
       )
-    }
+    },
+    [hideAvatars, renderMessage],
+  )
 
-    const rendered = group.messages.map(this.renderMessage.bind(this)).filter((el: any) => el !== null)
-    if (rendered.length === 0) return null
-
-    const key = group.messages[0].time
-    const name = group.as ? (group.as.first_name + ' ' + (group.as.last_name || '')).trim() : null
-
-    return (
-      <div key={key} className={`bubble-group ${group.messages[0].self ? 'self' : 'bot'} ${group.class || ''}`}>
-        {!this.props.hideAvatars && group.avatar ? (
-          <div className="as">
-            <div
-              className="avatar"
-              style={{ backgroundImage: group.avatar ? `url(${group.avatar})` : '' }}
-              title={name ? name : ''}
-            />
-            {name?.length ? <div className="name">{name}</div> : null}
+  const renderUpload = useCallback(
+    ({ progress, type, retry }: { progress: number; type: string; retry: any }) => {
+      if (retry) {
+        return (
+          <div className="upload">
+            <span className="label">Upload failed…</span>
+            <div className="retry">
+              <button onClick={() => handler.sendFile(retry)}>Retry</button>
+              <button onClick={() => handler.cancelUpload()}>×</button>
+            </div>
           </div>
-        ) : null}
-        <div className="bubble-container">{rendered}</div>
-      </div>
-    )
-  }
+        )
+      }
 
-  isRecent(message: Message<any>) {
-    if (!message) {
-      return false
-    }
-    return new Date().getTime() - message.time < 1000
-  }
+      const typeMap: Record<string, string> = { image: 'image', video: 'video', audio: 'sound' }
+      const displayType = typeMap[type.split('/')[0]] || 'file'
 
-  renderMessage(message: Message<any>) {
-    if (!this.props.settings) {
-      return null
-    }
-    const cls = `bubble ${message.self ? 'self' : 'bot'} ` + message.type
-
-    const attrs = {
-      ...this.props,
-      key: message.time,
-      message,
-      className:
-        cls + (message.payload.class ? ' ' + message.payload.class : '') + (this.isRecent(message) ? ' recent' : ''),
-      layout: this.props.settings.layout,
-      onLoad: () => this.scrollToBottom(),
-      toggleModalPreferHeight: null,
-      settings: this.props.settings,
-      localePrefs: this.props.localePrefs,
-    }
-
-    return (
-      (this.props.elementFactory ? this.props.elementFactory(message, attrs) : null) || ElementFactory(message, attrs)
-    )
-  }
-
-  renderUpload({ progress, type, retry }: { progress: number; type: string; retry: string }) {
-    if (retry) {
       return (
         <div className="upload">
-          <span className="label">Upload failed…</span>
-          <div className="retry">
-            <button onClick={() => this.props.handler.sendFile(retry)}>Retry</button>
-            <button onClick={() => this.props.handler.cancelUpload()}>×</button>
-          </div>
+          <span className="label">
+            Sending {displayType}… {Math.ceil(progress)}%
+          </span>
+          <span className="progress">
+            <span style={{ width: progress + '%' }} />
+          </span>
         </div>
       )
-    }
+    },
+    [handler],
+  )
 
-    const typeMap = { image: 'image', video: 'video', audio: 'sound' }
-    type = typeMap[type.split('/')[0]] || 'file'
-
-    return (
-      <div className="upload">
-        <span className="label">
-          Sending {type}… {Math.ceil(progress)}%
-        </span>
-        <span className="progress">
-          <span style={{ width: progress + '%' }} />
-        </span>
-      </div>
-    )
-  }
-
-  isGroupable(a: any, b: any) {
-    return (
-      a.self === b.self &&
-      a.type === b.type &&
-      a.payload.class === b.payload.class &&
-      isEqual(a.as, b.as) &&
-      Math.abs(a.time - b.time) < 15000
-    )
-  }
-
-  renderTyping() {
-    const avatar = this.props.typingAs ? this.props.typingAs.profile_picture : this.props.botAvatar
+  const renderTyping = useMemo(() => {
+    const avatar = typingAs ? typingAs.profile_picture : botAvatar
 
     return (
       <div className="bubble-group bot typing">
-        {!this.props.hideAvatars ? (
-          <div className="avatar" style={{ backgroundImage: avatar ? `url(${avatar})` : '' }} />
-        ) : null}
+        {!hideAvatars ? <div className="avatar" style={{ backgroundImage: avatar ? `url(${avatar})` : '' }} /> : null}
         <div className="typing">
           <span />
           <span />
@@ -272,96 +314,64 @@ export default class ChatMessages extends React.Component<ChatMessagesProps> {
         </div>
       </div>
     )
-  }
+  }, [typingAs, botAvatar, hideAvatars])
 
-  checkLinkClick = (e: any) => {
-    const url = e.target?.getAttribute('href')
-    if (url && this.props.handler) {
-      this.props.handler.sendLinkClick(url)
-    }
-  }
+  const checkLinkClick = useCallback(
+    (e: any) => {
+      const url = e.target?.getAttribute('href')
+      if (url && handler) {
+        handler.sendLinkClick(url)
+      }
+    },
+    [handler],
+  )
 
-  loadHistory() {
-    this.setState({ loading: true }, () => {
-      this.props.channel?.getMoreHistory()
-    })
-  }
-
-  onScroll = () => {
+  const onScroll = useCallback(() => {
     if (
-      this.props.channel &&
-      this.props.channel.hasMoreHistory() &&
-      this.wrapperElement &&
-      this.wrapperElement.current &&
-      this.wrapperElement.current.scrollTop < 10 &&
-      !this.state.loading
+      channel &&
+      channel.hasMoreHistory() &&
+      wrapperElementRef.current &&
+      wrapperElementRef.current.scrollTop < 10 &&
+      !loading
     ) {
-      this.loadHistory()
+      setLoading(true)
+      channel.getMoreHistory()
     }
-  }
+  }, [channel, loading])
 
-  wrapperElement = React.createRef<HTMLDivElement>()
+  return (
+    <div
+      className={`chat-messages ${hideAvatars ? 'hide-avatars' : userAvatar ? 'user-avatar' : ''}`}
+      ref={wrapperElementRef}
+      onClick={checkLinkClick}
+      onScroll={onScroll}
+    >
+      <div className="inner">
+        {settings?.layout === 'embedded' ? (
+          <div className="bubble-group self">
+            {!hideAvatars && userAvatar ? (
+              <div className="avatar" style={{ backgroundImage: userAvatar ? `url(${userAvatar})` : '' }} />
+            ) : null}
+            <ChatInput />
+          </div>
+        ) : null}
 
-  render() {
-    const { upload, typing, hideAvatars, userAvatar } = this.props
-    const { messageGroups, lastMessage } = this.state
+        {lastMessage && !lastMessage.self && lastMessage.payload.quick_replies && !typing && !upload ? (
+          <QuickReplies
+            className={`${lastMessage.payload.class} ${isRecent(lastMessage) ? ' recent' : ''}`}
+            buttons={lastMessage.payload.quick_replies}
+          />
+        ) : null}
 
-    if (this.isRecent(lastMessage) || typing || upload) {
-      setTimeout(() => this.scrollToBottom(), 0)
-    }
+        {upload ? renderUpload(upload) : null}
+        {typing ? renderTyping : null}
 
-    return (
-      <div
-        className={`chat-messages ${hideAvatars ? 'hide-avatars' : userAvatar ? 'user-avatar' : ''}`}
-        ref={this.wrapperElement}
-        onClick={this.checkLinkClick}
-        onScroll={this.onScroll}
-      >
-        <div className="inner">
-          {this.props.settings?.layout === 'embedded' ? (
-            <div className="bubble-group self">
-              {!hideAvatars && userAvatar ? (
-                <div
-                  className="avatar"
-                  style={{ backgroundImage: this.props.userAvatar ? `url(${this.props.userAvatar})` : '' }}
-                />
-              ) : null}
-              <ChatInput />
-            </div>
-          ) : null}
+        {messageGroups.map(renderMessageGroup)}
 
-          {lastMessage && !lastMessage.self && lastMessage.payload.quick_replies && !typing && !upload ? (
-            <QuickReplies
-              className={`${lastMessage.payload.class} ${this.isRecent(lastMessage) ? ' recent' : ''}`}
-              buttons={lastMessage.payload.quick_replies}
-            />
-          ) : null}
-
-          {upload ? this.renderUpload(upload) : null}
-          {typing ? this.renderTyping() : null}
-
-          {messageGroups.map(this.renderMessageGroup)}
-
-          {this.state.loading ? <span>…</span> : null}
-        </div>
+        {loading ? <span>…</span> : null}
       </div>
-    )
-  }
-
-  componentDidUpdate() {
-    if (this.props.settings?.layout === 'embedded') {
-      // do not autoload history, for now
-      return
-    }
-    const wrapper = this.wrapperElement.current
-    if (
-      wrapper &&
-      wrapper.scrollHeight <= wrapper.offsetHeight &&
-      this.props.channel &&
-      this.props.channel.hasMoreHistory() &&
-      !this.state.loading
-    ) {
-      this.loadHistory()
-    }
-  }
+    </div>
+  )
 }
+
+export default ChatMessages

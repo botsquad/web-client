@@ -1,10 +1,10 @@
 import moment, { Moment } from 'moment'
 
-import React, { useState } from 'react'
-import ReactDOM from 'react-dom'
+import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import Datetime from 'react-datetime'
 import { WidgetProps } from '@rjsf/utils'
-import { usePopper } from 'react-popper'
+import { useFloating, offset, flip, shift, autoUpdate } from '@floating-ui/react'
 import { chatLabel } from '../../../common/labels'
 
 export const checkDateConstraints = (currentDate: string, constraints: string[] | string) => {
@@ -32,32 +32,32 @@ export const checkDateConstraints = (currentDate: string, constraints: string[] 
   return true
 }
 
-const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formContext }) => {
+const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formContext = {} }) => {
   const [visible, setVisibility] = useState(false)
 
-  const [referenceRef, setReferenceRef] = useState<any>(null)
-  const [popperRef, setPopperRef] = useState<any>(null)
-
-  const { styles, attributes } = usePopper(referenceRef, popperRef, {
+  const { refs, floatingStyles, update } = useFloating({
     placement: 'top',
-    modifiers: [
-      {
-        name: 'offset',
-        enabled: true,
-        options: {
-          offset: [-125, 10],
-        },
-      },
-    ],
+    middleware: [offset(8), flip(), shift()],
+    open: visible,
+    whileElementsMounted: autoUpdate,
+    strategy: 'fixed',
   })
+
+  // Force update when visibility changes to ensure correct positioning
+  useEffect(() => {
+    if (visible && update) {
+      update()
+    }
+  }, [visible, update])
 
   function handleDropdownClick() {
     setVisibility(!visible)
   }
 
+  const localePrefs = (formContext as any)?.localePrefs || ['en']
   const selectDateText = value?.length
     ? moment(value).format('D-M-Y')
-    : chatLabel({ ui_labels: [] }, formContext.localePrefs, 'select_date')
+    : chatLabel({ ui_labels: [] }, localePrefs, 'select_date')
 
   const inputMethodContainer: any = document.querySelector('.botsi-web-client')
 
@@ -67,23 +67,40 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formC
         <div className="below">
           <button
             data-date-value={value}
-            ref={setReferenceRef}
+            ref={refs.setReference}
             onClick={handleDropdownClick}
-            style={{ borderRadius: 'var(--botsquad-bubble-radius)', border: '1px solid var(--botsquad-ui-color)' }}
+            style={{
+              borderRadius: 'var(--botsquad-bubble-radius)',
+              border: '1px solid var(--botsquad-ui-color)',
+              minHeight: '48px',
+              fontSize: '16px',
+              padding: '12px 16px',
+              touchAction: 'manipulation',
+            }}
           >
             {selectDateText}
           </button>
         </div>
-        {ReactDOM.createPortal(
+        {createPortal(
           <div
-            ref={setPopperRef}
+            /* eslint-disable-next-line react-hooks/refs */
+            ref={refs.setFloating}
             style={{
-              ...styles.popper,
+              ...floatingStyles,
               display: visible ? 'initial' : 'none',
               boxShadow: '0 0 4px 1px black',
             }}
-            {...attributes.popper}
+            className="datetime-widget-popup"
           >
+            <style>{`
+              .datetime-widget-popup .rdtPicker td,
+              .datetime-widget-popup .rdtPicker th {
+                min-width: 44px;
+                height: 44px !important;
+                padding: 8px;
+                font-size: 16px;
+              }
+            `}</style>
             <Datetime
               initialValue={moment()}
               input={false}
@@ -92,7 +109,7 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formC
                 onChange((value as Moment).format('YYYY-MM-DD'))
                 setVisibility(false)
               }}
-              locale={formContext.localePrefs[0]}
+              locale={localePrefs[0]}
               isValidDate={value => checkDateConstraints(value, (options.constraints || []) as string[])}
               timeFormat={false}
               dateFormat={'D-M-Y'}
