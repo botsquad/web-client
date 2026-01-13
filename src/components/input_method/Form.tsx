@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useState } from 'react'
 import Form, { FormProps } from '@rjsf/core'
-import validator from '@rjsf/validator-ajv8';
+import validator from '@rjsf/validator-ajv8'
 import debounce from 'lodash/debounce'
 import moment from 'moment'
 
@@ -31,7 +31,7 @@ function elementValue(e: any) {
 
 function elementLabel(e: any) {
   if ('labels' in e) {
-    return [...e.labels].map(label => label.textContent).join(', ') + ': '
+    return [...e.labels].map(label => label.textContent.replace(/[*]$/, '')).join(', ') + ': '
   }
 
   return ''
@@ -101,7 +101,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
 
   type OnChange = Exclude<FormProps['onChange'], undefined>
 
-  const onChange = React.useCallback<OnChange>((data) => {
+  const onChange = React.useCallback<OnChange>(data => {
     setFormData(data.formData)
   }, [])
 
