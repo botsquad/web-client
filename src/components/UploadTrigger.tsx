@@ -1,46 +1,54 @@
-import React from 'react'
+import { useRef, useState, useImperativeHandle, forwardRef } from 'react'
 
 export type Callback = ((file: any) => void) | null
 export type Capture = 'user' | 'environment'
 
-type State = { accept: string; uploadCount: number; capture?: Capture }
+export interface UploadTriggerRef {
+  trigger: (accept: string, callback: Callback, capture?: Capture) => void
+}
 
-export default class UploadTrigger extends React.Component<Record<string, unknown>, State> {
-  state: State = {
-    accept: '',
-    uploadCount: 0,
-    capture: undefined,
-  }
-  callback: Callback = null
-  input = React.createRef<HTMLInputElement>()
+const UploadTrigger = forwardRef<UploadTriggerRef, Record<string, unknown>>((_, ref) => {
+  const [accept, setAccept] = useState<string>('')
+  const [uploadCount, setUploadCount] = useState<number>(0)
+  const [capture, setCapture] = useState<Capture | undefined>(undefined)
+  const callbackRef = useRef<Callback>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
-  onChange = () => {
-    const file = this.input.current?.files?.[0]
-    if (!this.callback || !file) {
+  useImperativeHandle(ref, () => ({
+    trigger: (accept: string, callback: Callback, capture?: Capture) => {
+      callbackRef.current = callback
+      setAccept(accept)
+      setCapture(capture)
+      setTimeout(() => {
+        inputRef.current?.click()
+      }, 0)
+    },
+  }))
+
+  const onChange = () => {
+    const file = inputRef.current?.files?.[0]
+    if (!callbackRef.current || !file) {
       return
     }
-    this.callback(file)
-    this.callback = null
-    this.setState({ uploadCount: this.state.uploadCount + 1 })
+    callbackRef.current(file)
+    callbackRef.current = null
+    setUploadCount((prev) => prev + 1)
   }
 
-  trigger(accept: string, callback: Callback, capture?: Capture) {
-    this.callback = callback
-    this.setState({ accept, capture }, () => this.input.current?.click())
-  }
+  return (
+    <input
+      key={uploadCount}
+      className="upload-trigger"
+      onChange={onChange}
+      type="file"
+      multiple={false}
+      accept={accept}
+      capture={capture}
+      ref={inputRef}
+    />
+  )
+})
 
-  render() {
-    return (
-      <input
-        key={this.state.uploadCount}
-        className="upload-trigger"
-        onChange={this.onChange}
-        type="file"
-        multiple={false}
-        accept={this.state.accept}
-        capture={this.state.capture}
-        ref={this.input}
-      />
-    )
-  }
-}
+UploadTrigger.displayName = 'UploadTrigger'
+
+export default UploadTrigger

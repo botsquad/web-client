@@ -25,7 +25,7 @@ interface AttributesProp {
 
 type MessageProp = Message<Payload>
 
-export default function elementFactory({ type, payload, metadata }: MessageProp, attrs: AttributesProp): React.FC {
+export default function elementFactory({ type, payload, metadata }: MessageProp, attrs: AttributesProp): React.ReactElement | null {
   let element: any = null
 
   if (type === 'text') {

@@ -38,7 +38,7 @@ export function isLandscape(): boolean {
 }
 
 export function isIE(): boolean {
-  return !!window['MSInputMethodContext'] && !!document['documentMode']
+  return !!(window as any)['MSInputMethodContext'] && !!(document as any)['documentMode']
 }
 
 export function isMobile(): boolean {

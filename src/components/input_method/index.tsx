@@ -1,5 +1,3 @@
-import React from 'react'
-
 import SingleItemPicker from './SingleItemPicker'
 import MultiItemPicker from './MultiItemPicker'
 import Form from './Form'
@@ -8,7 +6,7 @@ import LocationPicker from './LocationPicker'
 import Wait from './Wait'
 import NumericKeyboard from './NumericKeyboard'
 import InputMethodContext from './InputMethodContext'
-import InputMethodTemplate from 'components/elements/InputMethodTemplate'
+import { InputModalInterface } from '../ChatContext'
 import { ChatHandler } from '../index'
 import Message, { Payload } from '../elements/types'
 
@@ -21,7 +19,7 @@ interface MethodProps {
 interface FactoryProps {
   handler: ChatHandler
   inline?: boolean
-  inputModal?: InputMethodTemplate | null
+  inputModal?: InputModalInterface | null
   settings: Record<string, any> | null
   localePrefs: string[]
   message?: Message<Payload> | null

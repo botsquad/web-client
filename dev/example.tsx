@@ -1,12 +1,11 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 
 import WebClient from '../src/index'
 import './example.scss'
 
 const user_id = 'YCP'
-const bot_id = '5b9e0beb-3c3d-4567-a0f4-63fa02fd588b'
-const mapsApiKey = process.env.GOOGLE_MAPS_API_KEY
+const bot_id = '9f62cd1d-8ec7-4a71-8d36-95b2acd251ab'
+const mapsApiKey = import.meta.env.GOOGLE_MAPS_API_KEY
 
 function App() {
   return (
@@ -25,5 +24,6 @@ function App() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(<App />, document.getElementById('root'))
+  const root = createRoot(document.getElementById('root')!)
+  root.render(<App />)
 })

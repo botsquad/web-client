@@ -248,7 +248,7 @@ export function determineUILocale(initialLocale: string, bot: any) {
   } else {
     _uiLocale = locale
   }
-  if (!_uiLocale || typeof LABELS.cancel[_uiLocale] === 'undefined') {
+  if (!_uiLocale || typeof LABELS.cancel[_uiLocale as keyof typeof LABELS.cancel] === 'undefined') {
     _uiLocale = 'en'
   }
   return _uiLocale

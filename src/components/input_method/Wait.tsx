@@ -5,7 +5,7 @@ import { Closed } from '../icons'
 import { fixedLabel } from '../../common/labels'
 import { TextUtil } from '@botsquad/sdk'
 import { useInputMethodProps, useInputMethodPropsUpdate } from './InputMethodContext'
-import InputMethodTemplate from 'components/elements/InputMethodTemplate'
+import { InputModalInterface } from '../ChatContext'
 import { ChatHandler } from 'components'
 import { isMobile } from '../../common/util'
 import { InputMethodClosed, InputMethodWait } from 'show_types'
@@ -30,12 +30,11 @@ const renderImplicitCloseButton: React.FC<renderImplicitCloseButtonProps> = prop
 
   return <button onClick={closeConversation}>{fixedLabel('new_conversation', localePrefs)}</button>
 }
-
 function renderButton(
   button: any,
   props: {
     config: any
-    inputModal: InputMethodTemplate | null
+    inputModal: InputModalInterface | null
     handler: ChatHandler
   },
 ) {
@@ -120,11 +119,13 @@ const Wait: React.FC<WaitProps> = props => {
     closedElement = <img className="qr" title={button.title} src={qrCodeUrl} />
   }
 
+  const RenderImplicitCloseButton = renderImplicitCloseButton
+
   return (
     <InputMethodContainer
       {...props}
       className="wait"
-      below={renderButton(button, renderButtonProps) || renderImplicitCloseButton(props)}
+      below={renderButton(button, renderButtonProps) || <RenderImplicitCloseButton type={props.type} />}
     >
       {type === 'wait' && typeof wait_time !== 'undefined' && <div className="loader" />}
 
