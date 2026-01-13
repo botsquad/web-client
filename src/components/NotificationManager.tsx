@@ -70,7 +70,7 @@ export default class NotificationManager {
         } else {
           ;(this.sound as HTMLAudioElement).play()
         }
-      } catch (e) {
+      } catch {
         // autoplay audio is disabled
       }
     }

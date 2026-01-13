@@ -36,7 +36,7 @@ function makeInputComponent({ disabled, autofocus, placeholder }: MakeInputCompo
 interface PhoneNumberWidgetProps {
   value: string
   onChange: (value: string | undefined) => void
-  formContext: { localePrefs: string[] }
+  formContext?: { localePrefs: string[] }
   disabled: boolean
   autofocus: boolean
   placeholder: string
@@ -50,11 +50,13 @@ function PhoneNumberWidget(props: PhoneNumberWidgetProps) {
     [disabled, autofocus, placeholder],
   )
 
+  const localePrefs = formContext?.localePrefs || ['en']
+
   return (
     <PhoneInput
       value={value}
       onChange={onChange}
-      defaultCountry={defaultCountry(formContext.localePrefs)}
+      defaultCountry={defaultCountry(localePrefs)}
       inputComponent={inputComponent}
     />
   )

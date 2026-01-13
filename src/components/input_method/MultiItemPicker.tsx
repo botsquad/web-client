@@ -22,6 +22,7 @@ const MultiItemPicker: React.FC<MultiItemPickerProps> = ({ settings }) => {
       const selected = (items as any).filter(({ value }: any) => default_value.find(v => v === value))
       setSelected(selected)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const submit = () => {

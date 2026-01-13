@@ -35,7 +35,11 @@ function removeEmpty(obj: any) {
   }
   if (typeof obj === 'object') {
     Object.keys(obj).forEach(function (key) {
-      ;(obj[key] && typeof obj[key] === 'object' && removeEmpty(obj[key])) || (obj[key] === null && delete obj[key])
+      if (obj[key] && typeof obj[key] === 'object') {
+        removeEmpty(obj[key])
+      } else if (obj[key] === null) {
+        delete obj[key]
+      }
     })
   }
   return obj

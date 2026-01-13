@@ -103,7 +103,7 @@ const ChatContext: React.FC<{ initial: Partial<ChatContextProps>; children: Reac
   })
 
   useEffect(() => {
-    setValues({ ...values, ...props.initial })
+    setValues(prevValues => ({ ...prevValues, ...props.initial }))
   }, [props.initial])
 
   const updateValues = (update: Partial<ChatContextProps>) => {

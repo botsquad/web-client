@@ -10,11 +10,11 @@ import { ChatHandler } from 'components'
 import { isMobile } from '../../common/util'
 import { InputMethodClosed, InputMethodWait } from 'show_types'
 
-interface renderImplicitCloseButtonProps {
+interface RenderImplicitCloseButtonProps {
   type: string
 }
 
-const renderImplicitCloseButton: React.FC<renderImplicitCloseButtonProps> = props => {
+const RenderImplicitCloseButton: React.FC<RenderImplicitCloseButtonProps> = props => {
   const { handler, localePrefs } = useInputMethodProps<InputMethodWait>()
 
   if (props.type !== 'closed') {
@@ -99,10 +99,12 @@ const Wait: React.FC<WaitProps> = props => {
     tick()
     const interval = setInterval(tick, 1000)
     return () => clearInterval(interval)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     updateValues('inline', type === 'closed')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type])
   const renderButtonProps = { config, inputModal, handler }
 
@@ -119,13 +121,13 @@ const Wait: React.FC<WaitProps> = props => {
     closedElement = <img className="qr" title={button.title} src={qrCodeUrl} />
   }
 
-  const RenderImplicitCloseButton = renderImplicitCloseButton
+  const RenderImplicitCloseButtonComponent = RenderImplicitCloseButton
 
   return (
     <InputMethodContainer
       {...props}
       className="wait"
-      below={renderButton(button, renderButtonProps) || <RenderImplicitCloseButton type={props.type} />}
+      below={renderButton(button, renderButtonProps) || <RenderImplicitCloseButtonComponent type={props.type} />}
     >
       {type === 'wait' && typeof wait_time !== 'undefined' && <div className="loader" />}
 

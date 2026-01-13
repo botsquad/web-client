@@ -533,7 +533,8 @@ function Chat(props: ChatProps) {
 
   useEffect(() => {
     mountedRef.current = true
-    handlerRef.current.joinChannel(props, socket, getSpan)
+    const handler = handlerRef.current
+    handler.joinChannel(props, socket, getSpan)
 
     if (notificationManagerRef.current) {
       notificationManagerRef.current.componentDidMount()
@@ -547,19 +548,22 @@ function Chat(props: ChatProps) {
       if (notificationManagerRef.current) {
         notificationManagerRef.current.componentWillUnmount()
       }
-      handlerRef.current.leaveChannel()
+      handler.leaveChannel()
     }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
-    if (props.bot_id !== undefined && props.bot_id !== componentRef.current.props.bot_id) {
+    const currentProps = componentRef.current.props
+    
+    if (props.bot_id !== undefined && props.bot_id !== currentProps.bot_id) {
       handlerRef.current.joinChannel(props, socket, getSpan)
     }
     if (notificationManagerRef.current) {
       notificationManagerRef.current.windowFocusChange()
     }
 
-    if (props.online !== undefined && props.online !== componentRef.current.props.online) {
+    if (props.online !== undefined && props.online !== currentProps.online) {
       if (props.online) {
         if (onlineTimeoutRef.current) {
           clearTimeout(onlineTimeoutRef.current)
@@ -569,7 +573,7 @@ function Chat(props: ChatProps) {
         onlineTimeoutRef.current = setTimeout(() => setOnline(false), 1000)
       }
     }
-  }, [props.bot_id, props.online, socket, getSpan])
+  }, [props, socket, getSpan])
 
   const localePrefsComputed = useMemo(() => {
     return (conversationMeta?.locale ? [conversationMeta.locale] : localePrefs).map(l =>

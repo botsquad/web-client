@@ -8,9 +8,11 @@ import { useChatProps, useChatPropsUpdate } from './ChatContext'
 
 const ChatWindow: React.FC = () => {
   const { online, settings } = useChatProps()
-  const [forceUpdater, setForceUpdater] = useState(false) // this is only used to force update the component
+  const [, setForceUpdater] = useState(false) // this is only used to force update the component
   useEffect(() => {
-    window.addEventListener('orientationchange', () => setForceUpdater(!forceUpdater))
+    const handleOrientationChange = () => setForceUpdater(prev => !prev)
+    window.addEventListener('orientationchange', handleOrientationChange)
+    return () => window.removeEventListener('orientationchange', handleOrientationChange)
   }, [])
   const allProps = useChatProps()
   const layout = `layout-${settings?.layout || 'docked'}`

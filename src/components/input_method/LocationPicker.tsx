@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { GoogleMap, Marker, LoadScript } from '@react-google-maps/api'
 
 import { chatLabel } from '../../common/labels'
@@ -66,21 +66,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ settings }) => {
 
   const { config, inputModal, handler, localePrefs } = useInputMethodProps<InputMethodLocation>()
 
-  useEffect(() => {
-    const { default_value, center: center2 } = config
-    if (default_value) {
-      setPosition(default_value)
-      setCenter(center2 || default_value)
-    }
-    setMyLocation()
-  }, [config])
-
-  const submit = () => {
-    setHasSubmitted(true)
-    inputModal?.finish('user_location', position, config)
-  }
-
-  const setMyLocation = () => {
+  const setMyLocation = useCallback(() => {
     if (findingLocation) {
       return
     }
@@ -100,6 +86,20 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ settings }) => {
         alert('Could not retrieve your current position, please check your location settings.')
       },
     )
+  }, [findingLocation])
+
+  useEffect(() => {
+    const { default_value, center: center2 } = config
+    if (default_value) {
+      setPosition(default_value)
+      setCenter(center2 || default_value)
+    }
+    setMyLocation()
+  }, [config, setMyLocation])
+
+  const submit = () => {
+    setHasSubmitted(true)
+    inputModal?.finish('user_location', position, config)
   }
 
   const { button_label } = config

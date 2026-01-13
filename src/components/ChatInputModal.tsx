@@ -48,13 +48,15 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     }
 
     if (Array.isArray(settings?.chat_config?.disabled_inputs)) {
-      for (const input of settings?.chat_config?.disabled_inputs) {
+      const disabledInputs = settings.chat_config.disabled_inputs
+      for (const input of disabledInputs) {
         inputs[input as InputType] = false
       }
     }
 
     if (Array.isArray(settings?.chat_config?.enabled_inputs)) {
-      for (const input of settings?.chat_config?.enabled_inputs) {
+      const enabledInputs = settings.chat_config.enabled_inputs
+      for (const input of enabledInputs) {
         inputs[input as InputType] = true
       }
     }
@@ -64,10 +66,12 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
 
   useEffect(() => {
     _checkShowInputModal()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     setTimeout(() => _checkShowInputModal(), 0)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props])
 
   const cancel = () => {

@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useState } from 'react'
+import React, { CSSProperties, useEffect, useState, useMemo } from 'react'
 import { InputMethodForm } from 'show_types'
 import { Close } from '../icons'
 import { useInputMethodProps } from './InputMethodContext'
@@ -37,7 +37,10 @@ const InputMethodContainer: React.FC<InputMethodContainerProps> = ({ below, head
     )
   }
 
-  const classList = `input-method--container ${height} ${className || ''} rest`.split(' ')
+  const classList = useMemo(
+    () => `input-method--container ${height} ${className || ''} rest`.split(' '),
+    [height, className]
+  )
 
   const [inlineStyle, setInlineStyle] = useState<CSSProperties>({})
 
@@ -55,7 +58,7 @@ const InputMethodContainer: React.FC<InputMethodContainerProps> = ({ below, head
     if (classList.includes('full')) size = SizeMap.Full
     const attr = classList.includes('fixed-height') ? 'height' : 'maxHeight'
     setInlineStyle({ [attr]: `${Math.floor(size * maxHeight)}px` })
-  }, [config])
+  }, [config, classList, handler])
 
   return (
     <div className={classList.join(' ')} style={inlineStyle}>

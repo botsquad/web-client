@@ -3,7 +3,11 @@ import { createRoot } from 'react-dom/client'
 import WebClient from '../src/index'
 import './example.scss'
 
-const user_id = 'YCP'
+let user_id = localStorage.getItem('user_id')
+if (!user_id) {
+  user_id = Math.random().toString(36).substring(2, 9)
+  localStorage.setItem('user_id', user_id)
+}
 const bot_id = '9f62cd1d-8ec7-4a71-8d36-95b2acd251ab'
 const mapsApiKey = import.meta.env.GOOGLE_MAPS_API_KEY
 

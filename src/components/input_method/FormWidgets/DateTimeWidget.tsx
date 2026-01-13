@@ -32,7 +32,7 @@ export const checkDateConstraints = (currentDate: string, constraints: string[] 
   return true
 }
 
-const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formContext }) => {
+const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formContext = {} }) => {
   const [visible, setVisibility] = useState(false)
 
   const { refs, floatingStyles } = useFloating({
@@ -48,9 +48,10 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formC
     setVisibility(!visible)
   }
 
+  const localePrefs = (formContext as any)?.localePrefs || ['en']
   const selectDateText = value?.length
     ? moment(value).format('D-M-Y')
-    : chatLabel({ ui_labels: [] }, formContext.localePrefs, 'select_date')
+    : chatLabel({ ui_labels: [] }, localePrefs, 'select_date')
 
   const inputMethodContainer: any = document.querySelector('.botsi-web-client')
 
@@ -84,7 +85,7 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formC
                 onChange((value as Moment).format('YYYY-MM-DD'))
                 setVisibility(false)
               }}
-              locale={formContext.localePrefs[0]}
+              locale={localePrefs[0]}
               isValidDate={value => checkDateConstraints(value, (options.constraints || []) as string[])}
               timeFormat={false}
               dateFormat={'D-M-Y'}

@@ -68,7 +68,7 @@ const ModalWrapper = React.forwardRef<ModalWrapperRef, ModalProps>((props, ref) 
 
   return (
     <div className={className}>
-      {React.Children.map(children, (child) => {
+      {React.Children.map(children, child => {
         if (React.isValidElement(child)) {
           return React.cloneElement(child, { onClick } as any)
         }
@@ -161,7 +161,10 @@ enum ASPECTS {
   'two-by-one' = 0.5,
 }
 function determineAspect(cls: string): number {
-  return (cls || '').split(' ').reduce((acc: number, c: string) => acc || ASPECTS[c as keyof typeof ASPECTS], 0) || ASPECTS.default
+  return (
+    (cls || '').split(' ').reduce((acc: number, c: string) => acc || ASPECTS[c as keyof typeof ASPECTS], 0) ||
+    ASPECTS.default
+  )
 }
 
 interface WebMediaProps {
@@ -264,6 +267,7 @@ export const AudioMedia: React.FC<AudioMediaProps> = React.memo(
           setHasAudio(false)
         }
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const { payload } = message

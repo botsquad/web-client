@@ -3,7 +3,7 @@ import { electronicFormat, isValid, printFormat } from 'iban'
 import React, { useEffect, useState } from 'react'
 import { WidgetProps } from '@rjsf/utils'
 
-const IbanWidget: React.FC<WidgetProps> = ({ value, onChange, disabled, autofocus, formContext, id, required }) => {
+const IbanWidget: React.FC<WidgetProps> = ({ value, onChange, disabled, autofocus, formContext = {}, id, required }) => {
   const [error, setError] = useState(false)
   const onIBANChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = electronicFormat(e.target.value)
@@ -11,8 +11,10 @@ const IbanWidget: React.FC<WidgetProps> = ({ value, onChange, disabled, autofocu
   }
 
   useEffect(() => {
-    setTimeout(() => formContext.setWidgetError(id, error), 0)
-  }, [error])
+    if ((formContext as any)?.setWidgetError) {
+      setTimeout(() => (formContext as any).setWidgetError(id, error), 0)
+    }
+  }, [error, formContext, id])
 
   useEffect(() => {
     // if the value is not a valid iban and the value is not empty then there is an error
@@ -22,11 +24,13 @@ const IbanWidget: React.FC<WidgetProps> = ({ value, onChange, disabled, autofocu
     } else {
       setError(false)
     }
-  }, [value])
+  }, [value, required])
+
+  const localePrefs = (formContext as any)?.localePrefs || ['en']
 
   const validate = () => {
     if (error && value !== '' && value) {
-      return <div style={{ color: 'red' }}>{chatLabel({ ui_labels: [] }, formContext.localePrefs, 'invalid_iban')}</div>
+      return <div style={{ color: 'red' }}>{chatLabel({ ui_labels: [] }, localePrefs, 'invalid_iban')}</div>
     }
     return null
   }
