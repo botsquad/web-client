@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { createContext, useContext, useState } from 'react'
-import InputMethodTemplate from '../elements/InputMethodTemplate'
+import { InputModalInterface } from '../ChatContext'
 import { ChatHandler } from '../index'
 
 export function useInputMethodProps<T>() {
@@ -15,7 +15,7 @@ interface InputMethodProps<T = any> {
   config: T
   handler: ChatHandler
   inline: boolean
-  inputModal: InputMethodTemplate | null
+  inputModal: InputModalInterface | null
   localePrefs: string[]
 }
 
@@ -33,7 +33,7 @@ const InputMethodPropsContext = createContext<InputMethodProps>(DEFAULT_INPUT_ME
 // {} as inputMethodUpdateType prevents showing that it could be null
 const InputMethodUpdateContext = createContext<inputMethodUpdateType>({} as inputMethodUpdateType)
 
-const InputMethodContext = (props: any) => {
+const InputMethodContext: React.FC<{ props: any; children: ReactNode }> = props => {
   const [values, setValues] = useState<InputMethodProps>({
     ...props.props,
   })

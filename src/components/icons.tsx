@@ -1,5 +1,3 @@
-import React from 'react'
-
 export const Arrow = (
   <svg fill="#FFF" viewBox="0 0 24 24">
     <path d="M2 21l21-9L2 3v7l15 2-15 2z" />

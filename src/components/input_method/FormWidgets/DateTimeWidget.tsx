@@ -1,10 +1,10 @@
 import moment, { Moment } from 'moment'
 
-import React, { useState } from 'react'
-import ReactDOM from 'react-dom'
+import { useState } from 'react'
+import { createPortal } from 'react-dom'
 import Datetime from 'react-datetime'
 import { WidgetProps } from '@rjsf/utils'
-import { usePopper } from 'react-popper'
+import { useFloating, offset, flip, shift } from '@floating-ui/react'
 import { chatLabel } from '../../../common/labels'
 
 export const checkDateConstraints = (currentDate: string, constraints: string[] | string) => {
@@ -35,19 +35,12 @@ export const checkDateConstraints = (currentDate: string, constraints: string[] 
 const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formContext }) => {
   const [visible, setVisibility] = useState(false)
 
-  const [referenceRef, setReferenceRef] = useState<any>(null)
-  const [popperRef, setPopperRef] = useState<any>(null)
-
-  const { styles, attributes } = usePopper(referenceRef, popperRef, {
+  const { refs, floatingStyles } = useFloating({
     placement: 'top',
-    modifiers: [
-      {
-        name: 'offset',
-        enabled: true,
-        options: {
-          offset: [-125, 10],
-        },
-      },
+    middleware: [
+      offset({ mainAxis: 10, crossAxis: -125 }),
+      flip(),
+      shift(),
     ],
   })
 
@@ -67,22 +60,21 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formC
         <div className="below">
           <button
             data-date-value={value}
-            ref={setReferenceRef}
+            ref={refs.setReference}
             onClick={handleDropdownClick}
             style={{ borderRadius: 'var(--botsquad-bubble-radius)', border: '1px solid var(--botsquad-ui-color)' }}
           >
             {selectDateText}
           </button>
         </div>
-        {ReactDOM.createPortal(
+        {createPortal(
           <div
-            ref={setPopperRef}
+            ref={refs.setFloating}
             style={{
-              ...styles.popper,
+              ...floatingStyles,
               display: visible ? 'initial' : 'none',
               boxShadow: '0 0 4px 1px black',
             }}
-            {...attributes.popper}
           >
             <Datetime
               initialValue={moment()}

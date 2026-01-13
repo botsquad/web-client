@@ -1,4 +1,3 @@
-import React from 'react'
 import { TextUtil } from '@botsquad/sdk'
 import { getUiOptions } from '@rjsf/utils'
 import { DescriptionFieldProps, FormContextType, RJSFSchema, StrictRJSFSchema } from '@rjsf/utils'

@@ -1,4 +1,4 @@
-import React from 'react'
+import { useMemo, forwardRef } from 'react'
 import PhoneInput, { Country } from 'react-phone-number-input'
 
 function defaultCountry(localePrefs: string[]): Country {
@@ -19,7 +19,7 @@ interface MakeInputComponentProps {
 }
 
 function makeInputComponent({ disabled, autofocus, placeholder }: MakeInputComponentProps) {
-  return React.forwardRef(function CustomInput(props: any, ref) {
+  return forwardRef<HTMLInputElement, any>(function CustomInput(props, ref) {
     return (
       <input
         ref={ref}
@@ -42,24 +42,22 @@ interface PhoneNumberWidgetProps {
   placeholder: string
 }
 
-class PhoneNumberWidget extends React.Component<PhoneNumberWidgetProps> {
-  inputComponent: any
-  constructor(props: PhoneNumberWidgetProps) {
-    super(props)
-    this.inputComponent = makeInputComponent(this.props)
-  }
+function PhoneNumberWidget(props: PhoneNumberWidgetProps) {
+  const { value, onChange, formContext, disabled, autofocus, placeholder } = props
 
-  render() {
-    const { value, onChange } = this.props
-    return (
-      <PhoneInput
-        value={value}
-        onChange={onChange}
-        defaultCountry={defaultCountry(this.props.formContext.localePrefs)}
-        inputComponent={this.inputComponent}
-      />
-    )
-  }
+  const inputComponent = useMemo(
+    () => makeInputComponent({ disabled, autofocus, placeholder }),
+    [disabled, autofocus, placeholder],
+  )
+
+  return (
+    <PhoneInput
+      value={value}
+      onChange={onChange}
+      defaultCountry={defaultCountry(formContext.localePrefs)}
+      inputComponent={inputComponent}
+    />
+  )
 }
 
 export default PhoneNumberWidget

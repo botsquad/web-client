@@ -4,18 +4,18 @@ import isEqual from 'lodash/isEqual'
 import inputMethodFactory from './input_method'
 import { useChatProps } from './ChatContext'
 
-export interface ChatProps {
+export interface ChatInputProps {
   operatorActive: boolean
-  isDisabled: (input: string) => boolean
+  isDisabled: (input: InputType) => boolean
 }
 
 interface ChatInputModalProps {
   onCancel: () => void
   onFinish: () => void
-  children: (props: ChatProps) => React.ReactElement | null
+  children: (props: ChatInputProps) => React.ReactElement | null
 }
 
-type InputType = 'file' | 'text' | 'location' | 'image'
+type InputType = 'file' | 'text' | 'location' | 'image' | 'dialpad'
 
 const ChatInputModal: React.FC<ChatInputModalProps> = props => {
   const {
@@ -43,7 +43,8 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
       file: settings?.layout === 'embedded' ? true : false,
       text: true,
       location: true,
-      image: true
+      image: true,
+      dialpad: true,
     }
 
     if (Array.isArray(settings?.chat_config?.disabled_inputs)) {
@@ -108,7 +109,7 @@ const ChatInputModal: React.FC<ChatInputModalProps> = props => {
     }
   }
 
-  const isDisabled = React.useCallback((item: any) => {
+  const isDisabled = React.useCallback((item: InputType) => {
     return inputs[item] === false
   }, [inputs])
 

@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useImperativeHandle } from 'react'
 import { EventEmitter } from 'fbemitter'
 import { TextUtil } from '@botsquad/sdk'
 import Message, { Media } from './types'
@@ -15,58 +15,70 @@ interface ModalProps {
   children: React.ReactNode
 }
 
-class ModalWrapper extends React.PureComponent<ModalProps> {
-  _component: any = null
-  onClick = () => {
-    if (this.props.toggleModalPreferHeight) {
-      this.props.handler.component.hideModal()
-    } else {
-      this.props.handler.component.showModal(this.props.message, null)
-    }
-  }
-
-  triggerResize = (_: any, component: any, ratio: number) => {
-    if (!this.props.toggleModalPreferHeight || (!component && !this._component)) {
-      return
-    }
-    if (component && !this._component) {
-      this._component = component
-    }
-
-    component = component || this._component
-    const { clientWidth, clientHeight, clientRatio } = this.props.handler.getClientDimensions()
-
-    this.props.toggleModalPreferHeight(ratio > clientRatio)
-
-    let w: number
-    let h: number
-    if (this.props.message.payload.class && this.props.message.payload.class.match(/\bfullscreen\b/)) {
-      w = clientWidth
-      h = clientHeight
-    } else if (clientRatio > ratio) {
-      w = Math.floor(clientWidth * 0.9) - 8
-      h = Math.floor(w * ratio)
-    } else {
-      h = Math.floor(clientHeight * 0.9) - 8
-      w = Math.floor(h / ratio)
-    }
-    component.style.width = `${w}px`
-    component.style.height = `${h}px`
-  }
-  render() {
-    if (this.props.toggleModalPreferHeight) {
-      return this.props.children as React.FC
-    }
-
-    return (
-      <div className={this.props.className}>
-        {React.Children.map(this.props.children, child =>
-          React.cloneElement(child as ReactElement, { onClick: this.onClick }),
-        )}
-      </div>
-    )
-  }
+interface ModalWrapperRef {
+  triggerResize: (_: any, component: any, ratio: number) => void
 }
+
+const ModalWrapper = React.forwardRef<ModalWrapperRef, ModalProps>((props, ref) => {
+  const { toggleModalPreferHeight, handler, message, className, children } = props
+  const componentRef = useRef<any>(null)
+
+  useImperativeHandle(ref, () => ({
+    triggerResize: (_: any, component: any, ratio: number) => {
+      if (!toggleModalPreferHeight || (!component && !componentRef.current)) {
+        return
+      }
+      if (component && !componentRef.current) {
+        componentRef.current = component
+      }
+
+      const actualComponent = component || componentRef.current
+      const { clientWidth, clientHeight, clientRatio } = handler.getClientDimensions()
+
+      toggleModalPreferHeight(ratio > clientRatio)
+
+      let w: number
+      let h: number
+      if (message.payload.class && message.payload.class.match(/\bfullscreen\b/)) {
+        w = clientWidth
+        h = clientHeight
+      } else if (clientRatio > ratio) {
+        w = Math.floor(clientWidth * 0.9) - 8
+        h = Math.floor(w * ratio)
+      } else {
+        h = Math.floor(clientHeight * 0.9) - 8
+        w = Math.floor(h / ratio)
+      }
+      actualComponent.style.width = `${w}px`
+      actualComponent.style.height = `${h}px`
+    },
+  }))
+
+  const onClick = () => {
+    if (toggleModalPreferHeight) {
+      handler.component.hideModal()
+    } else {
+      handler.component.showModal(message, null)
+    }
+  }
+
+  if (toggleModalPreferHeight) {
+    return children as React.ReactElement
+  }
+
+  return (
+    <div className={className}>
+      {React.Children.map(children, (child) => {
+        if (React.isValidElement(child)) {
+          return React.cloneElement(child, { onClick } as any)
+        }
+        return child
+      })}
+    </div>
+  )
+})
+
+ModalWrapper.displayName = 'ModalWrapper'
 
 interface ImageMediaProps {
   message: Message<Media>
@@ -81,7 +93,7 @@ export const ImageMedia: React.FC<ImageMediaProps> = props => {
   const [loading, setLoading] = useState(true)
   const [retry, setRetry] = useState(0)
   const { payload } = message
-  let wrapper: ModalWrapper | null = null
+  let wrapper: ModalWrapperRef | null = null
   let component: HTMLElement | null = null
 
   if (loading) {
@@ -149,7 +161,7 @@ enum ASPECTS {
   'two-by-one' = 0.5,
 }
 function determineAspect(cls: string): number {
-  return (cls || '').split(' ').reduce((acc: number, c: string) => acc || ASPECTS[c], 0) || ASPECTS.default
+  return (cls || '').split(' ').reduce((acc: number, c: string) => acc || ASPECTS[c as keyof typeof ASPECTS], 0) || ASPECTS.default
 }
 
 interface WebMediaProps {
@@ -166,7 +178,7 @@ const WebMediaNonMemoized: React.FC<WebMediaProps> = props => {
   const { payload } = message
   const { preview_image } = payload
   let component: HTMLDivElement | null = null
-  let wrapper: ModalWrapper | null = null
+  let wrapper: ModalWrapperRef | null = null
   const aspect = determineAspect(payload.class)
   const tryResize = (t: number | null) => {
     const resize = () => wrapper && component && wrapper.triggerResize(null, component, aspect)
