@@ -83,6 +83,7 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formC
         </div>
         {createPortal(
           <div
+            /* eslint-disable-next-line react-hooks/refs */
             ref={refs.setFloating}
             style={{
               ...floatingStyles,

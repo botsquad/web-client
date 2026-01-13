@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { GoogleMap, Marker, LoadScript } from '@react-google-maps/api'
 
 import { chatLabel } from '../../common/labels'
@@ -59,12 +59,15 @@ interface LocationPickerProps {
 }
 
 const LocationPicker: React.FC<LocationPickerProps> = ({ settings }) => {
-  const [hasSubmitted, setHasSubmitted] = useState(false)
-  const [position, setPosition] = useState<LocationType | null>(null)
-  const [center, setCenter] = useState<LocationType | null>(null)
-  const [findingLocation, setFindingLocation] = useState(false)
-
   const { config, inputModal, handler, localePrefs } = useInputMethodProps<InputMethodLocation>()
+  
+  const initialPosition = useMemo(() => config.default_value || null, [config.default_value])
+  const initialCenter = useMemo(() => config.center || config.default_value || null, [config.center, config.default_value])
+
+  const [hasSubmitted, setHasSubmitted] = useState(false)
+  const [position, setPosition] = useState<LocationType | null>(initialPosition)
+  const [center, setCenter] = useState<LocationType | null>(initialCenter)
+  const [findingLocation, setFindingLocation] = useState(false)
 
   const setMyLocation = useCallback(() => {
     if (findingLocation) {
@@ -89,13 +92,12 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ settings }) => {
   }, [findingLocation])
 
   useEffect(() => {
-    const { default_value, center: center2 } = config
-    if (default_value) {
-      setPosition(default_value)
-      setCenter(center2 || default_value)
+    // Only call setMyLocation if we don't have a default position
+    if (!initialPosition) {
+      setMyLocation()
     }
-    setMyLocation()
-  }, [config, setMyLocation])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const submit = () => {
     setHasSubmitted(true)

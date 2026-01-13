@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useImperativeHandle } from 'react'
+import React, { useEffect, useRef, useState, useImperativeHandle, useCallback } from 'react'
 import { EventEmitter } from 'fbemitter'
 import { TextUtil } from '@botsquad/sdk'
 import Message, { Media } from './types'
@@ -93,8 +93,8 @@ export const ImageMedia: React.FC<ImageMediaProps> = props => {
   const [loading, setLoading] = useState(true)
   const [retry, setRetry] = useState(0)
   const { payload } = message
-  let wrapper: ModalWrapperRef | null = null
-  let component: HTMLElement | null = null
+  const wrapperRef = useRef<ModalWrapperRef | null>(null)
+  const componentRef = useRef<HTMLImageElement | null>(null)
 
   if (loading) {
     const img = document.createElement('img')
@@ -110,9 +110,7 @@ export const ImageMedia: React.FC<ImageMediaProps> = props => {
     return (
       <ModalWrapper
         {...props}
-        ref={(w: any) => {
-          wrapper = w
-        }}
+        ref={wrapperRef}
       >
         <span className="loading" />
       </ModalWrapper>
@@ -122,23 +120,19 @@ export const ImageMedia: React.FC<ImageMediaProps> = props => {
     <ModalWrapper
       {...props}
       className={`image ${className}`}
-      ref={w => {
-        wrapper = w
-      }}
+      ref={wrapperRef}
     >
       <div>
         <img
           role="presentation"
-          ref={c => {
-            component = c
-          }}
+          ref={componentRef}
           src={payload.url}
           onLoad={event => {
             if (onLoad) onLoad()
-            if (wrapper && component) {
-              wrapper.triggerResize(
+            if (wrapperRef.current && componentRef.current) {
+              wrapperRef.current.triggerResize(
                 event,
-                component,
+                componentRef.current,
                 (event.target as HTMLImageElement).height / (event.target as HTMLImageElement).width,
               )
             }
@@ -180,29 +174,29 @@ const WebMediaNonMemoized: React.FC<WebMediaProps> = props => {
   const { message, onLoad } = props
   const { payload } = message
   const { preview_image } = payload
-  let component: HTMLDivElement | null = null
-  let wrapper: ModalWrapperRef | null = null
+  const componentRef = useRef<HTMLElement | null>(null)
+  const wrapperRef = useRef<ModalWrapperRef | null>(null)
   const aspect = determineAspect(payload.class)
-  const tryResize = (t: number | null) => {
-    const resize = () => wrapper && component && wrapper.triggerResize(null, component, aspect)
+  const tryResize = useCallback((t: number | null) => {
+    const resize = () =>
+      wrapperRef.current && componentRef.current && wrapperRef.current.triggerResize(null, componentRef.current, aspect)
     setTimeout(resize, 0)
     if (t) setTimeout(resize, t)
-  }
+  }, [aspect])
+
+  useEffect(() => {
+    tryResize(100)
+  }, [tryResize])
 
   return (
     <ModalWrapper
       {...props}
       className={`web ${props.className}`}
-      ref={w => {
-        wrapper = w
-        tryResize(100)
-      }}
+      ref={wrapperRef}
     >
       {preview_image && !props.toggleModalPreferHeight ? (
         <img
-          ref={c => {
-            component = c
-          }}
+          ref={componentRef as React.Ref<HTMLImageElement>}
           src={preview_image}
           role="presentation"
         />
@@ -210,9 +204,7 @@ const WebMediaNonMemoized: React.FC<WebMediaProps> = props => {
         <div>
           <div
             className="frame-wrapper "
-            ref={c => {
-              component = c
-            }}
+            ref={componentRef as React.Ref<HTMLDivElement>}
           >
             <iframe
               src={payload.url}

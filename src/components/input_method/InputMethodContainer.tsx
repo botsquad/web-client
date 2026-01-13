@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useState, useMemo } from 'react'
+import React, { CSSProperties, useMemo } from 'react'
 import { InputMethodForm } from 'show_types'
 import { Close } from '../icons'
 import { useInputMethodProps } from './InputMethodContext'
@@ -42,22 +42,20 @@ const InputMethodContainer: React.FC<InputMethodContainerProps> = ({ below, head
     [height, className]
   )
 
-  const [inlineStyle, setInlineStyle] = useState<CSSProperties>({})
-
-  useEffect(() => {
+  const inlineStyle = useMemo<CSSProperties>(() => {
     const { required, caption } = config
     const { clientHeight } = handler.getClientDimensions()
     const maxHeight = required && !caption ? clientHeight : clientHeight + 45
 
     if (classList.includes('qr') || classList.includes('barcode')) {
-      return
+      return {}
     }
 
     let size = SizeMap.Compact
     if (classList.includes('tall')) size = SizeMap.Tall
     if (classList.includes('full')) size = SizeMap.Full
     const attr = classList.includes('fixed-height') ? 'height' : 'maxHeight'
-    setInlineStyle({ [attr]: `${Math.floor(size * maxHeight)}px` })
+    return { [attr]: `${Math.floor(size * maxHeight)}px` }
   }, [config, classList, handler])
 
   return (
