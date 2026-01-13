@@ -20,7 +20,7 @@
     "lint:types": "tsc --noEmit",
     "lintfix": "eslint --fix src/**/*.{ts,tsx}",
     "dev": "vite --host 0.0.0.0",
-    "test": "mocha --require ts-node/register test/**/*.js test/**/*.ts test/**/*.tsx"
+    "test": "NODE_NO_WARNINGS=1 mocha --loader=ts-node/esm test/**/*.js"
   },
   "author": "Arjan Scherpenisse <arjan@miraclethings.nl>",
   "repository": {
