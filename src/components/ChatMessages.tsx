@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import isEqual from 'lodash/isEqual'
 import { EventEmitter } from 'fbemitter'
 
@@ -213,9 +213,10 @@ function ChatMessages(props: ChatMessagesProps) {
       }
       const cls = `bubble ${message.self ? 'self' : 'bot'} ` + message.type
 
+      const key = message.time
+
       const attrs = {
         ...props,
-        key: message.time,
         message,
         className:
           cls + (message.payload.class ? ' ' + message.payload.class : '') + (isRecent(message) ? ' recent' : ''),
@@ -226,7 +227,10 @@ function ChatMessages(props: ChatMessagesProps) {
         localePrefs: localePrefs,
       }
 
-      return (elementFactory ? elementFactory(message, attrs) : null) || ElementFactory(message, attrs)
+      const element = (elementFactory ? elementFactory(message, attrs) : null) || ElementFactory(message, attrs)
+
+      // Add key to the element, not to attrs
+      return element ? React.cloneElement(element, { key }) : null
     },
     [settings, props, isRecent, scrollToBottom, elementFactory, localePrefs],
   )

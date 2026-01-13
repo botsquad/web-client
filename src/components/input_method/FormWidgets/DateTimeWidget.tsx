@@ -1,10 +1,10 @@
 import moment, { Moment } from 'moment'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import Datetime from 'react-datetime'
 import { WidgetProps } from '@rjsf/utils'
-import { useFloating, offset, flip, shift } from '@floating-ui/react'
+import { useFloating, offset, flip, shift, autoUpdate } from '@floating-ui/react'
 import { chatLabel } from '../../../common/labels'
 
 export const checkDateConstraints = (currentDate: string, constraints: string[] | string) => {
@@ -35,14 +35,20 @@ export const checkDateConstraints = (currentDate: string, constraints: string[] 
 const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formContext = {} }) => {
   const [visible, setVisibility] = useState(false)
 
-  const { refs, floatingStyles } = useFloating({
+  const { refs, floatingStyles, update } = useFloating({
     placement: 'top',
-    middleware: [
-      offset({ mainAxis: 10, crossAxis: -125 }),
-      flip(),
-      shift(),
-    ],
+    middleware: [offset(8), flip(), shift()],
+    open: visible,
+    whileElementsMounted: autoUpdate,
+    strategy: 'fixed',
   })
+
+  // Force update when visibility changes to ensure correct positioning
+  useEffect(() => {
+    if (visible && update) {
+      update()
+    }
+  }, [visible, update])
 
   function handleDropdownClick() {
     setVisibility(!visible)
@@ -63,7 +69,14 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formC
             data-date-value={value}
             ref={refs.setReference}
             onClick={handleDropdownClick}
-            style={{ borderRadius: 'var(--botsquad-bubble-radius)', border: '1px solid var(--botsquad-ui-color)' }}
+            style={{
+              borderRadius: 'var(--botsquad-bubble-radius)',
+              border: '1px solid var(--botsquad-ui-color)',
+              minHeight: '48px',
+              fontSize: '16px',
+              padding: '12px 16px',
+              touchAction: 'manipulation',
+            }}
           >
             {selectDateText}
           </button>
@@ -76,7 +89,17 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formC
               display: visible ? 'initial' : 'none',
               boxShadow: '0 0 4px 1px black',
             }}
+            className="datetime-widget-popup"
           >
+            <style>{`
+              .datetime-widget-popup .rdtPicker td,
+              .datetime-widget-popup .rdtPicker th {
+                min-width: 44px;
+                height: 44px !important;
+                padding: 8px;
+                font-size: 16px;
+              }
+            `}</style>
             <Datetime
               initialValue={moment()}
               input={false}
