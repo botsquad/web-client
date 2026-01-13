@@ -1,6 +1,6 @@
 import React, { ReactNode, useState } from 'react'
 import Form, { FormProps } from '@rjsf/core'
-import validator from '@rjsf/validator-ajv8';
+import validator from '@rjsf/validator-ajv8'
 import debounce from 'lodash/debounce'
 import moment from 'moment'
 
@@ -27,6 +27,14 @@ function elementValue(e: any) {
     return moment(e.value).format('D/M/YYYY')
   }
   return e.value.trim()
+}
+
+function elementLabel(e: any) {
+  if ('labels' in e) {
+    return [...e.labels].map(label => label.textContent.replace(/[*]$/, '')).join(', ') + ': '
+  }
+
+  return ''
 }
 
 function removeEmpty(obj: any) {
@@ -89,7 +97,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
         'input[type=text],input[type=email],input[type=number],input[type=range],input[type=date],input[type=tel],textarea,select,input[type=checkbox],button[data-date-value]',
       ),
     ]
-      .map(elementValue)
+      .map(e => elementLabel(e) + elementValue(e))
       .filter(f => f.length > 0)
       .slice(0, 3)
       .join(', ')
@@ -102,7 +110,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
 
   type OnChange = Exclude<FormProps['onChange'], undefined>
 
-  const onChange = React.useCallback<OnChange>((data) => {
+  const onChange = React.useCallback<OnChange>(data => {
     setFormData(data.formData)
   }, [])
 
