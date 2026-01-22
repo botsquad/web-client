@@ -35,7 +35,17 @@ export default defineConfig(({ mode }) => {
               fileName: 'main',
             },
             rollupOptions: {
-              external: ['react', 'react-dom'],
+              external: [
+                'react',
+                'react-dom',
+                'react-dom/client',
+                'react/jsx-runtime',
+                'react/jsx-dev-runtime',
+                '@rjsf/core',
+                '@rjsf/utils',
+                '@rjsf/validator-ajv8',
+                '@floating-ui/react',
+              ],
             },
             outDir: 'dist',
             sourcemap: true,

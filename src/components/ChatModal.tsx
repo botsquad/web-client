@@ -57,7 +57,6 @@ const ChatModal: React.FC<ChatModalProps> = props => {
     >
       <div className="overlay" onClick={hide} />
       <div className={`modal ${message.type}`} ref={div}>
-        {/* eslint-disable-next-line react-hooks/refs */}
         {renderMessage(message, modalParams)}
       </div>
       <div className="close">{Close}</div>
