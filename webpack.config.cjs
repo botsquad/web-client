@@ -34,6 +34,30 @@ module.exports = {
     libraryTarget: 'umd',
     library: '@botsquad/web-client',
   },
+  externals: {
+    react: {
+      commonjs: 'react',
+      commonjs2: 'react',
+      amd: 'react',
+      root: 'React',
+    },
+    'react-dom': {
+      commonjs: 'react-dom',
+      commonjs2: 'react-dom',
+      amd: 'react-dom',
+      root: 'ReactDOM',
+    },
+    'react/jsx-runtime': {
+      commonjs: 'react/jsx-runtime',
+      commonjs2: 'react/jsx-runtime',
+      amd: 'react/jsx-runtime',
+      root: 'React',
+    },
+    '@rjsf/core': '@rjsf/core',
+    '@rjsf/utils': '@rjsf/utils',
+    '@rjsf/validator-ajv8': '@rjsf/validator-ajv8',
+    '@floating-ui/react': '@floating-ui/react',
+  },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
     modules: ['node_modules'],

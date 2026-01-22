@@ -1,6 +1,6 @@
 {
   "name": "@botsquad/web-client",
-  "version": "1.16.2",
+  "version": "1.16.3",
   "type": "module",
   "sideEffects": [
     "*.scss",
@@ -14,13 +14,13 @@
   "scripts": {
     "build": "npm-run-all --parallel build:*",
     "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "NODE_ENV=production webpack --config webpack.prod.config.js --mode production",
+    "build:js": "NODE_ENV=production webpack --config webpack.prod.config.cjs --mode production",
     "lint": "npm-run-all --parallel lint:*",
     "lint:eslint": "eslint src/**/*.{ts,tsx}",
     "lint:types": "tsc --noEmit",
     "lintfix": "eslint --fix src/**/*.{ts,tsx}",
     "stats": "NODE_ENV=development webpack --json | webpack-bundle-size-analyzer",
-    "dev": "webpack-dev-server --hot --host 0.0.0.0 --config ./webpack.config.js",
+    "dev": "webpack-dev-server --hot --host 0.0.0.0 --config ./webpack.config.cjs",
     "test": "mocha --require ts-node/register test/**/*.js test/**/*.ts test/**/*.tsx"
   },
   "author": "Arjan Scherpenisse <arjan@miraclethings.nl>",
@@ -35,9 +35,6 @@
     "@botsquad/sdk": "^0.16.7",
     "@popperjs/core": "^2.11.2",
     "@react-google-maps/api": "^2.7.0",
-    "@rjsf/core": "5.21.2",
-    "@rjsf/utils": "5.21.2",
-    "@rjsf/validator-ajv8": "5.21.2",
     "@types/iban": "^0.0.32",
     "babel-loader": "^8.0.0",
     "classnames": "^2.2.6",
@@ -98,6 +95,10 @@
     "@types/supercluster": "^5.0.3",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
     "@typescript-eslint/parser": "^5.3.1",
+    "@floating-ui/react": "^0.27.16",
+    "@rjsf/core": "5.21.2",
+    "@rjsf/utils": "5.21.2",
+    "@rjsf/validator-ajv8": "5.21.2",
     "autoprefixer": "^10.4.13",
     "babel-eslint": "^10.1.0",
     "baseline-browser-mapping": "^2.8.32",
@@ -139,7 +140,11 @@
     "webpack-dev-server": "^4.2.1"
   },
   "peerDependencies": {
-    "react": "^16.0.0 || ^17.0.0 || ^18.0.0",
-    "react-dom": "^16.0.0 || ^17.0.0 || ^18.0.0"
+    "react": "^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
+    "react-dom": "^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
+    "@floating-ui/react": ">=0.26.0",
+    "@rjsf/core": "^5.21.2",
+    "@rjsf/utils": "^5.21.2",
+    "@rjsf/validator-ajv8": "^5.21.2"
   }
 }
