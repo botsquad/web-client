@@ -154,6 +154,10 @@ export class ChatHandler {
           file.type,
         )
       })
+      .receive('error', message => {
+        this.component.setState({ upload: null })
+        this.component.showToast({ message })
+      })
   }
 
   handleAudioEvent(payload: any) {
