@@ -516,6 +516,7 @@ function Chat(props: ChatProps) {
   componentRef.current.showModal = showModal
   componentRef.current.hideModal = hideModal
   componentRef.current.addEvent = addEvent
+  componentRef.current.removeFile = removeFile
   componentRef.current.getSpan = getSpan
   componentRef.current.prependEvents = prependEvents
   componentRef.current.triggerModal = triggerModal
