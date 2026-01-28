@@ -445,6 +445,11 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
     return { type: type2, self, payload: payload2, renderable, time, as, metadata, id }
   }
 
+  removeFile(url: string) {
+    const events = this.state.events.filter(event => !(event.type === 'media' && event.payload.url === url))
+    this.setState({ events })
+  }
+
   render() {
     const localePrefs = (
       this.state.conversationMeta?.locale ? [this.state.conversationMeta.locale] : this.state.localePrefs
