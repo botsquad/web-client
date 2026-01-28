@@ -138,6 +138,9 @@ export default function botChatHandler(
           if (!component.mounted) return
           onDebug?.(info)
         })
+        channel.on('invalid_file', ({ url }) => {
+          component.removeFile(url)
+        })
         channel.onClose(() => {
           if (!component.mounted) return
           onClose?.()
