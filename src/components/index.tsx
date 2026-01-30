@@ -76,6 +76,7 @@ interface ChatComponentRef {
   triggerAudio: (payload: any) => void
   mounted: boolean
   forceUpdate: () => void
+  removeFile: (url: string) => void
 }
 
 interface ChatState {
@@ -117,17 +118,14 @@ export class ChatHandler {
     this.component.setState({ upload: null, typing: false, events: [] })
     const staticParams = { ...params, context: params?.context || { user: getUserInfo() } }
 
-    botChannelJoin(this.component, socket, staticParams, span)?.then(
-      channel => {
-        this.channel = channel
-        this._eventQueue.forEach(({ type, payload }) => {
-          this.send(type, payload)
-        })
-        this._eventQueue = []
-        this.component.setState({ online: true })
-      },
-      onJoinError,
-    )
+    botChannelJoin(this.component, socket, staticParams, span)?.then(channel => {
+      this.channel = channel
+      this._eventQueue.forEach(({ type, payload }) => {
+        this.send(type, payload)
+      })
+      this._eventQueue = []
+      this.component.setState({ online: true })
+    }, onJoinError)
   }
 
   leaveChannel() {
@@ -192,6 +190,10 @@ export class ChatHandler {
           },
           file.type,
         )
+      })
+      .receive('error', message => {
+        this.component.setState({ upload: null })
+        this.component.showToast({ message })
       })
   }
 
@@ -280,9 +282,7 @@ function Chat(props: ChatProps) {
   const [modalHiding, setModalHiding] = useState<boolean>(false)
   const [conversationMeta, setConversationMeta] = useState<API.Conversation | undefined>(undefined)
   const [online, setOnline] = useState<Argument>(true)
-  const [localePrefs, setLocalePrefs] = useState<string[]>(
-    props.localePrefs || [lang.replace(/-.*$/, '')],
-  )
+  const [localePrefs, setLocalePrefs] = useState<string[]>(props.localePrefs || [lang.replace(/-.*$/, '')])
   const [joined, setJoined] = useState<boolean>(false)
   const [socket] = useState<Socket>(props.socket || new Socket('wss://bsqd.me/socket'))
   const [toastHiding, setToastHiding] = useState<boolean>(true)
@@ -389,6 +389,12 @@ function Chat(props: ChatProps) {
     [events, normalizeEvent],
   )
 
+  const removeFile = useCallback((url: string) => {
+    setEvents(events => {
+      return events.filter(event => !(event.type === 'media' && event.payload.url === url))
+    })
+  }, [])
+
   const showModal = useCallback((message: Message<any>, modalParams: any) => {
     setModal(message)
     setModalParams(modalParams)
@@ -405,30 +411,27 @@ function Chat(props: ChatProps) {
     }, 300)
   }, [modal])
 
-  const showToast = useCallback(
-    (toast: any) => {
-      if (toastClearerRef.current) {
-        clearTimeout(toastClearerRef.current)
-      }
-      if (toastClearer2Ref.current) {
-        clearTimeout(toastClearer2Ref.current)
-      }
+  const showToast = useCallback((toast: any) => {
+    if (toastClearerRef.current) {
+      clearTimeout(toastClearerRef.current)
+    }
+    if (toastClearer2Ref.current) {
+      clearTimeout(toastClearer2Ref.current)
+    }
 
-      setToast(toast)
-      setToastHiding(false)
+    setToast(toast)
+    setToastHiding(false)
 
-      toastClearer2Ref.current = setTimeout(() => {
-        setToastHiding(true)
+    toastClearer2Ref.current = setTimeout(() => {
+      setToastHiding(true)
 
-        setTimeout(() => {
-          toastClearerRef.current = null
-          setToast(null)
-          setToastHiding(false)
-        }, 500)
-      }, 4000)
-    },
-    [],
-  )
+      setTimeout(() => {
+        toastClearerRef.current = null
+        setToast(null)
+        setToastHiding(false)
+      }, 500)
+    }, 4000)
+  }, [])
 
   const triggerModal = useCallback(() => {
     if (handlerRef.current._lastModal) {
@@ -496,6 +499,7 @@ function Chat(props: ChatProps) {
     showModal,
     hideModal,
     addEvent,
+    removeFile,
     getSpan,
     prependEvents,
     triggerModal,
@@ -555,7 +559,7 @@ function Chat(props: ChatProps) {
 
   useEffect(() => {
     const currentProps = componentRef.current.props
-    
+
     if (props.bot_id !== undefined && props.bot_id !== currentProps.bot_id) {
       handlerRef.current.joinChannel(props, socket, getSpan)
     }
@@ -576,9 +580,7 @@ function Chat(props: ChatProps) {
   }, [props, socket, getSpan])
 
   const localePrefsComputed = useMemo(() => {
-    return (conversationMeta?.locale ? [conversationMeta.locale] : localePrefs).map(l =>
-      l.replace(/[^a-z].*$/, ''),
-    )
+    return (conversationMeta?.locale ? [conversationMeta.locale] : localePrefs).map(l => l.replace(/[^a-z].*$/, ''))
   }, [conversationMeta, localePrefs])
 
   const contextProps: Partial<ChatContextProps> = useMemo(

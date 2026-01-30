@@ -14,13 +14,14 @@ interface ChatComponent {
   triggerAudio: (payload: any) => void
   mounted: boolean
   forceUpdate: () => void
+  removeFile: (url: string) => void
 }
 
 export default function botChatHandler(
   component: ChatComponent,
   socket: Socket,
   params: Record<string, string>,
-  span: () => object
+  span: () => object,
 ): Promise<AugmentedChannel | undefined> {
   if (!socket) {
     return Promise.resolve(undefined)
@@ -150,6 +151,9 @@ export default function botChatHandler(
         channel.on('debug_info', info => {
           if (!component.mounted) return
           onDebug?.(info)
+        })
+        channel.on('invalid_file', ({ url }) => {
+          component.removeFile(url)
         })
         channel.onClose(() => {
           if (!component.mounted) return
