@@ -154,6 +154,10 @@ export class ChatHandler {
           file.type,
         )
       })
+      .receive('error', message => {
+        this.component.setState({ upload: null })
+        this.component.showToast({ message })
+      })
   }
 
   handleAudioEvent(payload: any) {
@@ -439,6 +443,11 @@ export default class Chat extends React.Component<ChatProps, ChatState> {
     }
     const renderable = ['media', 'text', 'location', 'template', 'contact'].indexOf(type2) >= 0
     return { type: type2, self, payload: payload2, renderable, time, as, metadata, id }
+  }
+
+  removeFile(url: string) {
+    const events = this.state.events.filter(event => !(event.type === 'media' && event.payload.url === url))
+    this.setState({ events })
   }
 
   render() {
