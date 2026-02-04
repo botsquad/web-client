@@ -16,14 +16,16 @@ interface MakeInputComponentProps {
   disabled: boolean
   autofocus: boolean
   placeholder: string
+  id: string
 }
 
-function makeInputComponent({ disabled, autofocus, placeholder }: MakeInputComponentProps) {
+function makeInputComponent({ disabled, autofocus, placeholder, id }: MakeInputComponentProps) {
   return forwardRef<HTMLInputElement, any>(function CustomInput(props, ref) {
     return (
       <input
         ref={ref}
         {...props}
+        id={id}
         className="form-control"
         disabled={disabled}
         autoFocus={autofocus}
@@ -43,10 +45,10 @@ interface PhoneNumberWidgetProps {
 }
 
 function PhoneNumberWidget(props: PhoneNumberWidgetProps) {
-  const { value, onChange, formContext, disabled, autofocus, placeholder } = props
+  const { value, onChange, formContext, disabled, autofocus, placeholder, id } = props
 
   const inputComponent = useMemo(
-    () => makeInputComponent({ disabled, autofocus, placeholder }),
+    () => makeInputComponent({ disabled, autofocus, placeholder, id }),
     [disabled, autofocus, placeholder],
   )
 
