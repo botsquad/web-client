@@ -49,7 +49,7 @@ function PhoneNumberWidget(props: PhoneNumberWidgetProps) {
 
   const inputComponent = useMemo(
     () => makeInputComponent({ disabled, autofocus, placeholder, id }),
-    [disabled, autofocus, placeholder],
+    [disabled, autofocus, placeholder, id],
   )
 
   const localePrefs = formContext?.localePrefs || ['en']
