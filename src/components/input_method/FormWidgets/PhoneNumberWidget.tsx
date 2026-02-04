@@ -42,6 +42,7 @@ interface PhoneNumberWidgetProps {
   disabled: boolean
   autofocus: boolean
   placeholder: string
+  id: string
 }
 
 function PhoneNumberWidget(props: PhoneNumberWidgetProps) {
