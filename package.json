@@ -19,7 +19,7 @@
     "lintfix": "eslint --fix src/**/*.{ts,tsx}",
     "dev": "vite",
     "preview": "vite preview",
-    "test": "mocha --require ts-node/register test/**/*.js test/**/*.ts test/**/*.tsx"
+    "test": "NODE_OPTIONS='--import ./test/ts-node-register.mjs' node ./test/run-mocha.mjs"
   },
   "author": "Arjan Scherpenisse <arjan@miraclethings.nl>",
   "repository": {
