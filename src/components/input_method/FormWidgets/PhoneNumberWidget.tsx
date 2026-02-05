@@ -16,15 +16,17 @@ interface MakeInputComponentProps {
   disabled: boolean
   autofocus: boolean
   placeholder: string
+  id: string
 }
 
-function makeInputComponent({ disabled, autofocus, placeholder }: MakeInputComponentProps) {
+function makeInputComponent({ id, disabled, autofocus, placeholder }: MakeInputComponentProps) {
   return React.forwardRef(function CustomInput(props: any, ref) {
     return (
       <input
         ref={ref}
         {...props}
         className="form-control"
+        id={id}
         disabled={disabled}
         autoFocus={autofocus}
         placeholder={placeholder || '012-3456789'}
@@ -34,6 +36,7 @@ function makeInputComponent({ disabled, autofocus, placeholder }: MakeInputCompo
 }
 
 interface PhoneNumberWidgetProps {
+  id: string
   value: string
   onChange: (value: string | undefined) => void
   formContext: { localePrefs: string[] }

@@ -31,7 +31,13 @@ function elementValue(e: any) {
 
 function elementLabel(e: any) {
   if ('labels' in e) {
-    return [...e.labels].map(label => label.textContent.replace(/[*]$/, '')).join(', ') + ': '
+    const labels = [...e.labels]
+      .map(label => label.textContent.replace(/[*]$/, ''))
+      .join(', ')
+      .trim()
+    if (labels) {
+      return labels + ': '
+    }
   }
 
   return ''
