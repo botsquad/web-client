@@ -1001,6 +1001,29 @@
     }
   }
 
+  .bsqd-copy {
+    position: relative;
+
+    &:hover .bsqd-copy-button {
+      display: flex;
+      align-items: center;
+      justify-items: center;
+    }
+
+    .bsqd-copy-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      cursor: pointer;
+      display: none;
+
+      svg {
+        width: 1rem;
+        height: 1rem;
+      }
+    }
+  }
+
   @import '../common/components/loader';
   @import '../common/components/input';
   @import '../common/components/modal';
