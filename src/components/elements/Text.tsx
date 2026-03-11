@@ -23,6 +23,12 @@ const Text: React.FC<Props> = ({ className, message }) => {
     const textContainer = button.nextElementSibling
     if (!textContainer) return
     copyToClipboard(textContainer.textContent?.trim() || '')
+
+    const div = document.createElement('div')
+    div.classList.add('copied-to-clipboard')
+    div.innerHTML = CopyStr
+    button.parentElement.prepend(div)
+    setTimeout(() => div.remove(), 500)
   }, [])
 
   if (!message.payload.message || !message.payload.message.trim().length) {

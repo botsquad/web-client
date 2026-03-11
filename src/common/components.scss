@@ -1001,9 +1001,37 @@
     }
   }
 
+  @keyframes fadeUp {
+    0% {
+      opacity: 100%;
+      transform: translateY(0%);
+    }
+
+    100% {
+      opacity: 0%;
+      transform: translateY(-100%);
+    }
+  }
+
   .bsqd-copy {
     position: relative;
     padding-right: 2rem;
+
+    .copied-to-clipboard {
+      position: absolute;
+      top: 0;
+      right: 0;
+      animation-name: fadeUp;
+      animation-duration: 0.3s;
+      animation-timing-function: linear;
+      opacity: 0%;
+      padding: 1px 4px;
+
+      svg {
+        width: 1rem;
+        height: 1rem;
+      }
+    }
 
     &:hover .bsqd-copy-button {
       display: flex;
@@ -1012,11 +1040,13 @@
     }
 
     .bsqd-copy-button {
+      border: 0;
       position: absolute;
       top: 0;
       right: 0;
       cursor: pointer;
       display: none;
+      padding: 1px 4px;
 
       svg {
         width: 1rem;
