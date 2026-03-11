@@ -16,10 +16,19 @@
     > div.input {
       flex: 1;
       min-width: 80px;
-      input {
+      textarea {
         background: inherit;
-        height: 50px;
+        min-height: 50px;
+        max-height: 7.5rem;
+        font: inherit;
+        width: 100%;
+        border: none;
+        outline: none;
+        resize: none;
+        // Just so we can actually perform the padding calculation to center the text area.
         font-size: 125%;
+        line-height: 1.2;
+        padding: calc((50px - 1.5rem) / 2) 13px;
       }
     }
     button {
@@ -40,9 +49,9 @@
       overflow: hidden;
       opacity: 1;
 
-      input {
+      textarea {
         background-color: initial;
-        padding-left: 12px;
+        padding: 13px;
       }
     }
     button.send {
