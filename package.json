@@ -27,7 +27,7 @@
     "url": "https://github.com/botsquad/web-client"
   },
   "dependencies": {
-    "@botsquad/sdk": "^0.16.7",
+    "@botsquad/sdk": "^0.18.0",
     "@popperjs/core": "^2.11.2",
     "@react-google-maps/api": "^2.7.0",
     "@types/iban": "^0.0.32",
@@ -52,6 +52,10 @@
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
+    "@floating-ui/react": "^0.27.16",
+    "@rjsf/core": "5.21.2",
+    "@rjsf/utils": "5.21.2",
+    "@rjsf/validator-ajv8": "5.21.2",
     "@types/classnames": "^2.3.1",
     "@types/fbemitter": "^2.0.32",
     "@types/googlemaps": "^3.43.3",
@@ -66,10 +70,6 @@
     "@types/supercluster": "^5.0.3",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
     "@typescript-eslint/parser": "^5.3.1",
-    "@floating-ui/react": "^0.27.16",
-    "@rjsf/core": "5.21.2",
-    "@rjsf/utils": "5.21.2",
-    "@rjsf/validator-ajv8": "5.21.2",
     "@vitejs/plugin-react-swc": "^3.7.3",
     "autoprefixer": "^10.4.13",
     "baseline-browser-mapping": "^2.8.32",
@@ -100,11 +100,11 @@
     "vite-plugin-dts": "^4.3.0"
   },
   "peerDependencies": {
-    "react": "^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
-    "react-dom": "^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
     "@floating-ui/react": ">=0.26.0",
     "@rjsf/core": "^5.21.2",
     "@rjsf/utils": "^5.21.2",
-    "@rjsf/validator-ajv8": "^5.21.2"
+    "@rjsf/validator-ajv8": "^5.21.2",
+    "react": "^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
+    "react-dom": "^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
   }
 }

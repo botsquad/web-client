@@ -92,3 +92,33 @@ export function getUserInfo() {
     },
   }
 }
+
+export function copyToClipboard(text: string): Promise<void> {
+  if (!navigator.clipboard) {
+    // Fallback
+    return new Promise((resolve, reject) => {
+      const textarea = document.createElement('textarea')
+      textarea.value = text
+      textarea.style.top = '0'
+      textarea.style.left = '0'
+      textarea.style.position = 'fixed'
+      document.body.appendChild(textarea)
+      textarea.focus()
+      textarea.select()
+      try {
+        const success = document.execCommand('copy')
+        textarea.remove()
+        if (success) {
+          resolve()
+        } else {
+          reject('failed to copy')
+        }
+      } catch (err) {
+        textarea.remove()
+        reject(err)
+      }
+    })
+  }
+
+  return navigator.clipboard.writeText(text)
+}
