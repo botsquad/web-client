@@ -98,7 +98,7 @@ const ChatInput: React.FC = () => {
     setHasMessage(message.trim().length > 0)
   }
 
-  const onKeyUp = (e: any) => {
+  const onKeyDown = (e: any) => {
     let layout = ''
     if (settings) layout = settings.layout
     if (scrollToBottom) {
@@ -110,6 +110,8 @@ const ChatInput: React.FC = () => {
       sendTypingOff()
     }
     if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      e.stopPropagation()
       sendTypingOn.cancel()
       sendTypingOff.flush()
       sendMessage()
@@ -201,7 +203,7 @@ const ChatInput: React.FC = () => {
                   ref={input}
                   onFocus={() => onInputFocus()}
                   onBlur={() => onInputBlur()}
-                  onKeyUp={e => onKeyUp(e)}
+                  onKeyDown={e => onKeyDown(e)}
                   onChange={e => onChange(e)}
                 />
               ) : null}
@@ -283,7 +285,7 @@ const ChatInput: React.FC = () => {
                   readOnly={!online}
                   placeholder={chatLabel(settings as { ui_labels: any }, localePrefs, 'text_input_placeholder')}
                   ref={input}
-                  onKeyUp={e => onKeyUp(e)}
+                  onKeyDown={e => onKeyDown(e)}
                   onFocus={() => onFocus()}
                   onBlur={() => onBlur()}
                   onChange={e => onChange(e)}
