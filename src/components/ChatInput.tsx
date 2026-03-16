@@ -7,6 +7,7 @@ import ChatInputModalWrapper from './ChatInputModalWrapper'
 import { chatMessagesEvents } from './ChatMessages'
 import { chatLabel } from '../common/labels'
 import { useChatProps, useChatPropsUpdate } from './ChatContext'
+import TextareaAutosize from 'react-textarea-autosize'
 
 const ChatInput: React.FC = () => {
   const [hasMessage, setHasMessage] = useState(false)
@@ -18,7 +19,7 @@ const ChatInput: React.FC = () => {
   const updater = useChatPropsUpdate()
 
   const inputDiv = React.createRef<HTMLDivElement>()
-  const input = React.createRef<HTMLInputElement>()
+  const input = React.createRef<HTMLTextAreaElement | HTMLInputElement>()
 
   const { scrollToBottom, handler, settings, online, localePrefs, inputMethodOverride, params } = useChatProps()
   const showLocationInput = () => {
@@ -108,7 +109,7 @@ const ChatInput: React.FC = () => {
       sendTypingOn()
       sendTypingOff()
     }
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey) {
       sendTypingOn.cancel()
       sendTypingOff.flush()
       sendMessage()
@@ -192,8 +193,7 @@ const ChatInput: React.FC = () => {
           <div className="chat-input docked" ref={inputDiv}>
             <div className="input">
               {!inputProps.isDisabled('text') || inputProps.operatorActive ? (
-                <input
-                  type="text"
+                <TextareaAutosize
                   autoComplete="off"
                   value={message}
                   readOnly={!online}
@@ -227,7 +227,8 @@ const ChatInput: React.FC = () => {
               </button>
             ) : null}
 
-            {hasMessage || (inputProps.isDisabled('image') && inputProps.isDisabled('location') && inputProps.isDisabled('file')) ? (
+            {hasMessage ||
+            (inputProps.isDisabled('image') && inputProps.isDisabled('location') && inputProps.isDisabled('file')) ? (
               <button
                 className={`send ${hasMessage ? 'has-message' : ''}`}
                 disabled={!online || !hasMessage}
