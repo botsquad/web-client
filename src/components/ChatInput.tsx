@@ -19,7 +19,8 @@ const ChatInput: React.FC = () => {
   const updater = useChatPropsUpdate()
 
   const inputDiv = React.createRef<HTMLDivElement>()
-  const input = React.createRef<HTMLTextAreaElement | HTMLInputElement>()
+  const textarea = React.createRef<HTMLTextAreaElement>()
+  const textInput = React.createRef<HTMLInputElement>()
 
   const { scrollToBottom, handler, settings, online, localePrefs, inputMethodOverride, params } = useChatProps()
   const showLocationInput = () => {
@@ -67,12 +68,13 @@ const ChatInput: React.FC = () => {
     }
     setMessage('')
     setHasMessage(false)
-    if (input.current && settings) {
+    const input = textarea.current ?? textInput.current
+    if (input && settings) {
       const { alwaysFocus } = settings
       if (alwaysFocus) {
-        input.current.focus()
+        input.focus()
       } else {
-        input.current.blur()
+        input.blur()
       }
     }
   }
@@ -200,7 +202,7 @@ const ChatInput: React.FC = () => {
                   value={message}
                   readOnly={!online}
                   placeholder={chatLabel(settings as { ui_labels: any }, localePrefs, 'text_input_placeholder')}
-                  ref={input}
+                  ref={textarea}
                   onFocus={() => onInputFocus()}
                   onBlur={() => onInputBlur()}
                   onKeyDown={e => onKeyDown(e)}
@@ -284,7 +286,7 @@ const ChatInput: React.FC = () => {
                   value={message}
                   readOnly={!online}
                   placeholder={chatLabel(settings as { ui_labels: any }, localePrefs, 'text_input_placeholder')}
-                  ref={input}
+                  ref={textInput}
                   onKeyDown={e => onKeyDown(e)}
                   onFocus={() => onFocus()}
                   onBlur={() => onBlur()}
