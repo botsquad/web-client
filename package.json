@@ -53,9 +53,9 @@
   },
   "devDependencies": {
     "@floating-ui/react": "^0.27.16",
-    "@rjsf/core": "6.2.5",
-    "@rjsf/utils": "6.2.5",
-    "@rjsf/validator-ajv8": "6.2.5",
+    "@rjsf/core": "5.21.2",
+    "@rjsf/utils": "5.21.2",
+    "@rjsf/validator-ajv8": "5.21.2",
     "@types/classnames": "^2.3.1",
     "@types/fbemitter": "^2.0.32",
     "@types/googlemaps": "^3.43.3",
@@ -101,9 +101,9 @@
   },
   "peerDependencies": {
     "@floating-ui/react": ">=0.26.0",
-    "@rjsf/core": "^6.2.5",
-    "@rjsf/utils": "^6.2.5",
-    "@rjsf/validator-ajv8": "^6.2.5",
+    "@rjsf/core": "^5.21.2",
+    "@rjsf/utils": "^5.21.2",
+    "@rjsf/validator-ajv8": "^5.21.2",
     "react": "^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
     "react-dom": "^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
   }
