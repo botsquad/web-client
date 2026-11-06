@@ -2,8 +2,10 @@ import { chatLabel } from '../../../common/labels'
 import { electronicFormat, isValid, printFormat } from 'iban'
 import React, { useEffect, useMemo } from 'react'
 import { WidgetProps } from '@rjsf/utils'
+import { getFormContext } from './formContext'
 
-const IbanWidget: React.FC<WidgetProps> = ({ value, onChange, disabled, autofocus, formContext = {}, id, required }) => {
+const IbanWidget: React.FC<WidgetProps> = ({ value, onChange, disabled, autofocus, registry, id, required }) => {
+  const formContext = getFormContext(registry)
   const error = useMemo(() => {
     // if the value is not a valid iban and the value is not empty then there is an error
     // if the value is required and the value is empty then there is an error
@@ -19,12 +21,10 @@ const IbanWidget: React.FC<WidgetProps> = ({ value, onChange, disabled, autofocu
   }
 
   useEffect(() => {
-    if ((formContext as any)?.setWidgetError) {
-      setTimeout(() => (formContext as any).setWidgetError(id, error), 0)
-    }
+    setTimeout(() => formContext.setWidgetError(id, error), 0)
   }, [error, formContext, id])
 
-  const localePrefs = (formContext as any)?.localePrefs || ['en']
+  const { localePrefs } = formContext
 
   const validate = () => {
     if (error && value !== '' && value) {
