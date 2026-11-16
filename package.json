@@ -27,7 +27,7 @@
     "url": "https://github.com/botsquad/web-client"
   },
   "dependencies": {
-    "@botsquad/sdk": "^0.18.0",
+    "@botsquad/sdk": "^0.19.1",
     "@popperjs/core": "^2.11.2",
     "@react-google-maps/api": "^2.7.0",
     "@types/iban": "^0.0.32",
