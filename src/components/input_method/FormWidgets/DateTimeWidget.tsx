@@ -6,6 +6,7 @@ import Datetime from 'react-datetime'
 import { WidgetProps } from '@rjsf/utils'
 import { useFloating, offset, flip, shift, autoUpdate } from '@floating-ui/react'
 import { chatLabel } from '../../../common/labels'
+import { getFormContext } from './formContext'
 
 export const checkDateConstraints = (currentDate: string, constraints: string[] | string) => {
   if (typeof constraints === 'string') constraints = [constraints]
@@ -32,7 +33,7 @@ export const checkDateConstraints = (currentDate: string, constraints: string[] 
   return true
 }
 
-const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formContext = {} }) => {
+const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, registry }) => {
   const [visible, setVisibility] = useState(false)
 
   const { refs, floatingStyles, update } = useFloating({
@@ -54,7 +55,7 @@ const DateTimeWidget: React.FC<WidgetProps> = ({ value, onChange, options, formC
     setVisibility(!visible)
   }
 
-  const localePrefs = (formContext as any)?.localePrefs || ['en']
+  const { localePrefs } = getFormContext(registry)
   const selectDateText = value?.length
     ? moment(value).format('D-M-Y')
     : chatLabel({ ui_labels: [] }, localePrefs, 'select_date')

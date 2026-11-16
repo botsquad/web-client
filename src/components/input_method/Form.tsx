@@ -8,6 +8,7 @@ import { chatLabel } from '../../common/labels'
 import { Edit } from '../icons'
 import InputMethodContainer from './InputMethodContainer'
 import Widgets from './FormWidgets'
+import { FormContext } from './FormWidgets/formContext'
 import Templates from './FormTemplates'
 import { useInputMethodProps } from './InputMethodContext'
 import Message, { Payload } from 'components/elements/types'
@@ -156,7 +157,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ message, settings }) => {
   if (!config || !config.schema) {
     return <span>Missing &#39;config.schema&#39; in form</span>
   }
-  const formContext = { localePrefs, setWidgetError }
+  const formContext: FormContext = { localePrefs, setWidgetError }
 
   return (
     <InputMethodContainer
